@@ -28,6 +28,10 @@ Input → redact → preview facts → user xác nhận → deterministic policy
 
 `AUTO_APPROVE` chỉ cho phép hướng dẫn hoặc workflow mô phỏng; không cấp quyền, phát credential hoặc thay đổi production.
 
+## Sơ đồ luồng xử lý
+
+Sơ đồ Excalidraw mô tả luồng từ intake, redact và trích xuất facts đến deterministic policy, hướng dẫn người dùng, reviewer console và audit/feedback: [mermaid-diagram.excalidraw](mermaid-diagram.excalidraw).
+
 ## Route và contract
 
 | Route | Chức năng |
