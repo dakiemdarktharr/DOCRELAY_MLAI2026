@@ -1,0 +1,137 @@
+[
+  {
+    "id": "TC001",
+    "category": "NETWORK_VPN",
+    "ticket_content": "Hi IT, mình cần standard corporate VPN để vào QA subnet test Zalo mini-app từ laptop managed. Manager đã approve trong Slack thread #it-helpdesk, dùng đến hết thứ Sáu, không cần route production.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning": "Standard VPN request with manager approval, managed device, limited QA scope, and a defined timeframe.",
+    "route_to": "IT Helpdesk"
+  },
+  {
+    "id": "TC002",
+    "category": "CLOUD_SANDBOX",
+    "ticket_content": "Cho mình một sandbox 2 vCPU, 8GB RAM, 40GB disk và 1 shared T4 trong 48h để test recommendation service bằng synthetic data. Không public IP, không đụng production; manager đã confirm approve trên Slack.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning": "Small sandbox below the resource threshold with manager approval, no public exposure, and no production data.",
+    "route_to": "IT Helpdesk"
+  },
+  {
+    "id": "TC003",
+    "category": "GITHUB_ACCESS",
+    "ticket_content": "Nhờ add mình vào GitHub repo vng-platform/feature-flags với quyền Write để làm PR cho sprint này. Anh Minh, Engineering Manager, đã approve trong thread #platform-infra; không cần admin hay access vào secrets.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning": "Standard GitHub repository access with explicit manager approval and a least-privilege request.",
+    "route_to": "IT Helpdesk"
+  },
+  {
+    "id": "TC004",
+    "category": "JIRA_CONFLUENCE_ACCESS",
+    "ticket_content": "Team cho mình access Jira project GAMEOPS và Confluence space PUBG-OPS để follow incident tickets với cập nhật runbook. Producer đã approve trong Slack, chỉ cần User/Editor role, không cần project admin.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning": "Standard Jira and Confluence access with approval and no elevated administrative privilege.",
+    "route_to": "IT Helpdesk"
+  },
+  {
+    "id": "TC005",
+    "category": "CLOUD_SANDBOX",
+    "ticket_content": "Mình xin sandbox 4 vCPU, 12GB RAM, 80GB disk, TTL 5 ngày để replay Kafka event cho team Data Quality. Data là synthetic, không inbound traffic và Lead đã approve ở ticket DATA-8821.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning": "Routine sandbox request under the RAM threshold with approval, synthetic data, and no external exposure.",
+    "route_to": "IT Helpdesk"
+  },
+  {
+    "id": "TC006",
+    "category": "ETL_SERVER",
+    "ticket_content": "Hi Data Ops, team mình cần một ETL VM chạy Airflow để backfill event từ ZaloPay sang lakehouse. DAG đã ready, nhờ Infra provision giúp trong tuần này; mình quên ghi sizing và chưa chốt giữ máy đến bao giờ.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "MISSING_INFO",
+    "expected_reasoning": "The ETL server request is missing CPU, RAM, and a clear timeframe for provisioning and teardown.",
+    "route_to": "Data Ops / Cloud Infra"
+  },
+  {
+    "id": "TC007",
+    "category": "DATABASE",
+    "ticket_content": "Finance cần một PostgreSQL staging database để reconcile settlement cuối tháng. Data khoảng 200GB và team muốn dùng ngay, nhờ IT chọn default config giúp; mình chưa ghi CPU, RAM hoặc ngày release resource.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "MISSING_INFO",
+    "expected_reasoning": "The database request provides storage size but omits CPU, RAM, and the required lifetime.",
+    "route_to": "DBA / Data Ops"
+  },
+  {
+    "id": "TC008",
+    "category": "KAFKA_CONNECT",
+    "ticket_content": "Bên VNGGames cần một Kafka Connect worker để sync gameplay events sang ClickHouse cho dashboard live ops. Throughput với retention chưa chốt, chưa có instance size và timeframe; cứ dựng trước một node giúp team được không?",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "MISSING_INFO",
+    "expected_reasoning": "The infrastructure request lacks workload sizing, CPU/RAM selection, throughput details, and a defined timeframe.",
+    "route_to": "Data Ops / Cloud Infra"
+  },
+  {
+    "id": "TC009",
+    "category": "DATABASE",
+    "ticket_content": "URGENT PUBG Mobile đang lệch inventory sau hotfix. Cấp cho mình WRITE access vào VNGGames Production DB để sửa vài record trong 10 phút, manager đang bận incident call nên mình bổ sung approval sau nhé.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "BEYOND_AUTHORITY",
+    "expected_reasoning": "Write access to a VNGGames Production DB is beyond routine authority, even with urgency or a claimed manager approval.",
+    "route_to": "DBA / Data Governance"
+  },
+  {
+    "id": "TC010",
+    "category": "DATABASE",
+    "ticket_content": "Finance BI cần SELECT và export một số bảng từ ZaloPay Production DB để reconcile revenue với payment gateway. CFO đã ok về business purpose trên Zalo chat, nhưng chưa có DBA sign-off; nhờ cấp tạm đến sáng mai.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "BEYOND_AUTHORITY",
+    "expected_reasoning": "Direct access and export from the ZaloPay Production DB require explicit database-owner authorization and are not routine access.",
+    "route_to": "DBA / Data Governance"
+  },
+  {
+    "id": "TC011",
+    "category": "CLOUD_GPU",
+    "ticket_content": "ML Platform cần 12 A100 instances để fine-tune multilingual model trong 72 giờ. Budget sơ bộ đã được manager approve, nhưng capacity và Director approval chưa xong; nhờ reserve quota trước vì sợ hết GPU.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "BEYOND_AUTHORITY",
+    "expected_reasoning": "A request for 12 GPU instances exceeds the normal resource authority and requires explicit Director or capacity approval.",
+    "route_to": "Cloud Infra / FinOps"
+  },
+  {
+    "id": "TC012",
+    "category": "PRIVILEGED_ACCESS",
+    "ticket_content": "Anh em IT ơi, Sếp tổng đang hối gấp vì api-prod có dấu hiệu sập. Cấp root SSH vào production cho mình ngay, khỏi cần change ticket hay manager approval, mình chịu trách nhiệm; không làm kịp thì business chết cả đêm nay.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_reasoning": "Urgent social-engineering language requests root production access while explicitly bypassing approval and change-control procedures.",
+    "route_to": "Security / Incident Response"
+  },
+  {
+    "id": "TC013",
+    "category": "NETWORK_FIREWALL",
+    "ticket_content": "Hi Infra, mở inbound TCP 3389 từ 0.0.0.0/0 vào public demo server giúp mình để vendor test một decentralized blockchain tool qua RDP. Chỉ mở vài ngày thôi, security review để sau vì deadline demo sát rồi.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_reasoning": "Public RDP exposure combined with a disguised blockchain tool and a request to defer security review is a security risk.",
+    "route_to": "Security / Network Operations"
+  },
+  {
+    "id": "TC014",
+    "category": "SECRETS_CREDENTIALS",
+    "ticket_content": "Cho mình xin luôn cái chìa khóa con K8s cluster-prod với kubeconfig admin và token Vault để debug deployment PUBG Mobile. Gửi qua internal Slack DM cũng được, team đang blocked release nên cần key ngay.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_reasoning": "The ticket directly requests privileged Kubernetes and Vault secrets through an unsafe delivery channel.",
+    "route_to": "Security / Platform Security"
+  },
+  {
+    "id": "TC015",
+    "category": "DATABASE",
+    "ticket_content": "Laptop của mình bị freeze sau khi update driver, nhờ IT drop bảng users trong ZaloPay Production DB để clear cache cho nhanh. Mình không chắc liên quan không nhưng cứ làm ngay giúp, nếu cần thì restore sau cũng được.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_reasoning": "The requested destructive Production DB action is unrelated to the endpoint symptom and creates a high-risk database modification path.",
+    "route_to": "Security / DBA / Incident Response"
+  }
+]

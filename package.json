@@ -1,0 +1,45 @@
+{
+  "name": "mlai-vng-generic-skeleton",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@prisma/client": "6.16.2",
+    "lucide-react": "0.468.0",
+    "mongodb": "7.6.0",
+    "next": "15.5.25",
+    "openai": "5.12.2",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.3.0",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "autoprefixer": "10.4.21",
+    "eslint": "9.35.0",
+    "eslint-config-next": "15.5.25",
+    "postcss": "8.5.28",
+    "prisma": "6.16.2",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.9.2",
+    "vitest": "3.2.7"
+  },
+  "overrides": {
+    "postcss": "8.5.28"
+  }
+}

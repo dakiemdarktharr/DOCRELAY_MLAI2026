@@ -1,0 +1,13 @@
+id,vi_label,en_label,team,intake_visibility,approval_gate
+DATABASE,Database & dữ liệu,Database & Data,DBA/Data,selectable,verified_service_owner_for_access
+CLOUD_GPU,Cloud/GPU,Cloud/GPU,Cloud/ML Infra,selectable,verified_quota_or_budget_owner
+DEVICE_BOOT,Máy tính/thiết bị,Device & Boot,IT Helpdesk,selectable,not_required_for_standard_diagnosis
+NETWORK_VPN,Mạng/VPN,Network & VPN,Network,selectable,depends_on_requested_action
+ACCOUNT_ACCESS,Tài khoản/quyền truy cập,Account & Access,IAM/IT,selectable,verified_system_owner_for_access
+GIT_PERMISSION,Git/GitHub/GitLab,Git & Repository,DevOps,selectable,verified_repository_owner_for_permission
+CI_CD,CI/CD,CI/CD,DevOps,selectable,depends_on_environment_and_action
+KUBERNETES,Kubernetes,Kubernetes,Platform,selectable,depends_on_environment_and_privilege
+SECURITY,Security,Security,Security,selectable,security_or_incident_authority
+MONITORING,Monitoring/logging,Monitoring,SRE,selectable,depends_on_requested_action
+SOFTWARE_LICENSE,Phần mềm/license,Software & License,IT,selectable,verified_license_or_budget_owner
+OTHER,Không xác định / cần reviewer,Unclassified / needs reviewer,Classifier/reviewer,fallback_only,not_applicable

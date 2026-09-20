@@ -1,0 +1,37 @@
+[
+  {
+    "id": "verify-001-github-access",
+    "ticket_content": "Hi IT team, nhờ cấp giúp mình quyền collaborator vào GitHub repo vng-data/customer-profile-api để support sprint này. Anh Minh - Engineering Manager đã approve trong thread #backend-platform rồi, mình chỉ cần quyền push branch và mở PR, không cần admin access. Thanks team!",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning_keyword": "Manager approval"
+  },
+  {
+    "id": "verify-002-small-sandbox",
+    "ticket_content": "Chào team Infra, cho mình xin một sandbox nhỏ để test service recommendation nhé: 2 vCPU, 4GB RAM, disk 20GB, không cần public IP và chỉ dùng trong 3 ngày. Lead của mình đã confirm approve ở ticket DEV-4821. Nếu được thì provision theo default dev image giúp mình ạ.",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_reasoning_keyword": "4GB RAM"
+  },
+  {
+    "id": "verify-003-etl-missing-specs",
+    "ticket_content": "Hi Data Ops, bên mình cần dựng gấp một ETL server để pull event từ Kafka rồi load sang warehouse cho pipeline campaign. Nhờ team provision giúp trong hôm nay nhé, config giống môi trường data thông thường là được. Cảm ơn team.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "MISSING_INFO",
+    "expected_reasoning_keyword": "Missing RAM"
+  },
+  {
+    "id": "verify-004-production-db-write",
+    "ticket_content": "URGENT: PUBG Mobile production đang lỗi sync inventory sau hotfix. Cấp cho mình WRITE access trực tiếp vào Production DB để update vài record bị sai, xử lý khoảng 10 phút thôi. Manager mình đang bận incident call nên chưa approve được, cứ mở quyền trước giúp mình để tránh ảnh hưởng player, mình bổ sung approval sau.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "BEYOND_AUTHORITY",
+    "expected_reasoning_keyword": "Production DB"
+  },
+  {
+    "id": "verify-005-public-rdp-blockchain",
+    "ticket_content": "Hello Infra, mình đang test một blockchain analytics tool mới trên con server public demo. Tool này cần remote desktop để monitor realtime nên nhờ mở inbound port 3389 từ Internet (0.0.0.0/0) giúp mình, chỉ test nhanh thôi nên chắc không cần qua security review đâu. Nếu tiện thì whitelist luôn rule này để mai team vendor vào kiểm tra nhé.",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_reasoning_keyword": "Port 3389"
+  }
+]
