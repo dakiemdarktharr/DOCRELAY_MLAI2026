@@ -1,6 +1,6 @@
 # QA Checklist
 
-> Các dấu PASS/tick cũ dưới đây thuộc bản tham khảo `69b1649`. Main sau merge chọn lọc không có `src/`, chưa đạt QA runtime. Khi người dùng tự viết xong phải chạy lại và ghi bằng chứng mới; không dùng artifact cũ để xác nhận bài làm mới.
+> Main đã nhận toàn bộ runtime từ migration `89d62c4`. Evidence mới nhất: 87 unit/integration và 24 E2E desktop/mobile PASS, lint/typecheck/build PASS trên checkout kiểm thử của implementation này. Các mục lịch sử bên dưới giữ provenance; kết quả không áp dụng cho source đang viết dở hoặc chứng minh production readiness.
 
 ## Support v3 — evidence 20/09/2026
 

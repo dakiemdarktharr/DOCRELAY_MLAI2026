@@ -1,16 +1,9 @@
 # VNG Tech Support Escalation Referee
 
-## Main đang chờ sinh viên tự viết source
-
-Theo yêu cầu mới, nhánh `main` chỉ nhận cấu hình, tests, fixtures, tài liệu và bằng chứng tham khảo; **không có `src/`**. Vì vậy app chưa chạy/build được và tests còn thiếu module cho đến khi bạn tự triển khai. Không khôi phục code cũ chỉ để làm test xanh.
-
-Bắt đầu với [prompt gia sư cho Luna](LUNA-SRC-TUTOR-PROMPT.md): bản đồ từng file, thứ tự 8 chặng và bài đầu tiên. Luna hướng dẫn/review; bạn tự tạo và viết source. Đọc thêm [quy tắc hỗ trợ](AGENTS.md) và [trạng thái hiện tại](STATUS.md).
-
-Source AI-assisted trước đây vẫn ở [nhánh tham khảo](https://github.com/dakiemdarktharr/DOCRELAY_MLAI2026/tree/codex/support-v3-migration/src), commit `69b1649`; không được đưa vào tree `main`. Các mô tả runtime và kết quả QA bên dưới thuộc bản tham khảo hoặc là mục tiêu của bài làm mới, **không phải app đang chạy trên main**. Không deploy nhánh chuẩn bị này.
-
-## Mục tiêu và bản tham khảo
 
 Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **I need help** và **Admin** không yêu cầu đăng nhập trong demo công khai.
+
+Nhánh `codex/support-v3-migration` dùng lại giao diện orange/NAVI, Nunito/Baloo2 và bố cục hỗ trợ của prototype, nối với policy/workflow v3. Theo yêu cầu cập nhật ngày 20/09/2026, `main` đã nhận toàn bộ implementation này, gồm `src/`. Nguồn UI tái sử dụng và phạm vi thay đổi được ghi trong [UI-RESTORATION.md](UI-RESTORATION.md); commit mới không thay đổi nguồn gốc code cũ.
 
 ## Chạy ứng dụng
 
@@ -39,9 +32,9 @@ Input → redact → preview facts → user xác nhận → deterministic policy
 
 | Route | Chức năng |
 | --- | --- |
-| `/workspace` | Nhóm hỗ trợ, loại request, dropdown động, freeform, preview rồi xác nhận |
+| `/send-help`, `/workspace` | Cùng form: freeform nhóm + mô tả; structured taxonomy/fields v3; preview, quay lại sửa, xác nhận |
 | `/requests/[id]` | Kết quả, hướng dẫn, feedback, làm rõ và audit |
-| `/review` | Public demo reviewer queue và thao tác có guard |
+| `/review`, `/review?requestId=UUID` | Queue có lọc chờ xử lý/tất cả; link chi tiết, thao tác có guard |
 | `/verify` | Đề A v3, extended v3, fixture gốc, judge input mới |
 | `/audit` | Timeline theo request ID và số đếm feedback demo |
 | `/legacy/workspace`, `/legacy/verify`, `/legacy/audit` | UI echo cũ trong compatibility window |

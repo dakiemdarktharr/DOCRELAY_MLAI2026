@@ -1,17 +1,21 @@
-# Student implementation status — main
+# Support migration status — 20/09/2026
 
-Theo yêu cầu mới của người dùng: merge mọi thay đổi ngoài `src/` vào main, để người dùng tự viết source. Tree main chủ động không chứa `src/`; tests/config/fixtures đã có để làm contract và bài tập. Chưa có runtime mới, không thể dùng kết quả QA cũ để tuyên bố main build/test thành công.
+## Main đã nhận đầy đủ source
 
-- Hướng dẫn học: `LUNA-SRC-TUTOR-PROMPT.md`, 8 chặng và bản đồ từng file.
-- Chế độ hỗ trợ: gia sư/reviewer theo root `AGENTS.md`, không tự sinh hoặc restore source.
-- Bản AI-assisted được giữ nguyên ở `codex/support-v3-migration`, commit `69b16493143b1fd48d41487012ff0db77999a042`; lịch sử Git không bị xóa hoặc sửa ngày.
-- Chưa triển khai main thiếu source. Cần tự viết, chạy lại QA trên implementation mới, rồi mới xét live deployment.
+Theo yêu cầu mới nhất, merge toàn bộ `codex/support-v3-migration` tại `89d62c4` vào `main`, bao gồm `src/`. Source và các file runtime/test/config giữ nguyên bản migration đã kiểm thử; thay đổi thêm chỉ cập nhật tài liệu trạng thái main. Bản `contracts.ts` chưa commit trong workspace chính được giữ nguyên, không đưa vào merge.
 
-## Bản tham khảo — không phải trạng thái main hiện tại
+## Cập nhật giao diện cũ + workflow v3
 
-Các mục bên dưới ghi lại implementation và QA tại commit `69b1649` để tham khảo. Phases 0–7 của bản đó đã có code/test; source của nó không được nhận vào tree main trong lần merge chọn lọc này.
+- Khôi phục orange/NAVI, Nunito/Baloo2, home hai nút, form employee hai cột và các panel reviewer/audit/Verify. `/send-help` và `/workspace` dùng cùng UI; preview có quay lại sửa; reviewer có lọc và URL chi tiết tải lại được.
+- Giữ nguyên backend policy/workflow v3. Nguồn UI/font và khác biệt so với prototype được ghi tại `UI-RESTORATION.md`; không thay đổi provenance bằng commit mới.
+- QA cuối cho thay đổi UI: 87/87 unit/integration, 24/24 E2E desktop/mobile PASS (75.25s, 0 retry/flaky); lint và production build PASS trên checkout riêng. Typecheck cũng được kiểm tra riêng; build bao gồm kiểm tra TypeScript.
+- E2E cuối chạy tại checkout riêng `C:/Users/ANHKHOI/AppData/Local/Temp/mlai26-ui-validation-20260920`, port3216, base `69b1649` + UI changes. Đây là checkout của cùng repository, dùng mock/memory. Report có rootDir tương ứng.
+- Trong lúc QA, `src/domain/contracts.ts` ở workspace chính được chỉnh bởi thao tác khác và không còn khớp catalog (ví dụ `STORAGE_BACKUP` thay `STORAGE`). File đó được bảo toàn, không đưa vào commit UI; không suy diễn kết quả QA này áp dụng cho bản domain đang viết dở.
+- Tại thời điểm commit UI `89d62c4`, main còn chưa có source; yêu cầu merge toàn bộ sau đó thay thế giới hạn này như ghi ở đầu tài liệu.
 
-## Runtime của bản tham khảo
+Phases 0–7 đã có implementation, test và documentation cho demo local. Đây là repository `mlai26`, không phải bản LabPass/DocRelay trong repository khác. Live persistence/model/deployment vẫn là các bước chưa xác nhận bên dưới.
+
+## Runtime
 
 - Canonical request/decision contract, 13 service groups, taxonomy/fields, versioned policy và GUIDE-001…008.
 - Preview, confirmed idempotent submit, deterministic precedence, redaction, scoped demo approval.
@@ -20,7 +24,7 @@ Các mục bên dưới ghi lại implementation và QA tại commit `69b1649` �
 - Verify cùng API, judge input mới, Đề A v3 đúng3auto/2escalate. 123 Ground Truth +5Verify gốc giữ nguyên byte-for-byte và được báo mismatch riêng.
 - Generic UI chuyển `/legacy/*`; các API health/echo/events được giữ. Không thao tác hạ tầng thật.
 
-## Evidence của bản tham khảo
+## Evidence hiện tại
 
 - Baseline trước migration: 12 unit/integration tests, lint và build PASS.
 - Phase gates domain3, policy17, supportAPI4, model6, reviewer8 ban đầu (nay10), Verify18 PASS.

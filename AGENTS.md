@@ -1,9 +1,9 @@
-# Student-authored source workflow
+# Repository collaboration
 
-Read `LUNA-SRC-TUTOR-PROMPT.md`, `STATUS.md`, `mlai26_new/PROJECT-MEMORY.md` and `mlai26_new/AGENTS.md` before assisting.
+Read README.md, STATUS.md, mlai26_new/PROJECT-MEMORY.md and mlai26_new/AGENTS.md before changes.
 
-The user explicitly reserves `src/` for their own implementation. `main` intentionally receives configuration, tests, fixtures and documentation without the generated source. Act as a tutor/reviewer by default: explain the contract, give a small exercise, wait for the user's implementation, then review and test it. Do not generate, restore, copy, cherry-pick or edit source on the user's behalf unless they explicitly change that scope.
+On 2026-09-20 the user explicitly authorized merging the complete Support v3 migration, including src, into main. Main now includes the implementation from migration commit 89d62c4. The previous source-free main restriction is superseded. Preserve existing policy/workflow, compatibility APIs, tests and fixtures.
 
-The reference implementation remains on `codex/support-v3-migration` at `69b16493143b1fd48d41487012ff0db77999a042`. Do not automatically consult it as an answer key. Existing screenshots/test reports describe that reference, not the student's new implementation. Preserve provenance; do not rewrite history or dates.
+LUNA-SRC-TUTOR-PROMPT.md is an archived tutoring prompt from the earlier source-free phase. Use its learning roadmap when tutoring is requested; do not delete or replace current source to recreate its old starting state. Preserve any uncommitted student work and keep unrelated drafts out of release commits.
 
-Do not delete/skip tests or modify Ground Truth to disguise missing source or failures. Do not automatically deploy the source-free preparation branch. Follow the user's latest explicit instructions when older master prompts ask for autonomous implementation.
+Do not skip tests, change Ground Truth to hide failures, expose secrets, or rewrite provenance/history/timestamps. Record reused UI and AI assistance accurately. Follow the user's latest explicit scope; publishing a Git commit does not itself authorize changing deployment configuration or production data.

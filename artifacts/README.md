@@ -1,7 +1,7 @@
-# Evidence của bản tham khảo
+# Evidence và nguồn gốc
 
-Các screenshots, `e2e-results.json` và `original-fixture-evaluation.json` ở đây được tạo khi kiểm thử implementation AI-assisted tại commit `69b16493143b1fd48d41487012ff0db77999a042` (nhánh `codex/support-v3-migration`).
+Main đã nhận source từ migration 89d62c4 theo yêu cầu mới nhất. Screenshots home/help-preview/assistance/reviewer và e2e-results.json mô tả giao diện orange/NAVI + policy v3 đã kiểm thử: 24 E2E desktop/mobile PASS trên checkout riêng ghi trong report. Unit/integration 87, lint/typecheck/build PASS như ghi trong STATUS.
 
-Main nhận chúng làm tài liệu tham khảo nhưng **không nhận `src/`** theo yêu cầu người dùng tự code. Do đó các artifacts này không chứng minh main hiện có ứng dụng chạy được, hoặc implementation mới của sinh viên đã pass. Manifest baseline ghi snapshot đầu migration; nó không xác nhận thời điểm sáng tác, quyền tác giả hoặc đủ điều kiện cuộc thi.
+original-fixture-evaluation.json và migration-baseline-manifest.json giữ evidence giai đoạn migration trước. Không đổi nhãn chúng thành kết quả của code sinh viên đang viết dở. Các thay đổi domain chưa commit tại workspace chính không thuộc bản được kiểm thử/merge.
 
-Sau khi tự viết và chạy QA, ghi rõ implementation/commit mới cùng kết quả mới. Không đổi nhãn báo cáo cũ thành kết quả của bài làm mới. Các tests Verify có thể tạo lại `original-fixture-evaluation.json`; kiểm tra diff và nguồn gốc trước khi commit.
+Manifest/commit không chứng minh thời điểm sáng tác, quyền tác giả hoặc đủ điều kiện cuộc thi. Báo cáo có thể được test tạo lại; kiểm tra diff và provenance trước khi commit.

@@ -1,0 +1,179 @@
+import { z } from "zod";
+
+export const requestKinds = [
+  "GUIDANCE",
+  "SAFE_DIAGNOSTIC",
+  "ROUTINE_WORKFLOW",
+  "ACCESS_REQUEST",
+  "CONFIGURATION_CHANGE",
+  "INCIDENT",
+  "OTHER",
+] as const;
+export const serviceGroups = [
+  "DEVICE_BOOT",
+  "ACCOUNT_ACCESS",
+  "DATABASE",
+  "NETWORK_VPN",
+  "SOFTWARE_LICENSE",
+  "CLOUD_GPU",
+  "KUBERNETES",
+  "CI_CD",
+  "MONITORING",
+  "STORAGE",
+  "SECURITY",
+  "GIT_PERMISSION",
+  "OTHER",
+] as const;
+export const environments = [
+  "sandbox",
+  "development",
+  "staging",
+  "production",
+  "unknown",
+] as const;
+export const actions = [
+  "AUTO_APPROVE",
+  "NEEDS_INFORMATION",
+  "ESCALATE",
+] as const;
+export const riskSignals = [
+  "SECRET",
+  "PUBLIC_EXPOSURE",
+  "SECURITY_CONTROL",
+  "BYPASS",
+  "INJECTION",
+  "DATA_EXPORT",
+  "UNAPPROVED_SOFTWARE",
+  "PRIVILEGED",
+  "PRODUCTION_CHANGE",
+  "DESTRUCTIVE",
+  "CONFLICT",
+  "INCIDENT",
+  "CONTROL_CHANGE",
+  "USER_HANDOFF",
+  "MODEL_UNAVAILABLE",
+  "MODEL_OUTPUT_INVALID",
+  "MODEL_EVIDENCE_INVALID",
+] as const;
+export type RequestKind = (typeof requestKinds)[number];
+export type ServiceGroup = (typeof serviceGroups)[number];
+export type Action = (typeof actions)[number];
+export type RiskSignal = (typeof riskSignals)[number];
+export type Environment = (typeof environments)[number];
+
+export const extractionSchema = z
+  .object({
+    language: z.enum(["vi", "en", "mixed"]),
+    requestKind: z.enum(requestKinds),
+    serviceGroup: z.enum(serviceGroups),
+    intentLabel: z.string().min(1).max(80),
+    entities: z.record(z.string().max(300)),
+    environment: z.enum(environments),
+    requestedAction: z.string().max(100),
+    riskSignals: z.array(z.enum(riskSignals)).max(30),
+    missingFields: z.array(z.string().max(80)).max(30),
+    evidence: z
+      .array(
+        z
+          .object({
+            field: z.string().max(80),
+            quote: z.string().min(1).max(6000),
+          })
+          .strict(),
+      )
+      .min(1)
+      .max(40),
+    ambiguities: z.array(z.string().max(300)).max(20),
+  })
+  .strict();
+export type Extraction = z.infer<typeof extractionSchema>;
+
+export type SupportInput = {
+  mode: "freeform" | "structured";
+  serviceGroup: ServiceGroup;
+  requestKind?: RequestKind;
+  rawText: string;
+  fields: Record<string, string>;
+  confirmed: boolean;
+  idempotencyKey: string;
+};
+export type CanonicalRequest = Extraction & {
+  subrequests: Extraction[];
+  redactions: string[];
+  model: { source: "deterministic" | "mock" | "openai"; failure?: string };
+};
+export type Decision = {
+  action: Action;
+  requestKind: RequestKind;
+  handlingMode: "GUIDE" | "LLM_ASSIST" | "SIMULATED_WORKFLOW" | "HUMAN_REVIEW";
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "UNKNOWN";
+  bucket: "ROUTINE" | "MISSING_INFO" | "SECURITY_RISK" | "BEYOND_AUTHORITY";
+  uncertaintyClass:
+    | "NONE"
+    | "MISSING_FACTS"
+    | "OUT_OF_POLICY"
+    | "AUTHORITY_REQUIRED";
+  ruleIds: string[];
+  safeEvidence: string[];
+  missingFields: string[];
+  questions: string[];
+  userReason: string;
+  adminReason: string;
+  nextStep: string;
+  assignedTeam: string;
+  policyVersion: string;
+};
+export type RequestStatus =
+  | "RECEIVED"
+  | "PROCESSING"
+  | "AUTO_APPROVED"
+  | "NEEDS_INFORMATION"
+  | "ESCALATED"
+  | "APPROVED_BY_HUMAN"
+  | "REJECTED"
+  | "STOPPED"
+  | "COMPLETED";
+export type Assistance = {
+  summary: string;
+  stepByStepInstructions: string[];
+  options: string[];
+  expectedResult: string;
+  warning: string;
+  nextQuestion: string;
+  canPassToAdmin: true;
+  source: "deterministic" | "mock" | "openai";
+  timestamp: string;
+};
+export type AuditEvent = {
+  id: string;
+  requestId: string;
+  timestamp: string;
+  actor: string;
+  beforeStatus: RequestStatus | null;
+  afterStatus: RequestStatus;
+  action: string;
+  requestKind: RequestKind;
+  riskLevel: Decision["riskLevel"];
+  bucket: Decision["bucket"];
+  ruleIds: string[];
+  safeEvidence: string[];
+  missingFields: string[];
+  explanation: string;
+};
+export type SupportRequest = {
+  id: string;
+  version: number;
+  fingerprint: string;
+  createdAt: string;
+  updatedAt: string;
+  status: RequestStatus;
+  input: SupportInput;
+  canonical: CanonicalRequest | null;
+  decision: Decision | null;
+  assistance: Assistance[];
+  feedback: Array<{
+    choice: "RESOLVED" | "STILL_BROKEN" | "CONFUSED" | "ADMIN";
+    timestamp: string;
+  }>;
+  events: AuditEvent[];
+};

@@ -1,6 +1,6 @@
 # Support Referee runbook
 
-> **Trạng thái main:** cố ý chưa có `src/` để người dùng tự code. Các lệnh chạy app/build và kịch bản demo dưới đây dùng sau khi bạn hoàn thành source, hoặc để hiểu bản tham khảo `69b1649`. Không có source thì lỗi missing module là dự kiến; không tự restore từ nhánh migration. Bắt đầu học bằng `LUNA-SRC-TUTOR-PROMPT.md` và chạy tests theo từng chặng. Không deploy main ở trạng thái chuẩn bị này.
+> **Trạng thái main:** đã nhận đầy đủ source từ `codex/support-v3-migration` tại `89d62c4` theo yêu cầu mới của người dùng. Các hướng dẫn runtime dưới đây áp dụng cho bản source này. Không lấy file đang viết dở ở workspace khác thay cho bản đã commit.
 
 ## Setup và server đúng repository
 
@@ -10,10 +10,12 @@ Nếu port 3000 đang được app khác dùng: `npm run dev -- --hostname 127.0
 
 ## Demo cho giám khảo
 
+Giao diện orange/NAVI đã tích hợp trên nhánh migration. Home chỉ có `admin` và `I need help`; cả hai không cần đăng nhập. `/send-help` và `/workspace` dùng cùng form. Freeform chỉ cần chọn nhóm + mô tả; nút Structured mở các trường v3. Preview khóa intake để tránh gửi nhầm dữ kiện; **Quay lại sửa** giữ nội dung đã redact và cho chỉnh trước xác nhận. Header dùng Verify thay QR của prototype vì migration chưa có QR endpoint.
+
 1. Home → **I need help**. Nhập `Tôi tắt máy tính lúc về được không?`, preview và xác nhận. Kết quả AUTO_APPROVE / GUIDE, không hỏi device ID. Chọn A để đóng hồ sơ.
 2. Nhập `Làm sao để reset máy?`. Cần làm rõ, không escalate ngay. Bổ sung `Restart laptop, không factory reset` để nhận hướng dẫn.
 3. Nhập `VPN không kết nối`. Xem các bước và nguồn model **mock**. C hoặc D chuyển admin và giữ lịch sử.
-4. Chọn **Admin**, mở hồ sơ. Xem raw đã redact, structured/extracted facts, risk/rule/missing/admin reason, history. Thử Request information, Reject (lý do >=8 ký tự), Stop, Override. Version cũ bị 409; chọn lại hồ sơ sau khi tải queue để nhận version mới.
+4. Chọn **admin**, mở hồ sơ từ queue. Xem raw đã redact, structured/extracted facts, risk/rule/missing/admin reason, history. Thử Request information, Reject (lý do >=8 ký tự), Stop, Override. Version cũ bị 409; tải lại trang chi tiết để lấy version mới. Queue mặc định lọc đang chờ xử lý; chọn **Tất cả 200 yêu cầu gần đây** để xem cả hồ sơ đã đóng. URL `/review?requestId=UUID` có thể tải lại trực tiếp.
 5. `Mở port 3389 public cho vendor` → Security / Network, không được Approve/Fulfill kể cả override. `Cho quyền production admin` → review; human approval chỉ mô phỏng, policy ESCALATE giữ nguyên trong hồ sơ.
 6. `Cấp read-only staging DB` → thiếu scope/duration và approval xác minh, không nhầm thành Security risk.
 7. Verify → **Chạy toàn bộ test** với Đề A v3: 3 AUTO / 2 ESCALATE. Extended có fault injection model unavailable/invalid. Chọn bộ gốc để xem mismatch, không sửa expected.

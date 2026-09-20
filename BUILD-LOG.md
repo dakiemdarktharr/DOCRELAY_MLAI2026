@@ -1,5 +1,13 @@
 # Build Log
 
+## Merge toàn bộ vào main — 2026-09-20
+
+- Người dùng thay đổi phạm vi, yêu cầu đưa toàn bộ migration kể cả `src/` lên main.
+- Merge `89d62c4`, khôi phục đầy đủ source từng bị loại ở merge chọn lọc; không rewrite history, không đổi source đã kiểm thử.
+- Cập nhật tài liệu và hướng dẫn agent để không còn mô tả main là source-free. Giữ prompt Luna cũ như tài liệu lịch sử có chú thích.
+- Không đưa `src/domain/contracts.ts` chưa commit đang được người dùng chỉnh tại workspace chính vào merge.
+- Kiểm tra tree source/runtime/test/config trùng bản đã pass 87 unit/integration, 24 E2E, lint/typecheck/build. Không chạy lại E2E chỉ vì thay đổi tài liệu.
+
 ## Merge chọn lọc để người dùng tự viết src — 2026-09-20
 
 - Theo chỉ dẫn mới: nhận mọi thay đổi ngoài `src/` từ nhánh `codex/support-v3-migration` vào main. Loại source khỏi merge result; vẫn giữ nguyên source tham khảo trong commit `69b1649` và nhánh cũ, không rewrite history.
@@ -30,6 +38,15 @@
 - Human decisions: preserve LabPass as the future concept, keep the current code challenge-agnostic, use deterministic generic echo verification, keep the API key server-side, and use PostgreSQL/Prisma for production event persistence.
 - Corrections/risks to review: dependency versions, Render configuration, database connectivity, and all generated code must be reviewed and explained directly by team members.
 - Largest feature intentionally cut: challenge workflow, because it must be developed during Sprint 1 after the official brief is released.
+
+## 2026-09-20 — Restore prototype UI around Support v3
+
+- Tool: Astra/Codex. User requested the previous orange/NAVI interface integrated with the existing migration policy/workflow.
+- Reused prototype home, NAVI illustration/cursor, font assets/licenses and relevant CSS. Adapted presentation to the current Next 15/Tailwind 3 stack without importing prototype backend or environments.
+- Restored employee modes/preview editing, reviewer queue/filter/deep links, and cream/orange presentation for assistance, audit and Verify. `/workspace` remains an alias alongside `/send-help`; legacy generic API/UI remains.
+- Initial E2E exposed a filter label selector issue, fixed with an explicit accessible label. A concurrent edit to `src/domain/contracts.ts` then broke catalog compatibility in the shared workspace; preserved that edit and moved final validation to an isolated checkout of `69b1649` plus UI changes.
+- Final unit/integration: 87 pass. Final E2E: 24 pass, no retry/flaky tests, desktop + Pixel 7. Lint passes. Build/typecheck evidence is recorded in STATUS. Screenshots and JSON report are in `artifacts/`.
+- Main remains source-free. The UI commit excludes the concurrent domain edit. No student review/authorship or contest eligibility is asserted.
 
 ## Update template
 

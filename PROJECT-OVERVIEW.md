@@ -1,6 +1,6 @@
 # VNG Tech Support Escalation Referee
 
-> **Cập nhật theo yêu cầu tự viết source:** main hiện chỉ chứa phần ngoài `src/`. Những mô tả runtime và ghi chú migration bên dưới thuộc bản AI-assisted tham khảo `69b1649` hoặc mục tiêu thiết kế. Bài làm mới bắt đầu theo `LUNA-SRC-TUTOR-PROMPT.md`; không tự import source cũ.
+> **Cập nhật main 20/09/2026:** người dùng yêu cầu merge toàn bộ implementation, gồm `src/`, từ migration `89d62c4`. Main có giao diện orange/NAVI và policy/workflow v3; nguồn gốc AI-assisted/tái sử dụng giữ nguyên.
 
 > Runtime update 20/09/2026: Support v3 đã thay generic workspace; xem README, STATUS và `mlai26_new/data/policy/support-v3-migration.md` để biết behavior đang chạy. Các đoạn dưới là thiết kế ban đầu; khi khác với runtime, migration note v3 và tests là contract hiện tại. AUTO bao gồm guidance an toàn, OTHER không mặc định escalate, approval claim chưa xác minh không đủ authority. Tất cả side effect chỉ mô phỏng.
 

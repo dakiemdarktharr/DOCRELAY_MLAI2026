@@ -21,12 +21,12 @@ test("public entry buttons open both workspaces without authentication", async (
   await page.goto("/");
   await page.getByRole("link", { name: "I need help", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Bạn cần hỗ trợ gì?" }),
+    page.getByRole("heading", { name: "I Need Help" }),
   ).toBeVisible();
   await page.goto("/");
-  await page.getByRole("link", { name: "Admin", exact: true }).click();
+  await page.getByRole("link", { name: "admin", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Reviewer console" }),
+    page.getByRole("heading", { name: "Human Reviewer" }),
   ).toBeVisible();
   await page.goto("/");
   expect(
@@ -94,13 +94,14 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
     .getByLabel("Nhóm hỗ trợ", { exact: true })
     .selectOption("DEVICE_BOOT");
   await page
-    .getByLabel("Cách nhập", { exact: true })
-    .selectOption("structured");
+    .getByRole("button", { name: "Structured · Chọn mục", exact: true })
+    .click();
   await page
     .getByLabel("Nhu cầu cụ thể", { exact: true })
     .selectOption("DEVICE_RESTART_GUIDANCE");
   await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
   await expect(page.getByText("AUTO_APPROVE", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Quay lại sửa" }).click();
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("Grant write access to production DB");
@@ -121,7 +122,8 @@ test("reviewer rejection requires a reason and records audit", async ({
   });
   const { data } = await response.json();
   await page.goto("/review");
-  await page.getByRole("button", { name: text, exact: false }).click();
+  await page.getByRole("link", { name: text, exact: false }).click();
+  await expect(page).toHaveURL(new RegExp(`/review\\?requestId=${data.id}$`));
   await expect(
     page.getByRole("button", { name: "Reject", exact: true }),
   ).toBeDisabled();
@@ -142,6 +144,16 @@ test("reviewer rejection requires a reason and records audit", async ({
   ).json();
   expect(detail.data.status).toBe("REJECTED");
   expect(detail.data.events.at(-1).actor).toBe("public-demo-reviewer");
+  await page.reload();
+  await expect(page.getByRole("status")).toContainText("REJECTED");
+  await page.getByRole("link", { name: "← Review queue" }).click();
+  await expect(
+    page.getByRole("link", { name: text, exact: false }),
+  ).toHaveCount(0);
+  await page.getByLabel("Hiển thị", { exact: true }).selectOption("all");
+  await expect(
+    page.getByRole("link", { name: text, exact: false }),
+  ).toBeVisible();
   await page.goto("/audit");
   await page.getByLabel("Mã yêu cầu", { exact: true }).fill(data.id);
   await page.getByRole("button", { name: "Lọc / tải lại" }).click();

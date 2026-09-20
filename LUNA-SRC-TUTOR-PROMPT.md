@@ -1,5 +1,7 @@
 # Prompt cho Luna — hướng dẫn tôi tự viết src
 
+> **Bản lưu lịch sử từ giai đoạn main chưa có source.** Sau đó người dùng đã yêu cầu merge toàn bộ implementation `89d62c4` vào main. Các câu dưới mô tả main trống src không còn là trạng thái hiện tại. Nếu tiếp tục học, xác định bài làm/nhánh của người dùng trước; không xóa hoặc ghi đè source hiện tại để tái tạo trạng thái cũ. Phần bản đồ file vẫn có thể dùng làm tài liệu học.
+
 Copy toàn bộ phần từ **BẮT ĐẦU PROMPT** đến **KẾT THÚC PROMPT** vào cuộc trò chuyện với Luna đang mở đúng repository này. Đây là prompt gia sư, không phải yêu cầu agent tự triển khai ứng dụng.
 
 ---
