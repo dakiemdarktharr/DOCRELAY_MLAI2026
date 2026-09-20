@@ -54,3 +54,7 @@ Phases 0–7 đã có implementation, test và documentation cho demo local. Đ�
 ## Git và provenance
 
 Baseline commit `4009759` trên `main` (20/09/2026 16:20 +07), remote `dakiemdarktharr/DOCRELAY_MLAI2026`. Migration được tập hợp trên nhánh `codex/support-v3-migration` để review. Audit phase0 ghi nhận trạng thái chưa commit ở thời điểm kiểm tra ban đầu; sau đó đã có baseline commit. Không rewrite lịch sử hoặc timestamp. Tài liệu phân công TEAM-PLAN/PARALLEL-WORK-PLAN là lịch sử kế hoạch; prompt migration hiện tại cho phép agent triển khai và phải công bố AI assistance.
+
+## Liên kết GitHub với Vercel
+
+Bản production hiện tại được triển khai bằng Vercel CLI và đã xác nhận hoạt động. Tự deploy khi push GitHub chưa bật: Vercel từ chối `git connect` vì tài khoản chưa có GitHub Login Connection (HTTP 400). Người dùng cần kết nối GitHub trong phần Login Methods/Connections của Vercel, sau đó liên kết project labpass với dakiemdarktharr/DOCRELAY_MLAI2026. Lỗi này không ảnh hưởng URL production đang chạy.

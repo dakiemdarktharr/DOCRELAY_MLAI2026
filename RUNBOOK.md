@@ -67,3 +67,7 @@ Local: điền key vào `.env.local` (đã gitignore), đặt `AI_PROVIDER=opena
 - Không dùng git reset --hard, force-push hoặc xóa dữ liệu để sửa trạng thái.
 
 Trong Codex sandbox Windows, Playwright có thể hoàn tất test nhưng bị treo khi taskkill cây process. Lượt QA cuối chạy ngoài sandbox và tự cleanup thành công. Nếu gặp tình huống này, xác minh PID/command line của server3216 thuộc repository trước khi dừng; không dừng process3000 của ứng dụng khác.
+
+## Liên kết GitHub với Vercel
+
+Bản production hiện tại được triển khai bằng Vercel CLI và đã xác nhận hoạt động. Tự deploy khi push GitHub chưa bật: Vercel từ chối `git connect` vì tài khoản chưa có GitHub Login Connection (HTTP 400). Người dùng cần kết nối GitHub trong phần Login Methods/Connections của Vercel, sau đó liên kết project labpass với dakiemdarktharr/DOCRELAY_MLAI2026. Lỗi này không ảnh hưởng URL production đang chạy.
