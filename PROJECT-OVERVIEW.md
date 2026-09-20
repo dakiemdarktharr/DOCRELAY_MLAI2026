@@ -1,5 +1,7 @@
 # VNG Tech Support Escalation Referee
 
+> Runtime update 20/09/2026: Support v3 đã thay generic workspace; xem README, STATUS và `mlai26_new/data/policy/support-v3-migration.md` để biết behavior đang chạy. Các đoạn dưới là thiết kế ban đầu; khi khác với runtime, migration note v3 và tests là contract hiện tại. AUTO bao gồm guidance an toàn, OTHER không mặc định escalate, approval claim chưa xác minh không đủ authority. Tất cả side effect chỉ mô phỏng.
+
 ## 1. Tổng quan
 
 Đây là web application tiếp nhận và điều phối các yêu cầu hỗ trợ kỹ thuật của nhân viên trong môi trường công ty công nghệ như VNG.

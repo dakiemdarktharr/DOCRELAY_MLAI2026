@@ -1,0 +1,2 @@
+# Preserve fixture/policy hashes across Windows and Linux checkouts.
+mlai26_new/data/** text eol=lf

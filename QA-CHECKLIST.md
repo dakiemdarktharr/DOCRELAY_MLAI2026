@@ -1,5 +1,20 @@
 # QA Checklist
 
+## Support v3 — evidence 20/09/2026
+
+- [x] Read/audit/baseline trước code; phase gates trước mỗi phase tiếp theo.
+- [x] Guidance shutdown/restart, reset clarification, medium assistance và C/D handoff.
+- [x] Production/privilege/public/secret/conflict fail-safe; model invalid/timeout/evidence tests.
+- [x] Approval scoped/expiry server-only; reviewer guarded/versioned; complete chỉ mô phỏng.
+- [x] Audit actor/requestId/rules/evidence; secret không xuất hiện trong tested response/audit.
+- [x] Verify production API, judge input, v3 3auto/2escalate, fixtures gốc hash unchanged.
+- [x] 87 unit/integration tests, lint, typecheck, production build.
+- [x] 20 browser tests desktop/mobile trên server3216 có marker đúng repository.
+- [ ] Live Mongo persistence sau restart, approval integration thật, live model account/model access.
+- [ ] Public Vercel deployment của migration, cần đích deployment rõ ràng.
+
+Các checkbox generic bên dưới là checklist lịch sử, không thay thế báo cáo runtime mới trong STATUS.
+
 ## Local
 
 - [ ] `npm ci` completes from the lockfile.
