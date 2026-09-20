@@ -38,7 +38,7 @@ export function AssistanceHistory({
 }
 export function AuditTimeline({ events }: { events: AuditEvent[] }) {
   return (
-    <ol className="space-y-4">
+    <ol className="support-timeline space-y-4">
       {events.map((event) => (
         <li
           key={event.id}

@@ -2,6 +2,8 @@
 
 Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **I need help** và **Admin** không yêu cầu đăng nhập trong demo công khai.
 
+Nhánh `codex/support-v3-migration` dùng lại giao diện orange/NAVI, Nunito/Baloo2 và bố cục hỗ trợ của prototype, nối với policy/workflow v3. `main` vẫn dành cho đội tự viết `src`. Nguồn UI tái sử dụng và phạm vi thay đổi được ghi trong [UI-RESTORATION.md](UI-RESTORATION.md); commit mới không thay đổi nguồn gốc code cũ.
+
 ## Chạy ứng dụng
 
 ```powershell
@@ -29,9 +31,9 @@ Input → redact → preview facts → user xác nhận → deterministic policy
 
 | Route | Chức năng |
 | --- | --- |
-| `/workspace` | Nhóm hỗ trợ, loại request, dropdown động, freeform, preview rồi xác nhận |
+| `/send-help`, `/workspace` | Cùng form: freeform nhóm + mô tả; structured taxonomy/fields v3; preview, quay lại sửa, xác nhận |
 | `/requests/[id]` | Kết quả, hướng dẫn, feedback, làm rõ và audit |
-| `/review` | Public demo reviewer queue và thao tác có guard |
+| `/review`, `/review?requestId=UUID` | Queue có lọc chờ xử lý/tất cả; link chi tiết, thao tác có guard |
 | `/verify` | Đề A v3, extended v3, fixture gốc, judge input mới |
 | `/audit` | Timeline theo request ID và số đếm feedback demo |
 | `/legacy/workspace`, `/legacy/verify`, `/legacy/audit` | UI echo cũ trong compatibility window |

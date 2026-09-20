@@ -17,32 +17,11 @@ export function Button({
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "quiet" | "danger";
 }) {
-  return (
-    <button
-      className={cx(
-        "inline-flex min-h-10 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-accent/40 disabled:cursor-not-allowed disabled:opacity-50",
-        variant === "primary" && "bg-accent text-white hover:bg-blue-700",
-        variant === "secondary" &&
-          "border border-line bg-white text-ink hover:bg-paper",
-        variant === "quiet" && "text-slate-600 hover:bg-paper hover:text-ink",
-        variant === "danger" && "bg-red-600 text-white hover:bg-red-700",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <button className={cx("button", variant, className)} {...props} />;
 }
 
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      className={cx(
-        "rounded-2xl border border-line bg-white p-6 shadow-card",
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <div className={cx("panel", className)} {...props} />;
 }
 
 export function Badge({
@@ -78,7 +57,7 @@ export function Alert({
     <div
       className={cx(
         "rounded-xl border px-4 py-3 text-sm",
-        tone === "info" && "border-blue-200 bg-blue-50 text-blue-900",
+        tone === "info" && "border-line bg-[#e8edda] text-ink",
         tone === "error" && "border-red-200 bg-red-50 text-red-800",
         tone === "success" &&
           "border-emerald-200 bg-emerald-50 text-emerald-800",
@@ -89,28 +68,18 @@ export function Alert({
   );
 }
 
-export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      className={cx(
-        "min-h-10 w-full rounded-xl border border-line bg-white px-3 text-sm text-ink outline-none placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/10",
-        props.className,
-      )}
-      {...props}
-    />
-  );
+export function Input({
+  className,
+  ...props
+}: InputHTMLAttributes<HTMLInputElement>) {
+  return <input className={className} {...props} />;
 }
 
-export function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return (
-    <textarea
-      className={cx(
-        "min-h-36 w-full resize-y rounded-xl border border-line bg-white p-3 text-sm text-ink outline-none placeholder:text-slate-400 focus:border-accent focus:ring-2 focus:ring-accent/10",
-        props.className,
-      )}
-      {...props}
-    />
-  );
+export function Textarea({
+  className,
+  ...props
+}: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return <textarea className={cx("min-h-36", className)} {...props} />;
 }
 
 export function Spinner() {

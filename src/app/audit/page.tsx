@@ -41,8 +41,11 @@ export default function AuditPage() {
     }
   }
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-3xl font-black">Audit & phản hồi</h1>
+    <main className="page page-narrow space-y-6">
+      <div>
+        <p className="eyebrow">APPEND-ONLY AUDIT</p>
+        <h1>Mỗi quyết định, một dấu vết.</h1>
+      </div>
       <p className="text-sm text-slate-600">
         300 event mới nhất trong 200 hồ sơ demo gần đây. Lọc theo mã yêu cầu để
         xem toàn bộ timeline của hồ sơ đó.
@@ -88,6 +91,6 @@ export default function AuditPage() {
       <Link className="text-accent underline" href="/legacy/audit">
         Generic event log (compatibility)
       </Link>
-    </div>
+    </main>
   );
 }

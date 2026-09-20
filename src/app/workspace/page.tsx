@@ -27,8 +27,7 @@ type Preview = {
   canonical: CanonicalRequest;
   decision: Decision;
 };
-const selectClass =
-  "min-h-11 w-full rounded-xl border border-line bg-white p-3 text-sm";
+const selectClass = "min-h-11 w-full";
 const kinds: Record<RequestKind, string> = {
   GUIDANCE: "Hỏi cách thực hiện",
   SAFE_DIAGNOSTIC: "Chẩn đoán sự cố",
@@ -94,203 +93,248 @@ export default function WorkspacePage() {
     ...new Set([...commonFields, ...catalog[input.serviceGroup].fields]),
   ];
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <main className="page page-enter">
       <div>
-        <p className="text-sm font-semibold text-accent">
-          VNG TECH SUPPORT · DEMO
-        </p>
-        <h1 className="mt-2 text-3xl font-black">Bạn cần hỗ trợ gì?</h1>
-        <p className="mt-3 text-slate-600">
-          Mô tả vấn đề hoặc chọn thông tin có sẵn. Không gửi mật khẩu, token hay
-          dữ liệu thật.
+        <p className="eyebrow">EMPLOYEE SUPPORT</p>
+        <h1>I Need Help</h1>
+        <p className="page-description">
+          Chọn cách gửi. Kiểm tra. Chuyển đúng người.
         </p>
       </div>
-      <Card>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            void analyze();
-          }}
-          className="space-y-5"
-        >
-          <fieldset disabled={busy} className="space-y-5">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="space-y-2">
-                <span>Nhóm hỗ trợ</span>
-                <select
-                  aria-label="Nhóm hỗ trợ"
-                  className={selectClass}
-                  value={input.serviceGroup}
-                  onChange={(event) =>
-                    edit({
-                      serviceGroup: event.target.value as ServiceGroup,
-                      fields: {},
-                    })
-                  }
-                >
-                  {serviceGroups.map((group) => (
-                    <option key={group} value={group}>
-                      {catalog[group].label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="space-y-2">
-                <span>Loại yêu cầu</span>
-                <select
-                  aria-label="Loại yêu cầu"
-                  className={selectClass}
-                  value={input.requestKind ?? ""}
-                  onChange={(event) =>
-                    edit({
-                      requestKind: event.target.value
-                        ? (event.target.value as RequestKind)
-                        : undefined,
-                    })
-                  }
-                >
-                  <option value="">Để hệ thống nhận diện</option>
-                  {requestKinds.map((kind) => (
-                    <option key={kind} value={kind}>
-                      {kinds[kind]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <label className="block space-y-2">
-              <span>Cách nhập</span>
-              <select
-                className={selectClass}
-                aria-label="Cách nhập"
-                value={input.mode}
-                onChange={(event) =>
-                  edit({
-                    mode: event.target.value as SupportInput["mode"],
-                    fields: {},
-                  })
+      <div className="support-actions" role="group" aria-label="Kiểu yêu cầu">
+        {(["freeform", "structured"] as const).map((mode) => (
+          <Button
+            key={mode}
+            variant={input.mode === mode ? "primary" : "secondary"}
+            aria-pressed={input.mode === mode}
+            disabled={busy || !!preview}
+            onClick={() => edit({ mode, fields: {}, requestKind: undefined })}
+          >
+            {mode === "freeform" ? "Freeform · Mô tả" : "Structured · Chọn mục"}
+          </Button>
+        ))}
+      </div>
+      <div className="support-columns">
+        <Card>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (preview) void submit();
+              else void analyze();
+            }}
+            className="space-y-5"
+          >
+            <fieldset
+              disabled={busy || !!preview}
+              className="intake-fields space-y-5"
+            >
+              <div
+                className={
+                  input.mode === "structured" ? "grid gap-4 sm:grid-cols-2" : ""
                 }
               >
-                <option value="freeform">Mô tả tự do</option>
-                <option value="structured">Chọn thông tin chi tiết</option>
-              </select>
-            </label>
-            {input.mode === "structured" && (
-              <>
-                <label className="block space-y-2">
-                  <span>Nhu cầu cụ thể</span>
+                <label className="space-y-2">
+                  <span>Nhóm hỗ trợ</span>
                   <select
+                    aria-label="Nhóm hỗ trợ"
                     className={selectClass}
-                    aria-label="Nhu cầu cụ thể"
-                    value={input.fields.intentLabel ?? ""}
+                    value={input.serviceGroup}
                     onChange={(event) =>
                       edit({
-                        fields: {
-                          ...input.fields,
-                          intentLabel: event.target.value,
-                        },
+                        serviceGroup: event.target.value as ServiceGroup,
+                        fields: {},
                       })
                     }
                   >
-                    <option value="">Chọn nhu cầu</option>
-                    {catalog[input.serviceGroup].labels.map((label) => (
-                      <option key={label} value={label}>
-                        {label.replaceAll("_", " ")}
+                    {serviceGroups.map((group) => (
+                      <option key={group} value={group}>
+                        {catalog[group].label}
                       </option>
                     ))}
                   </select>
                 </label>
-                <details>
-                  <summary className="cursor-pointer font-semibold">
-                    Thông tin bổ sung theo nhóm
-                  </summary>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    {fields.map((field) => (
-                      <label className="space-y-2" key={field}>
-                        <span>{labelForField(field)}</span>
-                        {fieldOptions[field] ? (
-                          <select
-                            aria-label={labelForField(field)}
-                            className={selectClass}
-                            value={input.fields[field] ?? ""}
-                            onChange={(event) =>
-                              edit({
-                                fields: {
-                                  ...input.fields,
-                                  [field]: event.target.value,
-                                },
-                              })
-                            }
-                          >
-                            <option value="">Chưa cung cấp</option>
-                            {fieldOptions[field].map((value) => (
-                              <option key={value} value={value}>
-                                {value}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <Input
-                            aria-label={labelForField(field)}
-                            maxLength={300}
-                            value={input.fields[field] ?? ""}
-                            onChange={(event) =>
-                              edit({
-                                fields: {
-                                  ...input.fields,
-                                  [field]: event.target.value,
-                                },
-                              })
-                            }
-                          />
-                        )}
-                      </label>
-                    ))}
-                  </div>
-                </details>
-              </>
+                {input.mode === "structured" && (
+                  <label className="space-y-2">
+                    <span>Loại yêu cầu</span>
+                    <select
+                      aria-label="Loại yêu cầu"
+                      className={selectClass}
+                      value={input.requestKind ?? ""}
+                      onChange={(event) =>
+                        edit({
+                          requestKind: event.target.value
+                            ? (event.target.value as RequestKind)
+                            : undefined,
+                        })
+                      }
+                    >
+                      <option value="">Để hệ thống nhận diện</option>
+                      {requestKinds.map((kind) => (
+                        <option key={kind} value={kind}>
+                          {kinds[kind]}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+              </div>
+              {input.mode === "structured" && (
+                <>
+                  <label className="block space-y-2">
+                    <span>Nhu cầu cụ thể</span>
+                    <select
+                      className={selectClass}
+                      aria-label="Nhu cầu cụ thể"
+                      value={input.fields.intentLabel ?? ""}
+                      onChange={(event) =>
+                        edit({
+                          fields: {
+                            ...input.fields,
+                            intentLabel: event.target.value,
+                          },
+                        })
+                      }
+                    >
+                      <option value="">Chọn nhu cầu</option>
+                      {catalog[input.serviceGroup].labels.map((label) => (
+                        <option key={label} value={label}>
+                          {label.replaceAll("_", " ")}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <details>
+                    <summary className="cursor-pointer font-semibold">
+                      Thông tin bổ sung theo nhóm
+                    </summary>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      {fields.map((field) => (
+                        <label className="space-y-2" key={field}>
+                          <span>{labelForField(field)}</span>
+                          {fieldOptions[field] ? (
+                            <select
+                              aria-label={labelForField(field)}
+                              className={selectClass}
+                              value={input.fields[field] ?? ""}
+                              onChange={(event) =>
+                                edit({
+                                  fields: {
+                                    ...input.fields,
+                                    [field]: event.target.value,
+                                  },
+                                })
+                              }
+                            >
+                              <option value="">Chưa cung cấp</option>
+                              {fieldOptions[field].map((value) => (
+                                <option key={value} value={value}>
+                                  {value}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <Input
+                              aria-label={labelForField(field)}
+                              maxLength={300}
+                              value={input.fields[field] ?? ""}
+                              onChange={(event) =>
+                                edit({
+                                  fields: {
+                                    ...input.fields,
+                                    [field]: event.target.value,
+                                  },
+                                })
+                              }
+                            />
+                          )}
+                        </label>
+                      ))}
+                    </div>
+                  </details>
+                </>
+              )}
+              <label className="block space-y-2">
+                <span>
+                  Mô tả yêu cầu{" "}
+                  {input.mode === "structured" ? "(không bắt buộc)" : ""}
+                </span>
+                <Textarea
+                  aria-label="Mô tả yêu cầu"
+                  rows={7}
+                  required={input.mode === "freeform"}
+                  value={input.rawText}
+                  maxLength={6000}
+                  onChange={(event) => edit({ rawText: event.target.value })}
+                  placeholder="Ví dụ: VPN không kết nối, tôi nên kiểm tra gì?"
+                />
+              </label>
+            </fieldset>
+            {error && <Alert tone="error">{error}</Alert>}
+            {preview && (
+              <section
+                className="support-preview"
+                aria-label="Kiểm tra dữ kiện"
+              >
+                <h2>Mình đã hiểu như sau</h2>
+                <p>
+                  {catalog[preview.canonical.serviceGroup].label} ·{" "}
+                  {preview.canonical.intentLabel}
+                </p>
+                <p className="whitespace-pre-wrap">
+                  {preview.input.rawText || "Yêu cầu từ form structured"}
+                </p>
+                <p className="text-sm">
+                  Kiểm tra kết quả bên cạnh trước khi gửi. Bạn có thể quay lại
+                  sửa thông tin.
+                </p>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={busy}
+                  onClick={() => edit({ confirmed: false })}
+                >
+                  Quay lại sửa
+                </Button>
+              </section>
             )}
-            <label className="block space-y-2">
-              <span>
-                Mô tả yêu cầu{" "}
-                {input.mode === "structured" ? "(không bắt buộc)" : ""}
-              </span>
-              <Textarea
-                aria-label="Mô tả yêu cầu"
-                value={input.rawText}
-                maxLength={6000}
-                onChange={(event) => edit({ rawText: event.target.value })}
-                placeholder="Ví dụ: VPN không kết nối, tôi nên kiểm tra gì?"
-              />
-            </label>
             <Button type="submit" disabled={busy}>
               {busy ? (
                 <>
                   <Spinner />
                   <span className="ml-2">Đang xử lý…</span>
                 </>
+              ) : preview ? (
+                "Xác nhận và gửi yêu cầu"
               ) : (
                 "Xem hệ thống đã hiểu gì"
               )}
             </Button>
-          </fieldset>
-        </form>
-      </Card>
-      {error && <Alert tone="error">{error}</Alert>}
-      {preview && (
-        <>
-          <SupportResult {...preview} />
-          <Card className="space-y-3">
-            <p>
-              Kiểm tra thông tin trước khi gửi. Đây là demo synthetic; không có
-              cấp quyền hay thay đổi hạ tầng thật.
-            </p>
-            <Button disabled={busy} onClick={() => void submit()}>
-              Xác nhận và gửi yêu cầu
-            </Button>
-          </Card>
-        </>
-      )}
-    </div>
+          </form>
+        </Card>
+        <aside aria-label="Hướng dẫn gửi yêu cầu">
+          {preview ? (
+            <SupportResult {...preview} />
+          ) : (
+            <Card className="support-note">
+              <p className="eyebrow">AI TRÍCH XUẤT · POLICY QUYẾT ĐỊNH</p>
+              <h2>Có người kiểm tra.</h2>
+              <p>
+                Yêu cầu đơn giản nhận hướng dẫn ngay. Khi thiếu dữ kiện, hệ
+                thống hỏi đúng thông tin cần bổ sung.
+              </p>
+              <p>
+                Cần thêm hỗ trợ? Chuyển cho admin cùng lịch sử hướng dẫn. Yêu
+                cầu có rủi ro luôn qua người phụ trách.
+              </p>
+              <hr className="my-5 border-line" />
+              <p className="text-sm">
+                Demo synthetic. Không gửi mật khẩu, token hay dữ liệu thật.
+                Không có thao tác cấp quyền hoặc thay đổi hạ tầng thật.
+              </p>
+            </Card>
+          )}
+        </aside>
+      </div>
+    </main>
   );
 }

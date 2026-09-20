@@ -54,8 +54,11 @@ export default function VerifyPage() {
     }
   }
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-black">Verify policy & workflow</h1>
+    <main className="page space-y-6">
+      <div>
+        <p className="eyebrow">VERIFY · ĐỀ A</p>
+        <h1>Đối chiếu, không đoán.</h1>
+      </div>
       <Alert>
         Mỗi case gọi POST /api/support/requests, cùng API với workspace. Bộ Đề A
         v3 có 3 auto / 2 escalate. Fixture gốc được giữ nguyên; mismatch phản
@@ -182,6 +185,6 @@ export default function VerifyPage() {
       <Link className="text-accent underline" href="/legacy/verify">
         Generic echo Verify (compatibility)
       </Link>
-    </div>
+    </main>
   );
 }

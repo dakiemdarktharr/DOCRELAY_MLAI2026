@@ -24,6 +24,15 @@
 - Corrections/risks to review: dependency versions, Render configuration, database connectivity, and all generated code must be reviewed and explained directly by team members.
 - Largest feature intentionally cut: challenge workflow, because it must be developed during Sprint 1 after the official brief is released.
 
+## 2026-09-20 — Restore prototype UI around Support v3
+
+- Tool: Astra/Codex. User requested the previous orange/NAVI interface integrated with the existing migration policy/workflow.
+- Reused prototype home, NAVI illustration/cursor, font assets/licenses and relevant CSS. Adapted presentation to the current Next 15/Tailwind 3 stack without importing prototype backend or environments.
+- Restored employee modes/preview editing, reviewer queue/filter/deep links, and cream/orange presentation for assistance, audit and Verify. `/workspace` remains an alias alongside `/send-help`; legacy generic API/UI remains.
+- Initial E2E exposed a filter label selector issue, fixed with an explicit accessible label. A concurrent edit to `src/domain/contracts.ts` then broke catalog compatibility in the shared workspace; preserved that edit and moved final validation to an isolated checkout of `69b1649` plus UI changes.
+- Final unit/integration: 87 pass. Final E2E: 24 pass, no retry/flaky tests, desktop + Pixel 7. Lint passes. Build/typecheck evidence is recorded in STATUS. Screenshots and JSON report are in `artifacts/`.
+- Main remains source-free. The UI commit excludes the concurrent domain edit. No student review/authorship or contest eligibility is asserted.
+
 ## Update template
 
 For every meaningful change, record:

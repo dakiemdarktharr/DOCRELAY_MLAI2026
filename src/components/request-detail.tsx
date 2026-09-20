@@ -57,8 +57,11 @@ export function RequestDetail({ id }: { id: string }) {
       request.status,
     );
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-3xl font-black">Yêu cầu hỗ trợ</h1>
+    <main className="page page-narrow space-y-6">
+      <div>
+        <p className="eyebrow">EMPLOYEE SUPPORT</p>
+        <h1>Yêu cầu hỗ trợ</h1>
+      </div>
       <p className="break-all text-sm text-slate-500">Mã yêu cầu: {id}</p>
       {error && <Alert tone="error">{error}</Alert>}
       {!request && !error && <p role="status">Đang tải…</p>}
@@ -182,6 +185,6 @@ export function RequestDetail({ id }: { id: string }) {
       >
         Tải lại yêu cầu
       </Button>
-    </div>
+    </main>
   );
 }
