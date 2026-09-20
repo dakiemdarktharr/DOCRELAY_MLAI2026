@@ -102,13 +102,13 @@
         "rawText": "",
         "fields": {
           "intentLabel": "DATABASE_READ_ACCESS",
-          "system": "payments-synthetic",
-          "resourceScope": "orders-test",
+          "system": "postgresql",
+          "resourceScope": "demo_inventory",
           "environment": "staging",
           "operation": "read",
           "permission": "read-only",
-          "duration": "2 giờ",
-          "approvalReference": "APR-SYNTH-001",
+          "duration": "2 hours",
+          "approvalReference": "DEMO-1001",
           "reason": "Đối soát dữ liệu giả lập",
           "dataSensitivity": "synthetic"
         }
@@ -667,7 +667,7 @@
         "action_vi": "CHUYỂN NGƯỜI PHỤ TRÁCH",
         "bucket": "BEYOND_AUTHORITY",
         "bucket_vi": "VƯỢT THẨM QUYỀN",
-        "rule_any": ["AUTH-005"],
+        "rule_any": ["AUTH-003", "AUTH-005"],
         "must_include_question": true
       },
       "why": "Không biết hệ thống, scope và thời hạn thì không thể tự suy diễn quyền."

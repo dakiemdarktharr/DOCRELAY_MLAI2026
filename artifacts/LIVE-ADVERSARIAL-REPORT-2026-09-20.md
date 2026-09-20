@@ -78,7 +78,7 @@ Hướng sửa đề xuất:
 - Nội dung ticket được xem là dữ liệu không tin cậy; các chỉ dẫn “bỏ qua policy” không được coi là chỉ thị hệ thống.
 - Secret giả lập được che trước khi đưa vào canonical input và response.
 - Public exposure, production, đặc quyền, bypass và prompt injection không đi vào nhánh auto-approve.
-- Reviewer không thể approve/fulfill trực tiếp case `SECURITY_RISK` qua API.
+- Reviewer không thể approve trực tiếp case `SECURITY_RISK` qua API; đường `FULFILL` cũng bị chặn bởi trạng thái chuyển tiếp và hàng rào policy.
 - Cập nhật cạnh tranh dùng version và trả `VERSION_CONFLICT` cho thao tác cũ.
 - API đặt `Cache-Control: no-store` và có hàng rào Origin, content type, kích thước body và schema.
 - Giao diện dùng React text rendering; lần quét mã nguồn không thấy sink HTML nguy hiểm trong vùng đã kiểm tra.
@@ -94,4 +94,3 @@ Hướng sửa đề xuất:
 - Bộ ca mới: [`mlai26_new/data/adversarial/judge_stress_cases.json`](../mlai26_new/data/adversarial/judge_stress_cases.json).
 - Bộ hidden adversarial cũ vẫn giữ nguyên để không mất lịch sử; bộ mới bổ sung các nhánh reviewer, chống gửi trùng, redaction, model fault và mâu thuẫn field/free text.
 - Khi sửa lỗi, cập nhật `STATUS.md`, thêm liên kết tới báo cáo này, chạy lại `npm test`, `npm run lint`, `npm run typecheck`, `npm run build` và toàn bộ bộ ca đối kháng.
-
