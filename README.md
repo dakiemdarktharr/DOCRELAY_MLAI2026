@@ -5,6 +5,10 @@ Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js 
 
 Nhánh `codex/support-v3-migration` dùng lại giao diện orange/NAVI, Nunito/Baloo2 và bố cục hỗ trợ của prototype, nối với policy/workflow v3. Theo yêu cầu cập nhật ngày 20/09/2026, `main` đã nhận toàn bộ implementation này, gồm `src/`. Nguồn UI tái sử dụng và phạm vi thay đổi được ghi trong [UI-RESTORATION.md](UI-RESTORATION.md); commit mới không thay đổi nguồn gốc code cũ.
 
+## Bản public
+
+Mở [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
+
 ## Chạy ứng dụng
 
 ```powershell
@@ -109,10 +113,10 @@ Không gộp thành một file: server secrets và model adapter không được
 
 ## Model và storage
 
-- `AI_PROVIDER=mock` mặc định, UI ghi rõ mock. `openai` cần `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` phía server. Không có live call nào được dùng để xác nhận kết quả QA hiện tại.
+- `AI_PROVIDER=mock` mặc định, UI ghi rõ mock. `openai` cần `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` phía server. Bộ regression dùng mock; smoke production ngày 20/09/2026 đã gọi live assistance thành công với gpt-4.1-mini.
 - Model trích xuất facts, không nhận quyền quyết định. Schema strict, evidence là quote trong input; scope/entity phải có evidence; risk được tính lại. Assistance chỉ chọn/reorder bước trong safe catalog. Explanation cho user/admin luôn dùng deterministic templates nên vẫn có khi model lỗi.
 - JSON mode không bảo đảm schema; Zod vẫn bắt buộc. Adapter chặn refusal/truncation/timeout, không tool calls, không retries, `store:false`, tối đa 20 lần gọi trong budget. [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
-- `MONGODB_URI` + `MONGODB_DB` lưu request, history và audit trong cùng document bằng optimistic version CAS. Collection riêng `v3_support_requests`, `v3_model_budgets`. Chưa kiểm chứng live Mongo/restart với credential thật.
+- `MONGODB_URI` + `MONGODB_DB` lưu request, history và audit trong cùng document bằng optimistic version CAS. Collection riêng `v3_support_requests`, `v3_model_budgets`. Đã kiểm chứng live Mongo bằng workflow production và kết nối DB độc lập; chưa kiểm tra kịch bản chủ động restart cluster/failover.
 - PostgreSQL/Prisma và `DATABASE_URL` chỉ phục vụ generic event compatibility. Không migrate hoặc xóa dữ liệu cũ.
 - Production cần Mongo hoặc chủ động chọn `SUPPORT_STORAGE=memory-demo` (chỉ demo tạm); reviewer production cần `SUPPORT_ACCESS_MODE=public-demo`. Không dùng app public này cho dữ liệu thật hoặc authority thật.
 

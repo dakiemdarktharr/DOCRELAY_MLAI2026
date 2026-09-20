@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-09-20T15:46:14.042Z",
+  "newDatabase": "mlai26_support_v3_demo",
+  "dropped": [
+    "labpass_demo",
+    "labpass_rewrite_1789895268070",
+    "labpass_support_smoke_1789831331090",
+    "labpass_support_smoke_1789891727464"
+  ],
+  "remaining": [
+    "mlai26_support_v3_demo",
+    "sample_mflix",
+    "admin",
+    "local"
+  ],
+  "success": true
+}

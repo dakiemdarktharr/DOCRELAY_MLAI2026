@@ -42,17 +42,17 @@ E2E desktop + Pixel 7 khởi động server mới trên port3216, không reuse, 
 3. Restart đúng server. GET request UUID và audit; kiểm tra status/version/history còn nguyên. Hai reviewer dùng cùng version: chỉ một thao tác thành công, thao tác còn lại409.
 4. Kiểm tra trực tiếp collections chỉ có dữ liệu synthetic đã redact. Không xóa collection để reset budget. Budget model giới hạn20 lifetime trong collection `v3_model_budgets`; memory budget chỉ theo process và không phù hợp deployment nhiều instance.
 
-Live Mongo/persistence sau restart chưa được xác nhận trong migration khi không có credential. Không trình bày memory tests là bằng chứng Mongo.
+Live Mongo đã xác nhận qua production workflow và đọc document/audit bằng kết nối độc lập ngày 20/09/2026. Chưa kiểm thử chủ động cluster restart/failover. Memory tests vẫn không phải bằng chứng Mongo.
 
 ## Model live (tùy chọn)
 
-Đặt `AI_PROVIDER=openai`, `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` vào secret store của host, tên model có quyền truy cập trong tài khoản. Không đặt key trong browser hoặc Git. Dùng lượng request nhỏ trong giới hạn ngân sách; mỗi preview/submit unknown có thể gọi extraction riêng; VPN submit gọi assistance. `AI_MAX_ATTEMPTS` 0..20, timeout12s, max output1000 tokens, no retries/no tools. Model thiếu key, hết budget, refusal/invalid/evidence conflict → ESCALATE. Explanation deterministic vẫn có. Bản QA dùng mock và fault injection, không xác nhận model live.
+Đặt `AI_PROVIDER=openai`, `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` vào secret store của host, tên model có quyền truy cập trong tài khoản. Không đặt key trong browser hoặc Git. Dùng lượng request nhỏ trong giới hạn ngân sách; mỗi preview/submit unknown có thể gọi extraction riêng; VPN submit gọi assistance. `AI_MAX_ATTEMPTS` 0..20, timeout12s, max output1000 tokens, no retries/no tools. Model thiếu key, hết budget, refusal/invalid/evidence conflict → ESCALATE. Explanation deterministic vẫn có. Regression dùng mock/fault injection; smoke production đã xác nhận một assistance call bằng gpt-4.1-mini.
 
 ## Deploy
 
-Next.js có thể build/start trên host Node hoặc Vercel của **repository này**. Chưa có live release được xác nhận cho migration hiện tại; domain của repository khác không phải bằng chứng triển khai này.
+Production hiện tại: https://labpass-five.vercel.app, Vercel project `labpass`, deployment `dpl_AZS54EPpARmgqwBJ11iqvGw6tsw6`, source main `08cca12`. Project/domain cũ đã được thay bằng Support v3 của repository này. MongoDB dùng `mlai26_support_v3_demo`; bốn DB LabPass cũ đã bị xóa theo yêu cầu. Không dùng lại cấu hình MONGODB_DB=labpass_demo.
 
-Trên Vercel chọn đúng repo/root, configure Mongo riêng và `SUPPORT_ACCESS_MODE=public-demo`, model mock trước. `SUPPORT_VERIFY_FAULTS=true` cho demo Verify có chủ ý; header chỉ mô phỏng lỗi, không thể ép approve. Dùng Mongo để lưu giữa serverless instances; `memory-demo` chỉ smoke ngắn và không bền vững. Không tự copy secret của dự án khác. Sau deploy kiểm tra marker, Submit → Reviewer → Audit và persistence rồi ghi URL/deployment ID vào STATUS.
+Local: điền key vào `.env.local` (đã gitignore), đặt `AI_PROVIDER=openai`, `AI_MODEL=gpt-4.1-mini`, `AI_ESCALATION_MODEL=gpt-4.1-mini`, URI Mongo và đúng DB mới. Trên Vercel, key/URI phải là Secret và `SUPPORT_ACCESS_MODE=public-demo`. `SUPPORT_VERIFY_FAULTS=true` cho demo Verify có chủ ý; header chỉ mô phỏng lỗi, không thể ép approve. Dùng Mongo để lưu giữa serverless instances; `memory-demo` chỉ smoke ngắn và không bền vững. Không tự copy secret của dự án khác. Sau deploy kiểm tra marker, Submit → Reviewer → Audit và persistence rồi ghi URL/deployment ID vào STATUS.
 
 `render.yaml` vẫn là blueprint generic PostgreSQL lịch sử, chưa cấu hình Mongo Support v3. Nếu dùng Render phải thêm các env Support/Mongo; không coi blueprint cũ là migration release đã được kiểm chứng. Prisma migrations chỉ phục vụ `/api/events` cũ.
 

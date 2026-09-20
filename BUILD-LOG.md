@@ -1,5 +1,14 @@
 # Build Log
 
+## Vercel và MongoDB live — 2026-09-20
+
+- Theo yêu cầu: tạo `.env.local` cho key mới; không dùng key OpenAI cũ. Xác nhận model access, đồng bộ key/URI qua stdin vào Vercel Sensitive Secret. Không ghi secret vào source/log/report.
+- Thêm vercel.json và .vercelignore; kiểm tra upload không có env files. Merge cập nhật cache/index/README đồng thời trên main, không force-push. 87 tests, lint/typecheck pass; Vercel production build pass từ `08cca12`.
+- Deploy project labpass tại labpass-five.vercel.app; model gpt-4.1-mini và DB mlai26_support_v3_demo. Live smoke 12 checks pass, 1 paid model attempt tại thời điểm kiểm tra; read/write/audit được đối chiếu qua Mongo connection độc lập.
+- Sau khi bản mới hoạt động, drop bốn database LabPass cũ đúng danh sách đã kiểm kê, theo yêu cầu người dùng. Report ghi tên DB đã drop và DB được giữ; không đọc/ghi hồ sơ cũ vào fixture.
+- Browser desktop/mobile public entry pass. Không tuyên bố đã thử failover, load test hoặc mọi intent với model live.
+
+
 ## Merge toàn bộ vào main — 2026-09-20
 
 - Người dùng thay đổi phạm vi, yêu cầu đưa toàn bộ migration kể cả `src/` lên main.

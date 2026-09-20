@@ -1,0 +1,76 @@
+{
+  "timestamp": "2026-09-20T15:45:01.525Z",
+  "origin": "https://labpass-five.vercel.app",
+  "synthetic": true,
+  "checks": [
+    {
+      "name": "V3 production with MongoDB and OpenAI",
+      "pass": true
+    },
+    {
+      "name": "Shutdown auto guidance",
+      "pass": true
+    },
+    {
+      "name": "Reset clarification",
+      "pass": true
+    },
+    {
+      "name": "Real model assistance",
+      "pass": true
+    },
+    {
+      "name": "Handoff retains assistance",
+      "pass": true
+    },
+    {
+      "name": "Reviewer update",
+      "pass": true
+    },
+    {
+      "name": "Independent HTTP read retains version",
+      "pass": true
+    },
+    {
+      "name": "Public RDP escalates and secret redacts",
+      "pass": true
+    },
+    {
+      "name": "Audit persisted",
+      "pass": true
+    },
+    {
+      "name": "Queue can read indexed Mongo collection",
+      "pass": true
+    },
+    {
+      "name": "Separate Mongo connection verifies durable record",
+      "pass": true
+    },
+    {
+      "name": "Model call recorded in Mongo budget",
+      "pass": true
+    }
+  ],
+  "requestIds": [
+    "6f75a485-1374-414e-a1ad-8014077f0f65",
+    "acecf9cb-7b2c-424c-a73b-3c5d2e7a7632",
+    "158df55d-50ee-4ad1-8ffa-ab02fc22c853",
+    "0cd12211-2961-4548-8b1d-4a15e716ea86"
+  ],
+  "runtime": {
+    "status": "ok",
+    "app": "MLAI_SUPPORT_REFEREE_V3",
+    "storage": "MONGODB",
+    "provider": "openai",
+    "policy": "support-guidance-v3",
+    "simulated": true
+  },
+  "liveModel": {
+    "source": "openai",
+    "handlingMode": "LLM_ASSIST",
+    "failure": null
+  },
+  "paidModelAttempts": 1,
+  "success": true
+}

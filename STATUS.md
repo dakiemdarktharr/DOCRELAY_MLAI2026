@@ -1,5 +1,14 @@
 # Support migration status — 20/09/2026
 
+## Production — Vercel + MongoDB + OpenAI
+
+- Public URL: https://labpass-five.vercel.app; deployment `dpl_AZS54EPpARmgqwBJ11iqvGw6tsw6`, source main `08cca12`. Vercel build PASS.
+- Runtime xác nhận `MLAI_SUPPORT_REFEREE_V3`, storage `MONGODB`, provider `openai`; AI_MODEL và AI_ESCALATION_MODEL dùng `gpt-4.1-mini`. Key mới do người dùng nhập, lưu Vercel Sensitive Secret.
+- 12/12 live checks PASS: shutdown guide, reset hỏi thêm, VPN assistance từ OpenAI, handoff giữ history, reviewer reject, đọc lại version, RDP/secret fail-safe/redaction, audit, queue và đối chiếu document bằng kết nối Mongo độc lập. Đã tiêu thụ 1 model attempt lúc kiểm tra; giới hạn 20 lifetime.
+- Database mới `mlai26_support_v3_demo`: `v3_support_requests`, `v3_model_budgets`, index updatedAt. Đã xóa bốn DB LabPass cũ theo yêu cầu sau khi xác nhận bản mới hoạt động; giữ sample_mflix/admin/local.
+- Desktop/mobile public entry và không tràn ngang PASS. Reports: `artifacts/live-deployment-smoke.json`, `artifacts/mongodb-migration.json`; screenshots `production-help-*`.
+- Sau khi đồng bộ cập nhật main từ tác vụ khác: 87/87 unit/integration, lint/typecheck PASS; full E2E 24/24 là evidence trước deploy. Smoke live bổ sung trên bản production hiện tại, không gọi lại cả bộ Verify bằng paid model.
+
 ## Main đã nhận đầy đủ source
 
 Theo yêu cầu mới nhất, merge toàn bộ `codex/support-v3-migration` tại `89d62c4` vào `main`, bao gồm `src/`. Source và các file runtime/test/config giữ nguyên bản migration đã kiểm thử; thay đổi thêm chỉ cập nhật tài liệu trạng thái main. Bản `contracts.ts` chưa commit trong workspace chính được giữ nguyên, không đưa vào merge.
@@ -13,7 +22,7 @@ Theo yêu cầu mới nhất, merge toàn bộ `codex/support-v3-migration` tạ
 - Trong lúc QA, `src/domain/contracts.ts` ở workspace chính được chỉnh bởi thao tác khác và không còn khớp catalog (ví dụ `STORAGE_BACKUP` thay `STORAGE`). File đó được bảo toàn, không đưa vào commit UI; không suy diễn kết quả QA này áp dụng cho bản domain đang viết dở.
 - Tại thời điểm commit UI `89d62c4`, main còn chưa có source; yêu cầu merge toàn bộ sau đó thay thế giới hạn này như ghi ở đầu tài liệu.
 
-Phases 0–7 đã có implementation, test và documentation cho demo local. Đây là repository `mlai26`, không phải bản LabPass/DocRelay trong repository khác. Live persistence/model/deployment vẫn là các bước chưa xác nhận bên dưới.
+Phases 0–7 đã có implementation, test và documentation cho demo local. Đây là repository `mlai26`, không phải bản LabPass/DocRelay trong repository khác. Live persistence/model/deployment đã được kiểm tra trong phạm vi smoke ghi ở đầu tài liệu.
 
 ## Runtime
 
@@ -35,10 +44,10 @@ Phases 0–7 đã có implementation, test và documentation cho demo local. Đ�
 
 ## Chưa xác nhận / giới hạn
 
-- Live Mongo connection, persistence qua restart và live OpenAI models chưa test; không có credential trong repo này. Memory không bền vững hoặc chia sẻ instance.
+- Live Mongo connection/read-write và một assistance call OpenAI đã pass. Chưa kiểm chứng chủ động cluster restart/failover hoặc toàn bộ taxonomy trên model live. Memory vẫn không bền vững/chia sẻ instance nếu chọn chế độ đó.
 - Regex extraction/redaction có giới hạn ngôn ngữ; medium model chỉ chọn bước đã kiểm duyệt. Catalog đầy đủ không có nghĩa đầy đủ automation nghiệp vụ.
 - Không SSO/actor identity, external tools, IAM/DB/cloud execution, production data, approval authority thật. Public reviewer chỉ synthetic demo.
-- Chưa xác nhận public deployment của migration. Blueprint Render cũ vẫn là generic; cần environment Support v3.
+- Public deployment Vercel đã xác nhận; blueprint Render vẫn là generic và chưa được kiểm thử.
 - npm audit từ dependency install báo6 advisories (2moderate/4high); không force-upgrade major ngoài phạm vi migration.
 - Phần học sinh tự viết/review cần ghi riêng. Source migration do Astra/Codex hỗ trợ không được ghi là tự viết hay dùng commit mới để thay đổi nguồn gốc scaffold.
 
