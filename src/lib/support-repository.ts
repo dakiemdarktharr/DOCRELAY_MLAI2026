@@ -1,4 +1,4 @@
-import { MongoClient, MongoServerError } from "mongodb";
+import { MongoClient, MongoServerError, type Db } from "mongodb";
 import type { SupportRequest } from "@/domain/contracts";
 
 export class SupportError extends Error {
@@ -15,6 +15,7 @@ type Runtime = {
   supportV3Requests?: Map<string, SupportRequest>;
   supportV3Mongo?: MongoClient;
   supportV3Budget?: number;
+  supportV3IndexReady?: Promise<string>;
 };
 const runtime = globalThis as typeof globalThis & Runtime;
 function memory() {
@@ -42,6 +43,19 @@ function database() {
     );
   return null;
 }
+function supportRequests(db: Db) {
+  return db.collection<Document>("v3_support_requests");
+}
+async function ensureSupportRequestIndex(db: Db) {
+  if (!runtime.supportV3IndexReady) {
+    const creating = supportRequests(db).createIndex({ "data.updatedAt": -1 });
+    runtime.supportV3IndexReady = creating.catch((error) => {
+      runtime.supportV3IndexReady = undefined;
+      throw error;
+    });
+  }
+  await runtime.supportV3IndexReady;
+}
 export function supportStorageMode() {
   return process.env.MONGODB_URI ? "MONGODB" : "MEMORY_DEMO";
 }
@@ -51,24 +65,23 @@ export async function getSupportRequest(
   const db = database();
   const row = db
     ? (
-        await db
-          .collection<Document>("v3_support_requests")
-          .findOne({ _id: id })
+        await supportRequests(db).findOne({ _id: id })
       )?.data
     : memory().get(id);
   return row ? structuredClone(row) : null;
 }
 export async function listSupportRequests(): Promise<SupportRequest[]> {
   const db = database();
-  if (db)
+  if (db) {
+    await ensureSupportRequestIndex(db);
     return (
-      await db
-        .collection<Document>("v3_support_requests")
+      await supportRequests(db)
         .find()
         .sort({ "data.updatedAt": -1 })
         .limit(200)
         .toArray()
     ).map((row) => row.data);
+  }
   return structuredClone(
     [...memory().values()]
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
@@ -81,8 +94,7 @@ export async function insertSupportRequest(
   const db = database();
   if (db) {
     try {
-      await db
-        .collection<Document>("v3_support_requests")
+      await supportRequests(db)
         .insertOne({ _id: request.id, data: request });
       return true;
     } catch (error) {
@@ -173,4 +185,5 @@ export function resetSupportTestStore() {
   if (process.env.NODE_ENV !== "test") throw new Error("TEST_ONLY");
   runtime.supportV3Requests = new Map();
   runtime.supportV3Budget = 0;
+  runtime.supportV3IndexReady = undefined;
 }

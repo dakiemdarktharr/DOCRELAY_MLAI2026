@@ -4,10 +4,7 @@ import { SupportError } from "./support-repository";
 
 export async function supportApi(work: () => Promise<unknown>, status = 200) {
   try {
-    return successResponse(await work(), {
-      status,
-      headers: { "Cache-Control": "no-store" },
-    });
+    return successResponse(await work(), { status });
   } catch (error) {
     if (error instanceof SupportError)
       return errorResponse(error.code, error.message, error.status);
