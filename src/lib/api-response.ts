@@ -14,8 +14,17 @@ export type ApiFailure = {
   };
 };
 
+function noStore(init?: ResponseInit): ResponseInit {
+  const headers = new Headers(init?.headers);
+  headers.set("Cache-Control", "no-store");
+  return { ...init, headers };
+}
+
 export function successResponse<T>(data: T, init?: ResponseInit) {
-  return NextResponse.json<ApiSuccess<T>>({ success: true, data }, init);
+  return NextResponse.json<ApiSuccess<T>>(
+    { success: true, data },
+    noStore(init),
+  );
 }
 
 export function errorResponse(
@@ -29,6 +38,6 @@ export function errorResponse(
       success: false,
       error: { code, message, ...(details ? { details } : {}) },
     },
-    { status },
+    noStore({ status }),
   );
 }

@@ -6,6 +6,7 @@ describe("generic API routes", () => {
   it("returns a healthy standardized response", async () => {
     const response = health();
     expect(response.status).toBe(200);
+    expect(response.headers.get("cache-control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({
       success: true,
       data: { status: "ok" },
@@ -34,6 +35,7 @@ describe("generic API routes", () => {
       }),
     );
     expect(response.status).toBe(422);
+    expect(response.headers.get("cache-control")).toBe("no-store");
     await expect(response.json()).resolves.toMatchObject({
       success: false,
       error: { code: "VALIDATION_ERROR" },
