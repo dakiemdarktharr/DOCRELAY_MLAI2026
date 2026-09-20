@@ -1,72 +1,43 @@
-# Project Status
+# Student implementation status — main
 
-## Current phase
+Theo yêu cầu mới của người dùng: merge mọi thay đổi ngoài `src/` vào main, để người dùng tự viết source. Tree main chủ động không chứa `src/`; tests/config/fixtures đã có để làm contract và bài tập. Chưa có runtime mới, không thể dùng kết quả QA cũ để tuyên bố main build/test thành công.
 
-`PRE-SPRINT / GENERIC INFRASTRUCTURE SKELETON COMPLETE`
+- Hướng dẫn học: `LUNA-SRC-TUTOR-PROMPT.md`, 8 chặng và bản đồ từng file.
+- Chế độ hỗ trợ: gia sư/reviewer theo root `AGENTS.md`, không tự sinh hoặc restore source.
+- Bản AI-assisted được giữ nguyên ở `codex/support-v3-migration`, commit `69b16493143b1fd48d41487012ff0db77999a042`; lịch sử Git không bị xóa hoặc sửa ngày.
+- Chưa triển khai main thiếu source. Cần tự viết, chạy lại QA trên implementation mới, rồi mới xét live deployment.
 
-## Completed this session
+## Bản tham khảo — không phải trạng thái main hiện tại
 
-- [x] Next.js App Router scaffold with `/`, `/workspace`, `/verify`, and `/audit`.
-- [x] Generic shared UI primitives and navigation.
-- [x] `GET /api/health`, `POST /api/echo`, `GET /api/events`, and optional `POST /api/llm-test`.
-- [x] Zod validation and standardized success/error response format.
-- [x] Prisma `Event` schema, migrations scripts, and PostgreSQL-backed event helper.
-- [x] Generic in-memory fallback for local development when `DATABASE_URL` is absent.
-- [x] Generic four-case Verify runner using the production echo endpoint.
-- [x] Structured-output LLM wrapper with schema validation, timeout, and retry handling.
-- [x] Playwright config and browser smoke-test spec for the generic routes/workspace.
-- [x] README, Runbook, Build Log, QA checklist, Render blueprint, and task board.
-- [x] Reproducible `package-lock.json` with pinned dependencies.
-- [x] `npm test`: 12/12 tests pass.
-- [x] `npm run build`: production build passes.
-- [x] `npm run test:e2e`: 2/2 Chromium smoke tests pass.
-- [x] Local production smoke test: UI routes, health, events, and echo pass.
+Các mục bên dưới ghi lại implementation và QA tại commit `69b1649` để tham khảo. Phases 0–7 của bản đó đã có code/test; source của nó không được nhận vào tree main trong lần merge chọn lọc này.
 
-## Next action
+## Runtime của bản tham khảo
 
-1. Team reviews the generated generic code and makes the repository public before reusing it.
-2. Configure a disposable PostgreSQL database and run `npm run db:deploy` from a blank database.
-3. Deploy the generic shell to Render and record the live URL.
-4. Confirm the official challenge brief before adding any challenge-specific code during Sprint 1.
+- Canonical request/decision contract, 13 service groups, taxonomy/fields, versioned policy và GUIDE-001…008.
+- Preview, confirmed idempotent submit, deterministic precedence, redaction, scoped demo approval.
+- Model mock/OpenAI adapter, evidence/schema checks, fail-safe, bounded calls, safe assistance và deterministic explanations.
+- Employee feedback/clarification, public demo reviewer, guarded transitions/CAS, embedded audit/history và feedback counts.
+- Verify cùng API, judge input mới, Đề A v3 đúng3auto/2escalate. 123 Ground Truth +5Verify gốc giữ nguyên byte-for-byte và được báo mismatch riêng.
+- Generic UI chuyển `/legacy/*`; các API health/echo/events được giữ. Không thao tác hạ tầng thật.
 
-## Blockers
+## Evidence của bản tham khảo
 
-- No public repository URL yet.
-- No Render service or PostgreSQL credentials provided.
-- Official challenge-specific brief and test cases are intentionally not present.
-- PostgreSQL migration/restart evidence is still pending.
+- Baseline trước migration: 12 unit/integration tests, lint và build PASS.
+- Phase gates domain3, policy17, supportAPI4, model6, reviewer8 ban đầu (nay10), Verify18 PASS.
+- Full test: 87/87 PASS; lint, typecheck và production build PASS. E2E20/20 desktop/mobile PASS (51.9s, không retry, 0flaky), sau sửa regression từ khóa ETL. `artifacts/e2e-results.json` là report runner. Lượt cuối chạy ngoài sandbox Windows để Playwright tự cleanup server thành công; không dừng process3000.
+- Original fixture report: 128 total, 48 matched action+bucket, 80 mismatch với expected cũ; không case ESCALATE gốc nào thành AUTO trong lượt này. Đây là compatibility analysis, không phải pass rate với policy mới hay production accuracy. Xem `artifacts/original-fixture-evaluation.json`.
+- Hash check giữ nguyên toàn bộ nguồn policy/verify/ground-truth có trong `artifacts/migration-baseline-manifest.json`.
+- E2E dùng port3216, app marker `MLAI_SUPPORT_REFEREE_V3`, mock/memory; không dùng port3000 PID48292 của repository khác.
 
-## Decisions
+## Chưa xác nhận / giới hạn
 
-- Keep TypeScript/Next.js/Tailwind/Prisma/PostgreSQL/Vitest/Playwright/Render as the planned stack.
-- Keep all current behavior generic and harmless; do not add policy, escalation, authority, uncertainty, official prompt, or official dataset logic before Sprint 1.
-- Keep the policy/decision boundary out of this pre-sprint shell; the future workflow must remain deterministic and explainable.
-- Keep LLM access server-side behind `src/lib/ai/` and require a configured key only for the sandbox endpoint.
-- Use an in-memory event fallback only for local usability; production must use PostgreSQL persistence.
-- Upgrade direct Next.js, Vitest, and PostCSS versions based on audit findings; retain non-forced Prisma/Vitest transitive audit warnings for explicit team review.
+- Live Mongo connection, persistence qua restart và live OpenAI models chưa test; không có credential trong repo này. Memory không bền vững hoặc chia sẻ instance.
+- Regex extraction/redaction có giới hạn ngôn ngữ; medium model chỉ chọn bước đã kiểm duyệt. Catalog đầy đủ không có nghĩa đầy đủ automation nghiệp vụ.
+- Không SSO/actor identity, external tools, IAM/DB/cloud execution, production data, approval authority thật. Public reviewer chỉ synthetic demo.
+- Chưa xác nhận public deployment của migration. Blueprint Render cũ vẫn là generic; cần environment Support v3.
+- npm audit từ dependency install báo6 advisories (2moderate/4high); không force-upgrade major ngoài phạm vi migration.
+- Phần học sinh tự viết/review cần ghi riêng. Source migration do Astra/Codex hỗ trợ không được ghi là tự viết hay dùng commit mới để thay đổi nguồn gốc scaffold.
 
-## Risks
+## Git và provenance
 
-- `npm audit` still reports high transitive findings in Prisma CLI (`deepmerge-ts`/`effect`) and a moderate Vitest mocker advisory. No force-upgrade was applied because the suggested changes are major/breaking or unrelated to runtime production behavior.
-- Render deployment and blank-database migration are not validated until team credentials are available.
-- The generic pre-sprint code must be publicly disclosed if reused under the competition rules.
-
-## Evidence
-
-- Test command: `npm test` — 3 suites, 12 tests passed.
-- Build command: `npm run build` — Next.js 15.5.25 production build passed.
-- E2E command: `npm run test:e2e` — 2 Chromium smoke tests passed.
-- Smoke test: local `next start` on port 3100; `/`, `/workspace`, `/verify`, `/audit`, `/api/health`, `/api/events`, and `POST /api/echo` all passed.
-- Persistence evidence pending: PostgreSQL-backed migration and restart test.
-- Repository URL: `[to be added by team]`.
-- Live URL: `[to be added after Render deployment]`.
-- Lint command: `npm run lint` — ESLint completed with no errors.
-- Schema command: `DATABASE_URL=<process-local sample> npx prisma validate` — schema valid.
-
-## User directive recorded
-
-The three student members must self-write the challenge-specific core in TypeScript/TSX. Work is now split as three equal vertical slices in `TEAM-PLAN.md`: intake/verification, deterministic decision/safety, and human control/evidence. AI assistance is limited to explanation, review, test suggestions, and debugging support; it is not counted as core implementation authorship.
-
-## Parallel-work directive recorded
-
-Ba thành viên làm song song theo ba làn: intake/UI, decision engine và human review/audit. Contract và fixture cho phép mỗi làn chạy độc lập; Verify, QA và deployment được chia theo phần việc, không giao riêng cho Thành viên 3. Chi tiết ở `PARALLEL-WORK-PLAN.md`.
+Baseline commit `4009759` trên `main` (20/09/2026 16:20 +07), remote `dakiemdarktharr/DOCRELAY_MLAI2026`. Migration được tập hợp trên nhánh `codex/support-v3-migration` để review. Audit phase0 ghi nhận trạng thái chưa commit ở thời điểm kiểm tra ban đầu; sau đó đã có baseline commit. Không rewrite lịch sử hoặc timestamp. Tài liệu phân công TEAM-PLAN/PARALLEL-WORK-PLAN là lịch sử kế hoạch; prompt migration hiện tại cho phép agent triển khai và phải công bố AI assistance.

@@ -1,62 +1,67 @@
-# Runbook
+# Support Referee runbook
 
-## 1. Clone
+> **Trạng thái main:** cố ý chưa có `src/` để người dùng tự code. Các lệnh chạy app/build và kịch bản demo dưới đây dùng sau khi bạn hoàn thành source, hoặc để hiểu bản tham khảo `69b1649`. Không có source thì lỗi missing module là dự kiến; không tự restore từ nhánh migration. Bắt đầu học bằng `LUNA-SRC-TUTOR-PROMPT.md` và chạy tests theo từng chặng. Không deploy main ở trạng thái chuẩn bị này.
 
-```bash
-git clone <public-repository-url>
-cd <repository-directory>
-```
+## Setup và server đúng repository
 
-## 2. Install dependencies
+Chạy trong `C:/Users/ANHKHOI/Documents/ChatGPT/mlai26`, không phải repository khác. `npm ci`, copy `.env.example` sang `.env.local` nếu chưa có, `npm run db:generate`, rồi `npm run dev`. Mặc định memory/mock; không cần credential. Trên PowerShell kiểm tra `Get-NetTCPConnection -State Listen` trước khi chọn port. Không dừng process không thuộc tác vụ.
 
-```bash
-npm ci
-```
+Nếu port 3000 đang được app khác dùng: `npm run dev -- --hostname 127.0.0.1 --port 3216`. Gọi `/api/support/health` và xác nhận `app=MLAI_SUPPORT_REFEREE_V3`, `policy=support-guidance-v3`. Đây là liveness; muốn xác nhận DB thực sự phải tạo rồi đọc lại request.
 
-## 3. Configure environment
+## Demo cho giám khảo
 
-Copy `.env.example` to `.env.local`. For persistence, set a reachable PostgreSQL `DATABASE_URL`. Never commit `.env.local` or any API key.
+1. Home → **I need help**. Nhập `Tôi tắt máy tính lúc về được không?`, preview và xác nhận. Kết quả AUTO_APPROVE / GUIDE, không hỏi device ID. Chọn A để đóng hồ sơ.
+2. Nhập `Làm sao để reset máy?`. Cần làm rõ, không escalate ngay. Bổ sung `Restart laptop, không factory reset` để nhận hướng dẫn.
+3. Nhập `VPN không kết nối`. Xem các bước và nguồn model **mock**. C hoặc D chuyển admin và giữ lịch sử.
+4. Chọn **Admin**, mở hồ sơ. Xem raw đã redact, structured/extracted facts, risk/rule/missing/admin reason, history. Thử Request information, Reject (lý do >=8 ký tự), Stop, Override. Version cũ bị 409; chọn lại hồ sơ sau khi tải queue để nhận version mới.
+5. `Mở port 3389 public cho vendor` → Security / Network, không được Approve/Fulfill kể cả override. `Cho quyền production admin` → review; human approval chỉ mô phỏng, policy ESCALATE giữ nguyên trong hồ sơ.
+6. `Cấp read-only staging DB` → thiếu scope/duration và approval xác minh, không nhầm thành Security risk.
+7. Verify → **Chạy toàn bộ test** với Đề A v3: 3 AUTO / 2 ESCALATE. Extended có fault injection model unavailable/invalid. Chọn bộ gốc để xem mismatch, không sửa expected.
+8. Nhập câu mới tại Judge input; mở request để kiểm tra audit. `/audit` lọc theo UUID và xem actor, before/after, rule, evidence, missing fields.
 
-## 4. Run locally
+Synthetic simulated workflow có approval: chọn structured → DATABASE_READ_ACCESS; system `postgresql`, resourceScope `demo_inventory`, environment `staging`, permission `read-only`, duration `2 hours`, reason `Synthetic demo`, approvalReference `DEMO-1001`. Không cần freeform. Reference demo chỉ đúng scope này và hết hạn 01/01/2027 UTC. Browser không được gửi `approvalStatus=verified`.
 
-```bash
-npm run db:generate
-npm run dev
-```
+## QA
 
-## 5. Run Verify
-
-Open `/verify` and click **Run All Tests**. All four cases should pass when the app is running.
-
-## 6. Open the live URL
-
-Use the single Render URL recorded in the submission checklist. The app requires no account or installation.
-
-## 7. Test a normal request
-
-Open `/workspace`, enter `hello`, and click **Process**. The result should be a standardized success response containing the trimmed text.
-
-## 8. Test a validation error
-
-Submit an empty workspace input. The UI should show a `VALIDATION_ERROR` response.
-
-## 9. View the audit log
-
-Open `/audit`, refresh, and click an event row. The detail dialog should show timestamp, actor, event type, ID, and metadata.
-
-## 10. Override
-
-There is no challenge-specific human override in this generic pre-sprint shell. Add and document it only during Sprint 1 after the official workflow is known.
-
-## Database reset check
-
-Against a disposable empty PostgreSQL database:
-
-```bash
-npm run db:deploy
+```powershell
+npm test
+npm run lint
+npm run typecheck
 npm run build
+npm run test:e2e
 ```
 
-## Render checks
+E2E desktop + Pixel 7 khởi động server mới trên port3216, không reuse, env override Mongo/Postgres/key rỗng, mock/memory, max model attempts0. Port3216 phải trống; nếu đang chạy preview của chính bạn, tắt đúng process đó trước khi chạy. Không chạy build đồng thời với dev/E2E vì cùng `.next`. `artifacts/e2e-results.json` và screenshots ghi bằng chứng; output failure/trace trong `test-results/` không commit.
 
-Verify `/`, `/api/health`, `/audit`, and `/api/events` from an incognito browser window after each deployment.
+## Mongo và kiểm tra sau restart
+
+1. Tạo database disposable riêng, cấp credential hạn chế và đặt vào environment phía server. `MONGODB_DB=mlai26_support_v3_demo`; không trỏ DB production hoặc vùng hồ sơ cũ.
+2. Đặt `MONGODB_URI`, chạy app; health phải ghi MONGODB. Submit một request, lưu UUID, thao tác reviewer.
+3. Restart đúng server. GET request UUID và audit; kiểm tra status/version/history còn nguyên. Hai reviewer dùng cùng version: chỉ một thao tác thành công, thao tác còn lại409.
+4. Kiểm tra trực tiếp collections chỉ có dữ liệu synthetic đã redact. Không xóa collection để reset budget. Budget model giới hạn20 lifetime trong collection `v3_model_budgets`; memory budget chỉ theo process và không phù hợp deployment nhiều instance.
+
+Live Mongo/persistence sau restart chưa được xác nhận trong migration khi không có credential. Không trình bày memory tests là bằng chứng Mongo.
+
+## Model live (tùy chọn)
+
+Đặt `AI_PROVIDER=openai`, `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` vào secret store của host, tên model có quyền truy cập trong tài khoản. Không đặt key trong browser hoặc Git. Dùng lượng request nhỏ trong giới hạn ngân sách; mỗi preview/submit unknown có thể gọi extraction riêng; VPN submit gọi assistance. `AI_MAX_ATTEMPTS` 0..20, timeout12s, max output1000 tokens, no retries/no tools. Model thiếu key, hết budget, refusal/invalid/evidence conflict → ESCALATE. Explanation deterministic vẫn có. Bản QA dùng mock và fault injection, không xác nhận model live.
+
+## Deploy
+
+Next.js có thể build/start trên host Node hoặc Vercel của **repository này**. Chưa có live release được xác nhận cho migration hiện tại; domain của repository khác không phải bằng chứng triển khai này.
+
+Trên Vercel chọn đúng repo/root, configure Mongo riêng và `SUPPORT_ACCESS_MODE=public-demo`, model mock trước. `SUPPORT_VERIFY_FAULTS=true` cho demo Verify có chủ ý; header chỉ mô phỏng lỗi, không thể ép approve. Dùng Mongo để lưu giữa serverless instances; `memory-demo` chỉ smoke ngắn và không bền vững. Không tự copy secret của dự án khác. Sau deploy kiểm tra marker, Submit → Reviewer → Audit và persistence rồi ghi URL/deployment ID vào STATUS.
+
+`render.yaml` vẫn là blueprint generic PostgreSQL lịch sử, chưa cấu hình Mongo Support v3. Nếu dùng Render phải thêm các env Support/Mongo; không coi blueprint cũ là migration release đã được kiểm chứng. Prisma migrations chỉ phục vụ `/api/events` cũ.
+
+## Khắc phục lỗi
+
+- 422: xem field/code; chọn dropdown hợp lệ, UUID mới cho request mới, confirmed true cho submit.
+- 409: version đã thay đổi, key trùng nội dung khác, transition cấm hoặc security không được approve. Tải lại request/queue.
+- 403 reviewer production: cần chọn rõ public-demo theo phạm vi demo được cho phép.
+- 503: kiểm tra storage cấu hình; không bật log raw exception chứa URI/credential.
+- NEEDS_INFORMATION do approval: claim không đủ; cần đúng synthetic registry hoặc reviewer.
+- RECEIVED còn treo nếu process chết khi xử lý: reviewer Stop rồi tạo request mới; hiện chưa có background recovery job.
+- Không dùng git reset --hard, force-push hoặc xóa dữ liệu để sửa trạng thái.
+
+Trong Codex sandbox Windows, Playwright có thể hoàn tất test nhưng bị treo khi taskkill cây process. Lượt QA cuối chạy ngoài sandbox và tự cleanup thành công. Nếu gặp tình huống này, xác minh PID/command line của server3216 thuộc repository trước khi dừng; không dừng process3000 của ứng dụng khác.
