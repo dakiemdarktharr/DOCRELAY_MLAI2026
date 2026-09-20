@@ -30,7 +30,49 @@ Input → redact → preview facts → user xác nhận → deterministic policy
 
 ## Sơ đồ luồng xử lý
 
-Sơ đồ Excalidraw mô tả luồng từ intake, redact và trích xuất facts đến deterministic policy, hướng dẫn người dùng, reviewer console và audit/feedback: [mermaid-diagram.excalidraw](mermaid-diagram.excalidraw).
+Sơ đồ dưới đây mô tả luồng từ intake, redact và trích xuất facts đến deterministic policy, hướng dẫn người dùng, reviewer console và audit/feedback. Bản có thể chỉnh sửa nằm tại [mermaid-diagram.excalidraw](mermaid-diagram.excalidraw).
+
+```mermaid
+flowchart TD
+  A[Người dùng nhập yêu cầu] --> B[Redact secret và giữ raw input]
+  B --> C{Loại yêu cầu?}
+  C -->|Option có sẵn| D[Chuẩn hóa form]
+  C -->|Other / free text| D
+  D --> E[LLM trích xuất facts]
+  E --> F[Canonical request]
+  F --> G[Validate schema và kiểm tra mâu thuẫn]
+  G --> H[Deterministic Policy Engine]
+  H --> I{Đánh giá policy}
+  I -->|GUIDANCE hoặc safe diagnostic| J[AUTO_APPROVE: trả lời hướng dẫn]
+  I -->|Routine workflow đầy đủ| K[AUTO_APPROVE: simulated action]
+  I -->|Thiếu thông tin| L[NEEDS_INFORMATION]
+  I -->|Destructive / privileged / security risk| M[ESCALATE]
+  I -->|Production / public exposure / secret| M
+  I -->|Model lỗi / conflict không xác định| M
+  J --> N[LLM tạo explanation cho user và admin]
+  K --> N
+  L --> O[LLM tạo câu hỏi bổ sung cụ thể]
+  M --> P[Tạo reviewer task]
+  N --> Q[Hiển thị kết quả cho user]
+  O --> Q
+  P --> R[Reviewer console]
+  R --> S{Reviewer action}
+  S -->|Approve| T[Simulated fulfillment]
+  S -->|Reject| U[Thông báo từ chối]
+  S -->|Stop| V[Dừng workflow]
+  S -->|Override| W[Override có reason bắt buộc]
+  S -->|Request information| O
+  J --> X[Ghi audit event]
+  K --> X
+  L --> X
+  P --> X
+  T --> X
+  U --> X
+  V --> X
+  W --> X
+  X --> Y[Audit log theo request ID]
+  Y --> Z[Feedback và điều chỉnh policy có kiểm soát]
+```
 
 ## Route và contract
 
