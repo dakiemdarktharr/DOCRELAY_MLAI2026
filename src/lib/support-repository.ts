@@ -1,5 +1,9 @@
 import { MongoClient, MongoServerError, type Db } from "mongodb";
-import type { SupportRequest } from "@/domain/contracts";
+import type {
+  SupportRequest,
+  SupportPreview,
+  SupportSummary,
+} from "@/domain/contracts";
 
 export class SupportError extends Error {
   constructor(
@@ -12,6 +16,7 @@ export class SupportError extends Error {
 }
 type Document = { _id: string; data: SupportRequest };
 type Runtime = {
+  supportV3Previews?: Map<string, SupportPreview>;
   supportV3Requests?: Map<string, SupportRequest>;
   supportV3Mongo?: MongoClient;
   supportV3Budget?: number;
@@ -64,9 +69,7 @@ export async function getSupportRequest(
 ): Promise<SupportRequest | null> {
   const db = database();
   const row = db
-    ? (
-        await supportRequests(db).findOne({ _id: id })
-      )?.data
+    ? (await supportRequests(db).findOne({ _id: id }))?.data
     : memory().get(id);
   return row ? structuredClone(row) : null;
 }
@@ -94,8 +97,7 @@ export async function insertSupportRequest(
   const db = database();
   if (db) {
     try {
-      await supportRequests(db)
-        .insertOne({ _id: request.id, data: request });
+      await supportRequests(db).insertOne({ _id: request.id, data: request });
       return true;
     } catch (error) {
       if (error instanceof MongoServerError && error.code === 11000)
@@ -185,5 +187,71 @@ export function resetSupportTestStore() {
   if (process.env.NODE_ENV !== "test") throw new Error("TEST_ONLY");
   runtime.supportV3Requests = new Map();
   runtime.supportV3Budget = 0;
+  runtime.supportV3Previews = new Map();
   runtime.supportV3IndexReady = undefined;
+}
+
+export async function saveSupportPreview(preview: SupportPreview) {
+  const db = database();
+  if (db) {
+    const collection = db.collection<SupportPreview>("v3_support_previews");
+    await collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+    await collection.createIndex({ id: 1 }, { unique: true });
+    await collection.insertOne(preview);
+  } else {
+    const rows = (runtime.supportV3Previews ??= new Map());
+    for (const [id, item] of rows)
+      if (+item.expiresAt <= Date.now()) rows.delete(id);
+    rows.set(preview.id, structuredClone(preview));
+  }
+}
+export async function getSupportPreview(
+  id: string,
+): Promise<SupportPreview | null> {
+  const db = database();
+  return db
+    ? db.collection<SupportPreview>("v3_support_previews").findOne({ id })
+    : structuredClone(runtime.supportV3Previews?.get(id) ?? null);
+}
+export async function listSupportSummaries(): Promise<SupportSummary[]> {
+  const db = database();
+  // Additive API: the legacy full-list contract remains available during migration.
+  const rows = db
+    ? (
+        await supportRequests(db)
+          .find(
+            {},
+            {
+              projection: {
+                "data.id": 1,
+                "data.version": 1,
+                "data.status": 1,
+                "data.createdAt": 1,
+                "data.updatedAt": 1,
+                "data.originalQuestion": 1,
+                "data.input.rawText": 1,
+                "data.canonical.serviceGroup": 1,
+                "data.decision.action": 1,
+              },
+            },
+          )
+          .sort({ "data.updatedAt": -1 })
+          .limit(200)
+          .toArray()
+      ).map((row) => row.data)
+    : await listSupportRequests();
+  return rows.map((row) => ({
+    id: row.id,
+    version: row.version,
+    status: row.status,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    title: (
+      row.originalQuestion ||
+      row.input.rawText ||
+      "Yêu cầu theo danh mục"
+    ).slice(0, 140),
+    serviceGroup: row.canonical?.serviceGroup ?? "OTHER",
+    action: row.decision?.action ?? null,
+  }));
 }

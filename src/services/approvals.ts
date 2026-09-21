@@ -1,7 +1,7 @@
 import type { CanonicalRequest } from "@/domain/contracts";
 import type { Approval } from "@/domain/policy";
 import { requiresApproval } from "@/domain/policy";
-import { normalize } from "@/domain/text";
+import { normalizeFact } from "@/domain/text";
 
 // Deliberately narrow synthetic server registry. A reference is not enough without matching scope.
 // No person, real approval or production resource is represented here.
@@ -38,11 +38,11 @@ export function verifyApproval(
     Date.parse(entry.expiresAt) <= now ||
     entry.role !== "service_owner_or_dba_delegate" ||
     request.serviceGroup !== entry.service ||
-    normalize(e.system ?? "") !== entry.system ||
+    normalizeFact(e.system ?? "") !== entry.system ||
     e.resourceScope !== entry.resource ||
     request.environment !== entry.environment ||
     e.permission !== entry.permission ||
-    normalize(e.duration ?? "") !== entry.duration
+    normalizeFact(e.duration ?? "") !== entry.duration
   )
     return {
       status: "invalid",

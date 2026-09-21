@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { RequestStatus, SupportRequest } from "@/domain/contracts";
+import {
+  pendingReview,
+  type SupportSummary,
+  type RequestStatus,
+  type SupportRequest,
+} from "@/domain/contracts";
+import { displayId, statusLabels, optionName } from "@/domain/presentation";
+import { catalog, labelForField } from "@/domain/catalog";
 import { canReview, type ReviewAction } from "@/domain/transitions";
 import { browserApi } from "@/lib/browser-api";
 import { Alert, Badge, Button, Card, Textarea } from "@/components/ui";
@@ -9,23 +17,28 @@ import { SupportResult } from "@/components/support-result";
 import { AssistanceHistory, AuditTimeline } from "@/components/support-history";
 
 export function ReviewConsole({ requestId }: { requestId?: string }) {
-  const [requests, setRequests] = useState<SupportRequest[]>([]),
+  const [requests, setRequests] = useState<SupportSummary[]>([]),
     [selected, setSelected] = useState<SupportRequest | null>(null);
   const [reason, setReason] = useState(""),
     [target, setTarget] = useState<RequestStatus>("NEEDS_INFORMATION"),
     [pending, setPending] = useState(false),
     [error, setError] = useState("");
   const [filter, setFilter] = useState("pending");
+  const [search, setSearch] = useState("");
   async function refresh() {
     try {
-      setRequests(await browserApi<SupportRequest[]>("/api/support/requests"));
+      setRequests(
+        await browserApi<SupportSummary[]>(
+          "/api/support/requests?view=summary",
+        ),
+      );
       setError("");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Không thể tải queue.");
     }
   }
   useEffect(() => {
-    void browserApi<SupportRequest[]>("/api/support/requests")
+    void browserApi<SupportSummary[]>("/api/support/requests?view=summary")
       .then(setRequests)
       .catch(() => setError("Không thể tải queue."));
   }, []);
@@ -65,44 +78,48 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
     }
   }
   const labels: Record<ReviewAction, string> = {
-    APPROVE: "Approve",
-    REJECT: "Reject",
-    REQUEST_INFORMATION: "Request information",
-    STOP: "Stop",
-    OVERRIDE: "Override",
+    APPROVE: "Duyệt yêu cầu",
+    REJECT: "Từ chối",
+    REQUEST_INFORMATION: "Hỏi thêm thông tin",
+    STOP: "Dừng xử lý",
+    OVERRIDE: "Điều chỉnh quyết định",
     FULFILL: "Hoàn tất mô phỏng",
   };
   const visibleRequests = requests.filter(
     (request) =>
-      filter === "all" ||
-      ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"].includes(
-        request.status,
-      ),
+      (filter === "all" || pendingReview(request.status)) &&
+      `${request.id} ${request.title}`
+        .toLowerCase()
+        .includes(search.toLowerCase()),
   );
   return (
     <main className="page page-enter space-y-6">
       <div>
-        <p className="eyebrow">HUMAN REVIEW · SYNTHETIC DEMO</p>
-        <h1>Human Reviewer</h1>
+        <p className="eyebrow">KHÔNG GIAN NHÂN VIÊN</p>
+        <h1>Tiếp nhận hỗ trợ</h1>
       </div>
-      <Alert>
-        Demo công khai với dữ liệu giả lập. Approve và hoàn tất chỉ cập nhật hồ
-        sơ mô phỏng, không cấp quyền hay thay đổi hạ tầng.
-      </Alert>
+
       {error && <Alert tone="error">{error}</Alert>}
       <div>
         {!requestId && (
           <Card>
             <div className="section-heading">
-              <h2>Review queue ({visibleRequests.length})</h2>
+              <h2>Yêu cầu cần xử lý ({visibleRequests.length})</h2>
               <Button
                 variant="secondary"
                 onClick={() => void refresh()}
                 disabled={pending}
               >
-                Tải lại queue
+                Tải lại danh sách
               </Button>
             </div>
+            <label>
+              Tìm theo nội dung hoặc mã yêu cầu
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </label>
             <label className="max-w-sm">
               Hiển thị
               <select
@@ -115,12 +132,21 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               </select>
             </label>
             {!visibleRequests.length && (
-              <p>
-                Chưa có yêu cầu phù hợp.{" "}
-                <Link className="text-accent underline" href="/send-help">
-                  Tạo yêu cầu demo
-                </Link>
-              </p>
+              <div className="text-center py-6">
+                <Image
+                  src="/illustrations/support-mascot.png"
+                  width={110}
+                  height={110}
+                  alt=""
+                  className="mx-auto rounded-full"
+                />
+                <p>
+                  Chưa có yêu cầu phù hợp.{" "}
+                  <Link className="text-accent underline" href="/send-help">
+                    Tạo yêu cầu demo
+                  </Link>
+                </p>
+              </div>
             )}
             <ul className="review-list">
               {visibleRequests.map((request) => (
@@ -134,14 +160,12 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                         request.status === "ESCALATED" ? "warning" : "neutral"
                       }
                     >
-                      {request.status}
+                      {statusLabels[request.status]}
                     </Badge>
-                    <span className="block font-semibold">
-                      {request.input.rawText.slice(0, 180) ||
-                        request.canonical?.intentLabel}
-                    </span>
+                    <span className="block font-semibold">{request.title}</span>
                     <span className="block text-xs">
-                      {request.id} · {request.decision?.assignedTeam}
+                      {displayId(request.id)} ·{" "}
+                      {catalog[request.serviceGroup].label}
                     </span>
                   </Link>
                 </li>
@@ -152,23 +176,27 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
         {requestId && selected ? (
           <div className="min-w-0 space-y-5">
             <Link href="/review" className="button secondary">
-              ← Review queue
+              ← Danh sách yêu cầu
             </Link>
             <p role="status" className="break-all text-sm">
               {selected.id} · v{selected.version} ·{" "}
-              <strong>{selected.status}</strong>
+              <strong>{statusLabels[selected.status]}</strong>
             </p>
             <div className="support-columns review-comparison">
               <Card>
-                <h2 className="font-bold">Intake đã redact</h2>
+                <h2 className="font-bold">
+                  Nội dung đã che thông tin nhạy cảm
+                </h2>
                 <p className="my-3 whitespace-pre-wrap break-words">
                   {selected.input.rawText}
                 </p>
                 <dl>
                   {Object.entries(selected.input.fields).map(([key, value]) => (
                     <div className="mb-1 break-words" key={key}>
-                      <dt className="inline font-semibold">{key}: </dt>
-                      <dd className="inline">{value}</dd>
+                      <dt className="inline font-semibold">
+                        {labelForField(key)}:{" "}
+                      </dt>
+                      <dd className="inline">{optionName(value)}</dd>
                     </div>
                   ))}
                 </dl>
@@ -186,21 +214,36 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 <h2 className="font-bold">Giải thích cho admin</h2>
                 <p>{selected.decision.adminReason}</p>
                 <p className="mt-2">
-                  Risk signals:{" "}
+                  Dấu hiệu rủi ro:{" "}
                   {selected.canonical.riskSignals.join(", ") || "Không"}
                 </p>
                 <p>
-                  Missing information:{" "}
-                  {selected.decision.missingFields.join(", ") || "Không"}
+                  Thông tin còn thiếu:{" "}
+                  {selected.decision.missingFields
+                    .map(labelForField)
+                    .join(", ") || "Không"}
                 </p>
               </Card>
             )}
             <AssistanceHistory items={selected.assistance} />
+            {selected.stepExplanations?.map((item, index) => (
+              <Card key={index}>
+                <h2>Giải thích bước {item.step + 1}</h2>
+                <p>{item.text}</p>
+              </Card>
+            ))}
             <Card>
+              {(!!selected.decision?.missingFields.length ||
+                selected.decision?.bucket === "SECURITY_RISK") && (
+                <p className="mb-3 text-sm text-amber-900">
+                  Chưa thể duyệt: cần đủ thông tin, phê duyệt đúng phạm vi và
+                  không thuộc yêu cầu rủi ro bảo mật.
+                </p>
+              )}
               <fieldset disabled={pending} className="space-y-4">
-                <legend className="mb-3 font-bold">Xử lý của reviewer</legend>
+                <legend className="mb-3 font-bold">Thao tác xử lý</legend>
                 <label className="block">
-                  Lý do (bắt buộc với Reject / Override)
+                  Lý do (bắt buộc khi từ chối hoặc điều chỉnh)
                   <Textarea
                     maxLength={1000}
                     value={reason}
@@ -208,7 +251,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                   />
                 </label>
                 <label className="block">
-                  Trạng thái khi Override
+                  Trạng thái sau điều chỉnh
                   <select
                     className="ml-2 max-w-full rounded border p-2"
                     value={target}
@@ -216,9 +259,11 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                       setTarget(event.target.value as RequestStatus)
                     }
                   >
-                    <option value="NEEDS_INFORMATION">NEEDS_INFORMATION</option>
-                    <option value="REJECTED">REJECTED</option>
-                    <option value="APPROVED_BY_HUMAN">APPROVED_BY_HUMAN</option>
+                    <option value="NEEDS_INFORMATION">
+                      Cần bổ sung thông tin
+                    </option>
+                    <option value="REJECTED">Từ chối</option>
+                    <option value="APPROVED_BY_HUMAN">Đã duyệt</option>
                   </select>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -234,7 +279,8 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                         !canReview(selected.status, action) ||
                         (["REJECT", "OVERRIDE"].includes(action) &&
                           reason.trim().length < 8) ||
-                        (selected.decision?.bucket === "SECURITY_RISK" &&
+                        ((selected.decision?.bucket === "SECURITY_RISK" ||
+                          !!selected.decision?.missingFields.length) &&
                           (action === "APPROVE" ||
                             action === "FULFILL" ||
                             (action === "OVERRIDE" &&
@@ -253,7 +299,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               </fieldset>
             </Card>
             <Card>
-              <h2 className="mb-4 font-bold">Audit timeline</h2>
+              <h2 className="mb-4 font-bold">Lịch sử xử lý</h2>
               <AuditTimeline events={selected.events} />
             </Card>
           </div>

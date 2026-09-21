@@ -1,26 +1,49 @@
+"use client";
 import Link from "next/link";
-import { ArrowUpRight, Files } from "lucide-react";
-
+import { usePathname } from "next/navigation";
+import { Files } from "lucide-react";
 export function Header() {
+  const path = usePathname();
+  const staff = /^\/(review|audit|verify|legacy)/.test(path);
   return (
     <header className="site-header">
       <Link href="/" className="brand">
         <span className="brand-mark">
-          <Files size={25} strokeWidth={2.5} />
+          <Files size={23} />
         </span>
         IT Referee
       </Link>
-      <nav aria-label="Điều hướng chính">
-        <Link href="/send-help">
-          I Need Help <ArrowUpRight size={15} />
-        </Link>
-        <Link href="/review">Human Reviewer</Link>
-        <Link href="/audit">Audit</Link>
-        <Link href="/verify">Verify</Link>
-      </nav>
-      <span className="demo-badge">
-        <span /> DEMO MODE
-      </span>
+      {path !== "/" && (
+        <nav aria-label="Điều hướng chính">
+          {staff ? (
+            <>
+              <Link
+                href="/review"
+                aria-current={path === "/review" ? "page" : undefined}
+              >
+                Yêu cầu cần xử lý
+              </Link>
+              <Link
+                href="/audit"
+                aria-current={path === "/audit" ? "page" : undefined}
+              >
+                Lịch sử xử lý
+              </Link>
+              <Link
+                href="/verify"
+                aria-current={path === "/verify" ? "page" : undefined}
+              >
+                Kiểm thử
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/send-help">Gửi yêu cầu</Link>
+              <Link href="/track">Theo dõi yêu cầu</Link>
+            </>
+          )}
+        </nav>
+      )}
     </header>
   );
 }

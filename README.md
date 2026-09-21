@@ -1,13 +1,13 @@
 # VNG Tech Support Escalation Referee
 
 
-Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **I need help** và **Admin** không yêu cầu đăng nhập trong demo công khai.
+Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **Tôi cần hỗ trợ** và **Dành cho nhân viên** không yêu cầu đăng nhập trong demo công khai.
 
-Nhánh `codex/support-v3-migration` dùng lại giao diện orange/NAVI, Nunito/Baloo2 và bố cục hỗ trợ của prototype, nối với policy/workflow v3. Theo yêu cầu cập nhật ngày 20/09/2026, `main` đã nhận toàn bộ implementation này, gồm `src/`. Nguồn UI tái sử dụng và phạm vi thay đổi được ghi trong [UI-RESTORATION.md](UI-RESTORATION.md); commit mới không thay đổi nguồn gốc code cũ.
+Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đây chưa phải bản triển khai công khai mới.
 
 ## Bản public
 
-Mở [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
+Bằng chứng triển khai lịch sử ngày 20/09/2026 (chưa kiểm tra lại trong lượt sửa này): [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
 
 ## Chạy ứng dụng
 
@@ -22,13 +22,13 @@ Mở http://localhost:3000. Nếu port đã có process khác, dùng `npm run de
 
 ## Workflow thực tế
 
-Input → redact → preview facts → user xác nhận → deterministic policy → hướng dẫn / hỏi thêm / workflow mô phỏng / human review → audit → feedback.
+Input → redact → trích xuất facts và deterministic policy → preview ràng buộc với input → user xác nhận → lưu cùng decision/hướng dẫn → hỏi thêm / workflow mô phỏng / human review → audit → feedback.
 
 - Shutdown/restart: GUIDE-001, không hỏi device ID. Reset chưa rõ: hỏi restart hay factory reset.
-- VPN/Wi-Fi và troubleshooting trung bình: các bước đã kiểm duyệt, lựa chọn A hoàn thành / B còn lỗi / C không hiểu / D admin. C/D giữ toàn bộ lịch sử và tạo reviewer task.
+- VPN/Wi-Fi và troubleshooting trung bình: các bước đã kiểm duyệt, lựa chọn A hoàn thành / B còn lỗi / C giải thích bước đã chọn / D nhân viên hỗ trợ. C giữ trạng thái hướng dẫn và ghi lịch sử giải thích; D chuyển nhân viên. API CONFUSED cũ vẫn handoff để tương thích.
 - Production, quyền đặc quyền, secret, public exposure, bỏ kiểm soát bảo mật, wipe hoặc conflict: escalate; không có hạ tầng thật được gọi.
 - Thiếu scope/duration/approval xác minh: NEEDS_INFORMATION. Claim “manager đã approve” không là verified approval.
-- Reviewer có Approve, Reject, Request information, Stop, Override và hoàn tất mô phỏng. Reject/Override cần lý do; version guard chặn thao tác trên trạng thái cũ. SECURITY_RISK không được approve/fulfill. Quyết định policy ban đầu vẫn giữ khi người review thay trạng thái.
+- Reviewer có Approve, Reject, Request information, Stop, Override và hoàn tất mô phỏng. Reject/Override cần lý do; version guard chặn thao tác trên trạng thái cũ. SECURITY_RISK, hồ sơ đang cần thông tin, dữ kiện thiếu hoặc approval chưa xác minh không được approve/fulfill hay override sang approve. Server kiểm tra lại trong mỗi lần chuyển trạng thái. Quyết định policy ban đầu vẫn giữ khi người review thay trạng thái.
 
 `AUTO_APPROVE` chỉ cho phép hướng dẫn hoặc workflow mô phỏng; không cấp quyền, phát credential hoặc thay đổi production.
 
@@ -53,9 +53,9 @@ flowchart TD
   I -->|Destructive / privileged / security risk| M[ESCALATE]
   I -->|Production / public exposure / secret| M
   I -->|Model lỗi / conflict không xác định| M
-  J --> N[LLM tạo explanation cho user và admin]
+  J --> N[Giải thích theo rule và hướng dẫn đã kiểm duyệt]
   K --> N
-  L --> O[LLM tạo câu hỏi bổ sung cụ thể]
+  L --> O[Câu hỏi deterministic theo intent và facts thiếu]
   M --> P[Tạo reviewer task]
   N --> Q[Hiển thị kết quả cho user]
   O --> Q
@@ -83,6 +83,7 @@ flowchart TD
 | Route | Chức năng |
 | --- | --- |
 | `/send-help`, `/workspace` | Cùng form: freeform nhóm + mô tả; structured taxonomy/fields v3; preview, quay lại sửa, xác nhận |
+| `/track` | Mở hồ sơ bằng link hoặc UUID đầy đủ |
 | `/requests/[id]` | Kết quả, hướng dẫn, feedback, làm rõ và audit |
 | `/review`, `/review?requestId=UUID` | Queue có lọc chờ xử lý/tất cả; link chi tiết, thao tác có guard |
 | `/verify` | Đề A v3, extended v3, fixture gốc, judge input mới |
@@ -93,11 +94,11 @@ API dùng envelope `{success:true,data}` hoặc `{success:false,error:{code,mess
 
 | API | Contract chính |
 | --- | --- |
-| POST `/api/support/preview` | `{rawText,fields?,serviceGroup?,requestKind?,mode?,idempotencyKey:UUID}` → safe input, canonical facts, decision; không lưu request |
-| POST `/api/support/requests` | Cùng input + `confirmed:true` → request, version, decision, assistance, embedded audit; idempotent theo UUID + fingerprint |
-| GET `/api/support/requests` hoặc `/[id]` | Queue 200 hồ sơ gần đây hoặc chi tiết |
-| POST `/api/support/requests/[id]/feedback` | `{version,choice:RESOLVED|STILL_BROKEN|CONFUSED|ADMIN}` |
-| POST `/api/support/requests/[id]/clarification` | `{version,rawText,fields?}` chỉ khi NEEDS_INFORMATION |
+| POST `/api/support/preview` | `{rawText,fields?,serviceGroup?,requestKind?,mode?,idempotencyKey:UUID}` → safe input với previewId, canonical facts, decision, assistance; lưu snapshot hết hạn sau 10 phút, chưa tạo hồ sơ/queue |
+| POST `/api/support/requests` | Cùng input + `confirmed:true`, kèm previewId nếu có → request, version, decision, assistance, embedded audit; idempotent theo UUID + fingerprint |
+| GET `/api/support/requests` hoặc `/[id]` | Queue 200 hồ sơ gần đây hoặc chi tiết; `?view=summary` trả danh sách nhẹ dùng bởi UI |
+| POST `/api/support/requests/[id]/feedback` | `{version,choice:RESOLVED|STILL_BROKEN|CONFUSED|ADMIN|EXPLAIN,step?:number}` |
+| POST `/api/support/requests/[id]/clarification` | `{version,rawText?,fields?}` chỉ khi NEEDS_INFORMATION |
 | POST `/api/review/[id]` | `{version,action,reason?,target?}`; target chỉ cho override |
 | GET `/api/support/events?requestId=UUID` | Audit an toàn; không có secret gốc hay chain-of-thought |
 | GET `/api/support/metrics` | Số đếm 200 hồ sơ synthetic gần nhất, không phải production accuracy |

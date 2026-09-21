@@ -29,7 +29,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   DATABASE: {
-    label: "Database & dữ liệu",
+    label: "Cơ sở dữ liệu",
     team: "DBA/Data",
     labels: words(
       "DATABASE_CONNECTION DATABASE_READ_ACCESS DATABASE_WRITE_ACCESS DATABASE_QUERY_HELP DATABASE_QUERY_ERROR DATABASE_PERFORMANCE DATABASE_PROVISION DATABASE_SCHEMA_CHANGE DATABASE_DATA_CORRECTION DATABASE_EXPORT DATABASE_IMPORT DATABASE_BACKUP DATABASE_RESTORE DATABASE_MIGRATION DATABASE_PRODUCTION_INCIDENT",
@@ -49,7 +49,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   SOFTWARE_LICENSE: {
-    label: "Phần mềm & license",
+    label: "Phần mềm & bản quyền",
     team: "IT",
     labels: words(
       "SOFTWARE_INSTALL SOFTWARE_UPDATE SOFTWARE_UNINSTALL SOFTWARE_CRASH SOFTWARE_COMPATIBILITY SOFTWARE_PERFORMANCE LICENSE_ACTIVATION LICENSE_REQUEST APPROVED_CATALOG_LOOKUP BROWSER_EXTENSION UNSIGNED_SOFTWARE UNAPPROVED_SOFTWARE DEVELOPER_TOOL_SETUP",
@@ -59,7 +59,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   CLOUD_GPU: {
-    label: "Cloud & GPU",
+    label: "Máy chủ đám mây & GPU",
     team: "Cloud/ML Infra",
     labels: words(
       "CLOUD_SANDBOX CLOUD_VM_REQUEST GPU_REQUEST GPU_QUOTA GPU_CAPACITY CLOUD_STORAGE CLOUD_COST CLOUD_BUDGET PUBLIC_IP RESOURCE_SCALE RESOURCE_DELETE CLOUD_CREDENTIAL",
@@ -69,7 +69,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   KUBERNETES: {
-    label: "Kubernetes & Platform",
+    label: "Nền tảng Kubernetes",
     team: "Platform",
     labels: words(
       "K8S_VIEW_LOGS K8S_VIEW_METRICS K8S_RESTART_POD K8S_SCALE_WORKLOAD K8S_NAMESPACE_REQUEST K8S_DEPLOY K8S_MANIFEST_CHANGE K8S_ROLLBACK K8S_EXEC_POD K8S_CLUSTER_ACCESS K8S_SECRET_ACCESS K8S_INGRESS_CHANGE K8S_CLUSTER_ADMIN",
@@ -89,7 +89,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   MONITORING: {
-    label: "Monitoring & incident",
+    label: "Giám sát & sự cố",
     team: "SRE",
     labels: words(
       "MONITORING_VIEW_LOGS MONITORING_VIEW_METRICS ALERT_NOT_RECEIVED ALERT_FALSE_POSITIVE ALERT_THRESHOLD ALERT_ROUTING INCIDENT_REPORT INCIDENT_TRIAGE SERVICE_DEGRADED SERVICE_OUTAGE P1_INCIDENT P2_INCIDENT SLO_BREACH",
@@ -99,7 +99,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   STORAGE: {
-    label: "Storage & backup",
+    label: "Lưu trữ & sao lưu",
     team: "Storage/Data",
     labels: words(
       "STORAGE_ACCESS STORAGE_QUOTA FILE_SHARE BUCKET_ACCESS BACKUP_REQUEST BACKUP_FAILURE RESTORE_REQUEST DATA_RECOVERY DATA_DELETE DATA_RETENTION DATA_EXPORT ARCHIVE_REQUEST",
@@ -109,7 +109,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   SECURITY: {
-    label: "Security & compliance",
+    label: "Bảo mật & quy định",
     team: "Security",
     labels: words(
       "PHISHING_REPORT MALWARE_SUSPECTED SUSPICIOUS_LOGIN LOST_DEVICE_SECURITY SECRET_EXPOSURE CREDENTIAL_LEAK VULNERABILITY_REPORT POLICY_EXCEPTION MFA_DISABLE_REQUEST EDR_DISABLE_REQUEST SECURITY_INCIDENT DATA_BREACH AUDIT_EVIDENCE COMPLIANCE_QUESTION",
@@ -119,7 +119,7 @@ export const catalog: Record<ServiceGroup, Service> = {
     ),
   },
   GIT_PERMISSION: {
-    label: "Git & repository",
+    label: "Kho mã nguồn Git",
     team: "DevOps",
     labels: words("GIT_READ_ACCESS GIT_WRITE_ACCESS GIT_ADMIN_ACCESS GIT_HELP"),
     fields: words(
@@ -142,6 +142,7 @@ export const commonFields = words(
   "impact environment urgency desiredOutcome approvalStatus dataSensitivity",
 );
 export const fieldOptions: Record<string, string[]> = {
+  resetType: ["unknown", "restart", "factory_reset"],
   environment: ["unknown", "sandbox", "development", "staging", "production"],
   environmentIfKnown: [
     "unknown",
@@ -210,6 +211,75 @@ export const fieldOptions: Record<string, string[]> = {
   protocol: ["TCP", "UDP", "HTTPS", "SSH", "RDP", "Other"],
 };
 export const fieldLabels: Record<string, string> = {
+  impact: "Mức độ ảnh hưởng",
+  urgency: "Mức độ khẩn cấp",
+  desiredOutcome: "Bạn muốn đạt được điều gì",
+  dataSensitivity: "Loại dữ liệu",
+  deviceType: "Loại thiết bị",
+  dataLossRisk: "Có nguy cơ mất dữ liệu không",
+  backup: "Đã sao lưu chưa",
+  accessType: "Quyền cần dùng",
+  databaseType: "Loại cơ sở dữ liệu",
+  operation: "Việc cần làm",
+  dataVolume: "Dung lượng dữ liệu",
+  destination: "Nơi nhận dữ liệu",
+  rollbackPlan: "Cách khôi phục nếu có lỗi",
+  source: "Máy hoặc mạng nguồn",
+  target: "Máy hoặc dịch vụ đích",
+  protocol: "Giao thức kết nối",
+  port: "Cổng kết nối",
+  publicExposure: "Cho phép truy cập từ Internet",
+  affectedUsers: "Những người bị ảnh hưởng",
+  software: "Tên phần mềm",
+  version: "Phiên bản",
+  os: "Hệ điều hành",
+  approvedCatalogStatus: "Phần mềm có trong danh mục được phép không",
+  installationSource: "Nguồn cài đặt",
+  licenseDuration: "Thời hạn sử dụng bản quyền",
+  businessPurpose: "Mục đích công việc",
+  provider: "Nhà cung cấp",
+  resourceType: "Loại tài nguyên",
+  gpuType: "Loại GPU",
+  quantity: "Số lượng",
+  cpu: "Số lõi xử lý",
+  ram: "Bộ nhớ (GB)",
+  disk: "Ổ đĩa (GB)",
+  publicIp: "Cần địa chỉ Internet công khai",
+  purpose: "Mục đích sử dụng",
+  estimatedCost: "Chi phí dự kiến (USD)",
+  cleanupPlan: "Kế hoạch thu hồi tài nguyên",
+  cluster: "Cụm máy chủ",
+  namespace: "Không gian làm việc",
+  workload: "Ứng dụng cần xử lý",
+  privilegeLevel: "Mức quyền",
+  secretAccess: "Cần truy cập thông tin bí mật",
+  repository: "Kho mã nguồn",
+  pipeline: "Quy trình triển khai",
+  branchOrTag: "Nhánh hoặc phiên bản",
+  configChange: "Có thay đổi cấu hình",
+  secretChange: "Có thay đổi thông tin bí mật",
+  service: "Dịch vụ",
+  alertId: "Mã cảnh báo",
+  startTime: "Thời điểm bắt đầu lỗi",
+  affectedScope: "Phạm vi ảnh hưởng",
+  severity: "Mức nghiêm trọng",
+  storageType: "Loại lưu trữ",
+  pathOrBucket: "Thư mục hoặc vùng lưu trữ",
+  retention: "Thời gian lưu giữ",
+  productionData: "Có dữ liệu đang vận hành thật",
+  asset: "Thiết bị hoặc hệ thống liên quan",
+  incidentType: "Loại sự cố",
+  evidence: "Dấu hiệu quan sát được",
+  detectedAt: "Thời điểm phát hiện",
+  containmentRequested: "Biện pháp ngăn chặn mong muốn",
+  containsSecret: "Có chứa thông tin bí mật",
+  containsCustomerData: "Có chứa dữ liệu khách hàng",
+  reporterContact: "Cách liên hệ người báo",
+  summary: "Tóm tắt vấn đề",
+  targetServiceOrDevice: "Dịch vụ hoặc thiết bị cần hỗ trợ",
+  environmentIfKnown: "Môi trường (nếu biết)",
+  verifiedApproval: "Phê duyệt được xác minh",
+
   intentLabel: "Nhu cầu cụ thể",
   system: "Hệ thống",
   targetSystem: "Hệ thống đích",
@@ -225,13 +295,15 @@ export const fieldLabels: Record<string, string> = {
   ownership: "Thiết bị thuộc ai",
   symptom: "Triệu chứng",
   reason: "Lý do",
-  resetType: "Restart hay factory reset?",
+  resetType: "Cách đặt lại máy",
 };
 export function labelForField(name: string) {
   return fieldLabels[name] ?? name.replace(/([A-Z])/g, " $1");
 }
 export const allFields = new Set([
   "intentLabel",
+  "symptom",
+  "resetType",
   ...commonFields,
   ...Object.values(catalog).flatMap((service) => service.fields),
 ]);

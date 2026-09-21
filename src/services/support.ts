@@ -5,12 +5,16 @@ import type {
   Decision,
   SupportInput,
   SupportRequest,
+  SupportPreview,
 } from "@/domain/contracts";
 import { supportInputSchema } from "@/domain/input";
+import { POLICY_VERSION } from "@/domain/policy-source";
 import { evaluatePolicy } from "@/domain/policy";
 import { extractIntake, safeInput } from "@/domain/text";
 import {
   getSupportRequest,
+  getSupportPreview,
+  saveSupportPreview,
   insertSupportRequest,
   SupportError,
   updateSupportRequest,
@@ -68,9 +72,76 @@ export async function analyze(
     decision: evaluatePolicy(canonical, verifyApproval(canonical)),
   };
 }
+function fingerprintOf(input: SupportInput) {
+  return createHash("sha256")
+    .update(
+      JSON.stringify({
+        ...input,
+        fields: Object.fromEntries(Object.entries(input.fields).sort()),
+        confirmed: undefined,
+        idempotencyKey: undefined,
+        previewId: undefined,
+      }),
+    )
+    .digest("hex");
+}
+async function completeAnalysis(
+  input: SupportInput,
+  markers: string[],
+  options: ModelOptions = {},
+) {
+  const result = await analyze(input, markers, options);
+  let assistance = null;
+  if (
+    result.decision.action === "AUTO_APPROVE" &&
+    ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
+  ) {
+    try {
+      assistance = await createAssistance(
+        result.canonical,
+        result.decision.handlingMode === "LLM_ASSIST",
+        options,
+      );
+    } catch (error) {
+      result.canonical = modelFailure(result.canonical, error);
+      result.decision = evaluatePolicy(
+        result.canonical,
+        verifyApproval(result.canonical),
+      );
+    }
+  }
+  return { ...result, assistance };
+}
 export async function previewSupport(value: unknown) {
   const safe = prepareInput(value);
-  return { input: safe.input, ...(await analyze(safe.input, safe.markers)) };
+  const preview: SupportPreview = {
+    id: randomUUID(),
+    fingerprint: fingerprintOf(safe.input),
+    expiresAt: new Date(Date.now() + 10 * 60_000),
+    ...(await completeAnalysis(safe.input, safe.markers)),
+  };
+  await saveSupportPreview(preview);
+  return {
+    input: { ...safe.input, previewId: preview.id },
+    canonical: preview.canonical,
+    decision: preview.decision,
+    assistance: preview.assistance,
+    expiresAt: preview.expiresAt,
+  };
+}
+async function waitForDecision(request: SupportRequest) {
+  const deadline = Date.now() + 26_000;
+  while (!request.decision && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    request = (await getSupportRequest(request.id)) ?? request;
+  }
+  if (!request.decision)
+    throw new SupportError(
+      "REQUEST_PROCESSING",
+      "Yêu cầu đang được xử lý. Thử lại với cùng mã gửi.",
+      409,
+    );
+  return request;
 }
 export async function submitSupport(
   value: unknown,
@@ -84,16 +155,7 @@ export async function submitSupport(
       "Xác nhận preview trước khi gửi.",
       422,
     );
-  const fingerprint = createHash("sha256")
-    .update(
-      JSON.stringify({
-        ...input,
-        fields: Object.fromEntries(Object.entries(input.fields).sort()),
-        confirmed: undefined,
-        idempotencyKey: undefined,
-      }),
-    )
-    .digest("hex");
+  const fingerprint = fingerprintOf(input);
   const existing = await getSupportRequest(input.idempotencyKey);
   if (existing) {
     if (existing.fingerprint !== fingerprint)
@@ -102,7 +164,36 @@ export async function submitSupport(
         "Mã gửi này đã dùng cho nội dung khác.",
         409,
       );
-    return existing;
+    return waitForDecision(existing);
+  }
+  let cached: SupportPreview | null = null;
+  if (input.previewId) {
+    cached = await getSupportPreview(input.previewId);
+    if (
+      !cached ||
+      +cached.expiresAt <= Date.now() ||
+      cached.fingerprint !== fingerprint ||
+      cached.decision.policyVersion !== POLICY_VERSION
+    )
+      throw new SupportError(
+        "PREVIEW_EXPIRED",
+        "Thông tin đã đổi hoặc bản xem trước hết hạn. Vui lòng kiểm tra lại trước khi gửi.",
+        409,
+      );
+    const current = evaluatePolicy(
+      cached.canonical,
+      verifyApproval(cached.canonical),
+    );
+    if (
+      current.action !== cached.decision.action ||
+      JSON.stringify(current.ruleIds) !==
+        JSON.stringify(cached.decision.ruleIds)
+    )
+      throw new SupportError(
+        "PREVIEW_EXPIRED",
+        "Phê duyệt đã thay đổi. Vui lòng kiểm tra lại thông tin.",
+        409,
+      );
   }
   const now = new Date().toISOString();
   const request: SupportRequest = {
@@ -113,6 +204,7 @@ export async function submitSupport(
     updatedAt: now,
     status: "RECEIVED",
     input,
+    originalQuestion: input.rawText,
     canonical: null,
     decision: null,
     assistance: [],
@@ -136,28 +228,11 @@ export async function submitSupport(
         "Mã gửi bị trùng nội dung khác.",
         409,
       );
-    return winner;
+    return waitForDecision(winner);
   }
-  const result = await analyze(input, safe.markers, options);
-  let assistance = null;
-  if (
-    result.decision.action === "AUTO_APPROVE" &&
-    ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
-  ) {
-    try {
-      assistance = await createAssistance(
-        result.canonical,
-        result.decision.handlingMode === "LLM_ASSIST",
-        options,
-      );
-    } catch (error) {
-      result.canonical = modelFailure(result.canonical, error);
-      result.decision = evaluatePolicy(
-        result.canonical,
-        verifyApproval(result.canonical),
-      );
-    }
-  }
+  const result =
+    cached ?? (await completeAnalysis(input, safe.markers, options));
+  const assistance = result.assistance;
   return updateSupportRequest(request.id, 0, (draft) => {
     draft.canonical = result.canonical;
     draft.decision = result.decision;

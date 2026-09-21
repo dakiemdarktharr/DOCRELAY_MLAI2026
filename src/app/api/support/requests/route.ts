@@ -4,7 +4,10 @@ import {
   requireDemoReviewer,
   verifyModelOptions,
 } from "@/lib/support-http";
-import { listSupportRequests } from "@/lib/support-repository";
+import {
+  listSupportRequests,
+  listSupportSummaries,
+} from "@/lib/support-repository";
 import { submitSupport } from "@/services/support";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
@@ -14,9 +17,12 @@ export async function POST(request: Request) {
     201,
   );
 }
-export async function GET() {
+export async function GET(request: Request) {
   return supportApi(async () => {
     requireDemoReviewer();
-    return listSupportRequests();
+    return request &&
+      new URL(request.url).searchParams.get("view") === "summary"
+      ? listSupportSummaries()
+      : listSupportRequests();
   });
 }

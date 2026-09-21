@@ -1,3 +1,5 @@
+import { statusLabels } from "@/domain/presentation";
+import { labelForField } from "@/domain/catalog";
 import type { SupportRequest, AuditEvent } from "@/domain/contracts";
 import { Card } from "./ui";
 
@@ -10,16 +12,14 @@ export function AssistanceHistory({
     <div className="space-y-4">
       {items.map((item, index) => (
         <Card key={`${item.timestamp}-${index}`}>
-          <h2 className="text-lg font-bold">
-            Hướng dẫn {index + 1}: {item.summary}
-          </h2>
+          <h2 className="text-lg font-bold">{item.summary}</h2>
           <p className="my-2 text-xs text-slate-500">
             {item.source === "mock"
-              ? "Model mô phỏng (mock)"
+              ? "Hướng dẫn mẫu"
               : item.source === "openai"
-                ? "Model chọn các bước đã kiểm duyệt"
-                : "Hướng dẫn theo policy"}{" "}
-            · {new Date(item.timestamp).toLocaleString()}
+                ? "Trợ lý chọn các bước đã kiểm duyệt"
+                : "Hướng dẫn an toàn"}{" "}
+            · {new Date(item.timestamp).toLocaleString("vi-VN")}
           </p>
           <ol className="ml-5 list-decimal space-y-3">
             {item.stepByStepInstructions.map((step) => (
@@ -47,9 +47,10 @@ export function AuditTimeline({ events }: { events: AuditEvent[] }) {
           <p className="font-semibold">
             {event.action} · {event.actor}
           </p>
-          <time>{new Date(event.timestamp).toLocaleString()}</time>
+          <time>{new Date(event.timestamp).toLocaleString("vi-VN")}</time>
           <p>
-            {event.beforeStatus ?? "—"} → {event.afterStatus}
+            {event.beforeStatus ? statusLabels[event.beforeStatus] : "—"} →{" "}
+            {statusLabels[event.afterStatus]}
           </p>
           <p>{event.explanation}</p>
           <details className="mt-2">
@@ -61,7 +62,10 @@ export function AuditTimeline({ events }: { events: AuditEvent[] }) {
               {event.requestKind} · {event.riskLevel} · {event.bucket}
             </p>
             <p>Rules: {event.ruleIds.join(", ") || "Chờ đánh giá"}</p>
-            <p>Thiếu: {event.missingFields.join(", ") || "Không"}</p>
+            <p>
+              Thiếu:{" "}
+              {event.missingFields.map(labelForField).join(", ") || "Không"}
+            </p>
             {event.safeEvidence.map((evidence, i) => (
               <p key={i} className="whitespace-pre-wrap">
                 {evidence}

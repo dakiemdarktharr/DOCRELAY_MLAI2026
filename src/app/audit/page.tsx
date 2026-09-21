@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { AuditEvent } from "@/domain/contracts";
 import { browserApi } from "@/lib/browser-api";
 import { Alert, Button, Card, Input } from "@/components/ui";
 import { AuditTimeline } from "@/components/support-history";
 export default function AuditPage() {
+  const sequence = useRef(0);
   const [events, setEvents] = useState<AuditEvent[]>([]),
     [id, setId] = useState(""),
     [error, setError] = useState(""),
@@ -18,8 +19,11 @@ export default function AuditPage() {
     pendingReview: number;
   } | null>(null);
   useEffect(() => {
+    const current = ++sequence.current;
     void browserApi<AuditEvent[]>("/api/support/events")
-      .then(setEvents)
+      .then((rows) => {
+        if (sequence.current === current) setEvents(rows);
+      })
       .catch(() => setError("Không thể tải audit."));
     void browserApi<typeof metrics>("/api/support/metrics")
       .then(setMetrics)
@@ -27,13 +31,15 @@ export default function AuditPage() {
   }, []);
   async function load() {
     setPending(true);
+    const current = ++sequence.current;
     try {
-      setEvents(
-        await browserApi<AuditEvent[]>(
-          `/api/support/events${id ? `?requestId=${encodeURIComponent(id)}` : ""}`,
-        ),
+      const rows = await browserApi<AuditEvent[]>(
+        `/api/support/events${id ? `?requestId=${encodeURIComponent(id)}` : ""}`,
       );
-      setError("");
+      if (sequence.current === current) {
+        setEvents(rows);
+        setError("");
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : "Không thể tải audit.");
     } finally {
@@ -43,23 +49,23 @@ export default function AuditPage() {
   return (
     <main className="page page-narrow space-y-6">
       <div>
-        <p className="eyebrow">APPEND-ONLY AUDIT</p>
+        <p className="eyebrow">LỊCH SỬ XỬ LÝ</p>
         <h1>Mỗi quyết định, một dấu vết.</h1>
       </div>
       <p className="text-sm text-slate-600">
-        300 event mới nhất trong 200 hồ sơ demo gần đây. Lọc theo mã yêu cầu để
-        xem toàn bộ timeline của hồ sơ đó.
+        300 sự kiện mới nhất trong 200 hồ sơ demo gần đây. Lọc theo mã yêu cầu
+        để xem toàn bộ lịch sử của hồ sơ đó.
       </p>
       {metrics && (
         <Card>
           <p>
             Hồ sơ: {metrics.total} · Đã tự giải quyết:{" "}
             {metrics.resolvedFeedback} · Chuyển người: {metrics.handoffs} · Lỗi
-            model: {metrics.modelFailures} · Chờ review: {metrics.pendingReview}
+            trợ lý: {metrics.modelFailures} · Chờ xử lý: {metrics.pendingReview}
           </p>
           <p className="mt-2 text-xs text-slate-500">
-            Số đếm dữ liệu synthetic; không phải độ chính xác trên dữ liệu
-            production.
+            Số đếm dữ liệu giả lập; không phải độ chính xác trên dữ liệu thực
+            tế.
           </p>
         </Card>
       )}
@@ -81,8 +87,10 @@ export default function AuditPage() {
         <Button disabled={pending}>Lọc / tải lại</Button>
       </form>
       {error && <Alert tone="error">{error}</Alert>}
-      <Card>
-        {events.length ? (
+      <Card aria-busy={pending}>
+        {pending ? (
+          <p role="status">Đang tải lịch sử…</p>
+        ) : events.length ? (
           <AuditTimeline events={events} />
         ) : (
           <p>Chưa có event phù hợp.</p>

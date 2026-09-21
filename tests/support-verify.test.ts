@@ -2,7 +2,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { supportVerifyCases, runSupportCase } from "@/lib/support-verify";
-import { POST } from "@/app/api/support/requests/route";
+import { GET as detail } from "@/app/api/support/requests/[id]/route";
+import { GET as events } from "@/app/api/support/events/route";
+import { GET as metrics } from "@/app/api/support/metrics/route";
+import { POST, GET as list } from "@/app/api/support/requests/route";
 import { resetSupportTestStore } from "@/lib/support-repository";
 beforeEach(() => {
   vi.stubEnv("AI_PROVIDER", "mock");
@@ -11,8 +14,14 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 const productionApi: typeof fetch = async (url, init) => {
-  expect(url).toBe("/api/support/requests");
-  return POST(new Request(`http://localhost${url}`, init));
+  const request = new Request(`http://localhost${url}`, init);
+  if (init?.method === "POST") return POST(request);
+  if (String(url).startsWith("/api/support/events?")) return events(request);
+  if (String(url) === "/api/support/metrics") return metrics();
+  if (String(url).startsWith("/api/support/requests?")) return list(request);
+  return detail(request, {
+    params: Promise.resolve({ id: String(url).split("/").at(-1)! }),
+  });
 };
 it("the new Đề A pack has exactly three auto and two escalation cases", () => {
   const rows = supportVerifyCases.filter((item) => item.pack === "de-a-v3");

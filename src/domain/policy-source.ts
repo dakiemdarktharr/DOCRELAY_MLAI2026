@@ -1,7 +1,15 @@
 import type { RiskSignal } from "./contracts";
 
 // Versioned executable policy data. Meaning and migrations are documented independently of the engine.
-export const POLICY_VERSION = "support-guidance-v3";
+export const POLICY_VERSION = "support-guidance-v3.1";
+export const demoResourceLimits = {
+  gpuCount: 2,
+  gpuTypes: ["t4", "a10"],
+  cpu: 4,
+  ram: 16,
+  disk: 100,
+  hours: 8,
+} as const;
 export const bucketPriority = {
   ROUTINE: 0,
   MISSING_INFO: 1,

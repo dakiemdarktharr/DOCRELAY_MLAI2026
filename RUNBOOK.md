@@ -1,3 +1,20 @@
+# Runbook update — 2026-09-21
+
+## Bản sửa feedback và UX
+
+- Chạy trong checkout `mlai26-ux-refurbish-20260921`, không dùng bản nháp `contracts.ts` của workspace gốc. QA dùng mock/memory; không đọc/copy `.env.local` hay ghi MongoDB thật.
+- `npm run test:e2e` khởi động server Next của checkout trên **127.0.0.1:3227**, `reuseExistingServer:false`; đã kiểm tra port trống trước khi chạy. Không dùng process 3000. Không chạy build cùng lúc với E2E do dùng chung `.next`.
+- Preview trả `input.previewId`, decision và assistance; submit lại nguyên input đó với confirmed:true. Snapshot Mongo `v3_support_previews` có TTL 10 phút (index expiresAt); truy cập ứng dụng cần quyền tạo index như collection requests hiện có. Snapshot không phải ticket, không xuất hiện queue.
+- Sửa nội dung hoặc snapshot hết hạn/policy đổi/approval thay đổi: `409 PREVIEW_EXPIRED`; bấm Quay lại sửa và kiểm tra lại. Direct POST không previewId vẫn tương thích.
+- Gửi trùng đang xử lý sẽ đợi tối đa 26 giây; sau đó `409 REQUEST_PROCESSING`, giữ nguyên idempotencyKey để thử lại. Không báo 201 với RECEIVED/version 0. Process chết vẫn chưa có recovery worker: dùng Stop, rồi tạo hồ sơ mới.
+- Queue UI dùng `GET /api/support/requests?view=summary`; GET không query giữ full document cho client cũ trong compatibility window. Detail/audit UUID không tồn tại đều 404. Metrics pending gồm ESCALATED/NEEDS_INFORMATION/APPROVED_BY_HUMAN, phạm vi 200 hồ sơ gần nhất.
+- Reviewer không thể dùng Approve, Override→approved hoặc Fulfill để bỏ qua thiếu facts/approval, kể cả hồ sơ cũ. Phê duyệt demo chỉ có registry synthetic; không nhập claim để vượt xác minh.
+- Feedback mới EXPLAIN yêu cầu step (zero-based), giữ trạng thái. CONFUSED cũ vẫn tạo handoff; UI mới chỉ dùng EXPLAIN và ADMIN riêng biệt.
+- Không reset model budget để che lỗi. Giới hạn 20 lifetime, timeout và fail-safe giữ nguyên; cần budget/model live riêng nếu muốn nghiệm thu kết nối thật.
+- Public reviewer không đăng nhập là lựa chọn demo được người dùng cho phép. Không có công cụ thay đổi hạ tầng thật. Lượt này không triển khai, không đổi database hoặc secret.
+
+Các mục bên dưới là runbook/bằng chứng các phiên bản trước; chỉ áp dụng khi không mâu thuẫn với cập nhật trên.
+
 # Support Referee runbook
 
 > **Trạng thái main:** đã nhận đầy đủ source từ `codex/support-v3-migration` tại `89d62c4` theo yêu cầu mới của người dùng. Các hướng dẫn runtime dưới đây áp dụng cho bản source này. Không lấy file đang viết dở ở workspace khác thay cho bản đã commit.
@@ -62,7 +79,7 @@ Local: điền key vào `.env.local` (đã gitignore), đặt `AI_PROVIDER=opena
 - 409: version đã thay đổi, key trùng nội dung khác, transition cấm hoặc security không được approve. Tải lại request/queue.
 - 403 reviewer production: cần chọn rõ public-demo theo phạm vi demo được cho phép.
 - 503: kiểm tra storage cấu hình; không bật log raw exception chứa URI/credential.
-- NEEDS_INFORMATION do approval: claim không đủ; cần đúng synthetic registry hoặc reviewer.
+- NEEDS_INFORMATION do approval: claim không đủ; cần đúng synthetic registry. Reviewer không thể bỏ qua yêu cầu xác minh.
 - RECEIVED còn treo nếu process chết khi xử lý: reviewer Stop rồi tạo request mới; hiện chưa có background recovery job.
 - Không dùng git reset --hard, force-push hoặc xóa dữ liệu để sửa trạng thái.
 

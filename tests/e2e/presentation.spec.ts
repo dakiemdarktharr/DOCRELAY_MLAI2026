@@ -1,36 +1,26 @@
 import { expect, test } from "@playwright/test";
 
-test("orange role gate and NAVI respect desktop, touch and reduced motion", async ({
+test("welcome uses native cursor, clear entry buttons and reduced motion", async ({
   page,
-  isMobile,
 }) => {
   await page.goto("/");
-  await expect(page.locator(".role-entry")).toHaveCSS(
-    "background-color",
-    "rgb(248, 182, 76)",
+  await expect(page.locator(".entry-links a")).toHaveCount(2);
+  await expect(page.locator(".site-header")).toBeVisible();
+  await expect(page.locator("footer")).toHaveCount(0);
+  await expect(page.locator(".welcome-art img")).toBeVisible();
+  await expect(page.locator(".navi-cursor")).toHaveCount(0);
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".brand")).toBeFocused();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await expect(page.locator(".entry-primary")).toHaveCSS(
+    "transition-duration",
+    "0s",
   );
-  await expect(page.locator(".role-entry-actions a")).toHaveCount(2);
-  await expect(page.locator(".site-header")).toBeHidden();
-  await expect(page.locator("footer")).toBeHidden();
-  await expect(page.locator(".role-entry-backdrop svg")).toBeVisible();
-  if (isMobile) {
-    await expect(page.locator(".navi-cursor")).toBeHidden();
-  } else {
-    await page.mouse.move(100, 100);
-    await expect(page.locator(".navi-cursor")).toHaveAttribute(
-      "data-visible",
-      "true",
-    );
-    await page.keyboard.press("Tab");
-    await expect(page.locator("html")).not.toHaveAttribute("data-navi", "true");
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.mouse.move(150, 100);
-    await expect(page.locator(".navi-cursor")).toHaveAttribute(
-      "data-moving",
-      "false",
-    );
-    await expect(page.locator(".navi-trail")).toBeHidden();
-  }
 });
 
 test("old help route and workspace alias share preview, edit and v3 submit", async ({
@@ -39,7 +29,7 @@ test("old help route and workspace alias share preview, edit and v3 submit", asy
   for (const route of ["/workspace", "/send-help"]) {
     await page.goto(route);
     await expect(
-      page.getByRole("heading", { name: "I Need Help" }),
+      page.getByRole("heading", { name: "Tôi cần hỗ trợ" }),
     ).toBeVisible();
     await expect(page.locator(".site-header")).toBeVisible();
     await expect(page.locator("form select")).toHaveCount(1);
@@ -53,7 +43,9 @@ test("old help route and workspace alias share preview, edit and v3 submit", asy
   await expect(description).toHaveValue("Tôi tắt máy tính lúc về được không?");
   await description.fill("VPN không kết nối");
   await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
-  await expect(page.getByText("LLM_ASSIST", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Cách hỗ trợ: Hướng dẫn từng bước", { exact: true }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -66,7 +58,57 @@ test("old help route and workspace alias share preview, edit and v3 submit", asy
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
   await expect(page).toHaveURL(/\/requests\/[a-f0-9-]+$/);
   await expect(
-    page.getByRole("button", { name: "D. Chuyển yêu cầu cho admin" }),
+    page.getByRole("button", { name: "D. Chuyển cho nhân viên hỗ trợ" }),
   ).toBeVisible();
-  await expect(page.getByText("Trạng thái:")).toContainText("AUTO_APPROVED");
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Đã có hướng dẫn hoặc phương án",
+  );
+});
+
+test("explain stays open, handoff is explicit and rejected request shows current status", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/send-help");
+  await page
+    .getByLabel("Mô tả yêu cầu", { exact: true })
+    .fill("VPN không kết nối");
+  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await expect(page.getByText("CHƯA GỬI YÊU CẦU")).toBeVisible();
+  await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
+  await expect(page).toHaveURL(/\/requests\/[a-f0-9-]+$/);
+  await page.getByLabel("Bước cần giải thích").selectOption("1");
+  await page.getByRole("button", { name: "C. Giải thích bước này" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Giải thích bước 2" }),
+  ).toBeVisible();
+  await expect(page.getByText("Trạng thái:")).toContainText("Đã có hướng dẫn");
+  await page
+    .getByRole("button", { name: "D. Chuyển cho nhân viên hỗ trợ" })
+    .click();
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Đang chờ nhân viên hỗ trợ",
+  );
+  const id = page.url().split("/").at(-1)!;
+  const row = (await (await request.get(`/api/support/requests/${id}`)).json())
+    .data;
+  await request.post(`/api/review/${id}`, {
+    data: {
+      action: "REJECT",
+      version: row.version,
+      reason: "Synthetic reviewer feedback",
+    },
+  });
+  await page.reload();
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Yêu cầu đã bị từ chối",
+  );
+  await expect(
+    page.getByText(
+      "Nhân viên hỗ trợ sẽ xem xét yêu cầu. Dùng liên kết này để theo dõi cập nhật.",
+    ),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Vấn đề bạn đã gửi" }),
+  ).toBeVisible();
 });

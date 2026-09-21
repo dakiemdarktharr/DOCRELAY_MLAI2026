@@ -14,7 +14,7 @@ export function redact(text: string): { text: string; markers: string[] } {
     "[REDACTED_PRIVATE_KEY]",
   );
   replace(
-    /\b(?:sk-[A-Za-z0-9_-]{8,}|gh[pousr]_[A-Za-z0-9_]{8,}|github_pat_[A-Za-z0-9_]+|AKIA[A-Z0-9]{16})\b/g,
+    /\b(?:sk-[A-Za-z0-9_-]{8,}|gh[pousr]_[A-Za-z0-9_]{8,}|github_pat_[A-Za-z0-9_]+|(?:AKIA|ASIA)[A-Z0-9]{16})\b/g,
     "TOKEN",
     "[REDACTED_TOKEN]",
   );
@@ -25,7 +25,7 @@ export function redact(text: string): { text: string; markers: string[] } {
     "[REDACTED_TOKEN]",
   );
   safe = safe.replace(
-    /\b((?:password|passwd|pwd|token|api[ _-]?key|secret|credential|mật khẩu|mat khau|private[ _-]?key)\s*["']?\s*(?:[:=]|\bis\b|là(?=\s))\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi,
+    /\b((?:aws[ _-]?(?:secret[ _-]?access[ _-]?key|access[ _-]?key[ _-]?id|session[ _-]?token)|secret[ _-]?access[ _-]?key|access[ _-]?key[ _-]?id|password|passwd|pwd|token|api[ _-]?key|secret|credential|mật khẩu|mat khau|private[ _-]?key)\s*["']?\s*(?:[:=]|\bis\b|là(?=\s))\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi,
     (_, prefix: string) => {
       markers.add("SECRET_VALUE");
       return prefix + "[REDACTED]";

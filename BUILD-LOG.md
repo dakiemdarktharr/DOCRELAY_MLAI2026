@@ -1,5 +1,16 @@
 # Build Log
 
+## UX and judge feedback — 2026-09-21
+
+- Tool: Astra/Codex. User approved U1–U11/B1 and requested fixes from three judge feedback files before commit. Existing prototype/AI provenance retained; new commits do not rewrite authorship or contest dates.
+- Base main0764f1d; isolated checkout to protect the uncommitted student contracts draft. Baseline87 tests/lint/build pass.
+- Implemented Vietnamese role entry, targeted intake/preview, original question/current status, step explanation/handoff separation, readable queue/audit/Verify and VNG-inspired orange/white surfaces. Generated an original AI interpretation of NAVI; prompt and source research in public/illustrations/PROVENANCE.md. Kept licensed Nunito; old custom cursor no longer mounted.
+- Shared boundary fixes: AWS secret aliases, bounded idempotency waiting, reevaluated facts/approval on all approval/completion paths, intent-derived authority, negation/exposure and K8S label guards. Independent read-only investigation and candidate review found regressions; final tests cover them.
+- Server preview snapshot with fingerprint/TTL/policy binding avoids duplicate analysis. Summary projection is additive; Verify reads detail/events/queue/metrics. Original fixture expected values/hashes unchanged (48/128 match, 80 visible mismatches).
+- Final source:136 unit/integration tests pass, lint pass, production build pass. Browser evidence is detailed in STATUS and artifacts/e2e-results.json. Mock/memory only; no new live provider/DB validation or deployment.
+- First browser run:25/26, audit filter race/old results visible during loading; fixed request sequencing/loading state. Subsequent full run:26/26; final run after additional policy regression guards recorded in STATUS.
+
+
 ## Vercel và MongoDB live — 2026-09-20
 
 - Theo yêu cầu: tạo `.env.local` cho key mới; không dùng key OpenAI cũ. Xác nhận model access, đồng bộ key/URI qua stdin vào Vercel Sensitive Secret. Không ghi secret vào source/log/report.

@@ -19,14 +19,16 @@ test("public entry buttons open both workspaces without authentication", async (
   page,
 }, info) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "I need help", exact: true }).click();
+  await page.getByRole("link", { name: "Tôi cần hỗ trợ", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "I Need Help" }),
+    page.getByRole("heading", { name: "Tôi cần hỗ trợ" }),
   ).toBeVisible();
   await page.goto("/");
-  await page.getByRole("link", { name: "admin", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Dành cho nhân viên", exact: true })
+    .click();
   await expect(
-    page.getByRole("heading", { name: "Human Reviewer" }),
+    page.getByRole("heading", { name: "Tiếp nhận hỗ trợ" }),
   ).toBeVisible();
   await page.goto("/");
   expect(
@@ -43,39 +45,46 @@ test("shutdown guidance resolves through employee feedback", async ({
   page,
 }) => {
   await submit(page, "Tôi tắt máy tính lúc về được không?");
-  await expect(page.getByText("Trạng thái:")).toContainText("AUTO_APPROVED");
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Đã có hướng dẫn hoặc phương án",
+  );
   await expect(
     page.getByText("Lưu tài liệu đang làm và đóng các ứng dụng sau khi lưu."),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "A. Tôi đã làm được", exact: true })
     .click();
-  await expect(page.getByText("Trạng thái:")).toContainText("COMPLETED");
+  await expect(page.getByText("Trạng thái:")).toContainText("Đã hoàn tất");
 });
 test("reset asks clarification and then guides restart without a device ID", async ({
   page,
 }) => {
   await submit(page, "Làm sao để reset máy?");
   await expect(page.getByText("Trạng thái:")).toContainText(
-    "NEEDS_INFORMATION",
+    "Cần bạn bổ sung thông tin",
   );
   await page
     .getByLabel("Thông tin làm rõ")
     .fill("Tôi muốn restart laptop, không factory reset");
   await page.getByRole("button", { name: "Gửi bổ sung" }).click();
-  await expect(page.getByText("Trạng thái:")).toContainText("AUTO_APPROVED");
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Đã có hướng dẫn hoặc phương án",
+  );
 });
 test("medium assistance passes to admin with history intact", async ({
   page,
 }, info) => {
   await submit(page, "VPN không kết nối");
-  await expect(
-    page.getByText("Model mô phỏng (mock)", { exact: false }),
-  ).toBeVisible();
+  await expect(page.getByText("Hướng dẫn mẫu", { exact: false })).toBeVisible();
   await page
-    .getByRole("button", { name: "C. Tôi không hiểu bước này", exact: true })
+    .getByRole("button", {
+      name: "D. Chuyển cho nhân viên hỗ trợ",
+      exact: true,
+    })
     .click();
-  await expect(page.getByText("Trạng thái:")).toContainText("ESCALATED");
+  await expect(page.getByText("Trạng thái:")).toContainText(
+    "Đang chờ nhân viên hỗ trợ",
+  );
   await expect(
     page.getByText(
       "Mở ứng dụng VPN chính thức đã được IT cung cấp và kiểm tra tên profile công ty.",
@@ -94,19 +103,23 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
     .getByLabel("Nhóm hỗ trợ", { exact: true })
     .selectOption("DEVICE_BOOT");
   await page
-    .getByRole("button", { name: "Structured · Chọn mục", exact: true })
+    .getByRole("button", { name: "Chọn theo danh mục", exact: true })
     .click();
   await page
     .getByLabel("Nhu cầu cụ thể", { exact: true })
     .selectOption("DEVICE_RESTART_GUIDANCE");
   await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
-  await expect(page.getByText("AUTO_APPROVE", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Có thể hỗ trợ an toàn" }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Quay lại sửa" }).click();
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("Grant write access to production DB");
   await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
-  await expect(page.getByText("ESCALATE", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Cần người phụ trách xem xét" }),
+  ).toBeVisible();
 });
 test("reviewer rejection requires a reason and records audit", async ({
   page,
@@ -125,15 +138,15 @@ test("reviewer rejection requires a reason and records audit", async ({
   await page.getByRole("link", { name: text, exact: false }).click();
   await expect(page).toHaveURL(new RegExp(`/review\\?requestId=${data.id}$`));
   await expect(
-    page.getByRole("button", { name: "Reject", exact: true }),
+    page.getByRole("button", { name: "Từ chối", exact: true }),
   ).toBeDisabled();
   await page
-    .getByLabel("Lý do (bắt buộc với Reject / Override)")
+    .getByLabel("Lý do (bắt buộc khi từ chối hoặc điều chỉnh)")
     .fill("Không đủ scope và approval trong demo.");
-  await page.getByRole("button", { name: "Reject", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("REJECTED");
+  await page.getByRole("button", { name: "Từ chối", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Yêu cầu đã bị từ chối");
   await expect(
-    page.getByRole("button", { name: "Approve", exact: true }),
+    page.getByRole("button", { name: "Duyệt yêu cầu", exact: true }),
   ).toBeDisabled();
   await page.screenshot({
     path: `artifacts/reviewer-${info.project.name}.png`,
@@ -145,8 +158,8 @@ test("reviewer rejection requires a reason and records audit", async ({
   expect(detail.data.status).toBe("REJECTED");
   expect(detail.data.events.at(-1).actor).toBe("public-demo-reviewer");
   await page.reload();
-  await expect(page.getByRole("status")).toContainText("REJECTED");
-  await page.getByRole("link", { name: "← Review queue" }).click();
+  await expect(page.getByRole("status")).toContainText("Yêu cầu đã bị từ chối");
+  await page.getByRole("link", { name: "← Danh sách yêu cầu" }).click();
   await expect(
     page.getByRole("link", { name: text, exact: false }),
   ).toHaveCount(0);

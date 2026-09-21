@@ -22,16 +22,25 @@ export function normalize(text: string) {
     .trim();
 }
 
+// Only documented lexical equivalences; never infer a new resource or authority.
+export function normalizeFact(value: string) {
+  return normalize(value)
+    .replace(/\bpostgres\b/g, "postgresql")
+    .replace(/\b(?:chi doc|chi xem|read only)\b/g, "read only")
+    .replace(/\b(?:gio|tieng|hrs?|hours?)\b/g, "hours")
+    .replace(/\b(?:ngay|days?)\b/g, "days");
+}
 // Negation is local to the matched phrase; it cannot cancel a later risky subrequest.
 function asserted(text: string, pattern: RegExp) {
   const matcher = new RegExp(pattern.source, "g");
   for (const match of text.matchAll(matcher)) {
-    const prefix = text.slice(
-      Math.max(0, (match.index ?? 0) - 70),
-      match.index,
-    );
+    const prefix =
+      text
+        .slice(0, match.index)
+        .split(/[,;.\n]|\b(?:but|nhung|however|va|and)\b/)
+        .at(-1) ?? "";
     if (
-      !/(?:khong|not|no|without|never|don't|do not)(?:\s+(?:can|need|request|require|yeu cau|co|muon|quyen|access|vao|to|for|any|a|an|the|production|real|true|admin|hay|or)){0,5}\s*$/.test(
+      !/(?:\bkhong\b|\bnot\b|\bno\b|\bwithout\b|\bnever\b|don't|do not)(?:\s+(?:can|need|request|require|yeu|cau|co|muon|quyen|access|vao|to|for|any|a|an|the|production|real|true|admin|hay|or|mo|open|expose|service|bucket|server|services|buckets|servers|address|ip|public|port|rdp|ssh|inbound|remote|cap|grant|give|gui|send|share|token|private|key|internet|from|tu|ra|\d+)){0,10}\s*$/.test(
         prefix,
       )
     )
@@ -60,19 +69,29 @@ export function detectedRisks(raw: string): RiskSignal[] {
       /private key|kubeconfig|vault token|api key|credential|secret|bearer/,
     ) ||
     (!selfService && asserted(text, /password|mat khau|\btoken\b/)) ||
-    /(?:send|share|give|gui|cho|cung cap).{0,35}(?:password|mat khau|token|secret)/.test(
+    asserted(
       text,
+      /(?:send|share|give|gui|cho|cung cap).{0,35}(?:password|mat khau|token|secret)/,
     )
   )
     risks.add("SECRET");
-  const exposure = asserted(
-    text,
-    /public|internet|0\.0\.0\.0\/0|0\/0|allow all|ra ngoai/,
-  );
+  // Exposure must be an asserted operation on a resource in the same clause.
+  const clauses = text
+    .replace(
+      /\bpublic\s+(?:github|gitlab|docs?|documentation|tai lieu|open source)\b/g,
+      "reference documentation",
+    )
+    .split(/[;\n]|\b(?:but|nhung|however|and|va)\b/);
   if (
-    exposure &&
-    /\b(?:port|inbound|rdp|vnc|ssh|expose|exposure|open|mo|remote|public ip)\b/.test(
-      text,
+    clauses.some(
+      (clause) =>
+        asserted(
+          clause,
+          /\bpublic\b|\binternet\b|0\.0\.0\.0(?:\/0)?|\b0\/0\b|allow all|ra ngoai/,
+        ) &&
+        /\b(?:port|inbound|rdp|vnc|ssh|expose|exposure|remote|bucket|service|server|database|db|postgresql|postgres|mysql|public ip)\b|(?:open|mo)\s+\d+/.test(
+          clause,
+        ),
     )
   )
     risks.add("PUBLIC_EXPOSURE");
@@ -212,7 +231,7 @@ function classify(text: string): [ServiceGroup, string, RequestKind] {
     return ["ACCOUNT_ACCESS", "ACCOUNT_LOGIN", "SAFE_DIAGNOSTIC"];
   if (/phishing|malware|security incident|data breach/.test(text))
     return ["SECURITY", "SECURITY_INCIDENT", "INCIDENT"];
-  if (/port|firewall|rdp|dns|public ip|vpn|proxy/.test(text))
+  if (/\b(?:port|firewall|rdp|dns|public ip|vpn|proxy)\b/.test(text))
     return ["NETWORK_VPN", "PORT_OPEN_REQUEST", "CONFIGURATION_CHANGE"];
   if (/github|gitlab|\bgit\b|repository|\brepo\b/.test(text))
     return ["GIT_PERMISSION", "GIT_READ_ACCESS", "ACCESS_REQUEST"];
@@ -275,7 +294,7 @@ export function extractText(rawText: string): Extraction {
   if (system) entities.system = system[1];
   const permission = asserted(text, /\badmin\b|\broot\b|\bowner\b/)
     ? text.match(/\b(admin|root|owner)\b/)?.[1]
-    : /read.only|\bread\b|\bselect\b/.test(text)
+    : /read.only|\bread\b|\bselect\b|chi doc|chi xem/.test(text)
       ? "read-only"
       : /write|quyen ghi/.test(text)
         ? "write"
@@ -303,6 +322,33 @@ export function extractText(rawText: string): Extraction {
   })) {
     const match = text.match(pattern);
     if (match) entities[key] = match[1];
+  }
+  // Explicit labelled facts are extracted without an LLM; preserve original resource spelling.
+  const labels: Record<string, string> = {
+    resourceScope:
+      "resourceScope|resource scope|database name|database|db|cơ sở dữ liệu|database đích",
+    targetSystem: "targetSystem|target system|ứng dụng|hệ thống",
+    namespace: "namespace",
+    workload: "workload|pod|deployment",
+    cluster: "cluster|cụm",
+    source: "source|nguồn",
+    target: "target|đích",
+    reason: "reason|lý do|mục đích",
+    operation: "operation|thao tác",
+    repository: "repository|repo",
+    pipeline: "pipeline",
+    provider: "provider|nhà cung cấp",
+  };
+  for (const [key, label] of Object.entries(labels)) {
+    const match = rawText.match(
+      new RegExp(`(?:^|[;\\n,]|\\s)(?:${label})\\s*[:=]\\s*([^;\\n,]+)`, "i"),
+    );
+    if (match) entities[key] = match[1].trim();
+  }
+  if (serviceGroup === "ACCOUNT_ACCESS") {
+    if (entities.system && !entities.targetSystem)
+      entities.targetSystem = entities.system;
+    if (entities.permission) entities.accessType = entities.permission;
   }
   const gpu = text.match(/\b(a100|h100|t4|a10)\b/);
   if (gpu) entities.gpuType = gpu[1];
@@ -367,7 +413,7 @@ export function extractIntake(
     if (
       fields[key] &&
       extracted.entities[key] &&
-      normalize(fields[key]) !== normalize(extracted.entities[key])
+      normalizeFact(fields[key]) !== normalizeFact(extracted.entities[key])
     )
       risks.add("CONFLICT");
   }
@@ -394,6 +440,15 @@ export function extractIntake(
     if (selectedIntent && validIntent(serviceGroup, selectedIntent))
       intentLabel = selectedIntent;
   }
+  if (intentLabel === "DEVICE_RESET_GUIDANCE" && fields.resetType === "restart")
+    intentLabel = "DEVICE_RESTART_GUIDANCE";
+  if (
+    intentLabel === "DEVICE_RESET_GUIDANCE" &&
+    fields.resetType === "factory_reset"
+  ) {
+    intentLabel = "DEVICE_FACTORY_RESET";
+    risks.add("DESTRUCTIVE");
+  }
   const entities = { ...extracted.entities, ...fields };
   const env = fields.environment as Environment | undefined;
   const environment = env ?? extracted.environment;
@@ -415,7 +470,17 @@ export function extractIntake(
       /INCIDENT|OUTAGE|MALWARE|PHISHING|LOST|STOLEN/.test(selectedIntent)
     )
       requestKind = "INCIDENT";
-    else requestKind = "ROUTINE_WORKFLOW";
+    else
+      requestKind =
+        selectedIntent === "UNKNOWN_SUPPORT_REQUEST"
+          ? "OTHER"
+          : "ROUTINE_WORKFLOW";
+    if (
+      input.requestKind &&
+      input.requestKind !== "OTHER" &&
+      input.requestKind !== requestKind
+    )
+      risks.add("CONFLICT");
     if (!fields.requestedAction && !fields.operation)
       requestedAction =
         requestKind === "GUIDANCE"
@@ -431,6 +496,12 @@ export function extractIntake(
     (fields.operation && !["query_help", "read"].includes(fields.operation))
   )
     requestKind = "CONFIGURATION_CHANGE";
+  if (
+    /ACCESS|PERMISSION/.test(intentLabel) &&
+    fields.operation &&
+    !["read", "write"].includes(fields.operation)
+  )
+    risks.add("CONFLICT");
   detectedRisks(
     Object.entries(fields)
       .map(([key, value]) => `${key}=${value}`)
@@ -477,7 +548,7 @@ export function extractIntake(
     risks.add("SECURITY_CONTROL");
   if (/UNSIGNED|UNAPPROVED/.test(intentLabel)) risks.add("UNAPPROVED_SOFTWARE");
   if (
-    /DNS_CHANGE|FIREWALL_CHANGE|PROXY_CONFIG|CONFIG_CHANGE|MANIFEST_CHANGE|INGRESS_CHANGE|ALERT_THRESHOLD|ALERT_ROUTING|GPU_QUOTA|CLOUD_BUDGET/.test(
+    /DNS_CHANGE|FIREWALL_CHANGE|PROXY_CONFIG|CONFIG_CHANGE|MANIFEST_CHANGE|INGRESS_CHANGE|ALERT_THRESHOLD|ALERT_ROUTING|GPU_QUOTA|CLOUD_BUDGET|K8S_EXEC_POD|K8S_DEPLOY|K8S_RESTART_POD|K8S_SCALE_WORKLOAD|K8S_ROLLBACK|RESOURCE_SCALE|STAGING_DEPLOY|PRODUCTION_DEPLOY|PRODUCTION_ROLLBACK/.test(
       intentLabel,
     )
   )

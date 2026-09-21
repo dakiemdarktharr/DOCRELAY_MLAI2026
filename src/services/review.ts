@@ -1,7 +1,8 @@
+import { explainStep } from "@/domain/guidance";
 import { z } from "zod";
 import { canReview } from "@/domain/transitions";
 import { redact } from "@/domain/redaction";
-import { evaluatePolicy } from "@/domain/policy";
+import { evaluatePolicy, requiresApproval } from "@/domain/policy";
 import {
   getSupportRequest,
   SupportError,
@@ -77,6 +78,30 @@ export async function reviewSupport(id: string, value: unknown, actor: string) {
         "Demo không được approve/fulfill Security risk. Chọn Stop, Reject hoặc hỏi thêm.",
         409,
       );
+    if (["APPROVED_BY_HUMAN", "COMPLETED"].includes(target)) {
+      const canonical = request.canonical;
+      const approval = canonical ? verifyApproval(canonical) : null;
+      const current =
+        canonical && approval ? evaluatePolicy(canonical, approval) : null;
+      if (
+        request.status === "NEEDS_INFORMATION" ||
+        !current ||
+        current.missingFields.length ||
+        current.action === "NEEDS_INFORMATION" ||
+        (requiresApproval(canonical!) && approval?.status !== "verified")
+      )
+        throw new SupportError(
+          "REVIEW_REQUIREMENTS_MISSING",
+          "Cần bổ sung đủ thông tin và phê duyệt đúng phạm vi trước khi duyệt hoặc hoàn tất.",
+          409,
+        );
+      if (current.bucket === "SECURITY_RISK")
+        throw new SupportError(
+          "SECURITY_REVIEW_REQUIRED",
+          "Yêu cầu bảo mật cần người có thẩm quyền xử lý.",
+          409,
+        );
+    }
     if (
       input.action === "FULFILL" &&
       request.status === "AUTO_APPROVED" &&
@@ -107,7 +132,14 @@ export async function reviewSupport(id: string, value: unknown, actor: string) {
 const feedbackSchema = z
   .object({
     version: z.number().int().nonnegative(),
-    choice: z.enum(["RESOLVED", "STILL_BROKEN", "CONFUSED", "ADMIN"]),
+    choice: z.enum([
+      "RESOLVED",
+      "STILL_BROKEN",
+      "CONFUSED",
+      "ADMIN",
+      "EXPLAIN",
+    ]),
+    step: z.number().int().nonnegative().optional(),
   })
   .strict();
 export async function feedbackSupport(id: string, value: unknown) {
@@ -132,7 +164,7 @@ export async function feedbackSupport(id: string, value: unknown) {
       409,
     );
   if (
-    ["RESOLVED", "STILL_BROKEN"].includes(input.choice) &&
+    ["RESOLVED", "STILL_BROKEN", "EXPLAIN"].includes(input.choice) &&
     (snapshot.status !== "AUTO_APPROVED" || !snapshot.assistance.length)
   )
     throw new SupportError(
@@ -140,6 +172,27 @@ export async function feedbackSupport(id: string, value: unknown) {
       "Lựa chọn này chỉ áp dụng cho hướng dẫn đang mở.",
       409,
     );
+  if (input.choice === "EXPLAIN") {
+    const step =
+      snapshot.assistance.at(-1)?.stepByStepInstructions[input.step ?? -1];
+    if (!step)
+      throw new SupportError("INVALID_STEP", "Chọn bước cần giải thích.", 422);
+    return updateSupportRequest(id, input.version, (request) => {
+      const text = explainStep(step);
+      (request.stepExplanations ??= []).push({
+        step: input.step!,
+        text,
+        timestamp: new Date().toISOString(),
+      });
+      request.feedback.push({
+        choice: "EXPLAIN",
+        timestamp: new Date().toISOString(),
+      });
+      request.events.push(
+        auditEvent(request, request.status, "EXPLAIN", "employee-demo", text),
+      );
+    });
+  }
   let nextAssistance = null;
   let failedCanonical = null;
   if (
@@ -151,6 +204,7 @@ export async function feedbackSupport(id: string, value: unknown) {
       nextAssistance = await createAssistance(
         snapshot.canonical,
         snapshot.decision?.handlingMode === "LLM_ASSIST",
+        { assistanceRound: snapshot.assistance.length },
       );
     } catch (error) {
       failedCanonical = modelFailure(snapshot.canonical, error);
@@ -207,12 +261,23 @@ export async function feedbackSupport(id: string, value: unknown) {
 const clarificationSchema = z
   .object({
     version: z.number().int().nonnegative(),
-    rawText: z.string().trim().max(6000),
+    rawText: z.string().trim().max(6000).default(""),
     fields: z.record(z.string().max(300)).default({}),
   })
   .strict();
 export async function clarifySupport(id: string, value: unknown) {
   const input = clarificationSchema.parse(value);
+  if (
+    !input.rawText &&
+    !Object.values(input.fields).some(
+      (value) => value.trim() && !/^(unknown|not_provided)$/i.test(value),
+    )
+  )
+    throw new SupportError(
+      "EMPTY_CLARIFICATION",
+      "Điền ít nhất một thông tin bổ sung.",
+      422,
+    );
   const current = await getSupportRequest(id);
   if (!current)
     throw new SupportError("NOT_FOUND", "Không tìm thấy yêu cầu.", 404);
@@ -250,6 +315,7 @@ export async function clarifySupport(id: string, value: unknown) {
     }
   }
   return updateSupportRequest(id, input.version, (request) => {
+    request.originalQuestion ??= request.input.rawText;
     request.input = safe.input;
     request.canonical = result.canonical;
     request.decision = result.decision;

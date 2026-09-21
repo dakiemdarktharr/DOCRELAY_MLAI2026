@@ -55,9 +55,10 @@ export function Alert({
 }) {
   return (
     <div
+      role={tone === "error" ? "alert" : undefined}
       className={cx(
         "rounded-xl border px-4 py-3 text-sm",
-        tone === "info" && "border-line bg-[#e8edda] text-ink",
+        tone === "info" && "border-line bg-slate-50 text-ink",
         tone === "error" && "border-red-200 bg-red-50 text-red-800",
         tone === "success" &&
           "border-emerald-200 bg-emerald-50 text-emerald-800",
@@ -85,7 +86,7 @@ export function Textarea({
 export function Spinner() {
   return (
     <span
-      aria-label="Loading"
+      aria-label="Đang xử lý"
       className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent"
     />
   );

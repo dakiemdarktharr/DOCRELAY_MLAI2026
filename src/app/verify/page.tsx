@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   supportVerifyCases,
   runSupportCase,
+  verifyPersistence,
   type VerifyResult,
 } from "@/lib/support-verify";
 import { Alert, Button, Card, Textarea } from "@/components/ui";
@@ -15,6 +16,7 @@ export default function VerifyPage() {
   const [pack, setPack] = useState("de-a-v3"),
     [results, setResults] = useState<VerifyResult[]>([]),
     [running, setRunning] = useState(false);
+  const [readback, setReadback] = useState("");
   const [judge, setJudge] = useState(""),
     [judged, setJudged] = useState<SupportRequest | null>(null),
     [error, setError] = useState("");
@@ -39,12 +41,15 @@ export default function VerifyPage() {
     setRunning(true);
     setError("");
     try {
-      setJudged(
-        await browserApi<SupportRequest>("/api/support/requests", {
-          rawText: judge,
-          confirmed: true,
-          idempotencyKey: crypto.randomUUID(),
-        }),
+      const row = await browserApi<SupportRequest>("/api/support/requests", {
+        rawText: judge,
+        confirmed: true,
+        idempotencyKey: crypto.randomUUID(),
+      });
+      setJudged(row);
+      const persistence = await verifyPersistence(row);
+      setReadback(
+        `${persistence.pass ? "PASS" : "FAIL"}: ${persistence.checks.join(" · ")}`,
       );
       setJudge("");
     } catch (error) {
@@ -60,9 +65,9 @@ export default function VerifyPage() {
         <h1>Đối chiếu, không đoán.</h1>
       </div>
       <Alert>
-        Mỗi case gọi POST /api/support/requests, cùng API với workspace. Bộ Đề A
-        v3 có 3 auto / 2 escalate. Fixture gốc được giữ nguyên; mismatch phản
-        ánh thay đổi policy, không tự đổi expected.
+        Mỗi case tạo hồ sơ qua API dùng chung, rồi đọc lại chi tiết, audit, danh
+        sách và metrics. Bộ Đề A v3 có 3 auto / 2 escalate. Fixture gốc được giữ
+        nguyên; mismatch phản ánh thay đổi policy, không tự đổi expected.
       </Alert>
       <fieldset disabled={running} className="flex flex-wrap items-end gap-3">
         <label>
@@ -123,6 +128,18 @@ export default function VerifyPage() {
             </p>
             <p>Rule IDs: {result.actual?.ruleIds.join(", ") ?? "—"}</p>
             <p>{result.actual?.adminReason ?? result.error}</p>
+            <p>
+              Kiểm tra lưu trữ:{" "}
+              {result.persistence?.checks.join(" · ") ?? result.error}
+            </p>
+            <ul>
+              {[
+                ...(result.actual?.questions ?? []),
+                ...(result.actual?.reviewerQuestions ?? []),
+              ].map((question) => (
+                <li key={question}>{question}</li>
+              ))}
+            </ul>
             {supportVerifyCases.find((item) => item.id === result.caseId)
               ?.fault && (
               <p className="text-sm text-amber-800">
@@ -169,9 +186,11 @@ export default function VerifyPage() {
         </form>
         {judged?.decision && judged.canonical && (
           <div className="mt-4 space-y-3">
+            <p>Kiểm tra lưu trữ: {readback}</p>
             <SupportResult
               decision={judged.decision}
               canonical={judged.canonical}
+              audience="reviewer"
             />
             <Link
               className="text-accent underline"

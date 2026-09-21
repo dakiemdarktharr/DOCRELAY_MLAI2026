@@ -11,6 +11,7 @@ export const supportInputSchema = z
     fields: z.record(z.string().trim().max(300)).default({}),
     confirmed: z.boolean().default(false),
     idempotencyKey: z.string().uuid(),
+    previewId: z.string().uuid().optional(),
   })
   .strict()
   .superRefine((input, ctx) => {

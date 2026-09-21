@@ -64,7 +64,11 @@ it("a user can resolve guidance but cannot resolve an escalated production reque
   ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
 });
 it("review actions are versioned, keep the policy result, and block invalid transitions", async () => {
-  const request = await create("Grant production admin");
+  const guide = await create("VPN không kết nối");
+  const request = await feedbackSupport(guide.id, {
+    version: guide.version,
+    choice: "ADMIN",
+  });
   const action = {
     action: "APPROVE",
     version: request.version,
@@ -160,7 +164,11 @@ it("request information and override remain auditable human actions", async () =
   expect(override.decision).toEqual(original.decision);
 });
 it("only an approved simulation can complete; stopped work cannot resume", async () => {
-  const original = await create("Grant production admin");
+  const guide = await create("VPN không kết nối");
+  const original = await feedbackSupport(guide.id, {
+    version: guide.version,
+    choice: "ADMIN",
+  });
   await expect(
     reviewSupport(
       original.id,

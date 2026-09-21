@@ -96,6 +96,7 @@ export type SupportInput = {
   fields: Record<string, string>;
   confirmed: boolean;
   idempotencyKey: string;
+  previewId?: string;
 };
 export type CanonicalRequest = Extraction & {
   subrequests: Extraction[];
@@ -117,6 +118,7 @@ export type Decision = {
   safeEvidence: string[];
   missingFields: string[];
   questions: string[];
+  reviewerQuestions?: string[];
   userReason: string;
   adminReason: string;
   nextStep: string;
@@ -168,12 +170,32 @@ export type SupportRequest = {
   updatedAt: string;
   status: RequestStatus;
   input: SupportInput;
+  originalQuestion?: string;
+  stepExplanations?: Array<{ step: number; text: string; timestamp: string }>;
   canonical: CanonicalRequest | null;
   decision: Decision | null;
   assistance: Assistance[];
   feedback: Array<{
-    choice: "RESOLVED" | "STILL_BROKEN" | "CONFUSED" | "ADMIN";
+    choice: "RESOLVED" | "STILL_BROKEN" | "CONFUSED" | "ADMIN" | "EXPLAIN";
     timestamp: string;
   }>;
   events: AuditEvent[];
 };
+
+export type SupportPreview = {
+  id: string;
+  fingerprint: string;
+  expiresAt: Date;
+  canonical: CanonicalRequest;
+  decision: Decision;
+  assistance: Assistance | null;
+};
+export type SupportSummary = Pick<
+  SupportRequest,
+  "id" | "version" | "status" | "createdAt" | "updatedAt"
+> & { title: string; serviceGroup: ServiceGroup; action: Action | null };
+export function pendingReview(status: RequestStatus) {
+  return ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"].includes(
+    status,
+  );
+}

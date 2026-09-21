@@ -1,5 +1,6 @@
 import { successResponse } from "@/lib/api-response";
 import { supportStorageMode } from "@/lib/support-repository";
+import { POLICY_VERSION } from "@/domain/policy-source";
 export const dynamic = "force-dynamic";
 export function GET() {
   return successResponse({
@@ -7,7 +8,7 @@ export function GET() {
     app: "MLAI_SUPPORT_REFEREE_V3",
     storage: supportStorageMode(),
     provider: process.env.AI_PROVIDER || "mock",
-    policy: "support-guidance-v3",
+    policy: POLICY_VERSION,
     simulated: true,
   });
 }

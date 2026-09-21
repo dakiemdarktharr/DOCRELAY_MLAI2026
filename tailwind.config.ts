@@ -5,13 +5,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#372a21",
-        paper: "#faf7ee",
-        line: "#ded7c9",
-        accent: "#8b4c21",
+        ink: "#202124",
+        paper: "#fafaf8",
+        line: "#e3e5e8",
+        accent: "#ad390d",
       },
       boxShadow: {
-        card: "0 3px 0 #e4ded1",
+        card: "0 4px 24px #20212408",
       },
     },
   },

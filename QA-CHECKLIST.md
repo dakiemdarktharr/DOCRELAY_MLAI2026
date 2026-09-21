@@ -1,3 +1,7 @@
+# QA update — 2026-09-21
+
+Current candidate on codex/ux-vng-refurbish:136/136 unit/integration, lint and production build PASS;26/26 E2E PASS (desktop/Pixel7), no retry/flaky. E2E owns a fresh dev server on127.0.0.1:3227 in the isolated checkout, mock/memory. Sources, tests and fixture preservation described in UX-JUDGE-MIGRATION.md. No live Mongo/OpenAI or Vercel validation for this candidate. Student draft preserved. Sections below are historical checks, not new live evidence.
+
 # QA Checklist
 
 > Main đã nhận toàn bộ runtime từ migration `89d62c4`. Evidence mới nhất: 87 unit/integration và 24 E2E desktop/mobile PASS, lint/typecheck/build PASS trên checkout kiểm thử của implementation này. Các mục lịch sử bên dưới giữ provenance; kết quả không áp dụng cho source đang viết dở hoặc chứng minh production readiness.

@@ -1,5 +1,6 @@
 import { supportApi, requireDemoReviewer } from "@/lib/support-http";
 import { listSupportRequests } from "@/lib/support-repository";
+import { pendingReview } from "@/domain/contracts";
 export const dynamic = "force-dynamic";
 export async function GET() {
   return supportApi(async () => {
@@ -15,7 +16,7 @@ export async function GET() {
         row.events.some((event) => event.action === "HANDOFF"),
       ).length,
       modelFailures: rows.filter((row) => row.canonical?.model.failure).length,
-      pendingReview: rows.filter((row) => row.status === "ESCALATED").length,
+      pendingReview: rows.filter((row) => pendingReview(row.status)).length,
     };
   });
 }

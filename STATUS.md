@@ -1,3 +1,20 @@
+# Status — UX and judge feedback — 21/09/2026
+
+## Current candidate (not deployed)
+
+- Branch `codex/ux-vng-refurbish`, base main `0764f1d`, isolated checkout `C:/Users/ANHKHOI/AppData/Local/Temp/mlai26-ux-refurbish-20260921`. Original workspace remains on its prior branch with the student's uncommitted `src/domain/contracts.ts` untouched.
+- Implemented U1–U11/B1: Vietnamese entry labels without login, one-column intake/preview, clear original question and current status, targeted clarification, explain-step separate from handoff, tracking link, staff queue/search, orange/white styling and AI mascot. Removed the four requested UI blocks. C01–C20 checklist not added.
+- Judge feedback mapping and compatibility notes: [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md). Redaction aliases, concurrent submit, reviewer authority, negation/exposure, model validation, preview binding, summary queue and Verify readback covered.
+- Final source unit/integration: **136/136 PASS**. `npm run lint`: PASS. `npm run build`: PASS (includes TypeScript). Independent `npm run typecheck` also passed before final bounded policy/guidance edits; production build validates final types.
+- Final `npm run test:e2e`: **26/26 PASS**, 0 failures/retries/flaky, desktop Chromium + Pixel 7, about 1.1 minutes. Uses fresh Next dev server on **127.0.0.1:3227**, reuseExistingServer=false, mock model, memory storage and no external credentials.
+- Original 128 fixtures: **48 match, 80 mismatches** under current policy. Expected values and original data hashes unchanged; mismatches remain visible in `artifacts/original-fixture-evaluation.json`. New v3 Verify packs remain 3 auto/2 escalate and 10 extended cases.
+- No new Vercel deployment, no MongoDB live writes/migration, no paid model call or budget reset in this pass. Existing public URL still has the earlier code; historical live results below do not validate this candidate.
+- New Mongo collection `v3_support_previews` stores redacted expiring snapshots with TTL. A live deployment smoke must verify create-index permissions and cross-instance preview/readback before claiming live DB readiness.
+
+---
+
+The following sections are historical evidence for the previous release, retained for provenance.
+
 # Support migration status — 20/09/2026
 
 ## Production — Vercel + MongoDB + OpenAI

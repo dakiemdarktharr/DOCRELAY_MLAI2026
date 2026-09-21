@@ -1,18 +1,23 @@
 "use client";
+import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { SupportRequest } from "@/domain/contracts";
-import { allFields, fieldOptions, labelForField } from "@/domain/catalog";
+import { allFields } from "@/domain/catalog";
+import { displayId, statusLabels } from "@/domain/presentation";
 import { browserApi } from "@/lib/browser-api";
-import { Alert, Button, Card, Input, Textarea } from "./ui";
+import { Alert, Button, Card, Textarea } from "./ui";
 import { SupportResult } from "./support-result";
+import { SupportField } from "./support-field";
 import { AssistanceHistory, AuditTimeline } from "./support-history";
-
 export function RequestDetail({ id }: { id: string }) {
   const [request, setRequest] = useState<SupportRequest | null>(null),
     [error, setError] = useState("");
   const [pending, setPending] = useState(false),
     [clarification, setClarification] = useState(""),
-    [fields, setFields] = useState<Record<string, string>>({});
+    [fields, setFields] = useState<Record<string, string>>({}),
+    [step, setStep] = useState(0),
+    [copied, setCopied] = useState(false);
   async function refresh() {
     try {
       setRequest(
@@ -26,7 +31,7 @@ export function RequestDetail({ id }: { id: string }) {
   useEffect(() => {
     void browserApi<SupportRequest>(`/api/support/requests/${id}`)
       .then(setRequest)
-      .catch(() => setError("Không thể tải yêu cầu."));
+      .catch(() => setError("Không thể tải yêu cầu. Thử tải lại."));
   }, [id]);
   async function update(path: string, body: object) {
     if (!request) return;
@@ -45,69 +50,178 @@ export function RequestDetail({ id }: { id: string }) {
       setError(
         error instanceof Error
           ? error.message
-          : "Không thể cập nhật. Tải lại yêu cầu.",
+          : "Không thể cập nhật. Thông tin bạn vừa nhập vẫn được giữ lại.",
       );
     } finally {
       setPending(false);
     }
   }
-  const open =
+  const active =
     request &&
     !["RECEIVED", "PROCESSING", "COMPLETED", "STOPPED", "REJECTED"].includes(
       request.status,
     );
+  const latest = request?.assistance.at(-1);
+  const canGuide = request?.status === "AUTO_APPROVED" && !!latest;
+  const currentNote =
+    request?.status === "REJECTED"
+      ? "Yêu cầu đã bị từ chối. Xem lý do bên dưới hoặc tạo yêu cầu mới nếu tình huống thay đổi."
+      : request?.status === "STOPPED"
+        ? "Yêu cầu đã dừng. Các hướng dẫn trước đây chỉ còn trong lịch sử."
+        : request?.status === "COMPLETED"
+          ? "Yêu cầu đã hoàn tất. Cảm ơn bạn đã cập nhật kết quả."
+          : request?.status === "APPROVED_BY_HUMAN"
+            ? "Nhân viên đã duyệt; đang chờ hoàn tất xử lý mô phỏng."
+            : "";
   return (
     <main className="page page-narrow space-y-6">
       <div>
-        <p className="eyebrow">EMPLOYEE SUPPORT</p>
-        <h1>Yêu cầu hỗ trợ</h1>
+        <p className="eyebrow">THEO DÕI HỖ TRỢ</p>
+        <h1>Yêu cầu {displayId(id)}</h1>
       </div>
-      <p className="break-all text-sm text-slate-500">Mã yêu cầu: {id}</p>
       {error && <Alert tone="error">{error}</Alert>}
       {!request && !error && <p role="status">Đang tải…</p>}
       {request && (
         <>
-          <p role="status">
-            Trạng thái: <strong>{request.status}</strong>
-          </p>
-          {request.decision && request.canonical && (
+          <Card className="request-status">
+            <p role="status">
+              Trạng thái: <strong>{statusLabels[request.status]}</strong>
+            </p>
+            <p className="text-sm text-slate-600">
+              Cập nhật lúc {new Date(request.updatedAt).toLocaleString("vi-VN")}
+            </p>
+            <p>
+              {currentNote ||
+                (request.status === "ESCALATED"
+                  ? "Nhân viên hỗ trợ sẽ xem xét yêu cầu. Dùng liên kết này để theo dõi cập nhật."
+                  : request.status === "NEEDS_INFORMATION"
+                    ? "Điền các thông tin bạn biết bên dưới để chúng tôi hỗ trợ đúng hơn."
+                    : "Làm theo hướng dẫn rồi cho chúng tôi biết kết quả.")}
+            </p>
+            {request.status === "COMPLETED" && (
+              <Image
+                className="completion-mascot"
+                src="/illustrations/support-mascot.png"
+                width={100}
+                height={100}
+                alt="Nhân vật đồng hành mỉm cười"
+              />
+            )}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                void navigator.clipboard
+                  .writeText(window.location.href)
+                  .then(() => setCopied(true))
+                  .catch(() =>
+                    setError(
+                      "Không thể sao chép. Bạn có thể sao chép địa chỉ trang trên trình duyệt.",
+                    ),
+                  );
+              }}
+            >
+              {copied ? "Đã sao chép liên kết" : "Sao chép liên kết theo dõi"}
+            </Button>
+            <details>
+              <summary>Mã đầy đủ</summary>
+              <p className="break-all">{id}</p>
+            </details>
+          </Card>
+          <Card>
+            <h2>Vấn đề bạn đã gửi</h2>
+            <blockquote className="original-question">
+              {request.originalQuestion ||
+                request.input.rawText ||
+                "Yêu cầu theo danh mục"}
+            </blockquote>
+          </Card>
+          {currentNote && request.events.at(-1)?.actor.includes("reviewer") && (
+            <Card>
+              <h2>Phản hồi của nhân viên</h2>
+              <p>{request.events.at(-1)?.explanation}</p>
+            </Card>
+          )}
+          {active && request.decision && request.canonical && (
             <SupportResult
               decision={request.decision}
               canonical={request.canonical}
             />
           )}
-          <AssistanceHistory items={request.assistance} />
-          {open && (
-            <fieldset disabled={pending} className="space-y-3">
-              {request.status === "AUTO_APPROVED" &&
-                request.assistance.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {(
-                      ["RESOLVED", "STILL_BROKEN", "CONFUSED", "ADMIN"] as const
-                    ).map((choice, index) => (
-                      <Button
-                        key={choice}
-                        variant={index === 0 ? "primary" : "secondary"}
-                        onClick={() => void update("feedback", { choice })}
-                      >
-                        {request.assistance.at(-1)?.options[index]}
-                      </Button>
-                    ))}
+          {active && latest && <AssistanceHistory items={[latest]} />}
+          {request.stepExplanations?.map((item, index) => (
+            <Card key={index}>
+              <h2>Giải thích bước {item.step + 1}</h2>
+              <p>{item.text}</p>
+            </Card>
+          ))}
+          {active && (
+            <fieldset disabled={pending} className="space-y-4">
+              {canGuide && (
+                <>
+                  <div className="support-actions">
+                    <Button
+                      onClick={() =>
+                        void update("feedback", { choice: "RESOLVED" })
+                      }
+                    >
+                      A. Tôi đã làm được
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        void update("feedback", { choice: "STILL_BROKEN" })
+                      }
+                    >
+                      B. Vẫn còn lỗi
+                    </Button>
                   </div>
-                )}
-              {request.status !== "ESCALATED" && (
-                <Button
-                  variant="secondary"
-                  onClick={() => void update("feedback", { choice: "ADMIN" })}
-                >
-                  Tôi vẫn cần hỗ trợ — Chuyển cho admin
-                </Button>
+                  <div className="explain-controls">
+                    <label>
+                      Bước cần giải thích
+                      <select
+                        value={step}
+                        onChange={(event) =>
+                          setStep(Number(event.target.value))
+                        }
+                      >
+                        {latest!.stepByStepInstructions.map((_, index) => (
+                          <option key={index} value={index}>
+                            Bước {index + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                    <Button
+                      variant="secondary"
+                      onClick={() =>
+                        void update("feedback", { choice: "EXPLAIN", step })
+                      }
+                    >
+                      C. Giải thích bước này
+                    </Button>
+                  </div>
+                </>
               )}
+              {request.status !== "ESCALATED" &&
+                request.status !== "APPROVED_BY_HUMAN" && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => void update("feedback", { choice: "ADMIN" })}
+                  >
+                    {canGuide
+                      ? "D. Chuyển cho nhân viên hỗ trợ"
+                      : "Tôi vẫn cần hỗ trợ — Chuyển cho nhân viên"}
+                  </Button>
+                )}
             </fieldset>
           )}
           {request.status === "NEEDS_INFORMATION" && (
             <Card>
-              <h2 className="mb-3 font-bold">Bổ sung thông tin</h2>
+              <h2>Bổ sung thông tin</h2>
+              <p>
+                Trả lời những mục bạn biết. Bạn có thể điền ô bên dưới mà không
+                cần viết lại mô tả.
+              </p>
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -118,16 +232,8 @@ export function RequestDetail({ id }: { id: string }) {
                 }}
               >
                 <fieldset disabled={pending} className="space-y-4">
-                  <label className="block">
-                    Thông tin làm rõ
-                    <Textarea
-                      required
-                      value={clarification}
-                      onChange={(event) => setClarification(event.target.value)}
-                      maxLength={4000}
-                    />
-                  </label>
                   {(request.decision?.missingFields ?? [])
+                    .slice(0, 3)
                     .map((field) =>
                       field === "verifiedApproval"
                         ? "approvalReference"
@@ -135,47 +241,52 @@ export function RequestDetail({ id }: { id: string }) {
                     )
                     .filter((field) => allFields.has(field))
                     .map((field) => (
-                      <label className="block" key={field}>
-                        {labelForField(field)}
-                        {fieldOptions[field] ? (
-                          <select
-                            className="block min-h-10 w-full rounded border p-2"
-                            value={fields[field] ?? ""}
-                            onChange={(event) =>
-                              setFields({
-                                ...fields,
-                                [field]: event.target.value,
-                              })
-                            }
-                          >
-                            <option value="">Chưa rõ</option>
-                            {fieldOptions[field].map((value) => (
-                              <option key={value}>{value}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          <Input
-                            maxLength={300}
-                            value={fields[field] ?? ""}
-                            onChange={(event) =>
-                              setFields({
-                                ...fields,
-                                [field]: event.target.value,
-                              })
-                            }
-                          />
-                        )}
-                      </label>
+                      <SupportField
+                        key={field}
+                        field={field}
+                        value={fields[field] ?? ""}
+                        onChange={(value) =>
+                          setFields((current) => ({
+                            ...current,
+                            [field]: value,
+                          }))
+                        }
+                      />
                     ))}
+                  <label>
+                    Thông tin làm rõ (không bắt buộc)
+                    <Textarea
+                      aria-label="Thông tin làm rõ"
+                      value={clarification}
+                      onChange={(event) => setClarification(event.target.value)}
+                      maxLength={4000}
+                    />
+                  </label>
                   <Button type="submit">Gửi bổ sung</Button>
                 </fieldset>
               </form>
             </Card>
           )}
-          <Card>
-            <h2 className="mb-4 font-bold">Lịch sử yêu cầu</h2>
+          <details className="panel">
+            <summary>Lịch sử yêu cầu và hướng dẫn</summary>
+            {request.decision && request.canonical && currentNote && (
+              <SupportResult
+                decision={request.decision}
+                canonical={request.canonical}
+              />
+            )}
+            <AssistanceHistory
+              items={
+                active ? request.assistance.slice(0, -1) : request.assistance
+              }
+            />
             <AuditTimeline events={request.events} />
-          </Card>
+          </details>
+          {!active && (
+            <Link className="button primary" href="/send-help">
+              Gửi yêu cầu mới
+            </Link>
+          )}
         </>
       )}
       <Button
