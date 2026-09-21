@@ -1,0 +1,98 @@
+{
+  "checkedAt": "2026-09-21T08:38:32.087Z",
+  "base": "https://vng-support.vercel.app",
+  "sourceRevision": "cfb9295c07235f3f8bb20e45c6fd97fc9fcafed1",
+  "checks": [
+    {
+      "name": "Production source and Mongo ping",
+      "pass": true,
+      "detail": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "cfb9295c07235f3f8bb20e45c6fd97fc9fcafed1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "Legacy domain follows same release",
+      "pass": true
+    },
+    {
+      "name": "New title and entry labels",
+      "pass": true
+    },
+    {
+      "name": "Renamed mascot is served",
+      "pass": true
+    },
+    {
+      "name": "Reachable /send-help",
+      "pass": true
+    },
+    {
+      "name": "Reachable /review",
+      "pass": true
+    },
+    {
+      "name": "Reachable /verify",
+      "pass": true
+    },
+    {
+      "name": "Reachable /api/health",
+      "pass": true
+    },
+    {
+      "name": "Reachable /api/events",
+      "pass": true
+    },
+    {
+      "name": "Mongo revision 2 identity, no retired revision",
+      "pass": true,
+      "detail": {
+        "text": "Mình là trợ lý AI VNG Support, đồng hành cùng bạn để tìm câu trả lời và hỗ trợ kỹ thuật. Nếu bạn cần giúp đỡ hoặc có thắc mắc nào, mình luôn sẵn sàng hỗ trợ bạn.",
+        "source": "openai",
+        "retrieval": "mongodb",
+        "knowledgeIds": [
+          "support-kb-v2-identity"
+        ]
+      }
+    },
+    {
+      "name": "Assistant uses VNG Support identity",
+      "pass": true
+    },
+    {
+      "name": "Ordinary identity question does not escalate",
+      "pass": true
+    },
+    {
+      "name": "Saved Mongo answer survives independent read",
+      "pass": true
+    }
+  ],
+  "paidModelProbeLimit": 1,
+  "health": {
+    "status": "ok",
+    "app": "MLAI_SUPPORT_REFEREE_V3",
+    "storage": "MONGODB",
+    "durable": true,
+    "provider": "openai",
+    "policy": "support-guidance-v5.0",
+    "sourceRevision": "cfb9295c07235f3f8bb20e45c6fd97fc9fcafed1",
+    "simulated": true
+  },
+  "identity": {
+    "text": "Mình là trợ lý AI VNG Support, đồng hành cùng bạn để tìm câu trả lời và hỗ trợ kỹ thuật. Nếu bạn cần giúp đỡ hoặc có thắc mắc nào, mình luôn sẵn sàng hỗ trợ bạn.",
+    "source": "openai",
+    "retrieval": "mongodb",
+    "knowledgeIds": [
+      "support-kb-v2-identity"
+    ]
+  },
+  "requestId": "86671925-5c4c-4aca-ad9c-19117367c8c2",
+  "finalStatus": "COMPLETED"
+}

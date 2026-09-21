@@ -4,7 +4,8 @@
 - Header, metadata, answer bubble, model identity, package, file mascot và tài liệu mang tên DOCRELAY đã đồng bộ. Knowledge revision 2 thay ba bài nhận diện; lịch sử Mongo và bộ đếm API không reset.
 - README viết lại theo policy v5: hội thoại trực tiếp, MongoDB RAG, bounded web search, fallback an toàn, workflow vận hành, reviewer/audit/Verify và giới hạn thực tế.
 - Local: 219 unit tests PASS; lint và production build PASS. E2E cuối: 29 PASS, 1 skip quay video trùng trên mobile; server riêng 127.0.0.1:3227, mock/memory.
-- Deployment và smoke domain mới sẽ được ghi sau khi commit/release.
+- Deployed source `cfb9295c07235f3f8bb20e45c6fd97fc9fcafed1`, deployment `dpl_BcyeJnNXbZae9StBorhA2adSu28Y` READY. **13/13 live checks PASS**: domain mới/cũ cùng revision, header/mascot/routes, Mongo ping + revision 2 retrieval + save/readback, OpenAI thật tự giới thiệu VNG Support và không escalate. Một model probe; giữ cap 50, không reset counter.
+- Bằng chứng: [live verification](artifacts/vng-support-live-verification.json). Hồ sơ synthetic đã đóng `COMPLETED`. Commit tài liệu sau release chỉ bổ sung bằng chứng, không thay runtime SHA trên health.
 
 ## Release RAG trước đổi tên (bằng chứng lịch sử)
 

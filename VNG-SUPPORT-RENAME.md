@@ -33,3 +33,7 @@ Slide, video và report lịch sử vẫn là snapshot lúc tạo, không đư�
 ## QA trước deploy
 
 Baseline 218 unit/lint/build PASS. Sau thay đổi: 219 unit, lint/build PASS; E2E cuối 29 PASS + 1 duplicate-video skip. Đã sửa assertion title cũ ở smoke test, không sửa fixture nghiệp vụ. Link tài liệu tương đối và git diff --check PASS. Workspace gốc vẫn chỉ có draft contracts.ts (226 insertions / 104 deletions), không đưa vào commit.
+
+## Deployment đã kiểm chứng
+
+Source `cfb9295c07235f3f8bb20e45c6fd97fc9fcafed1`, deployment `dpl_BcyeJnNXbZae9StBorhA2adSu28Y` READY tại https://vng-support.vercel.app. Vercel build PASS. **13/13 live checks PASS** trong `artifacts/vng-support-live-verification.json`; OpenAI thật dùng `support-kb-v2-identity` từ MongoDB và tự giới thiệu tên mới. Một probe model trong cap đã cho phép, không đổi budget. Save/readback giữ đúng câu trả lời và hồ sơ synthetic đóng COMPLETED. Đã mở site mới trong browser và xác nhận title/brand/hai lối vào. Alias cũ cùng source revision.
