@@ -1,4 +1,8 @@
-import { knowledgeSeed, type KnowledgeArticle } from "@/domain/knowledge";
+import {
+  knowledgeSeed,
+  supersededKnowledgeIds,
+  type KnowledgeArticle,
+} from "@/domain/knowledge";
 import type { ConversationLabel } from "@/domain/conversation";
 import { normalize } from "@/domain/text";
 import { supportDatabase } from "./support-repository";
@@ -14,7 +18,11 @@ export function rankKnowledge(
     text.split(/[^a-z0-9]+/).filter((word) => word.length > 2),
   );
   return rows
-    .filter((row) => Date.parse(row.expiresAt) > now)
+    .filter(
+      (row) =>
+        !supersededKnowledgeIds.includes(row._id) &&
+        Date.parse(row.expiresAt) > now,
+    )
     .map((row) => ({
       row,
       score:
@@ -63,7 +71,11 @@ export async function retrieveKnowledge(
   });
   await seeded;
   const rows = await collection
-    .find({ label, expiresAt: { $gt: new Date().toISOString() } })
+    .find({
+      label,
+      _id: { $nin: supersededKnowledgeIds },
+      expiresAt: { $gt: new Date().toISOString() },
+    })
     .limit(50)
     .toArray();
   return {

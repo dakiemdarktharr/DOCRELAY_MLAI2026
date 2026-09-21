@@ -51,7 +51,7 @@ export default function Home() {
           Xin chào!
         </span>
         <Image
-          src="/illustrations/support-mascot.png"
+          src="/illustrations/vng-support-mascot.png"
           width={1024}
           height={1024}
           priority

@@ -8,7 +8,7 @@ test("generic routes are reachable", async ({ page }) => {
     "/legacy/audit",
   ]) {
     await page.goto(route);
-    await expect(page).toHaveTitle(/MLAI Project/);
+    await expect(page).toHaveTitle(/VNG Support/);
   }
 });
 

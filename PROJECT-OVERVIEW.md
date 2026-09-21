@@ -1,4 +1,6 @@
-# VNG Tech Support Escalation Referee
+# VNG Support
+
+> **Runtime hiện tại — 21/09/2026:** VNG Support có hội thoại thường ngày, MongoDB RAG, bounded public web search và workflow kỹ thuật theo deterministic policy v5. Xem [README](README.md) cho mô tả/sơ đồ hiện hành. Các phần thiết kế bên dưới là lịch sử; quan điểm LLM chỉ làm parser hoặc mọi lỗi model đều escalate đã được thay bằng safe conversation fallback. Website: https://vng-support.vercel.app.
 
 > **Cập nhật main 20/09/2026:** người dùng yêu cầu merge toàn bộ implementation, gồm `src/`, từ migration `89d62c4`. Main có giao diện orange/NAVI và policy/workflow v3; nguồn gốc AI-assisted/tái sử dụng giữ nguyên.
 

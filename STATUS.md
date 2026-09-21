@@ -1,3 +1,13 @@
+# VNG Support — đổi tên và cập nhật workflow, 21/09/2026
+
+- Website mới: https://vng-support.vercel.app. Vercel project `vng-support` giữ cùng ID/database; domain cũ vẫn tương thích. GitHub repository chưa đổi tên theo yêu cầu.
+- Header, metadata, answer bubble, model identity, package, file mascot và tài liệu mang tên DOCRELAY đã đồng bộ. Knowledge revision 2 thay ba bài nhận diện; lịch sử Mongo và bộ đếm API không reset.
+- README viết lại theo policy v5: hội thoại trực tiếp, MongoDB RAG, bounded web search, fallback an toàn, workflow vận hành, reviewer/audit/Verify và giới hạn thực tế.
+- Local: 219 unit tests PASS; lint và production build PASS. E2E cuối: 29 PASS, 1 skip quay video trùng trên mobile; server riêng 127.0.0.1:3227, mock/memory.
+- Deployment và smoke domain mới sẽ được ghi sau khi commit/release.
+
+## Release RAG trước đổi tên (bằng chứng lịch sử)
+
 # Current production — Conversation/RAG — 21/09/2026
 
 Site https://labpass-five.vercel.app · deployed source `f5272b5` · policy v5.0 · deployment `dpl_5D5KuDx2yutUmfqR8k4STn8qYKfU` READY. **22/22 final live checks pass**, including actual OpenAI answers, MongoDB retrieval/persistence, official web citations and Verify 4/4. Cumulative model-attempt cap 50 was explicitly approved; no counter reset. Final local suite: **218 pass**, lint and production build pass. E2E: 29 pass + 1 duplicate-video skip; targeted conversation rerun 2/2 pass.
@@ -16,7 +26,7 @@ See [migration audit](RAG-CONVERSATION-MIGRATION.md). Known limits: small lexica
 
 # Report fixes — 21/09/2026
 
-Policy `support-guidance-v4.2`. Đã đối chiếu 23 mục, bổ sung Verify runs, phân trang/tìm kiếm, contextual assistance, câu hỏi có trọng tâm và minh bạch dữ liệu. Xem [DOCRELAY-ERRORS-RECHECK.md](DOCRELAY-ERRORS-RECHECK.md).
+Policy `support-guidance-v4.2`. Đã đối chiếu 23 mục, bổ sung Verify runs, phân trang/tìm kiếm, contextual assistance, câu hỏi có trọng tâm và minh bạch dữ liệu. Xem [VNG-SUPPORT-ERRORS-RECHECK.md](VNG-SUPPORT-ERRORS-RECHECK.md).
 
 177 unit/integration, lint/build, 27 E2E pass (1 skip video mobile trùng). Race đổi bộ Verify đã được kiểm thử bằng phản hồi API chậm. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Production source `d432b94`, deployment `dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr` READY, **27/27 live checks PASS**, gồm OpenAI và MongoDB thật. Xem [release hiện tại](REPORT-RELEASE-VERIFICATION-2026-09-21.md).
 

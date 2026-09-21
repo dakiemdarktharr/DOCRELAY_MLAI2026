@@ -11,7 +11,7 @@ export function Header() {
         <span className="brand-mark">
           <Files size={23} />
         </span>
-        IT Referee
+        VNG Support
       </Link>
       {path !== "/" && (
         <nav aria-label="Điều hướng chính">

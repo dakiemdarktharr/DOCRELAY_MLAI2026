@@ -1,6 +1,8 @@
-# Gói tài liệu DOCRELAY
+# Gói tài liệu VNG Support
 
-- [5 slide kỹ thuật](DOCRELAY-5-SLIDES.pptx): đúng 5 trang theo brief, bản dự thảo để nhóm rà soát. Trang hiệu quả ghi rõ chưa có đo lường người dùng thật.
+Tên file đã đồng bộ sang VNG Support; nội dung slide/video là snapshot lịch sử trước khi đổi thương hiệu và thêm RAG. Xem README gốc để biết workflow hiện tại.
+
+- [5 slide kỹ thuật](VNG-SUPPORT-5-SLIDES.pptx): đúng 5 trang theo brief, bản dự thảo để nhóm rà soát. Trang hiệu quả ghi rõ chưa có đo lường người dùng thật.
 - [Build log một trang](BUILD-LOG-ONE-PAGE.pdf): tổng hợp công cụ AI, việc làm, giới hạn, chi phí/thời gian chưa có số liệu đầy đủ và tính năng đã cắt.
 - [Video demo raw](DEMO-LOCAL-MOCK.webm): quay tự động từ ứng dụng trên máy, mock model và memory tạm. Minh họa intake, handoff, Override, Stop, audit và Verify lưu/tải lại. Không được trình bày video này như bằng chứng model hoặc MongoDB thật. Live evidence ở `../artifacts/report-live-verification.json`.
 - [Mẫu thu thập phản hồi](USER-FEEDBACK-TEMPLATE.md): hiện chưa có người tham gia hay kết quả; chủ dự án xác nhận chưa có bằng chứng.
