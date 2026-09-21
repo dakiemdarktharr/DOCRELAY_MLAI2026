@@ -25,3 +25,12 @@ Không kéo dài expiry tự động. Kiểm tra lại nguồn rồi tạo revis
 - VNG public people strategy: https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html
 - GreenNode documentation discovery: https://docs.greennode.ai/ (không được dùng làm chứng cứ quota nội bộ).
 - Software/GPU preparation/browser/how-to của gói là hướng dẫn tổng quát do AI soạn và cần thành viên review; không gắn nhãn chính sách VNG hoặc tài liệu nhà phát hành chưa kiểm chứng.
+
+
+## Storage-boundary fix on base 92d140a
+
+MongoDB generic TypeScript types do not validate stored documents. Before comparing a record to the reviewed corpus, `rankKnowledge` now validates each record and nested source with a runtime schema. Invalid records are skipped independently; one malformed `sources` object cannot discard valid matches from the same query. Returned records contain only validated fields.
+
+The existing exact-content/revision comparison, expiry and review-date checks remain. A structurally valid but edited answer is still rejected. No public write endpoint, corpus revision, policy entitlement or Mongo data migration is added. Malformed documents are not deleted or repaired automatically. Source review and authorized storage remediation remain human tasks.
+
+Tests `knowledge-boundary.test.ts` and `knowledge-storage-boundary.test.ts` use synthetic rows and a fake Mongo boundary. They prove local rejection/filtering behavior, not live Mongo integrity or universal protection. `createConversationAnswer` retains its existing local-corpus fallback for actual storage outages.
