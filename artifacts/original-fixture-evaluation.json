@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T08:06:14.299Z",
+  "generatedAt": "2026-09-21T08:15:12.909Z",
   "provider": "mock",
   "route": "/api/support/requests",
   "total": 128,
@@ -7,7 +7,7 @@
   "results": [
     {
       "caseId": "verify-001-github-access",
-      "timestamp": "2026-09-21T08:06:13.438Z",
+      "timestamp": "2026-09-21T08:15:11.904Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -22,7 +22,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9d6777fd-daa7-4415-98ac-c3b59989d0ec",
+      "requestId": "c555301b-9fe7-4b8e-bffc-062bb0199bf7",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -126,7 +126,7 @@
     },
     {
       "caseId": "verify-002-small-sandbox",
-      "timestamp": "2026-09-21T08:06:13.442Z",
+      "timestamp": "2026-09-21T08:15:11.911Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -141,7 +141,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d1dbd779-d71c-412f-88af-ba2399d35683",
+      "requestId": "e6c23b48-05b9-428e-96b2-b3124acf2e99",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -238,7 +238,7 @@
     },
     {
       "caseId": "verify-003-etl-missing-specs",
-      "timestamp": "2026-09-21T08:06:13.459Z",
+      "timestamp": "2026-09-21T08:15:11.932Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -253,7 +253,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7919c38d-f853-4120-9405-2a474d77a52f",
+      "requestId": "aad143af-c62c-4d58-a13b-b8df336ab050",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -356,7 +356,7 @@
     },
     {
       "caseId": "verify-004-production-db-write",
-      "timestamp": "2026-09-21T08:06:13.464Z",
+      "timestamp": "2026-09-21T08:15:11.949Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -371,7 +371,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "bd8c9ea2-380b-486a-bf4f-12be593a83a8",
+      "requestId": "8436be8b-fda2-4e73-93eb-c40b444a63d8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -476,7 +476,7 @@
     },
     {
       "caseId": "verify-005-public-rdp-blockchain",
-      "timestamp": "2026-09-21T08:06:13.471Z",
+      "timestamp": "2026-09-21T08:15:11.962Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -491,7 +491,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "39122994-c200-4fbf-b7b5-f3e5d423e652",
+      "requestId": "a16aef9d-d925-47e5-a89c-5d47ea3a6596",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -590,7 +590,7 @@
     },
     {
       "caseId": "TC001",
-      "timestamp": "2026-09-21T08:06:13.475Z",
+      "timestamp": "2026-09-21T08:15:11.966Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -605,7 +605,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "67cd4915-3078-45fb-b684-243746bc0545",
+      "requestId": "d3925bd7-ff43-430f-a2b0-14aa3f957f76",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -692,7 +692,7 @@
     },
     {
       "caseId": "TC002",
-      "timestamp": "2026-09-21T08:06:13.479Z",
+      "timestamp": "2026-09-21T08:15:11.973Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -707,7 +707,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b9f34bbf-bd86-47b4-9681-037d79a5f9b9",
+      "requestId": "3658ce63-fe44-43fd-9058-f7c6b7e6486f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -816,7 +816,7 @@
     },
     {
       "caseId": "TC003",
-      "timestamp": "2026-09-21T08:06:13.484Z",
+      "timestamp": "2026-09-21T08:15:11.978Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -831,7 +831,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b36c82f5-0743-4334-a8c9-27cc11161d2d",
+      "requestId": "289b6e46-d690-457e-95ad-caeed50f238c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -934,7 +934,7 @@
     },
     {
       "caseId": "TC004",
-      "timestamp": "2026-09-21T08:06:13.489Z",
+      "timestamp": "2026-09-21T08:15:11.982Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -949,7 +949,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5e76ddf1-728b-4581-ab5b-07d2a49467ed",
+      "requestId": "1d4244be-9be8-4d72-938e-85046fbfea24",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -1032,7 +1032,7 @@
     },
     {
       "caseId": "TC005",
-      "timestamp": "2026-09-21T08:06:13.493Z",
+      "timestamp": "2026-09-21T08:15:11.990Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -1047,7 +1047,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b1c5f00c-60d8-4537-97b7-c230e53ae379",
+      "requestId": "947ca0cb-f16e-4a46-abef-0e0a0f0b72c4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -1135,7 +1135,7 @@
     },
     {
       "caseId": "TC006",
-      "timestamp": "2026-09-21T08:06:13.496Z",
+      "timestamp": "2026-09-21T08:15:11.997Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1150,7 +1150,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "2d8c9dc4-b65d-4c6c-ae09-61595aa50ab3",
+      "requestId": "e28bb5aa-dc4e-40fd-abc0-78fa75d68d4e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1253,7 +1253,7 @@
     },
     {
       "caseId": "TC007",
-      "timestamp": "2026-09-21T08:06:13.500Z",
+      "timestamp": "2026-09-21T08:15:12.005Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1268,7 +1268,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8b137885-941e-4e6a-baed-82b15b13c503",
+      "requestId": "7c73bf87-bdf6-4d69-8999-acd6b494cdd6",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1366,7 +1366,7 @@
     },
     {
       "caseId": "TC008",
-      "timestamp": "2026-09-21T08:06:13.504Z",
+      "timestamp": "2026-09-21T08:15:12.013Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1381,7 +1381,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "cd7c7832-f2b3-44b0-8ce0-32ae4f960754",
+      "requestId": "a50d20d7-bcbf-4a24-b6a8-180237dee469",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1480,7 +1480,7 @@
     },
     {
       "caseId": "TC009",
-      "timestamp": "2026-09-21T08:06:13.508Z",
+      "timestamp": "2026-09-21T08:15:12.018Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1495,7 +1495,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5adaf2e4-4566-450b-a5bb-4f0668ab674f",
+      "requestId": "bf5af13a-2fd9-4e84-a022-42d1f7244c20",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -1576,7 +1576,7 @@
     },
     {
       "caseId": "TC010",
-      "timestamp": "2026-09-21T08:06:13.514Z",
+      "timestamp": "2026-09-21T08:15:12.028Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1591,7 +1591,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f9245ced-7c30-40f7-992f-df8b65062b15",
+      "requestId": "7b326e81-bc5d-49e6-976c-4c47cafebda9",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -1711,7 +1711,7 @@
     },
     {
       "caseId": "TC011",
-      "timestamp": "2026-09-21T08:06:13.519Z",
+      "timestamp": "2026-09-21T08:15:12.039Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1726,7 +1726,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8b9122a5-840b-4501-aabc-73cf94233c22",
+      "requestId": "90514530-8e9a-46e3-8f47-37fa09319511",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1845,7 +1845,7 @@
     },
     {
       "caseId": "TC012",
-      "timestamp": "2026-09-21T08:06:13.523Z",
+      "timestamp": "2026-09-21T08:15:12.044Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -1860,7 +1860,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d1bb7157-0151-44e5-970f-ff999c7e0431",
+      "requestId": "6f9defc8-c4d4-40c4-8319-5ee14dc09d19",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1954,7 +1954,7 @@
     },
     {
       "caseId": "TC013",
-      "timestamp": "2026-09-21T08:06:13.528Z",
+      "timestamp": "2026-09-21T08:15:12.050Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -1969,7 +1969,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3955849c-b9ae-4c9b-b531-f164c4d6c942",
+      "requestId": "b666c966-edf7-4d9d-9a70-c46f424cac39",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -2050,7 +2050,7 @@
     },
     {
       "caseId": "TC014",
-      "timestamp": "2026-09-21T08:06:13.536Z",
+      "timestamp": "2026-09-21T08:15:12.058Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -2065,7 +2065,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "893992d5-21ef-4936-97f9-a619c37ab703",
+      "requestId": "59158f1b-9eab-4e23-b9f4-a146dec82c13",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -2145,7 +2145,7 @@
     },
     {
       "caseId": "TC015",
-      "timestamp": "2026-09-21T08:06:13.541Z",
+      "timestamp": "2026-09-21T08:15:12.063Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -2160,7 +2160,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "153e442b-3d5a-4e43-b17b-e7fa3dd62dc3",
+      "requestId": "8886098b-313f-46f7-b683-1d62b49e8cea",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -2260,7 +2260,7 @@
     },
     {
       "caseId": "gt-routine-001-github-monorepo",
-      "timestamp": "2026-09-21T08:06:13.546Z",
+      "timestamp": "2026-09-21T08:15:12.069Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2275,7 +2275,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "90021134-b075-4595-9e54-9a0f0570fb86",
+      "requestId": "1fb63b67-0f76-4f53-bba5-1035ab3d4852",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -2382,7 +2382,7 @@
     },
     {
       "caseId": "gt-routine-002-confluence-rdp-runbook",
-      "timestamp": "2026-09-21T08:06:13.552Z",
+      "timestamp": "2026-09-21T08:15:12.074Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2397,7 +2397,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d4231663-1659-458c-8294-f7030cd5fd3e",
+      "requestId": "6194ff29-0697-4390-a2c6-0ff3758be4a1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2495,7 +2495,7 @@
     },
     {
       "caseId": "gt-routine-003-jira-firewall-review",
-      "timestamp": "2026-09-21T08:06:13.557Z",
+      "timestamp": "2026-09-21T08:15:12.080Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2510,7 +2510,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "687c514b-d6be-4c2d-84d8-a1ad54e0fddd",
+      "requestId": "5f03ec3f-91f4-4727-99c3-b5ab94534f19",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2609,7 +2609,7 @@
     },
     {
       "caseId": "gt-routine-004-vpn-data-oncall",
-      "timestamp": "2026-09-21T08:06:13.561Z",
+      "timestamp": "2026-09-21T08:15:12.086Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2624,7 +2624,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ab789aee-18cf-4347-bd1a-938f4eeb92a6",
+      "requestId": "6a4f560e-4b48-4743-a187-d5c8c567c74c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2721,7 +2721,7 @@
     },
     {
       "caseId": "gt-routine-005-sandbox-webhook",
-      "timestamp": "2026-09-21T08:06:13.567Z",
+      "timestamp": "2026-09-21T08:15:12.094Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2736,7 +2736,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e0f6789e-ffdc-4bb0-a454-8aa06fa4543f",
+      "requestId": "deeae579-b481-4a7d-8ffa-a767032d008e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2842,7 +2842,7 @@
     },
     {
       "caseId": "gt-routine-006-sandbox-dbt-parser",
-      "timestamp": "2026-09-21T08:06:13.571Z",
+      "timestamp": "2026-09-21T08:15:12.100Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2857,7 +2857,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d51af82c-c02b-4eee-9efa-d08b90c789ac",
+      "requestId": "6142af3b-f6e1-4bb5-90bd-35bea338baff",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2963,7 +2963,7 @@
     },
     {
       "caseId": "gt-routine-007-github-blockchain-audit",
-      "timestamp": "2026-09-21T08:06:13.574Z",
+      "timestamp": "2026-09-21T08:15:12.107Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2978,7 +2978,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "24ed08f0-fdd4-4619-8ef2-7908470e57da",
+      "requestId": "f2046fb9-e2ec-469c-8963-ad755eee7bbc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3083,7 +3083,7 @@
     },
     {
       "caseId": "gt-routine-008-jira-game-incident",
-      "timestamp": "2026-09-21T08:06:13.578Z",
+      "timestamp": "2026-09-21T08:15:12.114Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3098,7 +3098,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "39fc06dc-f04a-4269-9b47-c2d1e1198b90",
+      "requestId": "dc45aa5f-2a8d-4d16-9377-9fa15fbc9dd3",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3205,7 +3205,7 @@
     },
     {
       "caseId": "gt-routine-009-confluence-prod-db-sop",
-      "timestamp": "2026-09-21T08:06:13.583Z",
+      "timestamp": "2026-09-21T08:15:12.121Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3220,7 +3220,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "43579fb9-7444-49f2-8424-2161232c08d2",
+      "requestId": "3d2c4dab-4b26-4f21-8f5a-4f83eaf43bbb",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3325,7 +3325,7 @@
     },
     {
       "caseId": "gt-routine-010-vpn-qa-network",
-      "timestamp": "2026-09-21T08:06:13.588Z",
+      "timestamp": "2026-09-21T08:15:12.128Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3340,7 +3340,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "bad0deb6-f42f-4ee2-a245-54349c875a8f",
+      "requestId": "66a506db-caff-4d8c-a712-b9cd5937abe5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -3443,7 +3443,7 @@
     },
     {
       "caseId": "gt-routine-011-sandbox-k3s",
-      "timestamp": "2026-09-21T08:06:13.594Z",
+      "timestamp": "2026-09-21T08:15:12.138Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3458,7 +3458,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "75f62657-4cff-4778-a5cf-d5dea86ccfe4",
+      "requestId": "91204880-60b8-4492-aa31-9edf9f243316",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -3561,7 +3561,7 @@
     },
     {
       "caseId": "gt-routine-012-github-actions-read",
-      "timestamp": "2026-09-21T08:06:13.598Z",
+      "timestamp": "2026-09-21T08:15:12.146Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3576,7 +3576,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "456455f1-637b-49dd-9e03-2684cbda6c63",
+      "requestId": "0cf5255d-f37a-43e7-9b5f-69f15cabc1f7",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3675,7 +3675,7 @@
     },
     {
       "caseId": "gt-routine-013-confluence-kafka-docs",
-      "timestamp": "2026-09-21T08:06:13.603Z",
+      "timestamp": "2026-09-21T08:15:12.155Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3690,7 +3690,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "eadbf17d-493e-4560-b6b9-1c4b95a5bb63",
+      "requestId": "d870f94b-1bf2-4dee-bac6-eded69cdc00c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3795,7 +3795,7 @@
     },
     {
       "caseId": "gt-routine-014-jira-dataops-board",
-      "timestamp": "2026-09-21T08:06:13.607Z",
+      "timestamp": "2026-09-21T08:15:12.163Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3810,7 +3810,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7f589ecd-1ad4-4916-9f94-4b1ddf85616e",
+      "requestId": "f4de361a-8b24-4bd0-b5a3-6cf5a6721525",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3922,7 +3922,7 @@
     },
     {
       "caseId": "gt-routine-015-sandbox-otel",
-      "timestamp": "2026-09-21T08:06:13.612Z",
+      "timestamp": "2026-09-21T08:15:12.170Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3937,7 +3937,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "11df7d1b-10a2-4e62-a1b4-cd19155c1489",
+      "requestId": "53f8f3f9-e474-4e22-ac93-d841bc6b6d6e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -4025,7 +4025,7 @@
     },
     {
       "caseId": "gt-missing-001-etl-generic",
-      "timestamp": "2026-09-21T08:06:13.616Z",
+      "timestamp": "2026-09-21T08:15:12.177Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4040,7 +4040,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "cbb70eba-2b42-4db3-a495-116c02a96d5f",
+      "requestId": "968d2633-3e73-42ad-84ab-feea6abadc85",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4128,7 +4128,7 @@
     },
     {
       "caseId": "gt-missing-002-airflow-worker",
-      "timestamp": "2026-09-21T08:06:13.620Z",
+      "timestamp": "2026-09-21T08:15:12.184Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4143,7 +4143,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3d11b713-d83b-4d77-8ee7-6f4dd6f9bbd3",
+      "requestId": "308dea16-e84c-4f68-afc4-17acc73fe611",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4231,7 +4231,7 @@
     },
     {
       "caseId": "gt-missing-003-kafka-connect",
-      "timestamp": "2026-09-21T08:06:13.626Z",
+      "timestamp": "2026-09-21T08:15:12.193Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4246,7 +4246,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "299a971a-19d1-4bf5-930a-59a121b69e60",
+      "requestId": "1b35a7ec-a74c-4f1a-b6b6-0e5772f4e4be",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4320,7 +4320,7 @@
     },
     {
       "caseId": "gt-missing-004-debezium-cdc",
-      "timestamp": "2026-09-21T08:06:13.629Z",
+      "timestamp": "2026-09-21T08:15:12.199Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4335,7 +4335,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "acd586aa-be82-4dbb-a2d7-9d85991fdaa8",
+      "requestId": "e454f9e0-ac5e-4ae9-8b1b-74443dd96848",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4433,7 +4433,7 @@
     },
     {
       "caseId": "gt-missing-005-spark-driver",
-      "timestamp": "2026-09-21T08:06:13.634Z",
+      "timestamp": "2026-09-21T08:15:12.207Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4448,7 +4448,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "487c4dc0-1090-49c5-9068-96b997fbe1cd",
+      "requestId": "4e8f50b3-a2a8-4a07-8bcb-bedcef2acc20",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4537,7 +4537,7 @@
     },
     {
       "caseId": "gt-missing-006-flink-etl",
-      "timestamp": "2026-09-21T08:06:13.639Z",
+      "timestamp": "2026-09-21T08:15:12.215Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4552,7 +4552,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5a058071-ea80-495e-86e6-31ed220928e6",
+      "requestId": "ef4eb60d-dee8-4b6e-8d9e-deee24b8fef4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4655,7 +4655,7 @@
     },
     {
       "caseId": "gt-missing-007-dbt-runner",
-      "timestamp": "2026-09-21T08:06:13.644Z",
+      "timestamp": "2026-09-21T08:15:12.221Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4670,7 +4670,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6ea0a88e-91b0-46a3-8cdf-9bf1c231acd9",
+      "requestId": "5ca130a5-b475-4330-9d9d-a2280ec57d65",
       "actual": {
         "action": "NEEDS_INFORMATION",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -4754,7 +4754,7 @@
     },
     {
       "caseId": "gt-missing-008-postgres-uat",
-      "timestamp": "2026-09-21T08:06:13.650Z",
+      "timestamp": "2026-09-21T08:15:12.227Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4769,7 +4769,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "fc2170f4-6bdd-4660-8b3d-e9747bc5d801",
+      "requestId": "e3be317e-44c7-4b98-8f0f-c62fea6dffdc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4852,7 +4852,7 @@
     },
     {
       "caseId": "gt-missing-009-redis-test",
-      "timestamp": "2026-09-21T08:06:13.654Z",
+      "timestamp": "2026-09-21T08:15:12.233Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4867,7 +4867,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "71becd11-cb54-4122-9713-25e675af68a7",
+      "requestId": "bbef4f97-17e6-4686-91f2-4c794ab9503c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4966,7 +4966,7 @@
     },
     {
       "caseId": "gt-missing-010-mongodb-qa",
-      "timestamp": "2026-09-21T08:06:13.658Z",
+      "timestamp": "2026-09-21T08:15:12.238Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4981,7 +4981,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e788e38d-3802-435d-9a79-794ebe528e87",
+      "requestId": "4a1d3421-c0e5-49aa-95e3-6f2676be8660",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -5070,7 +5070,7 @@
     },
     {
       "caseId": "gt-missing-011-clickhouse-analytics",
-      "timestamp": "2026-09-21T08:06:13.662Z",
+      "timestamp": "2026-09-21T08:15:12.243Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5085,7 +5085,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "bda8c785-82b8-4964-855a-67570f462f7c",
+      "requestId": "d3a3825f-e3f1-4529-a9ac-466b8a4208a0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5169,7 +5169,7 @@
     },
     {
       "caseId": "gt-missing-012-trino-coordinator",
-      "timestamp": "2026-09-21T08:06:13.666Z",
+      "timestamp": "2026-09-21T08:15:12.247Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5184,7 +5184,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ea4bb5e8-4d90-40ad-9445-f1279fad43cc",
+      "requestId": "a8706876-7875-4d70-b8c3-38e8be2fd821",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5272,7 +5272,7 @@
     },
     {
       "caseId": "gt-missing-013-feature-store-etl",
-      "timestamp": "2026-09-21T08:06:13.672Z",
+      "timestamp": "2026-09-21T08:15:12.254Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5287,7 +5287,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b5639de3-3bbf-437a-a138-d989deb5abfe",
+      "requestId": "2b79b0d5-8384-4a95-93b3-8cbac2c2eeab",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5390,7 +5390,7 @@
     },
     {
       "caseId": "gt-missing-014-data-quality-runner",
-      "timestamp": "2026-09-21T08:06:13.676Z",
+      "timestamp": "2026-09-21T08:15:12.259Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5405,7 +5405,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9539ccbd-9976-4383-bf5e-40e1c07a82f2",
+      "requestId": "920a3586-239b-4f8e-8ffa-640e865f4ea1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5508,7 +5508,7 @@
     },
     {
       "caseId": "gt-missing-015-temporal-worker",
-      "timestamp": "2026-09-21T08:06:13.681Z",
+      "timestamp": "2026-09-21T08:15:12.265Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5523,7 +5523,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1717b31c-5a2c-447d-91f2-1c8969ff57d8",
+      "requestId": "a6233ba5-8add-4be6-9882-ebc0bd8774d7",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5626,7 +5626,7 @@
     },
     {
       "caseId": "gt-security-001-public-rdp-blockchain",
-      "timestamp": "2026-09-21T08:06:13.685Z",
+      "timestamp": "2026-09-21T08:15:12.271Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5641,7 +5641,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "94a202a8-619a-444e-8ea6-cb56c6172f71",
+      "requestId": "5976819f-46c9-4d1b-ae4b-7c4134cbbe75",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -5719,7 +5719,7 @@
     },
     {
       "caseId": "gt-security-002-public-ssh-bypass",
-      "timestamp": "2026-09-21T08:06:13.690Z",
+      "timestamp": "2026-09-21T08:15:12.276Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5734,7 +5734,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b2ee1f87-d783-417c-95bd-f8cbd5cde3d9",
+      "requestId": "35f29749-6a9c-471d-a02e-ccd5a3e3483f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -5815,7 +5815,7 @@
     },
     {
       "caseId": "gt-security-003-torrent-dataset",
-      "timestamp": "2026-09-21T08:06:13.695Z",
+      "timestamp": "2026-09-21T08:15:12.282Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5830,7 +5830,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "4b5548ff-9a4f-4632-b7eb-ccc471c693a4",
+      "requestId": "9b591dcd-974f-4c1c-91c9-59cc24df0f3a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5908,7 +5908,7 @@
     },
     {
       "caseId": "gt-security-004-crypto-miner-benchmark",
-      "timestamp": "2026-09-21T08:06:13.699Z",
+      "timestamp": "2026-09-21T08:15:12.286Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5923,7 +5923,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "22595eb9-4b4c-4df6-a93a-bf11248d8adb",
+      "requestId": "9e458ba3-642e-49e5-bff1-a40ed2611a85",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -5999,7 +5999,7 @@
     },
     {
       "caseId": "gt-security-005-ngrok-reverse-tunnel",
-      "timestamp": "2026-09-21T08:06:13.705Z",
+      "timestamp": "2026-09-21T08:15:12.292Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6014,7 +6014,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b64b0936-eb05-4c84-8d6d-896672fd33d3",
+      "requestId": "5fd809f8-3499-4cee-9d07-92c022b8e4a5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6100,7 +6100,7 @@
     },
     {
       "caseId": "gt-security-006-public-jupyter",
-      "timestamp": "2026-09-21T08:06:13.710Z",
+      "timestamp": "2026-09-21T08:15:12.297Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6115,7 +6115,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "170656c8-7117-42b0-b22e-8e001d89e61a",
+      "requestId": "69ace82c-d77a-4e11-9e39-42a7905b79c2",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6191,7 +6191,7 @@
     },
     {
       "caseId": "gt-security-007-docker-daemon-public",
-      "timestamp": "2026-09-21T08:06:13.715Z",
+      "timestamp": "2026-09-21T08:15:12.303Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6206,7 +6206,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "83b1cf69-7f0a-4974-bd65-be037f0b8282",
+      "requestId": "7c688a31-f9e8-412f-9151-3a046a9c605f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6282,7 +6282,7 @@
     },
     {
       "caseId": "gt-security-008-kubernetes-api-public",
-      "timestamp": "2026-09-21T08:06:13.720Z",
+      "timestamp": "2026-09-21T08:15:12.309Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6297,7 +6297,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7a0e34af-b277-45d6-be2e-2166a2f06ab3",
+      "requestId": "2c8ce78f-fc38-4992-87d6-ae34cfa20897",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6377,7 +6377,7 @@
     },
     {
       "caseId": "gt-security-009-public-redis",
-      "timestamp": "2026-09-21T08:06:13.725Z",
+      "timestamp": "2026-09-21T08:15:12.315Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6392,7 +6392,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e4bd5a2e-98ab-4729-951a-f909de1a921a",
+      "requestId": "23341876-120c-4858-91a4-8319d3d98856",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6487,7 +6487,7 @@
     },
     {
       "caseId": "gt-security-010-public-postgres-urgent",
-      "timestamp": "2026-09-21T08:06:13.730Z",
+      "timestamp": "2026-09-21T08:15:12.320Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6502,7 +6502,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b63aa057-51ca-4412-b48a-c1f19f4f8ab4",
+      "requestId": "eb99d61f-0dc2-4216-850e-6b5adbdd37e2",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -6582,7 +6582,7 @@
     },
     {
       "caseId": "gt-security-011-public-grafana",
-      "timestamp": "2026-09-21T08:06:13.736Z",
+      "timestamp": "2026-09-21T08:15:12.327Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6597,7 +6597,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5770d835-f447-4ebf-8780-ea0c101ed26b",
+      "requestId": "dae47ca4-6ad5-4393-bc34-84e2fc8afb20",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6672,7 +6672,7 @@
     },
     {
       "caseId": "gt-security-012-disable-edr-driver",
-      "timestamp": "2026-09-21T08:06:13.741Z",
+      "timestamp": "2026-09-21T08:15:12.333Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6687,7 +6687,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b9222c78-6686-4ffd-89a3-14accbd6b9bf",
+      "requestId": "89f71c87-3227-46f3-b2f3-509eaade1c5c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6767,7 +6767,7 @@
     },
     {
       "caseId": "gt-security-013-torrent-build-cache",
-      "timestamp": "2026-09-21T08:06:13.747Z",
+      "timestamp": "2026-09-21T08:15:12.339Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6782,7 +6782,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c0a4fb98-c9ce-42d4-be81-2fc993942143",
+      "requestId": "09096d2f-70cd-475d-ac13-542fc4942392",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6860,7 +6860,7 @@
     },
     {
       "caseId": "gt-security-014-public-ethereum-rpc",
-      "timestamp": "2026-09-21T08:06:13.754Z",
+      "timestamp": "2026-09-21T08:15:12.345Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6875,7 +6875,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1a54175b-ba57-429a-8cc0-eb0c2340a5e5",
+      "requestId": "f60b1cab-e80a-4643-a64f-71f7fe4991f3",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6956,7 +6956,7 @@
     },
     {
       "caseId": "gt-security-015-conflicting-github-rdp",
-      "timestamp": "2026-09-21T08:06:13.760Z",
+      "timestamp": "2026-09-21T08:15:12.351Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6971,7 +6971,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6b0ce2e4-85dd-458b-9076-906ce0c515cc",
+      "requestId": "bf0cff3a-d546-4b27-8df9-d654c955e62e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -7054,7 +7054,7 @@
     },
     {
       "caseId": "gt-authority-001-pubg-prod-write",
-      "timestamp": "2026-09-21T08:06:13.765Z",
+      "timestamp": "2026-09-21T08:15:12.358Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7069,7 +7069,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "487eae6a-f869-4e28-bdd4-cc91560da274",
+      "requestId": "0bfb2804-a415-40fd-8025-0825b1eb96d9",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7169,7 +7169,7 @@
     },
     {
       "caseId": "gt-authority-002-zalopay-prod-read",
-      "timestamp": "2026-09-21T08:06:13.773Z",
+      "timestamp": "2026-09-21T08:15:12.364Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7184,7 +7184,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a5ecd818-7480-4da8-9198-73f79a41eb13",
+      "requestId": "382c7f5c-a75b-4e79-9d1e-9d84b11dd8c2",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7296,7 +7296,7 @@
     },
     {
       "caseId": "gt-authority-003-zalo-prod-write",
-      "timestamp": "2026-09-21T08:06:13.779Z",
+      "timestamp": "2026-09-21T08:15:12.371Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7311,7 +7311,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "640b9f5a-bc83-4826-898b-efb8f28e3564",
+      "requestId": "99646c94-5359-4c99-89a6-a1c49a1e8840",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7394,7 +7394,7 @@
     },
     {
       "caseId": "gt-authority-004-vnggames-schema-migration",
-      "timestamp": "2026-09-21T08:06:13.786Z",
+      "timestamp": "2026-09-21T08:15:12.378Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7409,7 +7409,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "da436daa-388f-4daf-b9e6-3540f2c60cdc",
+      "requestId": "f797c42a-ba73-4750-ad49-f8ff6b3b7d54",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7507,7 +7507,7 @@
     },
     {
       "caseId": "gt-authority-005-prod-service-account",
-      "timestamp": "2026-09-21T08:06:13.792Z",
+      "timestamp": "2026-09-21T08:15:12.384Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7522,7 +7522,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "81d72582-72eb-4073-afb8-50bb86f5c1b4",
+      "requestId": "21a0d3b1-0d3f-41a2-ab46-d923a39a3f66",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7598,7 +7598,7 @@
     },
     {
       "caseId": "gt-authority-006-prod-read-replica",
-      "timestamp": "2026-09-21T08:06:13.799Z",
+      "timestamp": "2026-09-21T08:15:12.392Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7613,7 +7613,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "00ebafbc-48ce-4a78-9ed1-c857d90e81ce",
+      "requestId": "737f9811-e18b-4eb9-a318-4b8946eec64c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7709,7 +7709,7 @@
     },
     {
       "caseId": "gt-authority-007-production-dump",
-      "timestamp": "2026-09-21T08:06:13.806Z",
+      "timestamp": "2026-09-21T08:15:12.400Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7724,7 +7724,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "512e74e2-8297-4e04-bc94-d1f05adf823e",
+      "requestId": "ec36c40e-6da0-4363-9cd3-3bd15c60b498",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -7815,7 +7815,7 @@
     },
     {
       "caseId": "gt-authority-008-eleven-gpu",
-      "timestamp": "2026-09-21T08:06:13.813Z",
+      "timestamp": "2026-09-21T08:15:12.408Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7830,7 +7830,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a92f1618-a368-4ac3-8495-322c4efcda4f",
+      "requestId": "0d2bdd0f-c2a2-48d4-b879-3efea785f137",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -7916,7 +7916,7 @@
     },
     {
       "caseId": "gt-authority-009-twelve-a100",
-      "timestamp": "2026-09-21T08:06:13.819Z",
+      "timestamp": "2026-09-21T08:15:12.415Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7931,7 +7931,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "515634fb-963c-416d-9ae6-2b1ba7db34ac",
+      "requestId": "b3fde8df-2c91-4814-8c7b-332e8e7914de",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8030,7 +8030,7 @@
     },
     {
       "caseId": "gt-authority-010-twenty-four-h100",
-      "timestamp": "2026-09-21T08:06:13.825Z",
+      "timestamp": "2026-09-21T08:15:12.422Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8045,7 +8045,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "47510388-1dfd-4bfd-8750-003d4231e79d",
+      "requestId": "891b658e-1fc2-461a-a7a4-0427ae159689",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8130,7 +8130,7 @@
     },
     {
       "caseId": "gt-authority-011-ray-sixteen-gpu",
-      "timestamp": "2026-09-21T08:06:13.832Z",
+      "timestamp": "2026-09-21T08:15:12.430Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8145,7 +8145,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "eba668c7-6005-45da-be8d-921f7bf34651",
+      "requestId": "01dcb1fc-1e92-4eca-867e-66d8d6297862",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8246,7 +8246,7 @@
     },
     {
       "caseId": "gt-authority-012-forty-gpu-render",
-      "timestamp": "2026-09-21T08:06:13.838Z",
+      "timestamp": "2026-09-21T08:15:12.436Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8261,7 +8261,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "69713d38-146b-417b-af00-cfb63f0ce8c5",
+      "requestId": "a7272aeb-5888-4f54-b1e1-f90fbd0f992e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8347,7 +8347,7 @@
     },
     {
       "caseId": "gt-authority-013-obfuscated-sixty-four-gpu",
-      "timestamp": "2026-09-21T08:06:13.845Z",
+      "timestamp": "2026-09-21T08:15:12.444Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8362,7 +8362,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "89af7b4c-a516-405c-8521-dd4456e9ebcd",
+      "requestId": "3c92dc28-f581-4436-b98e-a5734cac4698",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8447,7 +8447,7 @@
     },
     {
       "caseId": "gt-authority-014-prod-inference-twenty-gpu",
-      "timestamp": "2026-09-21T08:06:13.852Z",
+      "timestamp": "2026-09-21T08:15:12.451Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8462,7 +8462,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d79aeef0-27b7-4a77-a0cb-1dd299f92294",
+      "requestId": "f7831763-080f-4092-b155-a9297ab29d6c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -8567,7 +8567,7 @@
     },
     {
       "caseId": "gt-authority-015-prod-db-and-gpu",
-      "timestamp": "2026-09-21T08:06:13.859Z",
+      "timestamp": "2026-09-21T08:15:12.458Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8582,7 +8582,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c2ce024e-cc38-47a3-8c5d-75bf0f5d75bb",
+      "requestId": "c1a6c24e-100d-4396-86a9-def9cf1594af",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8662,7 +8662,7 @@
     },
     {
       "caseId": "xcf-routine-001-hr-confluence-onboarding",
-      "timestamp": "2026-09-21T08:06:13.866Z",
+      "timestamp": "2026-09-21T08:15:12.466Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8677,7 +8677,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "bd8e4f90-48a6-4b1e-8c2b-d3cab9b41878",
+      "requestId": "0dacde8b-4182-4a52-9431-2e0081c9ca6e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8784,7 +8784,7 @@
     },
     {
       "caseId": "xcf-routine-002-finance-vpn-month-end",
-      "timestamp": "2026-09-21T08:06:13.873Z",
+      "timestamp": "2026-09-21T08:15:12.473Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8799,7 +8799,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "94eb6dea-038e-4364-a284-94832cbf293b",
+      "requestId": "9d97bd9b-096e-4392-9c43-b697f909cfdd",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8880,7 +8880,7 @@
     },
     {
       "caseId": "xcf-routine-003-legal-jira-dsar",
-      "timestamp": "2026-09-21T08:06:13.882Z",
+      "timestamp": "2026-09-21T08:15:12.483Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8895,7 +8895,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "bdb98409-088e-494f-9d47-73a70be8b979",
+      "requestId": "03ed2c43-4ac9-4b3e-9c8c-3ed68c1c5d34",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9002,7 +9002,7 @@
     },
     {
       "caseId": "xcf-routine-004-procurement-github-sbom",
-      "timestamp": "2026-09-21T08:06:13.889Z",
+      "timestamp": "2026-09-21T08:15:12.491Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9017,7 +9017,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5800f20a-04b5-4953-b24f-e5371536945b",
+      "requestId": "30008df8-03ad-498f-ac50-d8d973cf6937",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9119,7 +9119,7 @@
     },
     {
       "caseId": "xcf-routine-005-salesops-jira-crm",
-      "timestamp": "2026-09-21T08:06:13.896Z",
+      "timestamp": "2026-09-21T08:15:12.500Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9134,7 +9134,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "54ee694b-8565-4971-ad1b-ae2df1a7d664",
+      "requestId": "9dd99dc2-ca0f-4e4c-a321-1a360806fdca",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9221,7 +9221,7 @@
     },
     {
       "caseId": "xcf-routine-006-marketing-sandbox-webhook",
-      "timestamp": "2026-09-21T08:06:13.902Z",
+      "timestamp": "2026-09-21T08:15:12.507Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9236,7 +9236,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c79fcf7e-8a97-4a84-a817-d8bbca39f725",
+      "requestId": "59396083-a065-4ca4-b931-711fede410cf",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9342,7 +9342,7 @@
     },
     {
       "caseId": "xcf-routine-007-customer-care-vpn",
-      "timestamp": "2026-09-21T08:06:13.909Z",
+      "timestamp": "2026-09-21T08:15:12.515Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9357,7 +9357,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "65fa6ca3-a108-4d1e-bb45-d5d3a59b1c14",
+      "requestId": "e8dff9b4-bf60-4197-9826-bc06bc278cc6",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9439,7 +9439,7 @@
     },
     {
       "caseId": "xcf-routine-008-facilities-jira-maintenance",
-      "timestamp": "2026-09-21T08:06:13.916Z",
+      "timestamp": "2026-09-21T08:15:12.523Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9454,7 +9454,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f4fb14cd-19b6-4ad6-b0fe-5d6665bcfcac",
+      "requestId": "df2e2199-7db1-402c-845f-39d3250ad22b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9559,7 +9559,7 @@
     },
     {
       "caseId": "xcf-routine-009-audit-confluence-controls",
-      "timestamp": "2026-09-21T08:06:13.926Z",
+      "timestamp": "2026-09-21T08:15:12.534Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9574,7 +9574,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "411bd25d-750e-4bbf-9f8c-38616c4e24a3",
+      "requestId": "7508f13f-2cee-4d2c-b69c-9e270f4e948a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9661,7 +9661,7 @@
     },
     {
       "caseId": "xcf-routine-010-comms-sandbox-preview",
-      "timestamp": "2026-09-21T08:06:13.933Z",
+      "timestamp": "2026-09-21T08:15:12.543Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9676,7 +9676,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a9d98bd3-7690-444a-80cb-3fd6d84af1ff",
+      "requestId": "28f45f10-e9a4-48b3-bd35-0eba5b9daf03",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -9764,7 +9764,7 @@
     },
     {
       "caseId": "xcf-routine-011-eventops-vpn",
-      "timestamp": "2026-09-21T08:06:13.940Z",
+      "timestamp": "2026-09-21T08:15:12.551Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9779,7 +9779,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9cea1cb1-61c2-4a33-8254-b05dc92c6392",
+      "requestId": "7b9e3348-befa-48b5-94f1-71cb5f1296bf",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9852,7 +9852,7 @@
     },
     {
       "caseId": "xcf-routine-012-executive-confluence-boardpack",
-      "timestamp": "2026-09-21T08:06:13.948Z",
+      "timestamp": "2026-09-21T08:15:12.561Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9867,7 +9867,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ea0000d3-d106-4672-962e-a29e6684d332",
+      "requestId": "6511856c-0c66-48cc-86b7-53a8ba2dcf58",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9972,7 +9972,7 @@
     },
     {
       "caseId": "xcf-missing-001-hr-payroll-etl",
-      "timestamp": "2026-09-21T08:06:13.956Z",
+      "timestamp": "2026-09-21T08:15:12.569Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -9987,7 +9987,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "39bfc93f-34b7-47ec-8c90-1caecbbdd6a8",
+      "requestId": "fe6d5374-3636-40d3-bf5c-13595b2aaec1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10092,7 +10092,7 @@
     },
     {
       "caseId": "xcf-missing-002-finance-bank-etl",
-      "timestamp": "2026-09-21T08:06:13.963Z",
+      "timestamp": "2026-09-21T08:15:12.577Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10107,7 +10107,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c5106b93-9842-417b-805c-dbd1ee96a59c",
+      "requestId": "be504092-1c85-4e57-8693-bf044e66df88",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10210,7 +10210,7 @@
     },
     {
       "caseId": "xcf-missing-003-legal-ediscovery-db",
-      "timestamp": "2026-09-21T08:06:13.970Z",
+      "timestamp": "2026-09-21T08:15:12.585Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10225,7 +10225,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "553ec523-a005-4c9e-9b94-741d70d0f92a",
+      "requestId": "6fbebdf3-196d-47d0-9217-dea4e60ced05",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10310,7 +10310,7 @@
     },
     {
       "caseId": "xcf-missing-004-procurement-vendor-db",
-      "timestamp": "2026-09-21T08:06:13.978Z",
+      "timestamp": "2026-09-21T08:15:12.594Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10325,7 +10325,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a8c05d07-7381-486f-9592-77f22d768182",
+      "requestId": "824cf6b5-4a42-4783-9c14-61b8068c2b81",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10410,7 +10410,7 @@
     },
     {
       "caseId": "xcf-missing-005-sales-crm-etl",
-      "timestamp": "2026-09-21T08:06:13.986Z",
+      "timestamp": "2026-09-21T08:15:12.602Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10425,7 +10425,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6b84e9f1-0775-4f5d-86e9-5580454c2fa5",
+      "requestId": "4e74ef66-6b97-4f3c-ba2c-1561c42c6c2d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10528,7 +10528,7 @@
     },
     {
       "caseId": "xcf-missing-006-marketing-attribution-etl",
-      "timestamp": "2026-09-21T08:06:13.994Z",
+      "timestamp": "2026-09-21T08:15:12.611Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10543,7 +10543,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9b31592f-f51b-4d04-b30f-fce7398af04b",
+      "requestId": "dbb45eec-045f-4300-8884-5fc4d195783a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10631,7 +10631,7 @@
     },
     {
       "caseId": "xcf-missing-007-care-transcript-db",
-      "timestamp": "2026-09-21T08:06:14.002Z",
+      "timestamp": "2026-09-21T08:15:12.619Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10646,7 +10646,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "4bc35281-e43d-4164-8f50-a2e714e6419f",
+      "requestId": "c52ee5e3-cdd4-4543-b7d4-5eec6f5d61b4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10731,7 +10731,7 @@
     },
     {
       "caseId": "xcf-missing-008-facilities-iot-db",
-      "timestamp": "2026-09-21T08:06:14.011Z",
+      "timestamp": "2026-09-21T08:15:12.628Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10746,7 +10746,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1416c15c-737c-4b08-88db-3f69c1093eeb",
+      "requestId": "6c18d0ab-abdf-49a4-b8fd-5e912254226e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10846,7 +10846,7 @@
     },
     {
       "caseId": "xcf-missing-009-audit-evidence-server",
-      "timestamp": "2026-09-21T08:06:14.022Z",
+      "timestamp": "2026-09-21T08:15:12.637Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10861,7 +10861,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "77034d0d-8ee8-4089-a56a-3851bc7d92cf",
+      "requestId": "b0e62aab-7b1d-4d45-a362-5cd79416485a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10964,7 +10964,7 @@
     },
     {
       "caseId": "xcf-missing-010-esg-reporting-db",
-      "timestamp": "2026-09-21T08:06:14.033Z",
+      "timestamp": "2026-09-21T08:15:12.646Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10979,7 +10979,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "aec23b37-d15e-4798-baa8-110cea3b0c38",
+      "requestId": "2f0bbc21-9261-426a-8e28-5572dba32bcd",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11064,7 +11064,7 @@
     },
     {
       "caseId": "xcf-missing-011-comms-media-db",
-      "timestamp": "2026-09-21T08:06:14.044Z",
+      "timestamp": "2026-09-21T08:15:12.655Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -11079,7 +11079,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ca6e582b-f490-4d25-9653-a89014cbfa5f",
+      "requestId": "b24e735e-674f-4569-83ab-c083d1c209e6",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11164,7 +11164,7 @@
     },
     {
       "caseId": "xcf-missing-012-risk-fraud-etl",
-      "timestamp": "2026-09-21T08:06:14.053Z",
+      "timestamp": "2026-09-21T08:15:12.663Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -11179,7 +11179,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "2f525a42-601a-46c4-b5ab-7102d02c236d",
+      "requestId": "86b8a697-17c8-400f-8ea4-b1ccca842c22",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11282,7 +11282,7 @@
     },
     {
       "caseId": "xcf-security-001-hr-anydesk-bypass",
-      "timestamp": "2026-09-21T08:06:14.061Z",
+      "timestamp": "2026-09-21T08:15:12.672Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11297,7 +11297,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "28ce4beb-c202-4e2e-9f94-4123a87b6d11",
+      "requestId": "58c72bea-df38-4693-aaff-68dd871ad2b6",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -11384,7 +11384,7 @@
     },
     {
       "caseId": "xcf-security-002-finance-disable-edr",
-      "timestamp": "2026-09-21T08:06:14.070Z",
+      "timestamp": "2026-09-21T08:15:12.680Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11399,7 +11399,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f4fa2b9c-15a5-49db-990f-f38a63314c13",
+      "requestId": "804ffb27-9d1b-4cbe-8361-025d177fc87a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11473,7 +11473,7 @@
     },
     {
       "caseId": "xcf-security-003-legal-public-rdp",
-      "timestamp": "2026-09-21T08:06:14.080Z",
+      "timestamp": "2026-09-21T08:15:12.689Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11488,7 +11488,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "beada901-2874-4bc7-9628-94168506b71b",
+      "requestId": "009e3db6-8d77-4bdf-b5b9-73179348345e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11589,7 +11589,7 @@
     },
     {
       "caseId": "xcf-security-004-procurement-public-sftp",
-      "timestamp": "2026-09-21T08:06:14.089Z",
+      "timestamp": "2026-09-21T08:15:12.698Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11604,7 +11604,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3a0de087-4b3a-49d5-a850-dea616413f8f",
+      "requestId": "e0f7b772-d41b-4981-9cec-03ac46f6f3fa",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11685,7 +11685,7 @@
     },
     {
       "caseId": "xcf-security-005-marketing-torrent-assets",
-      "timestamp": "2026-09-21T08:06:14.099Z",
+      "timestamp": "2026-09-21T08:15:12.707Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11700,7 +11700,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5c1a745e-ec13-4167-8537-ae67aed90ccb",
+      "requestId": "1ba6434c-93c6-48aa-8660-73c194298e73",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11778,7 +11778,7 @@
     },
     {
       "caseId": "xcf-security-006-care-remote-debug-port",
-      "timestamp": "2026-09-21T08:06:14.108Z",
+      "timestamp": "2026-09-21T08:15:12.717Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11793,7 +11793,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8d561ecf-4550-4b45-88d3-1d524fb201c6",
+      "requestId": "19b7f8fc-116a-4f2b-b1fd-05709394e9fc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11873,7 +11873,7 @@
     },
     {
       "caseId": "xcf-security-007-facilities-public-nvr",
-      "timestamp": "2026-09-21T08:06:14.116Z",
+      "timestamp": "2026-09-21T08:15:12.726Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11888,7 +11888,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c65bb1f8-b5a5-46b3-97ba-39bf1772ebb0",
+      "requestId": "84f03cbc-ec9f-4389-919e-293e397dee39",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11969,7 +11969,7 @@
     },
     {
       "caseId": "xcf-security-008-comms-cracked-font-pack",
-      "timestamp": "2026-09-21T08:06:14.125Z",
+      "timestamp": "2026-09-21T08:15:12.736Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11984,7 +11984,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "667585ab-f161-4003-bb40-e35971551aa2",
+      "requestId": "8cc61b36-92f5-44af-9962-a16045146913",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -12076,7 +12076,7 @@
     },
     {
       "caseId": "xcf-security-009-event-public-vnc",
-      "timestamp": "2026-09-21T08:06:14.134Z",
+      "timestamp": "2026-09-21T08:15:12.746Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12091,7 +12091,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "95fa5dbe-1d7d-482e-94ee-6e606c6d636b",
+      "requestId": "b614195f-3ee4-43eb-8694-2bdfea813923",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -12172,7 +12172,7 @@
     },
     {
       "caseId": "xcf-security-010-sales-sideload-extension",
-      "timestamp": "2026-09-21T08:06:14.144Z",
+      "timestamp": "2026-09-21T08:15:12.756Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12187,7 +12187,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ffee321d-7c69-4460-9e67-8b287544c21c",
+      "requestId": "d10339cc-d935-49d1-ad47-5ebe79e0fedd",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -12278,7 +12278,7 @@
     },
     {
       "caseId": "xcf-security-011-executive-bypass-mfa",
-      "timestamp": "2026-09-21T08:06:14.152Z",
+      "timestamp": "2026-09-21T08:15:12.765Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12293,7 +12293,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7ce89bcc-e8f4-467e-a5c4-183c7c896ee9",
+      "requestId": "26251886-e641-40da-a838-54f2c966575a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -12363,7 +12363,7 @@
     },
     {
       "caseId": "xcf-security-012-esg-public-blockchain-rpc",
-      "timestamp": "2026-09-21T08:06:14.163Z",
+      "timestamp": "2026-09-21T08:15:12.775Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12378,7 +12378,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "07c6c6f3-7b7c-4b2c-9693-e71690317150",
+      "requestId": "675113b2-586a-4b19-a786-92a1c0f76dad",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -12463,7 +12463,7 @@
     },
     {
       "caseId": "xcf-authority-001-finance-zalopay-prod-read",
-      "timestamp": "2026-09-21T08:06:14.172Z",
+      "timestamp": "2026-09-21T08:15:12.785Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12478,7 +12478,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "711b744b-ce0a-47fd-b219-da0adcec0503",
+      "requestId": "6ed7b158-b55e-4bb6-a23f-de94aa570527",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -12603,7 +12603,7 @@
     },
     {
       "caseId": "xcf-authority-002-care-zalopay-prod-write",
-      "timestamp": "2026-09-21T08:06:14.182Z",
+      "timestamp": "2026-09-21T08:15:12.795Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12618,7 +12618,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "02c66cea-50cb-48dc-b777-2cf8991a99af",
+      "requestId": "7931674b-03f3-40df-97dd-24ea6b819149",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -12687,7 +12687,7 @@
     },
     {
       "caseId": "xcf-authority-003-legal-zalo-prod-read",
-      "timestamp": "2026-09-21T08:06:14.192Z",
+      "timestamp": "2026-09-21T08:15:12.805Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12702,7 +12702,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7b651fe9-f594-4921-b444-95a7f50f8128",
+      "requestId": "130791b2-a89a-4ab8-9a48-a994c36a213c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -12811,7 +12811,7 @@
     },
     {
       "caseId": "xcf-authority-004-privacy-zalo-export",
-      "timestamp": "2026-09-21T08:06:14.202Z",
+      "timestamp": "2026-09-21T08:15:12.815Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12826,7 +12826,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f06cb998-b9c3-450c-a532-25a0c0f8e855",
+      "requestId": "7bf9d49e-9de7-462f-a071-7a4ad2c968f7",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -12926,7 +12926,7 @@
     },
     {
       "caseId": "xcf-authority-005-marketing-zalo-segmentation",
-      "timestamp": "2026-09-21T08:06:14.213Z",
+      "timestamp": "2026-09-21T08:15:12.825Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12941,7 +12941,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b210feb0-4eef-44c2-a662-b27fc0de6072",
+      "requestId": "b64ce162-7c78-4ff1-b0b0-4ba82810467e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -13038,7 +13038,7 @@
     },
     {
       "caseId": "xcf-authority-006-gameops-vnggames-write",
-      "timestamp": "2026-09-21T08:06:14.223Z",
+      "timestamp": "2026-09-21T08:15:12.835Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13053,7 +13053,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "52f3a483-63b7-473e-89f1-c6dd2f32fc69",
+      "requestId": "2a5e80e3-f1dd-4afa-938f-4b2e5997f277",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -13151,7 +13151,7 @@
     },
     {
       "caseId": "xcf-authority-007-audit-production-read",
-      "timestamp": "2026-09-21T08:06:14.235Z",
+      "timestamp": "2026-09-21T08:15:12.846Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13166,7 +13166,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "2ec78cff-6786-4932-a99e-52d462146062",
+      "requestId": "46ee1804-7d9e-448c-bdd4-d8f1aa00dd0d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -13256,7 +13256,7 @@
     },
     {
       "caseId": "xcf-authority-008-risk-prod-write",
-      "timestamp": "2026-09-21T08:06:14.246Z",
+      "timestamp": "2026-09-21T08:15:12.857Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13271,7 +13271,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "2dbc2d74-3cd1-4146-b5a6-a3ba43e5a5ef",
+      "requestId": "11f81a91-fa3e-480d-a6ed-a9a7de81c929",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -13377,7 +13377,7 @@
     },
     {
       "caseId": "xcf-authority-009-creative-render-gpu",
-      "timestamp": "2026-09-21T08:06:14.256Z",
+      "timestamp": "2026-09-21T08:15:12.868Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13392,7 +13392,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1bbb8b91-3783-4bf4-997f-95a5b1500530",
+      "requestId": "97c69116-731c-4141-9d5a-3efef0ee083d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13477,7 +13477,7 @@
     },
     {
       "caseId": "xcf-authority-010-localization-dubbing-gpu",
-      "timestamp": "2026-09-21T08:06:14.267Z",
+      "timestamp": "2026-09-21T08:15:12.877Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13492,7 +13492,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "fe0b0210-3be2-41f2-9ed6-bb03ac65e9fe",
+      "requestId": "66f7ae4f-6b8a-4860-90d1-b57044504c95",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13593,7 +13593,7 @@
     },
     {
       "caseId": "xcf-authority-011-hr-resume-gpu",
-      "timestamp": "2026-09-21T08:06:14.277Z",
+      "timestamp": "2026-09-21T08:15:12.888Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13608,7 +13608,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "fb5ef965-601d-4a12-bb34-fe6851e9b4c5",
+      "requestId": "1b6e8916-034a-46fd-8de5-33bb5cdb2b56",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13694,7 +13694,7 @@
     },
     {
       "caseId": "xcf-authority-012-comms-video-gpu",
-      "timestamp": "2026-09-21T08:06:14.288Z",
+      "timestamp": "2026-09-21T08:15:12.898Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13709,7 +13709,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b657e2f4-4f34-4b94-884e-ed6a0cdad1ea",
+      "requestId": "bd416c0c-2257-4229-896d-9a97565ae624",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",

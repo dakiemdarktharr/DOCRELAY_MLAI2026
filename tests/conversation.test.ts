@@ -320,3 +320,18 @@ it("allows official self-service password steps only in recovery context, never 
       validateAnswer({ ...value, text }, [], [], "GOOGLE_RECOVERY"),
     ).toThrow();
 });
+
+it.each([
+  "Không bao giờ chia sẻ mật khẩu hoặc mã xác minh.",
+  "Bạn không nên gửi mật khẩu cho bất kỳ ai.",
+  "Tránh cung cấp mật khẩu cho người khác.",
+])("allows safe recovery warnings: %s", (text) => {
+  expect(() =>
+    validateAnswer(
+      { label: "GOOGLE_RECOVERY", text, knowledgeIds: [] },
+      [],
+      [],
+      "GOOGLE_RECOVERY",
+    ),
+  ).not.toThrow();
+});

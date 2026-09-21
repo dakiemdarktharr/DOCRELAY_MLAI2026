@@ -256,12 +256,19 @@ export function validateAnswer(
   if (parsed.knowledgeIds.some((id) => !allowedIds.includes(id)))
     throw new ModelFailure("MODEL_EVIDENCE_INVALID");
   const text = normalize(parsed.text);
-  const recovery =
-    contextLabel === "GOOGLE_RECOVERY" && parsed.label === "GOOGLE_RECOVERY";
-  const sharing = asserted(
-    text.replace(/\bdung (gui|chia se|cung cap)/g, "khong $1"),
-    /(?:gui|chia se|cung cap|send|share|paste)[^,;.\n]{0,45}(?:mat khau|password|ma xac minh|otp|verification code)/,
-  );
+  // Authority comes from the server's recovery context, never the model's label.
+  const recovery = contextLabel === "GOOGLE_RECOVERY";
+  const sharing = text
+    .split(/[,;.\n]|\b(?:but|nhung|however|va|and)\b/)
+    .some((clause) =>
+      asserted(
+        clause.replace(
+          /\b(?:khong (?:bao gio|nen|duoc)|dung|tranh|never)\b/g,
+          "khong",
+        ),
+        /\b(?:gui|chia se|cung cap|send|share|paste)\s+(?:(?:cho|toi|minh|your|my|the|us|me|ban|a|an|cua)\s+){0,5}(?:mat khau|password|ma xac minh|otp|verification code)/,
+      ),
+    );
   const otherSecret =
     /private key|kubeconfig|api key|credential|secret|bearer/.test(text);
   const risks = detectedRisks(parsed.text).filter(
