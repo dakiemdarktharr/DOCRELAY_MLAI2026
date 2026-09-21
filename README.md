@@ -1,6 +1,6 @@
 # VNG Support
 
-> **Source và deployment:** main `20727b5` đã chứa hai bản vá RAG. Hai package sửa lỗi mới vẫn là candidate AI-assisted. Xem [release matrix](docs/RELEASE-MATRIX.md) để phân biệt source đã merge, policy của từng package và release được ghi nhận; chưa kiểm chứng live cho candidate mới.
+> **Source và deployment:** main được kiểm tra tại `92d140a`, đã chứa các bản vá RAG, safety v5.2, evaluation và Verify retry. Hai package release-fix mới vẫn chưa commit/deploy. Xem [release matrix](docs/RELEASE-MATRIX.md) để phân biệt source đã có trên main và release được ghi nhận.
 
 **Trợ lý giải đáp câu hỏi và hỗ trợ kỹ thuật: trả lời trực tiếp khi an toàn, hỏi đúng thông tin còn thiếu, chuyển nhân viên khi cần quyền hạn hoặc có rủi ro.**
 
@@ -58,7 +58,7 @@ flowchart TD
   Q --> R
 ```
 
-Policy của base là **support-guidance-v5.1**; package Tiến Khoa nâng candidate lên **v5.2**. Cả hai giữ ba action `AUTO_APPROVE`, `NEEDS_INFORMATION`, `ESCALATE`. `AUTO_APPROVE` chỉ cho phép trả lời/hướng dẫn/mô phỏng. Thứ tự ưu tiên: `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`.
+Policy của main được kiểm tra là **support-guidance-v5.2**, giữ ba action `AUTO_APPROVE`, `NEEDS_INFORMATION`, `ESCALATE`. `AUTO_APPROVE` chỉ cho phép trả lời/hướng dẫn/mô phỏng. Thứ tự ưu tiên: `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`.
 
 LLM không có authority cuối cùng. Form/freeform mâu thuẫn hoặc một subrequest nguy hiểm không được tự chọn cách hiểu ít rủi ro hơn. Claim “đã được duyệt” không thay thế approval có thể kiểm chứng. Reviewer cũng không được bỏ qua missing facts/approval hoặc approve/fulfill security risk.
 
