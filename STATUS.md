@@ -3,11 +3,11 @@
 ## Release validation — 21/09/2026
 
 - Reconciled UX/judge commit `e98d91e` with remote security/workflow commit `2803b8e`; policy is `support-guidance-v4.1`. Both histories are preserved.
-- Combined validation: **153/153 unit/integration PASS**, lint PASS, build PASS, **26/26 desktop/mobile E2E PASS** on a fresh checkout server at port 3227.
+- Combined validation: **154/154 unit/integration PASS**, lint PASS, build PASS, **26/26 desktop/mobile E2E PASS** on a fresh checkout server at port 3227.
 - Preserved remote rate limits, required reviewer reasons, per-subrequest evaluation, approval registry and expanded audit. Bound previews, Vietnamese UX, field-specific questions, resource limits and secret protection remain.
 - A labelled fact after a semicolon is attached to its request; independent risky subrequests still evaluate separately. Abandoned receipts older than 60 seconds can recover with a version guard.
 - Original fixtures: **55/128 match, 73 mismatches**; original expected values unchanged.
-- Push/deployment and live service verification requested by user; live results will be recorded after deployment.
+- First production smoke confirmed real OpenAI and MongoDB persistence/reviewer/audit. Fixed BSON optional-field serialization and kept reset clarification deterministic with OpenAI enabled. Final deployment evidence follows in artifacts/live-final-verification.json.
 
 ## Previous UX candidate validation (historical, before merge)
 

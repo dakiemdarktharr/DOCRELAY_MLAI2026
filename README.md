@@ -3,12 +3,12 @@
 
 Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **Tôi cần hỗ trợ** và **Dành cho nhân viên** không yêu cầu đăng nhập trong demo công khai.
 
-Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đây chưa phải bản triển khai công khai mới.
+Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đã tích hợp với các sửa bảo mật trên main; policy hiện tại là `support-guidance-v4.1`.
 
 
 ## Bản public
 
-Bằng chứng triển khai lịch sử ngày 20/09/2026 (chưa kiểm tra lại trong lượt sửa này): [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
+Bản public cập nhật ngày 21/09/2026: [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
 
 ## Chạy ứng dụng
 

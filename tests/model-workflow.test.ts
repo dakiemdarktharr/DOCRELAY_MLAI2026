@@ -132,3 +132,14 @@ it("bounds time and lifetime call count without retries", async () => {
   );
   expect(reserved.filter(Boolean)).toHaveLength(20);
 });
+
+it("known reset ambiguity asks the deterministic question even when OpenAI is enabled", async () => {
+  vi.stubEnv("AI_PROVIDER", "openai");
+  const run = vi.fn(async () => {
+    throw new Error("Model must not guess restart versus wipe");
+  });
+  const request = await submitSupport(input("Làm sao để reset máy?"), { run });
+  expect(request.decision?.action).toBe("NEEDS_INFORMATION");
+  expect(request.decision?.ruleIds).toContain("INFO-RESET");
+  expect(run).not.toHaveBeenCalled();
+});

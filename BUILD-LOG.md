@@ -85,3 +85,7 @@ The team requirement is stricter than merely using an AI coding assistant: chall
 ## 2026-09-21 — Merge security fixes with UX/judge feedback
 
 Merged both histories from e98d91e and 2803b8e. Policy support-guidance-v4.1 retains scoped approval verification, full subrequest evaluation, reviewer reasons and audit metadata alongside bound previews and Vietnamese UX. Labelled fact fragments do not become false subrequests. Older abandoned receipts recover through optimistic version guards. Validation: 153 unit/integration, lint, production build and 26 fresh-server desktop/mobile E2E passed. Original 128 fixture expectations unchanged (55 matches, 73 mismatches). Live release evidence follows after deployment.
+
+### Production verification follow-up
+
+Real OpenAI assistance and MongoDB submission/readback/reviewer/audit succeeded on deployment dpl_71e2uTywwY3Kqp4ipktDLSoX79rS. Found optional approvalReference converted to BSON null; set MongoClient ignoreUndefined so preview and stored API snapshots match. Added a regression reproducing an OpenAI-enabled reset ambiguity unnecessarily invoking extraction; deterministic INFO-RESET now asks the known clarification without a model call. No secrets or budget counters changed.

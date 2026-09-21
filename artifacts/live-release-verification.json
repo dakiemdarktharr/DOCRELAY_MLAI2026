@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-09-21T06:09:22.077Z",
+  "sourceCommit": "14e5f7e8418632a991aa91824377a10fb55ccbe6",
+  "deploymentId": "dpl_71e2uTywwY3Kqp4ipktDLSoX79rS",
+  "url": "https://labpass-five.vercel.app",
+  "checks": [
+    {
+      "name": "deployed policy",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "provider": "openai",
+        "policy": "support-guidance-v4.1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "new entry labels",
+      "pass": true
+    },
+    {
+      "name": "new mascot asset",
+      "pass": true
+    },
+    {
+      "name": "real OpenAI assistance",
+      "pass": true,
+      "details": {
+        "action": "AUTO_APPROVE",
+        "source": "openai",
+        "modelFailure": null,
+        "steps": 2
+      }
+    },
+    {
+      "name": "MongoDB submission persisted",
+      "pass": true,
+      "details": {
+        "requestId": "644c0c5d-35f2-4e68-a958-c11e28c8ac0c",
+        "status": "AUTO_APPROVED"
+      }
+    },
+    {
+      "name": "separate GET matches stored analysis",
+      "pass": false,
+      "details": {
+        "version": 1
+      }
+    },
+    {
+      "name": "idempotent submit reuses saved result",
+      "pass": true
+    },
+    {
+      "name": "explain retains employee workflow",
+      "pass": true
+    },
+    {
+      "name": "handoff retains OpenAI assistance",
+      "pass": true
+    },
+    {
+      "name": "public reviewer writes to MongoDB",
+      "pass": true
+    },
+    {
+      "name": "audit readback includes reviewer and rules",
+      "pass": true,
+      "details": {
+        "events": 5
+      }
+    },
+    {
+      "name": "final persisted status",
+      "pass": true
+    },
+    {
+      "name": "summary readback finds saved record",
+      "pass": true
+    }
+  ],
+  "requestIds": [
+    "644c0c5d-35f2-4e68-a958-c11e28c8ac0c"
+  ],
+  "completedAt": "2026-09-21T06:09:28.968Z",
+  "investigation": {
+    "mismatch": "Only optional decision.approvalReference changed from absent to BSON null; decisions and assistance content matched.",
+    "followupSyntheticRequest": "b62fea09-e8fc-4863-b690-01acd1a3c5a4",
+    "fix": "MongoClient ignoreUndefined: true; final deployment verification will be recorded separately."
+  }
+}

@@ -1,6 +1,6 @@
 # Executable policy v4
 
-Version runtime: `support-guidance-v4`  
+Version runtime: `support-guidance-v4`
 Scope: synthetic Sprint 1 demo; không phải policy chính thức của VNG.
 
 Các file policy-v2 trong thư mục này là nguồn challenge gốc và được giữ

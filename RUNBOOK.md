@@ -88,3 +88,7 @@ Trong Codex sandbox Windows, Playwright có thể hoàn tất test nhưng bị t
 ## Liên kết GitHub với Vercel
 
 Bản production hiện tại được triển khai bằng Vercel CLI và đã xác nhận hoạt động. Tự deploy khi push GitHub chưa bật: Vercel từ chối `git connect` vì tài khoản chưa có GitHub Login Connection (HTTP 400). Người dùng cần kết nối GitHub trong phần Login Methods/Connections của Vercel, sau đó liên kết project labpass với dakiemdarktharr/DOCRELAY_MLAI2026. Lỗi này không ảnh hưởng URL production đang chạy.
+
+## Live release verification — 21/09/2026
+
+User authorized main push, production deployment and actual MongoDB/OpenAI verification. Local regression remains mock/memory. Production smoke uses only synthetic requests and a bounded real OpenAI assistance call. Verify preview -> submit -> independent GET -> explain -> handoff -> reviewer -> audit. MongoDB mode has no memory fallback when MONGODB_URI is set. MongoClient ignores undefined optional values to keep stored API snapshots stable. Do not reset lifetime model budget. Direct Atlas TCP from this machine was refused; deployment API read/write tests exercise Atlas from Vercel. See artifacts/live-release-verification.json and final release evidence for exact source/deployment IDs.

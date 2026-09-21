@@ -144,6 +144,8 @@ export async function extractWithModel(
     input.mode === "structured"
   )
     return baseline;
+  // Policy already knows the exact clarification; a model must not guess the destructive scope.
+  if (baseline.intentLabel === "DEVICE_RESET_GUIDANCE") return baseline;
   if (
     baseline.intentLabel !== "UNKNOWN_SUPPORT_REQUEST" &&
     (process.env.AI_PROVIDER !== "openai" || !missingFacts(baseline).length) &&

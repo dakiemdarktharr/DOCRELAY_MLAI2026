@@ -30,6 +30,8 @@ function database() {
   if (process.env.MONGODB_URI) {
     runtime.supportV3Mongo ??= new MongoClient(process.env.MONGODB_URI, {
       maxPoolSize: 3,
+      // Keep optional API fields absent instead of changing them into BSON null.
+      ignoreUndefined: true,
       serverSelectionTimeoutMS: 8000,
       connectTimeoutMS: 8000,
     });
