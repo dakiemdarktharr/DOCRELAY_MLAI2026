@@ -3,9 +3,29 @@ import {
   supersededKnowledgeIds,
   type KnowledgeArticle,
 } from "@/domain/knowledge";
-import type { ConversationLabel } from "@/domain/conversation";
+import { conversationLabels, type ConversationLabel } from "@/domain/conversation";
+import { z } from "zod";
 import { searchKnowledge } from "@/domain/knowledge-search";
 import { supportDatabase } from "./support-repository";
+
+// Mongo's generic type does not validate stored documents at runtime.
+// Strip unused fields, then require exact content equality with a reviewed revision.
+const knowledgeArticleSchema = z.object({
+  _id: z.string(),
+  label: z.enum(conversationLabels),
+  keywords: z.array(z.string()),
+  title: z.string(),
+  answer: z.string(),
+  sources: z.array(z.object({
+    title: z.string(),
+    url: z.string().url(),
+    scope: z.enum(["public", "project"]),
+    checkedAt: z.string(),
+  })),
+  reviewedAt: z.string(),
+  expiresAt: z.string(),
+  version: z.number().int().positive(),
+});
 
 // Database documents are untrusted. A known ID alone is not proof of review.
 function articleContent(row: KnowledgeArticle) {
@@ -27,7 +47,7 @@ function articleContent(row: KnowledgeArticle) {
   ]);
 }
 export function rankKnowledge(
-  rows: KnowledgeArticle[],
+  rows: readonly unknown[],
   question: string,
   label: ConversationLabel,
   now = Date.now(),
@@ -35,13 +55,18 @@ export function rankKnowledge(
   const reviewed = new Map(
     knowledgeSeed.map((row) => [row._id, articleContent(row)]),
   );
-  const valid = rows.filter(
-    (row) =>
+  const valid: KnowledgeArticle[] = [];
+  for (const candidate of rows) {
+    const parsed = knowledgeArticleSchema.safeParse(candidate);
+    if (!parsed.success) continue;
+    const row = parsed.data;
+    if (
       !supersededKnowledgeIds.includes(row._id) &&
       Date.parse(row.expiresAt) > now &&
       Date.parse(row.reviewedAt) <= now &&
-      reviewed.get(row._id) === articleContent(row),
-  );
+      reviewed.get(row._id) === articleContent(row)
+    ) valid.push(row);
+  }
   return searchKnowledge(valid, question, label);
 }
 let seeded: Promise<void> | undefined;
