@@ -174,6 +174,10 @@ export type AnswerSource = {
   checkedAt: string;
 };
 export type ConversationAnswer = {
+  cacheHit?: boolean;
+  generatedAt?: string;
+  evidence?: Array<{ knowledgeId: string; quote: string }>;
+  scopeNotice?: string;
   text: string;
   label: ConversationLabel;
   sources: AnswerSource[];

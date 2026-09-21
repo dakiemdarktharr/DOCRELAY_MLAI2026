@@ -1,3 +1,4 @@
+import { hasInstructionAttack } from "./answer-safety";
 import type { CanonicalRequest, SupportInput } from "./contracts";
 import { normalize } from "./text";
 
@@ -41,6 +42,7 @@ export function conversationRoute(
   if (risks.some((risk) => risk !== "INJECTION" || !ignoredOverride))
     return null;
   if (baseline.redactions.length || !question) return null;
+  if (hasInstructionAttack(question)) return null;
   const text = normalize(question);
   // A leftover override is not a harmless prefix, and guidance cannot smuggle a second action.
   if (
