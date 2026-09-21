@@ -110,3 +110,17 @@ export const knowledgeSeed: KnowledgeArticle[] = entries.map(
     expiresAt: "2026-12-20T00:00:00.000Z",
   }),
 );
+
+// Multiple articles may share a label: retrieval must still follow the actual question.
+knowledgeSeed.push({
+  _id: "support-kb-v1-everyday-cake",
+  label: "EVERYDAY",
+  title: "Bánh kem đơn giản tại nhà",
+  keywords: ["banh kem", "cong thuc", "cake", "recipe"],
+  version: 1,
+  reviewedAt: checkedAt,
+  expiresAt: "2026-12-20T00:00:00.000Z",
+  sources: [],
+  answer:
+    "Bạn có thể làm bánh kem nhỏ với cốt bánh bông lan mua sẵn, 200 ml whipping cream lạnh, 20 g đường và trái cây đã rửa sạch.\n\n1. Giữ kem, tô và que đánh lạnh; đánh kem với đường đến khi kem tạo chóp, dừng trước khi kem tách nước.\n2. Đặt cốt bánh lên đĩa, phết một lớp kem; thêm trái cây rồi phủ kem lên mặt bánh.\n3. Cho bánh vào ngăn mát khoảng 1–2 giờ trước khi ăn. Giữ lạnh phần bánh còn lại theo hướng dẫn bảo quản trên hộp kem.\n\nCông thức này có sữa và cốt bánh có thể chứa trứng, gluten; kiểm tra nguyên liệu nếu có dị ứng. Bạn muốn dùng cốt bánh sẵn hay tự nướng?",
+});

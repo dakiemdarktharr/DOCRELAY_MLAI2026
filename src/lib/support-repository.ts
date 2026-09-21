@@ -160,7 +160,7 @@ export async function reserveModelAttempt(): Promise<boolean> {
   const configured = Number(process.env.AI_MAX_ATTEMPTS ?? 20);
   const limit =
     Number.isInteger(configured) && configured >= 0
-      ? Math.min(configured, 30)
+      ? Math.min(configured, 50)
       : 0;
   if (db) {
     const budgets = db.collection<{ _id: string; attempts: number }>(
