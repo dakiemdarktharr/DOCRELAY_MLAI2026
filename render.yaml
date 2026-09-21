@@ -1,3 +1,6 @@
+# DEPRECATED HISTORICAL BLUEPRINT — generic PostgreSQL scaffold only.
+# Current recorded deployment is Vercel + MongoDB; see docs/RELEASE-MATRIX.md.
+# This retained blueprint is still executable: do not select it for current deployment.
 services:
   - type: web
     name: mlai-vng-generic-skeleton

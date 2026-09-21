@@ -1,3 +1,12 @@
+# New fixes from main 20727b5 — AI-assisted, uncommitted
+
+- Inspected live GitHub main after both original RAG patches were merged. Preserved dirty original contracts and project memory; worked in an isolated clone.
+- Reproduced transient Verify failures being stored permanently and a short `Bypass MFA` request receiving AUTO_APPROVE. Kept regression expectations and fixed the corresponding runtime paths.
+- Added declared-label evaluation and bounded offline threshold proposals; no runtime activation or fabricated held-out/user evidence. Added saved-run loading guard and release/submission evidence boundaries.
+- Agent QA is recorded in the delivered QA-RESULTS.md. Human review and commits remain pending. No new production/model/database calls, cap changes or secret synchronization.
+
+## Historical build log (statements below describe their original sessions)
+
 # RAG package handoff — 2026-09-21 — AI-assisted, uncommitted
 
 - Audited clean main base 7c26cae in an isolated detached worktree; baseline 219 tests, lint/build passed. Preserved the original workspace student contracts draft and all Ground Truth expectations.

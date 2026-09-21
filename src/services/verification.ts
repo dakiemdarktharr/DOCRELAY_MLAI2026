@@ -99,6 +99,12 @@ export async function executeVerifyCase(
       "Tạm dừng một phút trước khi tiếp tục lần kiểm thử này.",
       429,
     );
+  if (result.retryable)
+    throw new SupportError(
+      "VERIFY_RETRYABLE",
+      "Chưa có kết quả kiểm chứng do API hoặc đọc lại tạm lỗi. Bấm Tiếp tục để thử lại cùng case; chưa ghi FAIL.",
+      503,
+    );
   return updateVerifyRun(id, (draft) => {
     if (!draft.results.some((item) => item.caseId === caseId))
       draft.results.push(result);
