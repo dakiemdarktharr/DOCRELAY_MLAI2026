@@ -5,7 +5,7 @@
 - Renamed existing Vercel project labpass to vng-support with CLI (browser session had no login); added verified production domain vng-support.vercel.app, retained old alias, updated public URL configuration. Same project ID, secrets, DB and model budget.
 - Updated UI/package/model identity and versioned three knowledge articles. Preserved old Mongo documents but excluded superseded identity IDs from retrieval. Regression verifies old identity cannot reappear after replacement expiry.
 - Rewrote README around current conversation/RAG/web/policy/reviewer workflow. Renamed branded mascot and two document filenames, updated links and preserved historical report provenance.
-- Local unit suite now 219 PASS, lint/build PASS. First E2E detected two stale title expectations (desktop/mobile); changed only expected brand to VNG Support and reran the suite. Deployment verification follows in STATUS.
+- Local unit suite now 219 PASS, lint/build PASS. First E2E detected two stale title expectations (desktop/mobile); changed only expected brand to VNG Support and reran the suite. Final E2E: 29 PASS, one intentional duplicate-video skip. Vercel release cfb9295 / dpl_BcyeJnNXbZae9StBorhA2adSu28Y is READY; 13/13 live checks PASS including real OpenAI identity, Mongo revision 2 retrieval and persistence. One paid model probe within the existing cap 50; no reset. Evidence in artifacts/vng-support-live-verification.json.
 
 ---
 
