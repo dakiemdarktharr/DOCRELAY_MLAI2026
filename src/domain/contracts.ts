@@ -181,6 +181,7 @@ export type ConversationAnswer = {
   retrieval: "mongodb" | "memory" | "unavailable";
   webSearch: "used" | "disabled" | "not_needed" | "unavailable";
   fallbackReason?: string;
+  webFailureReason?: string;
   ignoredOverride: boolean;
 };
 export type Assistance = {
