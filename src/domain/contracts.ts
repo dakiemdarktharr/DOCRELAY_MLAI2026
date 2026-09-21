@@ -103,7 +103,11 @@ export type SupportInput = {
 export type CanonicalRequest = Extraction & {
   subrequests: Extraction[];
   redactions: string[];
-  model: { source: "deterministic" | "mock" | "openai"; failure?: string };
+  model: {
+    source: "deterministic" | "mock" | "openai";
+    failure?: string;
+    failureReason?: string;
+  };
 };
 export type ApprovalStatus =
   | "not_required"

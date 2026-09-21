@@ -125,7 +125,7 @@ it("bounds time and lifetime call count without retries", async () => {
       {},
       { run, timeoutMs: 5 },
     ),
-  ).rejects.toMatchObject({ code: "MODEL_UNAVAILABLE" });
+  ).rejects.toMatchObject({ code: "MODEL_UNAVAILABLE", reason: "TIMEOUT" });
   expect(run).toHaveBeenCalledOnce();
   const reserved = await Promise.all(
     Array.from({ length: 25 }, () => reserveModelAttempt()),

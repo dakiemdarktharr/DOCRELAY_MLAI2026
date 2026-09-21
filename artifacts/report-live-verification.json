@@ -1,0 +1,222 @@
+{
+  "timestamp": "2026-09-21T06:50:35.298Z",
+  "sourceCommit": "6b93962b130f108860c9abc682acf5c03a71f61c",
+  "deploymentId": "dpl_GNASejX3hV93bNnUpuG4JaoG1542",
+  "url": "https://labpass-five.vercel.app",
+  "checks": [
+    {
+      "name": "production policy and services",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v4.2",
+        "sourceRevision": "6b93962b130f108860c9abc682acf5c03a71f61c",
+        "simulated": true
+      }
+    },
+    {
+      "name": "source SHA matches deployed code",
+      "pass": true,
+      "details": {
+        "sourceRevision": "6b93962b130f108860c9abc682acf5c03a71f61c"
+      }
+    },
+    {
+      "name": "new entry labels",
+      "pass": true
+    },
+    {
+      "name": "real OpenAI validated assistance",
+      "pass": false,
+      "details": {
+        "source": null,
+        "action": "ESCALATE",
+        "failure": "MODEL_UNAVAILABLE",
+        "steps": 0
+      }
+    },
+    {
+      "name": "OpenAI contextual prose and evidence",
+      "pass": false,
+      "details": {
+        "explanations": 0
+      }
+    },
+    {
+      "name": "MongoDB preview-submit-independent GET exact match",
+      "pass": true,
+      "details": {
+        "requestId": "aa8eb56e-dd88-4f7e-92e2-24d5737c5c26",
+        "version": 1
+      }
+    },
+    {
+      "name": "idempotency preserves snapshot",
+      "pass": true
+    },
+    {
+      "name": "reviewer status and audit persist in MongoDB",
+      "pass": true,
+      "details": {
+        "version": 2,
+        "events": 3
+      }
+    },
+    {
+      "name": "summary readback",
+      "pass": true
+    },
+    {
+      "name": "reset clarification with real provider configured",
+      "pass": true,
+      "details": {
+        "action": "NEEDS_INFORMATION"
+      }
+    },
+    {
+      "name": "shutdown auto-guide",
+      "pass": true
+    },
+    {
+      "name": "missing database scope asks information",
+      "pass": true
+    },
+    {
+      "name": "reviewer cannot approve incomplete access",
+      "pass": true,
+      "details": {
+        "code": "INVALID_TRANSITION"
+      }
+    },
+    {
+      "name": "public exposure and secret fail-safe redaction",
+      "pass": true
+    },
+    {
+      "name": "security override blocked",
+      "pass": true,
+      "details": {
+        "code": "SECURITY_REVIEW_REQUIRED"
+      }
+    },
+    {
+      "name": "model unavailable fails safely",
+      "pass": true
+    },
+    {
+      "name": "unknown event id returns 404",
+      "pass": true
+    },
+    {
+      "name": "four-case production Verify all pass",
+      "pass": true,
+      "details": {
+        "runId": "367b5a88-bc1a-4245-aa57-0b848e89f845",
+        "results": [
+          {
+            "caseId": "submission-shutdown",
+            "pass": true,
+            "error": null,
+            "actual": "AUTO_APPROVE",
+            "persistence": {
+              "pass": true,
+              "checks": [
+                "detail:pass",
+                "audit:pass",
+                "queue:pass",
+                "metrics:pass"
+              ]
+            }
+          },
+          {
+            "caseId": "submission-reset",
+            "pass": true,
+            "error": null,
+            "actual": "NEEDS_INFORMATION",
+            "persistence": {
+              "pass": true,
+              "checks": [
+                "detail:pass",
+                "audit:pass",
+                "queue:pass",
+                "metrics:pass"
+              ]
+            }
+          },
+          {
+            "caseId": "submission-read-scope",
+            "pass": true,
+            "error": null,
+            "actual": "AUTO_APPROVE",
+            "persistence": {
+              "pass": true,
+              "checks": [
+                "detail:pass",
+                "audit:pass",
+                "queue:pass",
+                "metrics:pass"
+              ]
+            }
+          },
+          {
+            "caseId": "submission-public-rdp",
+            "pass": true,
+            "error": null,
+            "actual": "ESCALATE",
+            "persistence": {
+              "pass": true,
+              "checks": [
+                "detail:pass",
+                "audit:pass",
+                "queue:pass",
+                "metrics:pass"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Verify run persists across independent GET",
+      "pass": true
+    },
+    {
+      "name": "Verify provenance separates staff queue",
+      "pass": true
+    },
+    {
+      "name": "MongoDB pagination reads distinct pages",
+      "pass": true,
+      "details": {
+        "total": 101
+      }
+    },
+    {
+      "name": "MongoDB audit search reads persisted Verify",
+      "pass": true
+    },
+    {
+      "name": "MongoDB aggregate count matches total",
+      "pass": true,
+      "details": {
+        "total": 101
+      }
+    },
+    {
+      "name": "MongoDB Stop and Override audit durable",
+      "pass": true
+    }
+  ],
+  "requestIds": [
+    "aa8eb56e-dd88-4f7e-92e2-24d5737c5c26",
+    "1c2afff8-7423-4d76-ba75-62518202fb3e",
+    "175b5be6-05aa-40e2-910f-e4fc34f029ec",
+    "508edd91-f27f-4c3f-be0b-ba78d75a2c0d"
+  ],
+  "verifyRunId": "367b5a88-bc1a-4245-aa57-0b848e89f845",
+  "completedAt": "2026-09-21T06:50:47.212Z"
+}

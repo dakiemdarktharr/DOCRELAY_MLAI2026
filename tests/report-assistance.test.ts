@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, it, expect, vi } from "vitest";
-import { createAssistance } from "@/lib/support-model";
+import { callModel, createAssistance, modelFailure } from "@/lib/support-model";
 import { extractIntake, extractText } from "@/domain/text";
 import { evaluatePolicy } from "@/domain/policy";
 import { guidanceTemplate } from "@/domain/guidance";
@@ -114,4 +114,35 @@ it("E09/E10 only asks the next relevant employee facts, with internal approval c
   );
   expect(risk.questions).toEqual([]);
   expect(risk.reviewerQuestions?.length).toBeGreaterThan(0);
+});
+
+it("model budget exhaustion is explicit and never exposes provider errors", async () => {
+  vi.stubEnv("AI_PROVIDER", "openai");
+  vi.stubEnv("OPENAI_API_KEY", "synthetic-unused-key");
+  vi.stubEnv("AI_MAX_ATTEMPTS", "0");
+  vi.stubEnv("MONGODB_URI", "");
+  let failure: unknown;
+  try {
+    await callModel(
+      {
+        purpose: "assistance",
+        model: "test",
+        instructions: "test",
+        data: "synthetic",
+      },
+      {},
+    );
+  } catch (error) {
+    failure = error;
+  }
+  expect(failure).toMatchObject({
+    code: "MODEL_UNAVAILABLE",
+    reason: "BUDGET_EXHAUSTED",
+  });
+  const result = modelFailure(
+    extractIntake(input("VPN không kết nối")),
+    failure,
+  );
+  expect(result.model.failureReason).toBe("BUDGET_EXHAUSTED");
+  expect(JSON.stringify(result)).not.toContain("synthetic-unused-key");
 });

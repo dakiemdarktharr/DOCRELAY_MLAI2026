@@ -102,3 +102,8 @@ Codex/Astra read all 23 findings against current runtime and history. Added pers
 Validation: 175 unit/integration, lint, production build, 26 desktop/mobile E2E and a dedicated Stop/Override/audit video test passed. Tests use a new port 3227 server with mock/memory. Live production results are recorded separately after deployment. Formatted new code for student readability.
 
 Created a five-slide technical draft, a one-page build log and raw local mock video. Owner confirmed no real-user feedback exists. No interviews, participant data, cost totals or time savings were invented. Student draft remains untouched. Main history is retained and AI contribution is disclosed. Runtime authority and actual infrastructure operations were deliberately kept separate: the public demo never executes real provisioning.
+
+
+### Production diagnostic follow-up
+
+First report release passed MongoDB/Verify/pagination/reviewer readback but the real model call failed safe as MODEL_UNAVAILABLE. Added safe categorical failureReason metadata (budget, configuration, timeout, refusal, truncated output or upstream class) without raw provider error text, credentials or extra logging. Shortened contextual output instructions within the existing token budget. Budget limits remain unchanged. 176 unit/integration and lint/build pass; final live outcome recorded separately.
