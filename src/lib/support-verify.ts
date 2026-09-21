@@ -8,6 +8,7 @@ import {
   pendingReview,
   type AuditEvent,
   type SupportSummary,
+  type ResultPage,
   type Decision,
   type SupportRequest,
 } from "@/domain/contracts";
@@ -158,7 +159,9 @@ export async function verifyPersistence(
   const [detail, events, queue, metrics] = await Promise.all([
     read<SupportRequest>(`/api/support/requests/${request.id}`),
     read<AuditEvent[]>(`/api/support/events?requestId=${request.id}`),
-    read<SupportSummary[]>("/api/support/requests?view=summary"),
+    read<ResultPage<SupportSummary>>(
+      `/api/support/requests?view=page&requestId=${encodeURIComponent(request.id)}&limit=1&origin=all`,
+    ),
     read<{ total: number; pendingReview: number }>("/api/support/metrics"),
   ]);
   const checks = [
@@ -176,7 +179,7 @@ export async function verifyPersistence(
     )
       ? "audit:pass"
       : "audit:fail",
-    queue.some((row) => row.id === request.id && row.version >= request.version)
+    queue.items.some((row) => row.id === request.id && row.version >= request.version)
       ? "queue:pass"
       : "queue:fail",
     metrics.total >= 1 &&
