@@ -14,7 +14,7 @@ const api: typeof fetch = async (url, init) => {
   if (init?.method === "POST") return POST(request);
   if (String(url).startsWith("/api/support/events?")) return events(request);
   if (String(url) === "/api/support/metrics") return metrics();
-  if (String(url).includes("?view=summary")) return list(request);
+  if (String(url).startsWith("/api/support/requests?")) return list(request);
   return detail(request, { params: Promise.resolve({ id: String(url).split("/").at(-1)! }) });
 };
 it.each(["json-503", "html-502", "rate-limit", "network", "processing", "readback"])("keeps %s retryable without consuming a case result or changing request ID", async (failure) => {
