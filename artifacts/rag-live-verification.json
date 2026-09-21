@@ -12,6 +12,309 @@
         "durable": true,
         "provider": "openai",
         "policy": "support-guidance-v5.0",
+        "sourceRevision": "f5272b576434b7b0697c999cca7af72c25eb9de1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "google direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "GOOGLE_RECOVERY",
+        "retrieval": "mongodb",
+        "webSearch": "not_needed",
+        "knowledgeIds": [
+          "support-kb-v1-google_recovery"
+        ],
+        "sourceUrls": [
+          "https://support.google.com/accounts/answer/7682439?hl=vi"
+        ],
+        "text": "Để khôi phục tài khoản Google của bạn, hãy làm theo các bước sau: 1. Truy cập trang trợ giúp chính thức của Google. 2. Chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh mà Google đưa ra để xác nhận danh tính. 3. Khi Google yêu cầu, hãy đặt mật khẩu mới cho tài khoản của bạn. 4. Nếu bạn quên địa chỉ email đăng nhập, có thể chọn tìm tên người dùng bằng email hoặc số điện thoại khôi phục cùng họ tên của bạn. Lưu ý, nếu tài khoản Google thuộc quản lý của cơ quan hay tổ chức, quy trình tự khôi phục có thể không áp dụng. Quan trọng là bạn không được gửi mật khẩu hoặc mã xác minh vào bất kỳ cuộc trò chuyện nào để đảm bảo an toàn thông tin cá nhân."
+      }
+    },
+    {
+      "name": "google actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "google actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "google snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "google idempotent save",
+      "pass": true
+    },
+    {
+      "name": "dangerous injection remains escalated",
+      "pass": true
+    },
+    {
+      "name": "legacy echo compatibility",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "f5272b576434b7b0697c999cca7af72c25eb9de1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "recipe direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "EVERYDAY",
+        "retrieval": "mongodb",
+        "webSearch": "not_needed",
+        "knowledgeIds": [
+          "support-kb-v1-everyday-cake"
+        ],
+        "sourceUrls": [],
+        "text": "Bạn có thể làm bánh kem đơn giản tại nhà theo công thức sau:\n\n1. Chuẩn bị nguyên liệu: cốt bánh bông lan mua sẵn, 200 ml whipping cream lạnh, 20 g đường, và trái cây đã rửa sạch.\n2. Đánh kem: giữ lạnh kem, tô và que đánh. Đánh kem với đường đến khi kem tạo chóp, nhưng không đánh quá tay để kem không bị tách nước.\n3. Trang trí bánh: đặt cốt bánh lên đĩa, phết một lớp kem lên mặt bánh, thêm trái cây lên trên rồi phủ tiếp một lớp kem.\n4. Bảo quản: cho bánh vào ngăn mát tủ lạnh khoảng 1-2 giờ trước khi ăn để bánh được mát và kem được ổn định.\n\nLưu ý: Cốt bánh bông lan có thể chứa trứng và gluten, nên kiểm tra nguyên liệu nếu bạn bị dị ứng. Nếu bạn muốn, mình cũng có thể hướng dẫn công thức làm cốt bánh bông lan tự nướng."
+      }
+    },
+    {
+      "name": "recipe actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "recipe actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "recipe snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "recipe idempotent save",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "f5272b576434b7b0697c999cca7af72c25eb9de1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "policy direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "COMPANY_POLICY",
+        "retrieval": "mongodb",
+        "webSearch": "used",
+        "knowledgeIds": [
+          "support-kb-v1-company_policy"
+        ],
+        "sourceUrls": [
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html?utm_source=openai",
+          "https://career.vng.com.vn/?utm_source=openai"
+        ],
+        "text": "Chính sách phúc lợi của công ty VNG được công bố chủ yếu thông qua các thông tin tổng quan có tính chất công khai trên website chính thức và các kênh truyền thông tuyển dụng như career.vng.com.vn. Nội dung công khai bao gồm các gói phúc lợi hấp dẫn như bảo hiểm sức khỏe toàn diện cho nhân viên và gia đình, bảo hiểm tai nạn, khám sức khỏe định kỳ, trợ cấp ăn trưa, tiền công tác, không gian văn phòng hiện đại cùng các hoạt động văn hóa, thể thao nội bộ. Bên cạnh đó, VNG minh bạch trong việc truyền thông các thay đổi chính sách và bảo vệ dữ liệu cá nhân theo quy định pháp luật. \n\nCác quy định chi tiết về phúc lợi dành cho từng nhân viên được quản lý và truyền thông nội bộ qua kênh email, portal, với quy trình phê duyệt rõ ràng, bao gồm cả chương trình ESOP dành cho quản lý và nhân viên xuất sắc. Thông tin công khai có tính bao quát, chủ yếu dùng để giới thiệu và thu hút nhân tài, trong khi nội dung nội bộ được chi tiết hóa để đảm bảo thực thi chính sách hiệu quả và tuân thủ pháp luật."
+      }
+    },
+    {
+      "name": "policy actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "policy actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "public web search has official citations",
+      "pass": true
+    },
+    {
+      "name": "policy snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "policy idempotent save",
+      "pass": true
+    },
+    {
+      "name": "production Verify four-case pack",
+      "pass": true,
+      "details": {
+        "runId": "e2c19273-8010-4880-bdd2-7e4b9c4f98b2",
+        "results": [
+          {
+            "caseId": "submission-shutdown",
+            "pass": true
+          },
+          {
+            "caseId": "submission-reset",
+            "pass": true
+          },
+          {
+            "caseId": "submission-read-scope",
+            "pass": true
+          },
+          {
+            "caseId": "submission-public-rdp",
+            "pass": true
+          }
+        ]
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "60643ee3-8076-4eee-8063-f3430ff3165a",
+      "topic": "google",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:17:24.591Z",
+        "answer": {
+          "text": "Để khôi phục tài khoản Google của bạn, hãy làm theo các bước sau: 1. Truy cập trang trợ giúp chính thức của Google. 2. Chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh mà Google đưa ra để xác nhận danh tính. 3. Khi Google yêu cầu, hãy đặt mật khẩu mới cho tài khoản của bạn. 4. Nếu bạn quên địa chỉ email đăng nhập, có thể chọn tìm tên người dùng bằng email hoặc số điện thoại khôi phục cùng họ tên của bạn. Lưu ý, nếu tài khoản Google thuộc quản lý của cơ quan hay tổ chức, quy trình tự khôi phục có thể không áp dụng. Quan trọng là bạn không được gửi mật khẩu hoặc mã xác minh vào bất kỳ cuộc trò chuyện nào để đảm bảo an toàn thông tin cá nhân.",
+          "label": "GOOGLE_RECOVERY",
+          "sources": [
+            {
+              "title": "Google: Khôi phục Tài khoản Google hoặc Gmail",
+              "url": "https://support.google.com/accounts/answer/7682439?hl=vi",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-google_recovery"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "not_needed",
+          "ignoredOverride": false
+        }
+      }
+    },
+    {
+      "id": "447afa9c-95c8-4dec-9c08-d3b84e14c370",
+      "topic": "recipe",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:17:30.990Z",
+        "answer": {
+          "text": "Bạn có thể làm bánh kem đơn giản tại nhà theo công thức sau:\n\n1. Chuẩn bị nguyên liệu: cốt bánh bông lan mua sẵn, 200 ml whipping cream lạnh, 20 g đường, và trái cây đã rửa sạch.\n2. Đánh kem: giữ lạnh kem, tô và que đánh. Đánh kem với đường đến khi kem tạo chóp, nhưng không đánh quá tay để kem không bị tách nước.\n3. Trang trí bánh: đặt cốt bánh lên đĩa, phết một lớp kem lên mặt bánh, thêm trái cây lên trên rồi phủ tiếp một lớp kem.\n4. Bảo quản: cho bánh vào ngăn mát tủ lạnh khoảng 1-2 giờ trước khi ăn để bánh được mát và kem được ổn định.\n\nLưu ý: Cốt bánh bông lan có thể chứa trứng và gluten, nên kiểm tra nguyên liệu nếu bạn bị dị ứng. Nếu bạn muốn, mình cũng có thể hướng dẫn công thức làm cốt bánh bông lan tự nướng.",
+          "label": "EVERYDAY",
+          "sources": [],
+          "knowledgeIds": [
+            "support-kb-v1-everyday-cake"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "not_needed",
+          "ignoredOverride": true
+        }
+      }
+    },
+    {
+      "id": "a925d119-d111-40d6-8ad7-f26c37f9ad7d",
+      "topic": "policy",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:18:21.842Z",
+        "answer": {
+          "text": "Chính sách phúc lợi của công ty VNG được công bố chủ yếu thông qua các thông tin tổng quan có tính chất công khai trên website chính thức và các kênh truyền thông tuyển dụng như career.vng.com.vn. Nội dung công khai bao gồm các gói phúc lợi hấp dẫn như bảo hiểm sức khỏe toàn diện cho nhân viên và gia đình, bảo hiểm tai nạn, khám sức khỏe định kỳ, trợ cấp ăn trưa, tiền công tác, không gian văn phòng hiện đại cùng các hoạt động văn hóa, thể thao nội bộ. Bên cạnh đó, VNG minh bạch trong việc truyền thông các thay đổi chính sách và bảo vệ dữ liệu cá nhân theo quy định pháp luật. \n\nCác quy định chi tiết về phúc lợi dành cho từng nhân viên được quản lý và truyền thông nội bộ qua kênh email, portal, với quy trình phê duyệt rõ ràng, bao gồm cả chương trình ESOP dành cho quản lý và nhân viên xuất sắc. Thông tin công khai có tính bao quát, chủ yếu dùng để giới thiệu và thu hút nhân tài, trong khi nội dung nội bộ được chi tiết hóa để đảm bảo thực thi chính sách hiệu quả và tuân thủ pháp luật.",
+          "label": "COMPANY_POLICY",
+          "sources": [
+            {
+              "title": "VNG: Chiến lược Phát triển Con người (BCTN 2024)",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            },
+            {
+              "title": "Tin tức doanh nghiệp-Chiến lược Phát triển Con người",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html?utm_source=openai",
+              "scope": "public",
+              "checkedAt": "2026-09-21T08:14:38.565Z"
+            },
+            {
+              "title": "VNG Careers",
+              "url": "https://career.vng.com.vn/?utm_source=openai",
+              "scope": "public",
+              "checkedAt": "2026-09-21T08:14:38.565Z"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-company_policy"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "used",
+          "ignoredOverride": false
+        }
+      }
+    }
+  ],
+  "sourceRevision": "f5272b576434b7b0697c999cca7af72c25eb9de1",
+  "updatedAt": "2026-09-21T08:18:58.701Z",
+  "historicalChecks": [
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
         "sourceRevision": "533c1f374526b54e0e973041027b7e997356e35d",
         "simulated": true
       }
@@ -57,9 +360,277 @@
     {
       "name": "legacy echo compatibility",
       "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "78171ce671f07a1d255ba072c7dbadb3ba1508a6",
+        "simulated": true
+      }
+    },
+    {
+      "name": "google direct answer",
+      "pass": true,
+      "details": {
+        "source": "deterministic",
+        "label": "GOOGLE_RECOVERY",
+        "retrieval": "mongodb",
+        "webSearch": "not_needed",
+        "fallbackReason": "UNSAFE_PROSE",
+        "knowledgeIds": [
+          "support-kb-v1-google_recovery"
+        ],
+        "sourceUrls": [
+          "https://support.google.com/accounts/answer/7682439?hl=vi"
+        ],
+        "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?"
+      }
+    },
+    {
+      "name": "google actual OpenAI response",
+      "pass": false
+    },
+    {
+      "name": "google actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "google snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "google idempotent save",
+      "pass": true
+    },
+    {
+      "name": "dangerous injection remains escalated",
+      "pass": true
+    },
+    {
+      "name": "legacy echo compatibility",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "78171ce671f07a1d255ba072c7dbadb3ba1508a6",
+        "simulated": true
+      }
+    },
+    {
+      "name": "policy direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "COMPANY_POLICY",
+        "retrieval": "mongodb",
+        "webSearch": "unavailable",
+        "knowledgeIds": [
+          "support-kb-v1-company_policy"
+        ],
+        "sourceUrls": [
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html"
+        ],
+        "text": "VNG công bố thông tin tổng quan về chính sách phát triển con người và phúc lợi thông qua các tài liệu nội bộ trên nền tảng tra cứu dành cho nhân viên. Các bài công khai trên website công ty cung cấp cái nhìn chung về chiến lược phát triển con người nhưng không chi tiết các quy định đầy đủ áp dụng cho từng cá nhân. Ví dụ như số ngày nghỉ phép, quyền lợi GPU hay quy trình phê duyệt cụ thể chưa được công bố rộng rãi. Để nắm rõ hơn về chính sách phúc lợi của công ty, nhân viên thường cần truy cập tài liệu nội bộ hoặc hỏi trực tiếp bộ phận nhân sự. Nếu bạn cần thông tin chi tiết hơn theo từng chủ đề cụ thể, tôi có thể giúp tìm và giải thích các nguồn công khai liên quan."
+      }
+    },
+    {
+      "name": "policy actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "policy actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "public web search has official citations",
+      "pass": false
+    },
+    {
+      "name": "policy snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "policy idempotent save",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "c21334f98b69b514aca7b8e5242d6366170a2b13",
+        "simulated": true
+      }
+    },
+    {
+      "name": "policy direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "COMPANY_POLICY",
+        "retrieval": "mongodb",
+        "webSearch": "unavailable",
+        "webFailureReason": "HTTP_400:tools",
+        "knowledgeIds": [
+          "support-kb-v1-company_policy"
+        ],
+        "sourceUrls": [
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html"
+        ],
+        "text": "Chính sách phúc lợi của công ty VNG được công bố tổng quan qua các tài liệu công khai như Bản chiến lược phát triển con người 2024. Tài liệu này cung cấp thông tin về các chính sách phát triển con người và phúc lợi cho nhân viên, đồng thời cho thấy VNG tập trung quản lý và lưu trữ các tài liệu chính sách nội bộ trên nền tảng tra cứu dành riêng cho nhân viên. Tuy nhiên, các bài công khai không trình bày chi tiết cụ thể từng quyền lợi, số ngày nghỉ phép hay quy trình phê duyệt liên quan đến phúc lợi của từng cá nhân. Nếu bạn muốn tìm hiểu chi tiết về một chính sách cụ thể trong phúc lợi, bạn có thể tra cứu trực tiếp tại nền tảng nội bộ của công ty hoặc yêu cầu bộ phận nhân sự hỗ trợ giải thích và cung cấp các quy định phù hợp."
+      }
+    },
+    {
+      "name": "policy actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "policy actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "public web search has official citations",
+      "pass": false
+    },
+    {
+      "name": "policy snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "policy idempotent save",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "c21334f98b69b514aca7b8e5242d6366170a2b13",
+        "simulated": true
+      }
+    },
+    {
+      "name": "google direct answer",
+      "pass": true,
+      "details": {
+        "source": "deterministic",
+        "label": "GOOGLE_RECOVERY",
+        "retrieval": "mongodb",
+        "webSearch": "not_needed",
+        "fallbackReason": "PROSE_SECRET",
+        "knowledgeIds": [
+          "support-kb-v1-google_recovery"
+        ],
+        "sourceUrls": [
+          "https://support.google.com/accounts/answer/7682439?hl=vi"
+        ],
+        "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?"
+      }
+    },
+    {
+      "name": "google actual OpenAI response",
+      "pass": false
+    },
+    {
+      "name": "google actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "google snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "google idempotent save",
+      "pass": true
+    },
+    {
+      "name": "dangerous injection remains escalated",
+      "pass": true
+    },
+    {
+      "name": "legacy echo compatibility",
+      "pass": true
+    },
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "c21334f98b69b514aca7b8e5242d6366170a2b13",
+        "simulated": true
+      }
+    },
+    {
+      "name": "policy direct answer",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "label": "COMPANY_POLICY",
+        "retrieval": "mongodb",
+        "webSearch": "used",
+        "knowledgeIds": [
+          "support-kb-v1-company_policy"
+        ],
+        "sourceUrls": [
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+          "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html?utm_source=openai",
+          "https://career.vng.com.vn/?utm_source=openai"
+        ],
+        "text": "Chính sách phúc lợi của công ty VNG được công bố ra bên ngoài dưới dạng các thông tin tổng quan và khái quát nhằm thu hút và củng cố thương hiệu nhà tuyển dụng. Công ty chia sẻ các gói phúc lợi hấp dẫn như bảo hiểm sức khỏe toàn diện cho nhân viên và gia đình, bảo hiểm tai nạn, khám sức khỏe định kỳ, trợ cấp ăn trưa, tiền công tác cùng các không gian văn phòng hiện đại và các hoạt động thể thao, sự kiện văn hóa nội bộ. Tất cả các chính sách phúc lợi và thay đổi liên quan đều được truyền thông rõ ràng qua các kênh chính thức như website, HR Portal và email. Tuy nhiên, chi tiết các quy định cụ thể áp dụng từng nhân viên, như số ngày nghỉ phép, thủ tục phê duyệt hay quyền lợi cụ thể nội bộ, được quản lý riêng biệt và không công khai rộng rãi. VNG cũng cam kết tuân thủ đầy đủ các quy trình bảo vệ dữ liệu cá nhân theo quy định pháp luật và duy trì chương trình ESOP dành cho quản lý và nhân sự xuất sắc. Như vậy, công ty công bố chính sách phúc lợi một cách minh bạch và tổng quan, còn các nội dung chi tiết hơn sẽ được điều chỉnh và truyền thông nội bộ cho nhân viên."
+      }
+    },
+    {
+      "name": "policy actual OpenAI response",
+      "pass": true
+    },
+    {
+      "name": "policy actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "public web search has official citations",
+      "pass": true
+    },
+    {
+      "name": "policy snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "policy idempotent save",
+      "pass": true
     }
   ],
-  "requests": [
+  "historicalRequests": [
     {
       "id": "aa6f78a7-9ee5-4480-bc7f-f404a9566b23",
       "topic": "google",
@@ -98,8 +669,214 @@
           "ignoredOverride": false
         }
       }
+    },
+    {
+      "id": "0a1aa5d1-79e5-4c9d-8077-5c260fb56069",
+      "topic": "google",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "deterministic",
+        "timestamp": "2026-09-21T08:08:25.233Z",
+        "answer": {
+          "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?",
+          "label": "GOOGLE_RECOVERY",
+          "sources": [
+            {
+              "title": "Google: Khôi phục Tài khoản Google hoặc Gmail",
+              "url": "https://support.google.com/accounts/answer/7682439?hl=vi",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-google_recovery"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "not_needed",
+          "fallbackReason": "UNSAFE_PROSE",
+          "ignoredOverride": false
+        }
+      }
+    },
+    {
+      "id": "87093b96-76a7-4017-8954-052e7070f6f3",
+      "topic": "policy",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:09:03.638Z",
+        "answer": {
+          "text": "VNG công bố thông tin tổng quan về chính sách phát triển con người và phúc lợi thông qua các tài liệu nội bộ trên nền tảng tra cứu dành cho nhân viên. Các bài công khai trên website công ty cung cấp cái nhìn chung về chiến lược phát triển con người nhưng không chi tiết các quy định đầy đủ áp dụng cho từng cá nhân. Ví dụ như số ngày nghỉ phép, quyền lợi GPU hay quy trình phê duyệt cụ thể chưa được công bố rộng rãi. Để nắm rõ hơn về chính sách phúc lợi của công ty, nhân viên thường cần truy cập tài liệu nội bộ hoặc hỏi trực tiếp bộ phận nhân sự. Nếu bạn cần thông tin chi tiết hơn theo từng chủ đề cụ thể, tôi có thể giúp tìm và giải thích các nguồn công khai liên quan.",
+          "label": "COMPANY_POLICY",
+          "sources": [
+            {
+              "title": "VNG: Chiến lược Phát triển Con người (BCTN 2024)",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-company_policy"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "unavailable",
+          "ignoredOverride": false
+        }
+      }
+    },
+    {
+      "id": "0b1a63a3-9c7e-4cc3-83b4-bc4021169a24",
+      "topic": "policy",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:11:51.571Z",
+        "answer": {
+          "text": "Chính sách phúc lợi của công ty VNG được công bố tổng quan qua các tài liệu công khai như Bản chiến lược phát triển con người 2024. Tài liệu này cung cấp thông tin về các chính sách phát triển con người và phúc lợi cho nhân viên, đồng thời cho thấy VNG tập trung quản lý và lưu trữ các tài liệu chính sách nội bộ trên nền tảng tra cứu dành riêng cho nhân viên. Tuy nhiên, các bài công khai không trình bày chi tiết cụ thể từng quyền lợi, số ngày nghỉ phép hay quy trình phê duyệt liên quan đến phúc lợi của từng cá nhân. Nếu bạn muốn tìm hiểu chi tiết về một chính sách cụ thể trong phúc lợi, bạn có thể tra cứu trực tiếp tại nền tảng nội bộ của công ty hoặc yêu cầu bộ phận nhân sự hỗ trợ giải thích và cung cấp các quy định phù hợp.",
+          "label": "COMPANY_POLICY",
+          "sources": [
+            {
+              "title": "VNG: Chiến lược Phát triển Con người (BCTN 2024)",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-company_policy"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "unavailable",
+          "webFailureReason": "HTTP_400:tools",
+          "ignoredOverride": false
+        }
+      }
+    },
+    {
+      "id": "b1d2db71-b4d6-4f3b-830b-0e1e4e02e7c5",
+      "topic": "google",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "deterministic",
+        "timestamp": "2026-09-21T08:13:07.385Z",
+        "answer": {
+          "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?",
+          "label": "GOOGLE_RECOVERY",
+          "sources": [
+            {
+              "title": "Google: Khôi phục Tài khoản Google hoặc Gmail",
+              "url": "https://support.google.com/accounts/answer/7682439?hl=vi",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-google_recovery"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "not_needed",
+          "fallbackReason": "PROSE_SECRET",
+          "ignoredOverride": false
+        }
+      }
+    },
+    {
+      "id": "e669ce4e-d189-4a91-9ed4-cc6bb0c32601",
+      "topic": "policy",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "openai",
+        "timestamp": "2026-09-21T08:14:43.183Z",
+        "answer": {
+          "text": "Chính sách phúc lợi của công ty VNG được công bố ra bên ngoài dưới dạng các thông tin tổng quan và khái quát nhằm thu hút và củng cố thương hiệu nhà tuyển dụng. Công ty chia sẻ các gói phúc lợi hấp dẫn như bảo hiểm sức khỏe toàn diện cho nhân viên và gia đình, bảo hiểm tai nạn, khám sức khỏe định kỳ, trợ cấp ăn trưa, tiền công tác cùng các không gian văn phòng hiện đại và các hoạt động thể thao, sự kiện văn hóa nội bộ. Tất cả các chính sách phúc lợi và thay đổi liên quan đều được truyền thông rõ ràng qua các kênh chính thức như website, HR Portal và email. Tuy nhiên, chi tiết các quy định cụ thể áp dụng từng nhân viên, như số ngày nghỉ phép, thủ tục phê duyệt hay quyền lợi cụ thể nội bộ, được quản lý riêng biệt và không công khai rộng rãi. VNG cũng cam kết tuân thủ đầy đủ các quy trình bảo vệ dữ liệu cá nhân theo quy định pháp luật và duy trì chương trình ESOP dành cho quản lý và nhân sự xuất sắc. Như vậy, công ty công bố chính sách phúc lợi một cách minh bạch và tổng quan, còn các nội dung chi tiết hơn sẽ được điều chỉnh và truyền thông nội bộ cho nhân viên.",
+          "label": "COMPANY_POLICY",
+          "sources": [
+            {
+              "title": "VNG: Chiến lược Phát triển Con người (BCTN 2024)",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            },
+            {
+              "title": "Tin tức doanh nghiệp-Chiến lược Phát triển Con người",
+              "url": "https://vng.com.vn/news/enterprise/chien-luoc-phat-trien-con-nguoi.html?utm_source=openai",
+              "scope": "public",
+              "checkedAt": "2026-09-21T08:14:38.565Z"
+            },
+            {
+              "title": "VNG Careers",
+              "url": "https://career.vng.com.vn/?utm_source=openai",
+              "scope": "public",
+              "checkedAt": "2026-09-21T08:14:38.565Z"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-company_policy"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "used",
+          "ignoredOverride": false
+        }
+      }
     }
   ],
-  "sourceRevision": "533c1f374526b54e0e973041027b7e997356e35d",
-  "updatedAt": "2026-09-21T08:02:59.156Z"
+  "deploymentId": "dpl_5D5KuDx2yutUmfqR8k4STn8qYKfU",
+  "webModel": "gpt-4.1",
+  "modelAttemptLimit": 50
 }

@@ -8,6 +8,8 @@ MongoDB `v3_support_knowledge` stores versioned reviewed articles, labels, keywo
 
 Set `AI_PROVIDER=openai`, `OPENAI_API_KEY`, `AI_MODEL`; optionally set `AI_CONVERSATION_MODEL`/`AI_WEB_MODEL`. `AI_WEB_SEARCH=true` enables official public VNG/GreenNode lookup with server-owned search queries and a 24-hour Mongo cache. User tickets are not sent to the search engine; redacted questions go to the answer model without tools. Search and answer attempts share the existing capped budget (maximum 50), with no automatic retries or reset.
 
+Live site: https://labpass-five.vercel.app · [Verified release](RAG-RELEASE-VERIFICATION-2026-09-21.md).
+
 See [migration audit and limitations](RAG-CONVERSATION-MIGRATION.md). Prior release sections below are historical evidence.
 
 ---
