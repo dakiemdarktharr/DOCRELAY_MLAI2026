@@ -170,3 +170,11 @@ Source d432b94, deployment dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr: 177 tests, lint/bui
 - Live verification exposed over-strict Google recovery prose filtering and an HTTP 400 tools response from the inherited web model. Recovery permits password concepts only within server-verified self-service context; direct secret/code collection remains blocked, including later clauses after safe warnings. Web model gpt-4.1 successfully searched official VNG sources and cached citations in MongoDB. Final local unit suite: 218 pass; lint pass.
 
 - Final production source f5272b5, deployment dpl_5D5KuDx2yutUmfqR8k4STn8qYKfU READY. 22/22 final live checks passed; Google and benign-prefix cake answers came from OpenAI with Mongo retrieval, and the final public-policy answer reused the verified official web cache. Initial failures remain in historicalChecks. Release report records corpus/internal-policy and original-fixture limitations.
+
+## Integrated release-fix recheck at 9d9ab05
+
+The owner explicitly requested agent fixes, commit/push and deployment in the follow-up. An isolated clone preserved the original dirty workspace. All twelve release-package files match integrated main; no runtime change was needed in this recheck. Corrected README, STATUS, RUNBOOK and release matrix statements that still called those fixes uncommitted. This documentation work and QA are AI-assisted; no human review or personal contribution is inferred from the existing commits.
+
+Fresh npm ci, Prisma client generation, 290 unit/integration tests, lint, typecheck and production build passed. Fresh E2E ran against mock/memory on 127.0.0.1:3227: 33 passed, one duplicate mobile recording skipped. Existing fixtures were not changed; generated timestamp/screenshots/video artifacts are excluded from this commit.
+
+Vercel CLI confirmed the existing acne-a6cd/vng-support project. Deployment input dry-check excluded environment files, dependencies and generated test artifacts. Production deployment and read-only smoke results must be recorded separately after they actually occur; no new paid-model call, budget reset or production workflow write is part of this recheck.

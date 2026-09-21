@@ -1,6 +1,6 @@
 # VNG Support
 
-> **Source và deployment:** main được kiểm tra tại `92d140a`, đã chứa các bản vá RAG, safety v5.2, evaluation và Verify retry. Hai package release-fix mới vẫn chưa commit/deploy. Xem [release matrix](docs/RELEASE-MATRIX.md) để phân biệt source đã có trên main và release được ghi nhận.
+> **Source và deployment:** main được kiểm tra tại `9d9ab05`, đã chứa cả hai package release-fix: kiểm tra schema knowledge và Verify readback theo UUID. Policy hiện tại là v5.2. Xem [release matrix](docs/RELEASE-MATRIX.md) để đối chiếu source, QA và deployment thực tế; Git commit không tự chứng minh human review.
 
 **Trợ lý giải đáp câu hỏi và hỗ trợ kỹ thuật: trả lời trực tiếp khi an toàn, hỏi đúng thông tin còn thiếu, chuyển nhân viên khi cần quyền hạn hoặc có rủi ro.**
 
