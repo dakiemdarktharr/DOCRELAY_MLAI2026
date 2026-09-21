@@ -1,3 +1,15 @@
+# RAG hardening candidate — chưa triển khai
+
+Hai package phải được thành viên review/commit rồi tích hợp. Không deploy từ zip hoặc tự nâng budget. Live production hiện chưa có code này.
+
+- Gói Tiến Khoa: thêm corpus/retrieval; query toàn reviewed ID list, loại bài bị sửa/hết hạn. Mongo chỉ upsert ID mới, không xóa dữ liệu. Xem docs/KNOWLEDGE-REVIEW.md trước khi thêm nguồn.
+- Gói Duy Anh: thêm `v3_support_answer_cache` với Date TTL index deleteAt. URI account cần quyền index/upsert như collection hiện có. Chỉ nội dung public trong allowlist được cache; key là SHA256 theo input/model/policy/corpus, payload ký HMAC. Không in key/signature secret hoặc dùng shared cache cho private input.
+- Key OpenAI thay đổi làm chữ ký cache cũ hết hiệu lực; code vẫn revalidate output trên hit. Model/corpus/policy thay đổi làm key đổi. Không cần xóa cache/requests/budget để deploy. Mongo/web cache có lỗi không làm safe conversation tự handoff.
+- Cap 50 giữ nguyên. Trong demo hết cap: curated fallback hoặc cache hợp lệ có nhãn, không tuyên bố đang gọi AI thật. Không dùng gói QA này làm bằng chứng OpenAI/Mongo live.
+- QA: `npm test`, `npm run lint`, `npm run build`, `npm run test:e2e`. Retrieval benchmark viết artifacts/rag-retrieval-evaluation.json; đọc đầy đủ giới hạn development synthetic. Port E2E 3227 phải trống và không reuse process cũ.
+
+---
+
 # VNG Support — vận hành hiện tại
 
 Website: https://vng-support.vercel.app. Project Vercel `vng-support`, ID `prj_hmxBwMixxSLC7fZzeGXI6o6VV5Rh` giữ nguyên. Domain mới là project domain production; alias cũ vẫn dùng được. GitHub repository giữ `dakiemdarktharr/DOCRELAY_MLAI2026`.

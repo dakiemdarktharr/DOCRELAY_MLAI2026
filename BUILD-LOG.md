@@ -1,3 +1,13 @@
+# RAG package handoff — 2026-09-21 — AI-assisted, uncommitted
+
+- Audited clean main base 7c26cae in an isolated detached worktree; baseline 219 tests, lint/build passed. Preserved the original workspace student contracts draft and all Ground Truth expectations.
+- Added 14 reviewed public guidance entries, weighted lexical retrieval and a 54-case synthetic development benchmark. Fixed expectations before tuning; baseline comparison uses the same expanded corpus. Added manifest/content integrity, expiry and poisoned-document regressions.
+- Added cited-evidence validation, internal-policy boundary, Unicode/role-override guards and a signed one-hour cache restricted to exact generic public questions. Policy candidate bumped to 5.1 so old previews invalidate. Model budget remains 50.
+- Verified independent patches and combined runtime with local/mock suites. Final executed results are bundled in QA-RESULTS.md; production was not changed or reverified.
+- Packaged disjoint responsibilities for Tien Khoa and Duy Anh, including source payload, binary-safe patch, checksums, LLM handoff prompt and commit guide. No commits, pushes, deployments, invented human review or rewritten authorship/timestamps.
+
+---
+
 # VNG Support naming release — 2026-09-21
 
 - Owner requested README workflow/description update, main commit and Vercel naming consistency; GitHub repository rename deferred to owner.

@@ -101,6 +101,14 @@ it("calls the answer model once with retrieved evidence and validates model labe
     label: "IDENTITY",
     text: "Mình là trợ lý VNG Support, có thể hướng dẫn bạn và giải đáp câu hỏi.",
     knowledgeIds: ["support-kb-v2-identity"],
+    evidence: [
+      {
+        knowledgeId: "support-kb-v2-identity",
+        quote: knowledgeSeed
+          .find((row) => row._id === "support-kb-v2-identity")!
+          .answer.slice(0, 80),
+      },
+    ],
   }));
   const row = await submitSupport(input("bạn tên gì"), { run });
   expect(run).toHaveBeenCalledOnce();
@@ -212,7 +220,7 @@ it("web lookup failure does not leak provider errors or trigger reviewer work", 
   vi.stubEnv("OPENAI_API_KEY", "synthetic-unused");
   vi.stubEnv("AI_MAX_ATTEMPTS", "0");
   const canonical = (
-    await analyze(input("chính sách công ty về nghỉ phép?"), [])
+    await analyze(input("chính sách công ty công khai về phúc lợi?"), [])
   ).canonical;
   const answer = await createConversationAnswer(canonical);
   expect(answer.answer?.webSearch).toBe("unavailable");

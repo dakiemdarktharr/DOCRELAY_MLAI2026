@@ -1,5 +1,7 @@
 # VNG Support
 
+> **Candidate RAG hardening — chưa commit/deploy:** hai package dành cho Tiến Khoa và Duy Anh. Các mô tả cải thiện dưới đây áp dụng sau khi tích hợp cả hai; website live vẫn là release được ghi trong STATUS.
+
 **Trợ lý giải đáp câu hỏi và hỗ trợ kỹ thuật: trả lời trực tiếp khi an toàn, hỏi đúng thông tin còn thiếu, chuyển nhân viên khi cần quyền hạn hoặc có rủi ro.**
 
 **Website: [vng-support.vercel.app](https://vng-support.vercel.app)** · [Hướng dẫn vận hành](RUNBOOK.md) · [Trạng thái và kiểm chứng](STATUS.md)
@@ -56,7 +58,7 @@ flowchart TD
   Q --> R
 ```
 
-Policy **support-guidance-v5.0** giữ ba action `AUTO_APPROVE`, `NEEDS_INFORMATION`, `ESCALATE`. `AUTO_APPROVE` chỉ cho phép trả lời/hướng dẫn/mô phỏng. Thứ tự ưu tiên: `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`.
+Policy **support-guidance-v5.1** giữ ba action `AUTO_APPROVE`, `NEEDS_INFORMATION`, `ESCALATE`. `AUTO_APPROVE` chỉ cho phép trả lời/hướng dẫn/mô phỏng. Thứ tự ưu tiên: `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`.
 
 LLM không có authority cuối cùng. Form/freeform mâu thuẫn hoặc một subrequest nguy hiểm không được tự chọn cách hiểu ít rủi ro hơn. Claim “đã được duyệt” không thay thế approval có thể kiểm chứng. Reviewer cũng không được bỏ qua missing facts/approval hoặc approve/fulfill security risk.
 
@@ -66,9 +68,11 @@ Preview giữ snapshot theo input/policy, TTL **10 phút**. Submit dùng lại s
 
 ## RAG, AI và dữ liệu
 
-- **RAG nhỏ, có thể kiểm tra**: 10 bài đang hoạt động, tra cứu label + từ khóa trong MongoDB; chưa dùng embeddings/vector search. Model gán nhãn câu trả lời nhưng không được dùng nhãn để mở quyền.
+- **RAG có benchmark**: 24 bài đang hoạt động, BM25 nhỏ với synonym Việt–Anh/typo tolerance và trọng số title/keyword; label là gợi ý, không khóa retrieval. Chỉ chấp nhận Mongo document khớp reviewed manifest. Chưa dùng embeddings/vector search. Model gán nhãn câu trả lời nhưng không được dùng nhãn để mở quyền.
 - Bài có nguồn, ngày review, expiry và ID theo revision. Các bài nhận diện thương hiệu dùng revision 2; revision 1 vẫn lưu nhưng không được retrieval lại. Không đưa câu trả lời model/user hay web thẳng vào kho đã kiểm duyệt.
 - Web search chỉ cho câu hỏi công khai về công ty/GPU khi bật. Server tạo query từ chủ đề được phép, giới hạn domain chính thức; không chuyển nguyên mô tả nội bộ lên search. Cache 24 giờ tách khỏi knowledge. Nguồn công khai không chứng minh entitlement/chính sách nội bộ.
+- Trích dẫn article/web phải có quote đúng trong context; chỉ hiển thị nguồn thực sự được dùng. Quote đúng chưa chứng minh toàn bộ diễn giải đúng, vẫn cần đánh giá faithfulness. Câu hỏi entitlement nội bộ nhận boundary rõ ràng, không gọi model để đoán.
+- Shared answer cache một giờ chỉ cho allowlist câu hỏi công khai, có chữ ký và khóa theo model/policy/corpus; không cache câu hỏi cá nhân hoặc follow-up. UI ghi rõ câu trả lời được dùng lại. Cache không nâng hay reset cap 50.
 - Model không được gọi shell, database, IAM, Kubernetes hoặc tool thực thi. Web search là hosted tool riêng có giới hạn. Output phải qua schema và safety validation; không lưu chain-of-thought.
 - MongoDB lưu request/history/audit, preview, Verify run, knowledge, web cache và bộ đếm model. Health thực hiện Mongo ping. Khi cấu hình Mongo lỗi hoặc chạy trên Vercel mà thiếu Mongo, không tự rơi về memory.
 - API budget production hiện được chủ dự án cho phép tối đa **50 lần gọi tích lũy**; web lookup và answer tính riêng, không reset bộ đếm. Local `.env.example` vẫn mặc định mock và cap 20. Tăng cap cần chủ dự án cho phép.
@@ -164,8 +168,10 @@ Bằng chứng runtime trước đổi tên: [RAG release](RAG-RELEASE-VERIFICAT
 
 Vercel project **vng-support** giữ cùng project ID và MongoDB. Domain mới tự theo production deployment; alias `labpass-five.vercel.app` giữ cho link cũ. Deploy thủ công bằng CLI sau QA; GitHub auto-deploy chưa được kết nối. Chi tiết ở [RUNBOOK](RUNBOOK.md).
 
-Không có thực thi IAM/cloud/shell thật, SSO hoặc xác thực actor của public demo. Redaction và risk detection theo pattern có giới hạn ngôn ngữ; không nhập secret hay dữ liệu production. Chưa có benchmark retrieval đa ngôn ngữ, bằng chứng người dùng thật hay kiểm chứng chủ động Mongo failover. Kho nguồn công khai không thay chính sách nội bộ.
+Không có thực thi IAM/cloud/shell thật, SSO hoặc xác thực actor của public demo. Redaction và risk detection theo pattern có giới hạn ngôn ngữ; không nhập secret hay dữ liệu production. Có benchmark development synthetic 54 case, chưa có held-out độc lập, bằng chứng người dùng thật hay kiểm chứng chủ động Mongo failover. Kho nguồn công khai không thay chính sách nội bộ.
 
+- [Retrieval/benchmark — Tiến Khoa](docs/RAG-RETRIEVAL.md), [quản trị knowledge](docs/KNOWLEDGE-REVIEW.md)
+- [Answer/cache/guard — Duy Anh](docs/RAG-ANSWER.md)
 - [Đổi tên và mapping file](VNG-SUPPORT-RENAME.md)
 - [Migration hội thoại/RAG](RAG-CONVERSATION-MIGRATION.md)
 - [Đối chiếu feedback E01–E23](VNG-SUPPORT-ERRORS-RECHECK.md)

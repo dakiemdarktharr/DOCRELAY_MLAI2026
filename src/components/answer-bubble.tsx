@@ -21,12 +21,22 @@ export function AnswerBubble({
         {item.answer ? (
           <>
             <div className="assistant-text">{item.answer.text}</div>
-            {item.answer.fallbackReason && (
+            {item.answer.cacheHit && (
               <p className="assistant-note">
-                AI đang tạm không sẵn sàng. Đây là hướng dẫn có sẵn; câu hỏi
-                chưa được chuyển cho nhân viên.
+                Câu trả lời AI đã lưu, dùng lại trong tối đa một giờ để tiết
+                kiệm lượt gọi.
               </p>
             )}
+            {item.answer.scopeNotice && (
+              <p className="assistant-note">{item.answer.scopeNotice}</p>
+            )}
+            {item.answer.fallbackReason &&
+              item.answer.fallbackReason !== "INTERNAL_POLICY_UNVERIFIED" && (
+                <p className="assistant-note">
+                  AI đang tạm không sẵn sàng. Đây là hướng dẫn có sẵn; câu hỏi
+                  chưa được chuyển cho nhân viên.
+                </p>
+              )}
             {item.answer.webSearch === "unavailable" && (
               <p className="assistant-note">
                 Chưa tra cứu được web mới nhất; nguồn có sẵn được ghi ngày kiểm
