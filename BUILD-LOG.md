@@ -5,7 +5,7 @@
 - User requested direct everyday/help answers, highlighted 400ms/200ms bubbles, MongoDB RAG, public internet lookup and resilience to benign instruction-override prefixes. Existing main worktree used; student's uncommitted original workspace untouched.
 - Baseline 177 tests, lint/build passed. Added read-only gate before unnecessary extraction, Mongo curated knowledge with expiry/provenance, bounded official web lookup/cache, validated answer generation, follow-up risk reevaluation and answer audit. Public policy is explicitly separate from internal authorization.
 - Removed automatic reviewer escalation only for recognized read-only conversations, including model outages. Operational extraction/assistance fail-closed, reviewer transitions, compatibility APIs and original Ground Truth expectations remain. No budget reset, database deletion or new dependencies.
-- Candidate validation: 212 tests, lint and 29 E2E pass (one existing mobile video duplicate skipped). Production build/live evidence recorded at release. Research used official Google recovery, VNG annual-report HR overview and OpenAI Responses web-search documentation.
+- Candidate validation: 214 tests, lint and 29 E2E pass (one existing mobile video duplicate skipped). Production build/live evidence recorded at release. Research used official Google recovery, VNG annual-report HR overview and OpenAI Responses web-search documentation.
 
 
 ## UX and judge feedback — 2026-09-21
@@ -134,3 +134,5 @@ Live diagnostics narrowed rejection to the prose guard. Reproduced false positiv
 ### Final report release verified
 
 Source d432b94, deployment dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr: 177 tests, lint/build, 27 E2E and 27 live checks pass. Actual OpenAI contextual assistance and MongoDB persistence verified. Evidence in REPORT-RELEASE-VERIFICATION-2026-09-21.md. Three model previews used from the owner-authorized extra allowance, with no budget reset. Real-user evidence remains absent.
+
+- Initial RAG production check confirmed Mongo persistence but the previous 30-call budget was exhausted. Owner explicitly approved 50 total attempts; counter retained. Added recipe-specific retrieval fallback and verification-code redaction for recovery follow-ups. Full unit suite/lint pass, conversation desktop/mobile E2E rechecked after changes.

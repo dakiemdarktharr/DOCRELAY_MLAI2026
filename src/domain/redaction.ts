@@ -25,6 +25,13 @@ export function redact(text: string): { text: string; markers: string[] } {
       return prefix + "[REDACTED]";
     },
   );
+  safe = safe.replace(
+    /((?:mã xác minh|ma xac minh|mã otp|ma otp|\botp|verification code|one[ -]time code)\s*(?::|=|là|la|is)?\s*)[0-9]{4,10}\b/gi,
+    (_, prefix: string) => {
+      markers.add("VERIFICATION_CODE");
+      return prefix + "[REDACTED_VERIFICATION_CODE]";
+    },
+  );
   replace(/\bBearer\s+[^\s,;]+/gi, "TOKEN", "Bearer [REDACTED_TOKEN]");
   replace(
     /\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g,

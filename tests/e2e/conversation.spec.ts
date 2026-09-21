@@ -23,6 +23,7 @@ test("conversation answers before confirmation, wraps and continues without a re
     "href",
     /support.google.com/,
   );
+  await expect(page.locator(".assistant-reveal")).toHaveCSS("opacity", "1");
   await page.screenshot({
     path: `artifacts/conversation-${info.project.name}.png`,
     fullPage: true,

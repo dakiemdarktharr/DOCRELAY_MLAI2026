@@ -1,0 +1,105 @@
+{
+  "startedAt": "2026-09-21T08:02:55.707Z",
+  "url": "https://labpass-five.vercel.app",
+  "checks": [
+    {
+      "name": "health MongoDB and policy v5",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "durable": true,
+        "provider": "openai",
+        "policy": "support-guidance-v5.0",
+        "sourceRevision": "533c1f374526b54e0e973041027b7e997356e35d",
+        "simulated": true
+      }
+    },
+    {
+      "name": "google direct answer",
+      "pass": true,
+      "details": {
+        "source": "deterministic",
+        "label": "GOOGLE_RECOVERY",
+        "retrieval": "mongodb",
+        "webSearch": "not_needed",
+        "fallbackReason": "BUDGET_EXHAUSTED",
+        "knowledgeIds": [
+          "support-kb-v1-google_recovery"
+        ],
+        "sourceUrls": [
+          "https://support.google.com/accounts/answer/7682439?hl=vi"
+        ],
+        "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?"
+      }
+    },
+    {
+      "name": "google actual OpenAI response",
+      "pass": false
+    },
+    {
+      "name": "google actual Mongo retrieval",
+      "pass": true
+    },
+    {
+      "name": "google snapshot and audit persisted",
+      "pass": true
+    },
+    {
+      "name": "google idempotent save",
+      "pass": true
+    },
+    {
+      "name": "dangerous injection remains escalated",
+      "pass": true
+    },
+    {
+      "name": "legacy echo compatibility",
+      "pass": true
+    }
+  ],
+  "requests": [
+    {
+      "id": "aa6f78a7-9ee5-4480-bc7f-f404a9566b23",
+      "topic": "google",
+      "answer": {
+        "summary": "Trợ lý trả lời",
+        "stepByStepInstructions": [],
+        "options": [
+          "Tôi đã hiểu",
+          "Hỏi rõ hơn",
+          "Câu hỏi khác",
+          "Nhờ nhân viên"
+        ],
+        "expectedResult": "",
+        "warning": "",
+        "nextQuestion": "",
+        "canPassToAdmin": true,
+        "source": "deterministic",
+        "timestamp": "2026-09-21T08:02:57.332Z",
+        "answer": {
+          "text": "Với tài khoản Google của chính bạn, mở trang trợ giúp Google trong nguồn bên dưới, chọn liên kết khôi phục tài khoản và trả lời các câu hỏi xác minh trực tiếp trên Google. Đặt mật khẩu mới khi Google yêu cầu. Nếu quên địa chỉ đăng nhập, chọn tìm tên người dùng bằng email/số điện thoại khôi phục và họ tên. Nếu tài khoản do cơ quan quản lý, quy trình tự khôi phục có thể không áp dụng. Không gửi mật khẩu hoặc mã xác minh vào cuộc trò chuyện này. Bạn quên mật khẩu, quên địa chỉ email hay không nhận được mã xác minh?",
+          "label": "GOOGLE_RECOVERY",
+          "sources": [
+            {
+              "title": "Google: Khôi phục Tài khoản Google hoặc Gmail",
+              "url": "https://support.google.com/accounts/answer/7682439?hl=vi",
+              "scope": "public",
+              "checkedAt": "2026-09-21"
+            }
+          ],
+          "knowledgeIds": [
+            "support-kb-v1-google_recovery"
+          ],
+          "retrieval": "mongodb",
+          "webSearch": "not_needed",
+          "fallbackReason": "BUDGET_EXHAUSTED",
+          "ignoredOverride": false
+        }
+      }
+    }
+  ],
+  "sourceRevision": "533c1f374526b54e0e973041027b7e997356e35d",
+  "updatedAt": "2026-09-21T08:02:59.156Z"
+}

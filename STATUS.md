@@ -1,6 +1,6 @@
 # Conversation/RAG candidate — 21/09/2026
 
-Policy `support-guidance-v5.0`: direct conversational answers, reviewed MongoDB knowledge, optional official web search and highlighted chat bubbles. 212 unit/integration tests pass; lint and production build pass; 29 desktop/mobile E2E pass (1 existing duplicate-video skip), fresh port 3227 server. Existing operational safeguards and all original fixture expectations retained. Live deployment verification is recorded separately after release; historical evidence below validates older releases.
+Policy `support-guidance-v5.0`: direct conversational answers, reviewed MongoDB knowledge, optional official web search and highlighted chat bubbles. 214 unit/integration tests pass; lint and production build pass; 29 desktop/mobile E2E pass (1 existing duplicate-video skip), fresh port 3227 server. Existing operational safeguards and all original fixture expectations retained. Live deployment verification is recorded separately after release; historical evidence below validates older releases.
 
 See [migration audit](RAG-CONVERSATION-MIGRATION.md). Known limits: small lexical corpus, not semantic/vector retrieval; no verified internal employee/GPU policy; safe fallback when budget/API unavailable; public lookup restricted to VNG/GreenNode domains. No claim of universal prompt-injection immunity.
 

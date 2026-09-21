@@ -136,6 +136,11 @@ it("bounds time and lifetime call count without retries", async () => {
     Array.from({ length: 15 }, () => reserveModelAttempt()),
   );
   expect(added.filter(Boolean)).toHaveLength(10);
+  vi.stubEnv("AI_MAX_ATTEMPTS", "50");
+  const conversationAllowance = await Promise.all(
+    Array.from({ length: 25 }, () => reserveModelAttempt()),
+  );
+  expect(conversationAllowance.filter(Boolean)).toHaveLength(20);
   vi.stubEnv("AI_MAX_ATTEMPTS", "100");
   expect(await reserveModelAttempt()).toBe(false);
 });
