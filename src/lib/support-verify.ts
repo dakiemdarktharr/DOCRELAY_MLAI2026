@@ -69,6 +69,7 @@ export type VerifyResult = {
   persistence?: { pass: boolean; checks: string[] };
   error?: string;
   httpStatus?: number;
+  retryable?: boolean;
 };
 // Browser and integration tests use this same HTTP contract. No direct policy shortcut.
 export async function runSupportCase(
@@ -103,11 +104,16 @@ export async function runSupportCase(
           : {}),
       }),
     });
-    const body = await response.json();
+    const transientStatus = response.status === 408 || response.status === 429 || response.status >= 500;
+    // Gateways may return HTML instead of the API envelope. Preserve retry semantics.
+    const body = await response.json().catch(() => null);
+    if (!body)
+      return { ...result, httpStatus: response.status, retryable: transientStatus || response.ok, error: "Decision API trả nội dung không hợp lệ." };
     if (!response.ok || body.success !== true)
       return {
         ...result,
         httpStatus: response.status,
+        retryable: transientStatus || (response.status === 409 && body.error?.code === "REQUEST_PROCESSING"),
         error: body.error?.message ?? "API error",
       };
     const request = body.data as SupportRequest;
@@ -116,6 +122,7 @@ export async function runSupportCase(
       return {
         ...result,
         requestId: request.id,
+        retryable: true,
         error: "Request đang xử lý; chưa có quyết định.",
       };
     const persistence = await verifyPersistence(request, fetcher);
@@ -132,7 +139,7 @@ export async function runSupportCase(
         (!item.expected_rule || actual.ruleIds.includes(item.expected_rule)),
     };
   } catch {
-    return { ...result, error: "Không thể kết nối decision API." };
+    return { ...result, retryable: true, error: "Không thể kết nối hoặc đọc lại decision API. Có thể tiếp tục case này." };
   }
 }
 

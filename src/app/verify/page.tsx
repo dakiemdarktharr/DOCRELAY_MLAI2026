@@ -30,15 +30,29 @@ export default function VerifyPage() {
     }>
   >([]);
   const stop = useRef(false);
+  const activeOperation = useRef(false);
+  const loadingRun = useRef(false);
+  const loadSequence = useRef(0);
+  const [loading, setLoading] = useState(false);
+  const busy = running || loading;
   const results = currentRun?.results ?? [];
   async function loadRun(id: string) {
+    const sequence = ++loadSequence.current;
+    loadingRun.current = true;
+    setLoading(true);
     try {
       const row = await browserApi<VerifyRun>(`/api/support/verify-runs/${id}`);
+      if (sequence !== loadSequence.current) return;
       setCurrentRun(row);
       setPack(row.pack);
       window.history.replaceState(null, "", `/verify?run=${id}`);
     } catch {
-      setError("Không tải được lần kiểm thử.");
+      if (sequence === loadSequence.current) setError("Không tải được lần kiểm thử.");
+    } finally {
+      if (sequence === loadSequence.current) {
+        loadingRun.current = false;
+        setLoading(false);
+      }
     }
   }
   useEffect(() => {
@@ -49,6 +63,8 @@ export default function VerifyPage() {
     if (id) void loadRun(id);
   }, []);
   async function run(resume = false) {
+    if (activeOperation.current || loadingRun.current) return;
+    activeOperation.current = true;
     setRunning(true);
     setError("");
     stop.current = false;
@@ -82,6 +98,7 @@ export default function VerifyPage() {
     } finally {
       // Keep pack selection locked until the final persisted readback completes.
       if (row) await loadRun(row.id);
+      activeOperation.current = false;
       setRunning(false);
       void browserApi<typeof history>("/api/support/verify-runs")
         .then(setHistory)
@@ -105,6 +122,8 @@ export default function VerifyPage() {
     }
   }
   async function runJudge() {
+    if (activeOperation.current || loadingRun.current) return;
+    activeOperation.current = true;
     setRunning(true);
     setError("");
     try {
@@ -122,6 +141,7 @@ export default function VerifyPage() {
     } catch (error) {
       setError(error instanceof Error ? error.message : "API error");
     } finally {
+      activeOperation.current = false;
       setRunning(false);
     }
   }
@@ -137,7 +157,7 @@ export default function VerifyPage() {
         các case gọi cùng decision API của ứng dụng. Fixture gốc và expected
         được giữ nguyên.
       </Alert>
-      <fieldset disabled={running} className="flex flex-wrap items-end gap-3">
+      <fieldset disabled={busy} className="flex flex-wrap items-end gap-3">
         <label>
           Bộ kiểm thử
           <select
@@ -189,7 +209,7 @@ export default function VerifyPage() {
             </Button>
           ) : (
             currentRun.status !== "COMPLETE" && (
-              <Button onClick={() => void run(true)}>
+              <Button disabled={busy} onClick={() => void run(true)}>
                 Tiếp tục lần kiểm thử
               </Button>
             )
@@ -208,7 +228,7 @@ export default function VerifyPage() {
               <li key={row.id}>
                 <button
                   className="text-accent underline"
-                  disabled={running}
+                  disabled={busy}
                   onClick={() => void loadRun(row.id)}
                 >
                   {row.pack} · {row.completed}/{row.total} ·{" "}
@@ -220,6 +240,7 @@ export default function VerifyPage() {
         </details>
       )}
       <p role="status">
+        {loading ? "Đang tải kết quả đã lưu… " : ""}
         {running ? "Đang chạy… " : ""}
         {results.length}/{cases.length} · Pass:{" "}
         {results.filter((result) => result.pass).length} · Fail:{" "}
@@ -343,7 +364,7 @@ export default function VerifyPage() {
               required
             />
           </label>
-          <Button disabled={running || !judge.trim()}>
+          <Button disabled={busy || !judge.trim()}>
             Đánh giá input mới
           </Button>
         </form>
