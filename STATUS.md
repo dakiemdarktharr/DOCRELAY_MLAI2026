@@ -1,3 +1,11 @@
+# Current production — Conversation/RAG — 21/09/2026
+
+Site https://labpass-five.vercel.app · deployed source `f5272b5` · policy v5.0 · deployment `dpl_5D5KuDx2yutUmfqR8k4STn8qYKfU` READY. **22/22 final live checks pass**, including actual OpenAI answers, MongoDB retrieval/persistence, official web citations and Verify 4/4. Cumulative model-attempt cap 50 was explicitly approved; no counter reset. Final local suite: **218 pass**, lint and production build pass. E2E: 29 pass + 1 duplicate-video skip; targeted conversation rerun 2/2 pass.
+
+Details, historical failures and limitations: [RAG release verification](RAG-RELEASE-VERIFICATION-2026-09-21.md).
+
+---
+
 # Conversation/RAG candidate — 21/09/2026
 
 Policy `support-guidance-v5.0`: direct conversational answers, reviewed MongoDB knowledge, optional official web search and highlighted chat bubbles. 218 unit/integration tests pass; lint and production build pass; 29 desktop/mobile E2E pass (1 existing duplicate-video skip), fresh port 3227 server. Existing operational safeguards and all original fixture expectations retained. Live deployment verification is recorded separately after release; historical evidence below validates older releases.
