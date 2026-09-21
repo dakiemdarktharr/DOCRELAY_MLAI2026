@@ -2,7 +2,7 @@
 
 Policy `support-guidance-v4.2`. Đã đối chiếu 23 mục, bổ sung Verify runs, phân trang/tìm kiếm, contextual assistance, câu hỏi có trọng tâm và minh bạch dữ liệu. Xem [DOCRELAY-ERRORS-RECHECK.md](DOCRELAY-ERRORS-RECHECK.md).
 
-176 unit/integration, lint/build, 27 E2E pass (1 skip video mobile trùng). Race đổi bộ Verify đã được kiểm thử bằng phản hồi API chậm. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Trạng thái deploy mới ghi sau kiểm chứng live.
+177 unit/integration, lint/build, 27 E2E pass (1 skip video mobile trùng). Race đổi bộ Verify đã được kiểm thử bằng phản hồi API chậm. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Production source `d432b94`, deployment `dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr` READY, **27/27 live checks PASS**, gồm OpenAI và MongoDB thật. Xem [release hiện tại](REPORT-RELEASE-VERIFICATION-2026-09-21.md).
 
 # Status — Production release — 21/09/2026
 

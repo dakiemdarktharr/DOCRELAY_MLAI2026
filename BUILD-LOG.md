@@ -121,3 +121,8 @@ The first newly authorized live model call was rejected by output validation. En
 
 
 Live diagnostics narrowed rejection to the prose guard. Reproduced false positives for safe negated warnings and substrings (information contains format). Reused existing local-negation detection and added word boundaries; affirmative dangerous clauses and certainty claims still fail. Added regression for both allowed warnings and a later unsafe clause.
+
+
+### Final report release verified
+
+Source d432b94, deployment dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr: 177 tests, lint/build, 27 E2E and 27 live checks pass. Actual OpenAI contextual assistance and MongoDB persistence verified. Evidence in REPORT-RELEASE-VERIFICATION-2026-09-21.md. Three model previews used from the owner-authorized extra allowance, with no budget reset. Real-user evidence remains absent.

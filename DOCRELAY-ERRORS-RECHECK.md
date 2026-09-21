@@ -45,7 +45,7 @@ Expected files: src/domain/{contracts,input,guidance,questions,text,policy}.ts, 
 ## Kiểm chứng và giới hạn
 
 - Baseline: 154 unit/integration, lint, build pass.
-- Sau sửa và diagnostic follow-up: 176 unit/integration pass; lint/build pass. 26 desktop/mobile E2E và 1 E2E Stop/Override/video pass, dùng server mới port 3227, `reuseExistingServer=false`, mock/memory.
+- Sau sửa và diagnostic follow-up: 177 unit/integration pass; lint/build pass. 26 desktop/mobile E2E và 1 E2E Stop/Override/video pass, dùng server mới port 3227, `reuseExistingServer=false`, mock/memory.
 - Bộ fixture gốc giữ nguyên: 55/128 khớp, 73 khác biệt policy có sẵn. Đây không phải 128/128 pass và không phải bằng chứng hiệu quả người dùng.
 - Live production: xem `artifacts/report-live-verification.json` sau triển khai. Local E2E không chứng minh OpenAI/MongoDB thật.
 - `stepExplanations` là nội dung model qua schema/evidence/redaction/risk guard. Guard ngôn ngữ không phải chứng minh ngữ nghĩa tuyệt đối; model không có tool hoặc quyền thay policy. Khi không hợp lệ, fail-safe.
@@ -59,3 +59,15 @@ Expected files: src/domain/{contracts,input,guidance,questions,text,policy}.ts, 
 Lần deploy 6b93962 và 2d50176 xác nhận MongoDB/Verify thật nhưng model fail-safe vì BUDGET_EXHAUSTED. Chủ dự án đã cho phép tăng tổng hạn mức lên 30, giữ nguyên số lượt đã dùng (thêm tối đa 10 lượt). Cấu hình Vercel đã cập nhật. Regression mới xác nhận không vượt trần và không reset.
 
 Kiểm tra E2E lặp lại tìm được race đổi pack sau khi đủ kết quả nhưng trước khi đọc lại run hoàn tất. Đã khóa lựa chọn đến sau readback; test trì hoãn phản hồi GET thật 350ms để tái hiện. Sau sửa race: 27 E2E pass, 1 skip quay video trùng trên mobile; không retry.
+
+
+## Release cuối đã kiểm chứng
+
+Source `d432b94f8b3c5fefd0621735a41c575360b6a695`, Vercel `dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr`, READY tại https://labpass-five.vercel.app.
+
+- **177/177 unit/integration**, lint, build PASS.
+- **27 E2E PASS**, 1 skip video mobile trùng, 0 retry/flaky; server riêng port 3227.
+- **27/27 live checks PASS**. OpenAI trả 3 bước và 3 lời giải thích gắn với evidence. MongoDB đọc lại đúng snapshot; Verify 4/4 lưu được, phân trang/aggregate và Stop/Override/audit đều pass.
+- Kết quả Verify: https://labpass-five.vercel.app/verify?run=4c6d7db4-074d-49c3-bbf6-cbc4ee945756
+- Ba preview sau khi được phép thêm lượt đã dùng model: hai phản hồi bị validation từ chối và một phản hồi thành công. Bằng chứng không khẳng định mọi lần gọi model đều thành công; trường hợp invalid vẫn fail-safe.
+- Bằng chứng người dùng thật vẫn chưa có. Bộ fixture gốc vẫn 55/128 khớp và 73 khác biệt đã giữ nguyên expected. Các giới hạn ngôn ngữ/phân trang/demo nêu ở trên vẫn áp dụng.

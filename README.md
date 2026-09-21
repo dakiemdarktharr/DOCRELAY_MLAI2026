@@ -14,7 +14,9 @@ Nhóm xác nhận chưa có phản hồi người dùng thật. Số test và de
 
 ## Bản public
 
-Bản public cập nhật ngày 21/09/2026: [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Bản `c0c5ea5` đã qua 17/17 kiểm tra trực tiếp, gồm OpenAI thật và lưu/đọc/reviewer/audit trên MongoDB; xem [bằng chứng phát hành](RELEASE-VERIFICATION-2026-09-21.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo được chủ dự án cho phép nâng từ 20 lên 30 lần gọi model tích lũy cho database, giữ nguyên bộ đếm; khi hết budget, hệ thống fail-safe sang review.
+Bản public: [Tech Support Referee](https://labpass-five.vercel.app). Source `d432b94`, policy `support-guidance-v4.2`, đã qua **27/27 kiểm tra production**, gồm OpenAI thật (3 bước và 3 giải thích theo ngữ cảnh), MongoDB snapshot/submit/readback, Verify, phân trang và reviewer/audit. Xem [bằng chứng release mới](REPORT-RELEASE-VERIFICATION-2026-09-21.md) và [lần Verify đã lưu](https://labpass-five.vercel.app/verify?run=4c6d7db4-074d-49c3-bbf6-cbc4ee945756).
+
+Production dùng OpenAI `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. API key chỉ nằm trong `.env.local` và Vercel Secret. Chủ dự án đã cho phép nâng tổng hạn mức model từ 20 lên **30 lần**, giữ nguyên bộ đếm. Khi hết hạn mức hoặc model output không hợp lệ, hệ thống fail-safe sang review. Bằng chứng release cũ được giữ ở [release trước](RELEASE-VERIFICATION-2026-09-21.md).
 
 ## Chạy ứng dụng
 

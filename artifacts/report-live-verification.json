@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-21T07:07:27.759Z",
-  "sourceCommit": "0e092995fc8c0cd28682628212c51532aa7d558f",
-  "deploymentId": "dpl_GHVK3EnbFExMmjGV66izAr6ASAF9",
+  "timestamp": "2026-09-21T07:12:17.497Z",
+  "sourceCommit": "d432b94f8b3c5fefd0621735a41c575360b6a695",
+  "deploymentId": "dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr",
   "url": "https://labpass-five.vercel.app",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "durable": true,
         "provider": "openai",
         "policy": "support-guidance-v4.2",
-        "sourceRevision": "0e092995fc8c0cd28682628212c51532aa7d558f",
+        "sourceRevision": "d432b94f8b3c5fefd0621735a41c575360b6a695",
         "simulated": true
       }
     },
@@ -22,7 +22,7 @@
       "name": "source SHA matches deployed code",
       "pass": true,
       "details": {
-        "sourceRevision": "0e092995fc8c0cd28682628212c51532aa7d558f"
+        "sourceRevision": "d432b94f8b3c5fefd0621735a41c575360b6a695"
       }
     },
     {
@@ -35,27 +35,27 @@
     },
     {
       "name": "real OpenAI validated assistance",
-      "pass": false,
+      "pass": true,
       "details": {
-        "source": null,
-        "action": "ESCALATE",
-        "failure": "MODEL_OUTPUT_INVALID",
-        "failureReason": "UNSAFE_PROSE",
-        "steps": 0
+        "source": "openai",
+        "action": "AUTO_APPROVE",
+        "failure": null,
+        "failureReason": null,
+        "steps": 3
       }
     },
     {
       "name": "OpenAI contextual prose and evidence",
-      "pass": false,
+      "pass": true,
       "details": {
-        "explanations": 0
+        "explanations": 3
       }
     },
     {
       "name": "MongoDB preview-submit-independent GET exact match",
       "pass": true,
       "details": {
-        "requestId": "a469685f-6e6f-452b-bf58-ddd9afdbee71",
+        "requestId": "99079dbf-3b9c-426f-a2bc-6511d00c35a8",
         "version": 1
       }
     },
@@ -64,11 +64,19 @@
       "pass": true
     },
     {
+      "name": "explain retains employee workflow",
+      "pass": true
+    },
+    {
+      "name": "handoff retains real model history",
+      "pass": true
+    },
+    {
       "name": "reviewer status and audit persist in MongoDB",
       "pass": true,
       "details": {
-        "version": 2,
-        "events": 3
+        "version": 4,
+        "events": 5
       }
     },
     {
@@ -120,7 +128,7 @@
       "name": "four-case production Verify all pass",
       "pass": true,
       "details": {
-        "runId": "ac3d20d3-3495-4506-ac2e-496ce30c5501",
+        "runId": "4c6d7db4-074d-49c3-bbf6-cbc4ee945756",
         "results": [
           {
             "caseId": "submission-shutdown",
@@ -197,7 +205,7 @@
       "name": "MongoDB pagination reads distinct pages",
       "pass": true,
       "details": {
-        "total": 125
+        "total": 133
       }
     },
     {
@@ -208,7 +216,7 @@
       "name": "MongoDB aggregate count matches total",
       "pass": true,
       "details": {
-        "total": 125
+        "total": 133
       }
     },
     {
@@ -217,11 +225,11 @@
     }
   ],
   "requestIds": [
-    "a469685f-6e6f-452b-bf58-ddd9afdbee71",
-    "c5b9a781-7723-4e12-859a-4b5d5e5490e7",
-    "1eee6434-55e6-463f-b50d-862632d9ae46",
-    "87e8498a-be42-4668-a112-42b7475514e7"
+    "99079dbf-3b9c-426f-a2bc-6511d00c35a8",
+    "c86f0942-daff-4f8e-943c-cdb6d2a424b9",
+    "b669d702-5f0e-4887-bcdb-2bf8998bf051",
+    "ab6c8e86-0228-44bd-90b9-c3ce5940a29a"
   ],
-  "verifyRunId": "ac3d20d3-3495-4506-ac2e-496ce30c5501",
-  "completedAt": "2026-09-21T07:07:43.926Z"
+  "verifyRunId": "4c6d7db4-074d-49c3-bbf6-cbc4ee945756",
+  "completedAt": "2026-09-21T07:12:30.024Z"
 }
