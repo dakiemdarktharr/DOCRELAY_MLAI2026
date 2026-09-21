@@ -107,5 +107,3 @@ Bản production hiện tại được triển khai bằng Vercel CLI và đã x
 ## Live release verification — 21/09/2026
 
 User authorized main push, production deployment and actual MongoDB/OpenAI verification. Local regression remains mock/memory. Production smoke uses only synthetic requests and a bounded real OpenAI assistance call. Verify preview -> submit -> independent GET -> explain -> handoff -> reviewer -> audit. MongoDB mode has no memory fallback when MONGODB_URI is set. MongoClient ignores undefined optional values to keep stored API snapshots stable. Do not reset lifetime model budget. Direct Atlas TCP from this machine was refused; deployment API read/write tests exercise Atlas from Vercel. See artifacts/live-release-verification.json and final release evidence for exact source/deployment IDs.
-
-

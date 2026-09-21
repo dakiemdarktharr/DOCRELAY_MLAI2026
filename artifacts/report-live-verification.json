@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-21T06:55:17.094Z",
-  "sourceCommit": "2d50176b2ddcd64338f90404756fd8c578a5ee46",
-  "deploymentId": "dpl_HcmDD6auHodhmTgj8qShu5GKqVcX",
+  "timestamp": "2026-09-21T07:02:22.866Z",
+  "sourceCommit": "cdf2b1ec252a3290b309fae9969a85271c75201d",
+  "deploymentId": "dpl_4HE1sUpUC4EZ9X6yAoib6RPZ91Fw",
   "url": "https://labpass-five.vercel.app",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "durable": true,
         "provider": "openai",
         "policy": "support-guidance-v4.2",
-        "sourceRevision": "2d50176b2ddcd64338f90404756fd8c578a5ee46",
+        "sourceRevision": "cdf2b1ec252a3290b309fae9969a85271c75201d",
         "simulated": true
       }
     },
@@ -22,8 +22,12 @@
       "name": "source SHA matches deployed code",
       "pass": true,
       "details": {
-        "sourceRevision": "2d50176b2ddcd64338f90404756fd8c578a5ee46"
+        "sourceRevision": "cdf2b1ec252a3290b309fae9969a85271c75201d"
       }
+    },
+    {
+      "name": "legacy echo and Mongo event compatibility",
+      "pass": true
     },
     {
       "name": "new entry labels",
@@ -35,8 +39,8 @@
       "details": {
         "source": null,
         "action": "ESCALATE",
-        "failure": "MODEL_UNAVAILABLE",
-        "failureReason": "BUDGET_EXHAUSTED",
+        "failure": "MODEL_OUTPUT_INVALID",
+        "failureReason": null,
         "steps": 0
       }
     },
@@ -51,7 +55,7 @@
       "name": "MongoDB preview-submit-independent GET exact match",
       "pass": true,
       "details": {
-        "requestId": "7eef7443-b86d-4e0a-b7ad-d5c3a7f70459",
+        "requestId": "5c5edad2-ab24-4be7-9cc7-18a5252dfb3f",
         "version": 1
       }
     },
@@ -116,7 +120,7 @@
       "name": "four-case production Verify all pass",
       "pass": true,
       "details": {
-        "runId": "2f56ed75-d5cb-4669-9439-1dc003472022",
+        "runId": "ad892bef-32da-414a-82e8-cf69465364e3",
         "results": [
           {
             "caseId": "submission-shutdown",
@@ -193,7 +197,7 @@
       "name": "MongoDB pagination reads distinct pages",
       "pass": true,
       "details": {
-        "total": 109
+        "total": 117
       }
     },
     {
@@ -204,7 +208,7 @@
       "name": "MongoDB aggregate count matches total",
       "pass": true,
       "details": {
-        "total": 109
+        "total": 117
       }
     },
     {
@@ -213,11 +217,11 @@
     }
   ],
   "requestIds": [
-    "7eef7443-b86d-4e0a-b7ad-d5c3a7f70459",
-    "5f512db1-c7ed-4bc0-b0e3-3c9be2a4a51a",
-    "16e750c3-4094-4d3a-93d3-f4dd789d97d7",
-    "550b4afc-10ed-4062-9226-5d635dbcfa90"
+    "5c5edad2-ab24-4be7-9cc7-18a5252dfb3f",
+    "1b8fc000-03ba-4aab-a284-98f95b2fd281",
+    "19ad29f8-e7a8-4f9b-a8b1-eba60c77f118",
+    "c7406b7b-502f-4a0f-b206-f5bfe3bb5fb2"
   ],
-  "verifyRunId": "2f56ed75-d5cb-4669-9439-1dc003472022",
-  "completedAt": "2026-09-21T06:55:27.859Z"
+  "verifyRunId": "ad892bef-32da-414a-82e8-cf69465364e3",
+  "completedAt": "2026-09-21T07:02:50.442Z"
 }

@@ -2,7 +2,7 @@
 
 Policy `support-guidance-v4.2`. Đã đối chiếu 23 mục, bổ sung Verify runs, phân trang/tìm kiếm, contextual assistance, câu hỏi có trọng tâm và minh bạch dữ liệu. Xem [DOCRELAY-ERRORS-RECHECK.md](DOCRELAY-ERRORS-RECHECK.md).
 
-175 unit/integration, lint/build, 26 desktop/mobile E2E + 1 Stop/Override/video E2E pass. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Trạng thái deploy mới ghi sau kiểm chứng live.
+176 unit/integration, lint/build, 27 E2E pass (1 skip video mobile trùng). Race đổi bộ Verify đã được kiểm thử bằng phản hồi API chậm. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Trạng thái deploy mới ghi sau kiểm chứng live.
 
 # Status — Production release — 21/09/2026
 

@@ -115,3 +115,6 @@ Production diagnosis returned BUDGET_EXHAUSTED. Owner explicitly approved at mos
 
 
 Final E2E repetition exposed a pack-selection race: Verify enabled controls before final saved-run readback, which could overwrite a newly selected pack. Kept controls locked until readback completes and added delayed real-API readback to the browser regression. No policy result is stubbed.
+
+
+The first newly authorized live model call was rejected by output validation. Enforced provider-side strict JSON schema, exact evidence choices and valid step indexes in addition to existing server validation. Added safe categorical validation diagnostics without saving rejected model prose. Original safety checks and token/call ceilings remain in force.

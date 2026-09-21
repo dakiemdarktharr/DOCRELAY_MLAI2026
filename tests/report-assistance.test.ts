@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, it, expect, vi } from "vitest";
-import { callModel, createAssistance, modelFailure } from "@/lib/support-model";
+import {
+  callModel,
+  createAssistance,
+  modelFailure,
+  type ModelCall,
+} from "@/lib/support-model";
 import { extractIntake, extractText } from "@/domain/text";
 import { evaluatePolicy } from "@/domain/policy";
 import { guidanceTemplate } from "@/domain/guidance";
@@ -48,7 +53,7 @@ it("E07 shutdown gives a direct answer and VPN timeout has a relevant follow-up"
 });
 it("E08 contextual model output uses redacted request evidence and retains vetted actions", async () => {
   const request = extractIntake(input("VPN timeout trên Windows"));
-  const run = vi.fn(async () => ({
+  const run = vi.fn<(call: ModelCall) => Promise<unknown>>(async () => ({
     summary:
       "VPN trên Windows đang hết thời gian chờ; kết quả kiểm tra mạng giúp khoanh vùng nguyên nhân.",
     stepIndexes: [0, 1],
@@ -63,6 +68,10 @@ it("E08 contextual model output uses redacted request evidence and retains vette
   }));
   const result = await createAssistance(request, true, { run });
   expect(run.mock.calls).toHaveLength(1);
+  expect(run.mock.calls[0][0].responseSchema).toMatchObject({
+    additionalProperties: false,
+    required: expect.arrayContaining(["evidenceQuote", "stepExplanations"]),
+  });
   expect(result.summary).toContain("Windows");
   expect(result.stepExplanations).toHaveLength(2);
   expect(result.stepByStepInstructions[0]).toBe(
