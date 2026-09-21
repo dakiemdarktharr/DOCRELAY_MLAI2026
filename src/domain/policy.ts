@@ -376,6 +376,35 @@ function evaluateSinglePolicy(
     };
   }
 
+  if (request.conversation && request.requestedAction === "answer")
+    return {
+      ...base,
+      action: "AUTO_APPROVE",
+      requestKind: "GUIDANCE",
+      handlingMode: "LLM_ASSIST",
+      riskLevel: "LOW",
+      bucket: "ROUTINE",
+      uncertaintyClass: "NONE",
+      ruleIds: [
+        "CHAT-001",
+        ...(request.conversation.ignoredOverride
+          ? ["CHAT-INJECTION-IGNORED"]
+          : []),
+      ],
+      missingFields: [],
+      questions: [],
+      approvalStatus: "not_required",
+      assignedTeam: "Trợ lý",
+      userReason: "Trợ lý có thể trả lời câu hỏi này trực tiếp.",
+      adminReason:
+        "CHAT-001: read-only answer; no execution or approval authority. " +
+        (request.conversation.ignoredOverride
+          ? "Ignored instruction override; remaining question passed risk checks."
+          : ""),
+      nextStep:
+        "Đọc câu trả lời hoặc hỏi rõ hơn; chỉ chuyển nhân viên khi bạn yêu cầu.",
+    };
+
   if (
     requiresApproval(request) &&
     !["not_required", "pending", "verified"].includes(approval.status)

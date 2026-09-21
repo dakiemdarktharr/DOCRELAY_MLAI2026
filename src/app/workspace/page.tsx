@@ -105,6 +105,7 @@ export default function WorkspacePage() {
       setBusy(false);
     }
   }
+  const isConversation = !!preview?.assistance?.answer;
   const required = missingFacts(
     extractIntake({
       ...input,
@@ -137,7 +138,8 @@ export default function WorkspacePage() {
       <p className="eyebrow">HỖ TRỢ KỸ THUẬT</p>
       <h1>Tôi cần hỗ trợ</h1>
       <p className="page-description">
-        Bạn không cần biết thuật ngữ kỹ thuật. Hãy mô tả điều đang gặp.
+        Bạn có thể hỏi chuyện thường ngày hoặc mô tả điều đang gặp. Không cần
+        biết thuật ngữ kỹ thuật.
       </p>
       <ol className="flow-steps" aria-label="Các bước gửi yêu cầu">
         <li aria-current={!preview ? "step" : undefined}>1. Mô tả</li>
@@ -282,11 +284,21 @@ export default function WorkspacePage() {
           {error && <Alert tone="error">{error}</Alert>}
           {preview && (
             <section className="support-preview" aria-label="Kiểm tra dữ kiện">
-              <p className="eyebrow">CHƯA GỬI YÊU CẦU</p>
-              <h2>Mình đã hiểu như sau</h2>
+              <p className="eyebrow">
+                {isConversation
+                  ? "TRỢ LÝ TRẢ LỜI TRỰC TIẾP"
+                  : "CHƯA GỬI YÊU CẦU"}
+              </p>
+              <h2>
+                {isConversation ? "Câu hỏi của bạn" : "Mình đã hiểu như sau"}
+              </h2>
               <p>
-                {catalog[preview.canonical.serviceGroup].label} ·{" "}
-                {intentName(preview.canonical.intentLabel)}
+                {!isConversation && (
+                  <>
+                    {catalog[preview.canonical.serviceGroup].label} ·{" "}
+                    {intentName(preview.canonical.intentLabel)}
+                  </>
+                )}
               </p>
               <blockquote className="original-question">
                 {preview.input.rawText || "Yêu cầu theo danh mục"}
@@ -302,10 +314,11 @@ export default function WorkspacePage() {
                   ))}
               </dl>
               <p>
-                Bản xem trước chưa tạo hồ sơ. Kiểm tra thông tin rồi xác nhận
-                gửi bên dưới.
+                {isConversation
+                  ? "Bạn đã nhận câu trả lời. Lưu cuộc trò chuyện nếu muốn hỏi tiếp hoặc theo dõi."
+                  : "Bản xem trước chưa tạo hồ sơ. Kiểm tra thông tin rồi xác nhận gửi bên dưới."}
               </p>
-              <SupportResult {...preview} />
+              {!isConversation && <SupportResult {...preview} />}
               {preview.assistance && (
                 <AssistanceHistory items={[preview.assistance]} />
               )}
@@ -315,7 +328,7 @@ export default function WorkspacePage() {
                 disabled={busy}
                 onClick={() => edit({ confirmed: false })}
               >
-                Quay lại sửa
+                {isConversation ? "Hỏi câu khác" : "Quay lại sửa"}
               </Button>
             </section>
           )}
@@ -326,7 +339,11 @@ export default function WorkspacePage() {
                 Đang xử lý…
               </>
             ) : preview ? (
-              "Xác nhận và gửi yêu cầu"
+              isConversation ? (
+                "Lưu và tiếp tục trò chuyện"
+              ) : (
+                "Xác nhận và gửi yêu cầu"
+              )
             ) : (
               "Xem hệ thống đã hiểu gì"
             )}

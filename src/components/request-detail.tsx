@@ -15,6 +15,7 @@ export function RequestDetail({ id }: { id: string }) {
     [error, setError] = useState("");
   const [pending, setPending] = useState(false),
     [clarification, setClarification] = useState(""),
+    [followup, setFollowup] = useState(""),
     [fields, setFields] = useState<Record<string, string>>({}),
     [step, setStep] = useState(0),
     [copied, setCopied] = useState(false);
@@ -45,6 +46,7 @@ export function RequestDetail({ id }: { id: string }) {
         ),
       );
       setClarification("");
+      setFollowup("");
       setFields({});
     } catch (error) {
       setError(
@@ -141,12 +143,15 @@ export function RequestDetail({ id }: { id: string }) {
               <p>{request.events.at(-1)?.explanation}</p>
             </Card>
           )}
-          {active && request.decision && request.canonical && (
-            <SupportResult
-              decision={request.decision}
-              canonical={request.canonical}
-            />
-          )}
+          {active &&
+            request.decision &&
+            request.canonical &&
+            !latest?.answer && (
+              <SupportResult
+                decision={request.decision}
+                canonical={request.canonical}
+              />
+            )}
           {active && latest && <AssistanceHistory items={[latest]} />}
           {request.stepExplanations?.map((item, index) => (
             <Card key={index}>
@@ -154,9 +159,43 @@ export function RequestDetail({ id }: { id: string }) {
               <p>{item.text}</p>
             </Card>
           ))}
+          {canGuide && latest?.answer && (
+            <Card>
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void update("conversation", { question: followup });
+                }}
+              >
+                <fieldset disabled={pending} className="space-y-4">
+                  <label>
+                    Hỏi tiếp
+                    <Textarea
+                      aria-label="Hỏi tiếp"
+                      value={followup}
+                      onChange={(event) => setFollowup(event.target.value)}
+                      required
+                      minLength={2}
+                      maxLength={2000}
+                    />
+                  </label>
+                  <Button type="submit">Gửi câu hỏi</Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() =>
+                      void update("feedback", { choice: "RESOLVED" })
+                    }
+                  >
+                    Tôi đã hiểu
+                  </Button>
+                </fieldset>
+              </form>
+            </Card>
+          )}
           {active && (
             <fieldset disabled={pending} className="space-y-4">
-              {canGuide && (
+              {canGuide && !latest?.answer && (
                 <>
                   <div className="support-actions">
                     <Button

@@ -1,3 +1,15 @@
+# Conversation / RAG operations — 21/09/2026
+
+- Keep the existing Vercel project and MongoDB database. First conversation retrieval idempotently seeds `v3_support_knowledge`; it does not delete requests or old records. Account needs collection/index/upsert permissions. Public users cannot write knowledge articles.
+- Articles have immutable versioned IDs, provenance, review date and expiry (initial corpus expires 2026-12-20). Review sources and add a new version before expiry. Retire outdated articles by expiry; never accept arbitrary model/user text into the approved collection. Label+keyword retrieval is intentionally small; introduce embeddings only with a measured multilingual retrieval benchmark.
+- Optional `AI_CONVERSATION_MODEL` and `AI_WEB_MODEL` inherit `AI_MODEL` (current gpt-4.1-mini). `AI_WEB_SEARCH=true` enables Responses hosted web search for public company/GPU questions. Only server-owned queries and approved domains are searched. No shell, MCP, function or database tools are exposed to the LLM. `v3_support_web_cache` expires after 24 hours and is distinct from reviewed knowledge.
+- Search reserves one existing budget attempt; answer reserves one. Ordinary chat normally consumes one attempt. Never reset the lifetime counter or raise the cap beyond authorization. Budget/provider/invalid-output failures return an explicit safe fallback for conversation; operational failure handling remains unchanged.
+- Production preview/submit contracts remain compatible. Assistance optionally contains `answer` (text, model label, source list, knowledge IDs, storage, web status, fallback reason, ignored-override flag). POST `/api/support/requests/:id/conversation` accepts `{version, question}` and requires an open conversational request. Stale versions and closed requests are rejected. Each turn is redacted and risk-evaluated anew; reviewer handoff retains history.
+- Smoke: greeting returns CHAT-001; Google recovery cites support.google.com; unknown software asks exact name/OS without invented download; public policy shows public scope; benign override+recipe answers; override+public RDP escalates. Check bubble text wrapping and reduced-motion on mobile. No reviewer task should be created merely because a safe answer failed.
+- `retrieval=mongodb` plus saved knowledge IDs is live retrieval evidence. `source=openai` is necessary to claim a real model answer; `webSearch=used` includes a valid cached public lookup and source date. Never describe mock/fallback as live AI or cached lookup as a new live search.
+
+---
+
 ## Report fixes: Verify, storage, pagination and release identity
 
 - Default `/verify` runs `submission-4`. Select `de-a-v3` for 3 auto / 2 escalate. Each run saves to MongoDB `v3_verify_runs`; copy `/verify?run=<id>`. Reload, stop after the current case, or resume unfinished cases. Server calls the production request API and stores server-derived actual results.
