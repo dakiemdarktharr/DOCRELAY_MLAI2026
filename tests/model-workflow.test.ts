@@ -131,6 +131,13 @@ it("bounds time and lifetime call count without retries", async () => {
     Array.from({ length: 25 }, () => reserveModelAttempt()),
   );
   expect(reserved.filter(Boolean)).toHaveLength(20);
+  vi.stubEnv("AI_MAX_ATTEMPTS", "30");
+  const added = await Promise.all(
+    Array.from({ length: 15 }, () => reserveModelAttempt()),
+  );
+  expect(added.filter(Boolean)).toHaveLength(10);
+  vi.stubEnv("AI_MAX_ATTEMPTS", "100");
+  expect(await reserveModelAttempt()).toBe(false);
 });
 
 it("known reset ambiguity asks the deterministic question even when OpenAI is enabled", async () => {

@@ -107,3 +107,11 @@ Created a five-slide technical draft, a one-page build log and raw local mock vi
 ### Production diagnostic follow-up
 
 First report release passed MongoDB/Verify/pagination/reviewer readback but the real model call failed safe as MODEL_UNAVAILABLE. Added safe categorical failureReason metadata (budget, configuration, timeout, refusal, truncated output or upstream class) without raw provider error text, credentials or extra logging. Shortened contextual output instructions within the existing token budget. Budget limits remain unchanged. 176 unit/integration and lint/build pass; final live outcome recorded separately.
+
+
+### Explicit budget authorization
+
+Production diagnosis returned BUDGET_EXHAUSTED. Owner explicitly approved at most 10 additional model attempts, raising cumulative limit from 20 to 30 while preserving the existing counter and data. Code ceiling is now 30; default remains 20. Regression reserves 20, raises config to 30, permits exactly 10 more and rejects config over the ceiling. No budget reset, no new database, no secret changes.
+
+
+Final E2E repetition exposed a pack-selection race: Verify enabled controls before final saved-run readback, which could overwrite a newly selected pack. Kept controls locked until readback completes and added delayed real-API readback to the browser regression. No policy result is stubbed.

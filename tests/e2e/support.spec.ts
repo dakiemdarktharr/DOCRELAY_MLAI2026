@@ -180,6 +180,13 @@ test("reviewer rejection requires a reason and records audit", async ({
 test("one click Verify and a new judge input use live decision API", async ({
   page,
 }) => {
+  // Slow the real readback to reproduce switching packs while the previous run finishes.
+  await page.route("**/api/support/verify-runs/*", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    const response = await route.fetch();
+    await new Promise((resolve) => setTimeout(resolve, 350));
+    await route.fulfill({ response });
+  });
   await page.goto("/verify");
   await page
     .getByRole("button", { name: "Chạy toàn bộ test (4)", exact: true })

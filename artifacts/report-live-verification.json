@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-21T06:50:35.298Z",
-  "sourceCommit": "6b93962b130f108860c9abc682acf5c03a71f61c",
-  "deploymentId": "dpl_GNASejX3hV93bNnUpuG4JaoG1542",
+  "timestamp": "2026-09-21T06:55:17.094Z",
+  "sourceCommit": "2d50176b2ddcd64338f90404756fd8c578a5ee46",
+  "deploymentId": "dpl_HcmDD6auHodhmTgj8qShu5GKqVcX",
   "url": "https://labpass-five.vercel.app",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "durable": true,
         "provider": "openai",
         "policy": "support-guidance-v4.2",
-        "sourceRevision": "6b93962b130f108860c9abc682acf5c03a71f61c",
+        "sourceRevision": "2d50176b2ddcd64338f90404756fd8c578a5ee46",
         "simulated": true
       }
     },
@@ -22,7 +22,7 @@
       "name": "source SHA matches deployed code",
       "pass": true,
       "details": {
-        "sourceRevision": "6b93962b130f108860c9abc682acf5c03a71f61c"
+        "sourceRevision": "2d50176b2ddcd64338f90404756fd8c578a5ee46"
       }
     },
     {
@@ -36,6 +36,7 @@
         "source": null,
         "action": "ESCALATE",
         "failure": "MODEL_UNAVAILABLE",
+        "failureReason": "BUDGET_EXHAUSTED",
         "steps": 0
       }
     },
@@ -50,7 +51,7 @@
       "name": "MongoDB preview-submit-independent GET exact match",
       "pass": true,
       "details": {
-        "requestId": "aa8eb56e-dd88-4f7e-92e2-24d5737c5c26",
+        "requestId": "7eef7443-b86d-4e0a-b7ad-d5c3a7f70459",
         "version": 1
       }
     },
@@ -115,7 +116,7 @@
       "name": "four-case production Verify all pass",
       "pass": true,
       "details": {
-        "runId": "367b5a88-bc1a-4245-aa57-0b848e89f845",
+        "runId": "2f56ed75-d5cb-4669-9439-1dc003472022",
         "results": [
           {
             "caseId": "submission-shutdown",
@@ -192,7 +193,7 @@
       "name": "MongoDB pagination reads distinct pages",
       "pass": true,
       "details": {
-        "total": 101
+        "total": 109
       }
     },
     {
@@ -203,7 +204,7 @@
       "name": "MongoDB aggregate count matches total",
       "pass": true,
       "details": {
-        "total": 101
+        "total": 109
       }
     },
     {
@@ -212,11 +213,11 @@
     }
   ],
   "requestIds": [
-    "aa8eb56e-dd88-4f7e-92e2-24d5737c5c26",
-    "1c2afff8-7423-4d76-ba75-62518202fb3e",
-    "175b5be6-05aa-40e2-910f-e4fc34f029ec",
-    "508edd91-f27f-4c3f-be0b-ba78d75a2c0d"
+    "7eef7443-b86d-4e0a-b7ad-d5c3a7f70459",
+    "5f512db1-c7ed-4bc0-b0e3-3c9be2a4a51a",
+    "16e750c3-4094-4d3a-93d3-f4dd789d97d7",
+    "550b4afc-10ed-4062-9226-5d635dbcfa90"
   ],
-  "verifyRunId": "367b5a88-bc1a-4245-aa57-0b848e89f845",
-  "completedAt": "2026-09-21T06:50:47.212Z"
+  "verifyRunId": "2f56ed75-d5cb-4669-9439-1dc003472022",
+  "completedAt": "2026-09-21T06:55:27.859Z"
 }

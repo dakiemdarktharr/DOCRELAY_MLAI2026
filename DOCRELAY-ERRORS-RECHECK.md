@@ -45,10 +45,17 @@ Expected files: src/domain/{contracts,input,guidance,questions,text,policy}.ts, 
 ## Kiểm chứng và giới hạn
 
 - Baseline: 154 unit/integration, lint, build pass.
-- Sau sửa: 175 unit/integration pass; lint/build pass. 26 desktop/mobile E2E và 1 E2E Stop/Override/video pass, dùng server mới port 3227, `reuseExistingServer=false`, mock/memory.
+- Sau sửa và diagnostic follow-up: 176 unit/integration pass; lint/build pass. 26 desktop/mobile E2E và 1 E2E Stop/Override/video pass, dùng server mới port 3227, `reuseExistingServer=false`, mock/memory.
 - Bộ fixture gốc giữ nguyên: 55/128 khớp, 73 khác biệt policy có sẵn. Đây không phải 128/128 pass và không phải bằng chứng hiệu quả người dùng.
 - Live production: xem `artifacts/report-live-verification.json` sau triển khai. Local E2E không chứng minh OpenAI/MongoDB thật.
 - `stepExplanations` là nội dung model qua schema/evidence/redaction/risk guard. Guard ngôn ngữ không phải chứng minh ngữ nghĩa tuyệt đối; model không có tool hoặc quyền thay policy. Khi không hợp lệ, fail-safe.
 - Pagination dùng offset và thứ tự createdAt/id. Nếu có ghi đồng thời, trang sau có thể dịch; tìm bằng ID vẫn truy xuất được. Chưa thiết kế cho số lượng enterprise.
 - Phiên Verify public dùng rate limit hiện có. 429 giữ kết quả đã chạy để chờ và tiếp tục. Run đang chạy bị đóng trình duyệt cần mở lại link rồi Tiếp tục.
 - Reviewer public là lựa chọn demo đã được chủ dự án chấp thuận. Không dùng dữ liệu thật, không có side effect hạ tầng.
+
+
+### Follow-up từ kiểm chứng production
+
+Lần deploy 6b93962 và 2d50176 xác nhận MongoDB/Verify thật nhưng model fail-safe vì BUDGET_EXHAUSTED. Chủ dự án đã cho phép tăng tổng hạn mức lên 30, giữ nguyên số lượt đã dùng (thêm tối đa 10 lượt). Cấu hình Vercel đã cập nhật. Regression mới xác nhận không vượt trần và không reset.
+
+Kiểm tra E2E lặp lại tìm được race đổi pack sau khi đủ kết quả nhưng trước khi đọc lại run hoàn tất. Đã khóa lựa chọn đến sau readback; test trì hoãn phản hồi GET thật 350ms để tái hiện. Sau sửa race: 27 E2E pass, 1 skip quay video trùng trên mobile; không retry.

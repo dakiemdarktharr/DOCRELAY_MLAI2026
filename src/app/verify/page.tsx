@@ -80,8 +80,9 @@ export default function VerifyPage() {
           : "Không thể tiếp tục Verify. Kết quả đã chạy vẫn được lưu; dùng Tiếp tục.",
       );
     } finally {
-      setRunning(false);
+      // Keep pack selection locked until the final persisted readback completes.
       if (row) await loadRun(row.id);
+      setRunning(false);
       void browserApi<typeof history>("/api/support/verify-runs")
         .then(setHistory)
         .catch(() => setError("Không tải được lịch sử Verify."));
