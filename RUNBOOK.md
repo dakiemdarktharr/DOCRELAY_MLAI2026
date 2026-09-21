@@ -14,12 +14,19 @@ Open /verify, choose a pack, run, and retain the saved-run link. Pack/new-run/hi
 
 ## Policy and measurement
 
-With Tiến Khoa's package the candidate uses v5.2; recreate v5.0/v5.1 previews. Duy Anh's package alone keeps v5.1. Security/authority precedence stays deterministic. Cap ceiling remains 50; local mock defaults remain unchanged.
+Inspected main 92d140a uses v5.2; recreate v5.0/v5.1 previews. The new release-fix packages leave v5.2 unchanged. Security/authority precedence stays deterministic. Cap ceiling remains 50; local mock defaults remain unchanged.
 
-[Evaluation contract](docs/EVALUATION.md) applies when Tiến Khoa's package is installed. The additive endpoint computes declared-label reports without storing data or changing runtime policy. Held-out data cannot tune proposals. No authentic reviewer identity or internal entitlement is inferred from the public demo.
+[Evaluation contract](docs/EVALUATION.md) is already included in inspected main. The additive endpoint computes declared-label reports without storing data or changing runtime policy. Held-out data cannot tune proposals. No authentic reviewer identity or internal entitlement is inferred from the public demo.
 
 ## Deployment boundary
 
 Vercel + MongoDB is the recorded deployment architecture. render.yaml is a deprecated historical PostgreSQL blueprint and must not be selected as the current target. Deployment requires an explicit owner request, human review and fresh QA. Keep secrets, model counter, old knowledge revisions and existing database intact. After an authorized deployment record source SHA, policy, URL, deployment ID and actual synthetic live checks together in the release matrix. Do not reuse old receipts to claim new code is live.
 
 [Historical runbook](docs/history/RUNBOOK-before-20727b5-fixes.md) is retained for provenance only.
+
+
+## Release recheck corrections
+
+Verify now checks `/api/support/requests?view=page&requestId=<UUID>&limit=1&origin=all` instead of assuming the request appears in the newest-200 summary list. The new filter uses exact identity, is UUID-validated, and does not change the legacy array contracts. Do not repair a false queue failure by deleting newer requests or widening an unbounded list. Genuine missing records, audit problems or persistence mismatches still fail verification.
+
+Knowledge retrieval validates database document shapes before reviewed-content comparison. A malformed record is skipped while valid neighbors stay available. All-invalid returned rows give no Mongo matches; the code does not rewrite database documents. Actual storage outages still use the existing explicitly labeled local fallback. Use synthetic boundary tests before any authorized live verification.
