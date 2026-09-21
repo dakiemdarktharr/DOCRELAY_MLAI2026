@@ -4,42 +4,45 @@ import {
   type KnowledgeArticle,
 } from "@/domain/knowledge";
 import type { ConversationLabel } from "@/domain/conversation";
-import { normalize } from "@/domain/text";
+import { searchKnowledge } from "@/domain/knowledge-search";
 import { supportDatabase } from "./support-repository";
 
+// Database documents are untrusted. A known ID alone is not proof of review.
+function articleContent(row: KnowledgeArticle) {
+  return JSON.stringify([
+    row._id,
+    row.label,
+    row.title,
+    row.keywords,
+    row.answer,
+    row.sources?.map((source) => [
+      source.title,
+      source.url,
+      source.scope,
+      source.checkedAt,
+    ]),
+    row.version,
+    row.reviewedAt,
+    row.expiresAt,
+  ]);
+}
 export function rankKnowledge(
   rows: KnowledgeArticle[],
   question: string,
   label: ConversationLabel,
   now = Date.now(),
 ) {
-  const text = normalize(question);
-  const words = new Set(
-    text.split(/[^a-z0-9]+/).filter((word) => word.length > 2),
+  const reviewed = new Map(
+    knowledgeSeed.map((row) => [row._id, articleContent(row)]),
   );
-  return rows
-    .filter(
-      (row) =>
-        !supersededKnowledgeIds.includes(row._id) &&
-        Date.parse(row.expiresAt) > now,
-    )
-    .map((row) => ({
-      row,
-      score:
-        (row.label === label ? 8 : 0) +
-        row.keywords.reduce(
-          (score, keyword) =>
-            score + (text.includes(normalize(keyword)) ? 2 : 0),
-          0,
-        ) +
-        normalize(row.title)
-          .split(" ")
-          .filter((word) => words.has(word)).length,
-    }))
-    .filter((item) => item.score >= 8)
-    .sort((a, b) => b.score - a.score || a.row._id.localeCompare(b.row._id))
-    .slice(0, 3)
-    .map((item) => item.row);
+  const valid = rows.filter(
+    (row) =>
+      !supersededKnowledgeIds.includes(row._id) &&
+      Date.parse(row.expiresAt) > now &&
+      Date.parse(row.reviewedAt) <= now &&
+      reviewed.get(row._id) === articleContent(row),
+  );
+  return searchKnowledge(valid, question, label);
 }
 let seeded: Promise<void> | undefined;
 export async function retrieveKnowledge(
@@ -72,11 +75,10 @@ export async function retrieveKnowledge(
   await seeded;
   const rows = await collection
     .find({
-      label,
-      _id: { $nin: supersededKnowledgeIds },
+      _id: { $in: knowledgeSeed.map((article) => article._id) },
       expiresAt: { $gt: new Date().toISOString() },
     })
-    .limit(50)
+    .limit(knowledgeSeed.length)
     .toArray();
   return {
     articles: rankKnowledge(rows, question, label),
