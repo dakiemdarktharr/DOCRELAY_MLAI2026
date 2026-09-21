@@ -8,6 +8,7 @@ import {
 import {
   resetSupportTestStore,
   getSupportRequest,
+  insertSupportRequest,
 } from "@/lib/support-repository";
 import { canReview } from "@/domain/transitions";
 beforeEach(() => {
@@ -19,6 +20,26 @@ afterEach(() => vi.unstubAllEnvs());
 const create = (rawText: string) =>
   submitSupport({
     rawText,
+    confirmed: true,
+    idempotencyKey: crypto.randomUUID(),
+  });
+const createCompleteEscalation = () =>
+  submitSupport({
+    rawText: "",
+    mode: "structured",
+    serviceGroup: "DATABASE",
+    fields: {
+      intentLabel: "DATABASE_EXPORT",
+      system: "postgresql",
+      resourceScope: "demo_inventory",
+      environment: "staging",
+      permission: "read-only",
+      duration: "2 hours",
+      reason: "Create a controlled backup",
+      operation: "export",
+      dataSensitivity: "internal",
+      destination: "Controlled internal demo backup",
+    },
     confirmed: true,
     idempotencyKey: crypto.randomUUID(),
   });
@@ -69,6 +90,7 @@ it("review actions are versioned, keep the policy result, and block invalid tran
     version: guide.version,
     choice: "ADMIN",
   });
+
   const action = {
     action: "APPROVE",
     version: request.version,
@@ -89,6 +111,7 @@ it("review actions are versioned, keep the policy result, and block invalid tran
   ).toHaveLength(1);
   expect(canReview("STOPPED", "APPROVE")).toBe(false);
   expect(canReview("COMPLETED", "OVERRIDE")).toBe(false);
+  expect(canReview("NEEDS_INFORMATION", "APPROVE")).toBe(false);
 });
 it("security risk cannot be approved or overridden into approval", async () => {
   const request = await create("Open public RDP port 3389");
@@ -126,6 +149,33 @@ it("reject and override require a meaningful reason; sensitive reasons are redac
     "reviewer",
   );
   expect(JSON.stringify(rejected)).not.toContain(secret);
+});
+it("cannot approve or override a request with unresolved facts", async () => {
+  const request = await create("Need database access");
+  expect(request.status).toBe("NEEDS_INFORMATION");
+  await expect(
+    reviewSupport(
+      request.id,
+      {
+        action: "APPROVE",
+        version: request.version,
+        reason: "Trying to bypass missing facts",
+      },
+      "reviewer",
+    ),
+  ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
+  await expect(
+    reviewSupport(
+      request.id,
+      {
+        action: "OVERRIDE",
+        target: "APPROVED_BY_HUMAN",
+        version: request.version,
+        reason: "Trying to bypass missing facts",
+      },
+      "reviewer",
+    ),
+  ).rejects.toMatchObject({ code: "MISSING_INFORMATION" });
 });
 it("reset clarification produces restart guidance and retains prior audit", async () => {
   const request = await create("Làm sao reset máy?");
@@ -169,21 +219,34 @@ it("only an approved simulation can complete; stopped work cannot resume", async
     version: guide.version,
     choice: "ADMIN",
   });
+
   await expect(
     reviewSupport(
       original.id,
-      { version: original.version, action: "FULFILL" },
+      {
+        version: original.version,
+        action: "FULFILL",
+        reason: "Attempt fulfillment before approval",
+      },
       "reviewer-demo",
     ),
   ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
   const approved = await reviewSupport(
     original.id,
-    { version: original.version, action: "APPROVE" },
+    {
+      version: original.version,
+      action: "APPROVE",
+      reason: "Reviewed export scope for simulation",
+    },
     "reviewer-demo",
   );
   const completed = await reviewSupport(
     original.id,
-    { version: approved.version, action: "FULFILL" },
+    {
+      version: approved.version,
+      action: "FULFILL",
+      reason: "Complete the approved simulated workflow",
+    },
     "reviewer-demo",
   );
   expect(completed.status).toBe("COMPLETED");
@@ -191,10 +254,50 @@ it("only an approved simulation can complete; stopped work cannot resume", async
   const another = await create("VPN không kết nối");
   const stopped = await reviewSupport(
     another.id,
-    { version: another.version, action: "STOP" },
+    {
+      version: another.version,
+      action: "STOP",
+      reason: "Stop this synthetic support workflow",
+    },
     "reviewer-demo",
   );
   await expect(
     feedbackSupport(stopped.id, { version: stopped.version, choice: "ADMIN" }),
   ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
+});
+
+it("complete controlled export can be reviewed without losing the DBA policy decision", async () => {
+  const request = await createCompleteEscalation();
+  expect(request.decision?.ruleIds).toContain("AUTH-001");
+  expect(request.decision?.missingFields).toEqual([]);
+  const approved = await reviewSupport(
+    request.id,
+    {
+      version: request.version,
+      action: "APPROVE",
+      reason: "Reviewed controlled demo destination",
+    },
+    "reviewer-demo",
+  );
+  expect(approved.status).toBe("APPROVED_BY_HUMAN");
+});
+it("recovers an abandoned receipt without duplicating the decision audit", async () => {
+  const request = await create("Restart my laptop");
+  resetSupportTestStore();
+  await insertSupportRequest({
+    ...request,
+    version: 0,
+    status: "RECEIVED",
+    canonical: null,
+    decision: null,
+    assistance: [],
+    events: request.events.slice(0, 1),
+    updatedAt: new Date(Date.now() - 120_000).toISOString(),
+  });
+  const recovered = await submitSupport(request.input);
+  expect(recovered.status).toBe("AUTO_APPROVED");
+  expect(recovered.version).toBe(1);
+  expect(
+    recovered.events.filter((event) => event.action === "DECISION"),
+  ).toHaveLength(1);
 });

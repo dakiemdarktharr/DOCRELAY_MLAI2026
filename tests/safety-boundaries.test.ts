@@ -99,7 +99,7 @@ it("approval is exact, scoped, server verified and expires", () => {
     handlingMode: "SIMULATED_WORKFLOW",
   });
   expect(verifyApproval(canonical, Date.parse("2027-01-02")).status).toBe(
-    "invalid",
+    "expired",
   );
   expect(
     verifyApproval({
@@ -112,7 +112,80 @@ it("approval is exact, scoped, server verified and expires", () => {
       ...canonical,
       entities: { ...canonical.entities, approvalReference: "UNKNOWN-123" },
     }).status,
-  ).toBe("pending");
+  ).toBe("unverifiable");
+});
+it("keeps documented routine approval routes executable in the synthetic registry", () => {
+  const cases: Array<{
+    serviceGroup: "ACCOUNT_ACCESS" | "GIT_PERMISSION" | "CLOUD_GPU" | "SOFTWARE_LICENSE";
+    fields: Record<string, string>;
+  }> = [
+    {
+      serviceGroup: "ACCOUNT_ACCESS",
+      fields: {
+        intentLabel: "REQUEST_STANDARD_ACCESS",
+        targetSystem: "jira-demo",
+        environment: "staging",
+        accessType: "standard",
+        duration: "8 hours",
+        reason: "Support the assigned project work",
+        approvalReference: "DEMO-ACCOUNT-1001",
+      },
+    },
+    {
+      serviceGroup: "GIT_PERMISSION",
+      fields: {
+        intentLabel: "GIT_WRITE_ACCESS",
+        provider: "github",
+        repository: "docrelay-demo",
+        permission: "write",
+        duration: "8 hours",
+        reason: "Push the reviewed sprint change",
+        approvalReference: "DEMO-GIT-1001",
+      },
+    },
+    {
+      serviceGroup: "CLOUD_GPU",
+      fields: {
+        intentLabel: "GPU_REQUEST",
+        provider: "internal cloud",
+        environment: "development",
+        gpuType: "t4",
+        quantity: "1",
+        duration: "4 hours",
+        purpose: "model testing",
+        budgetOrQuota: "verified demo quota",
+        approvalReference: "DEMO-GPU-1001",
+      },
+    },
+    {
+      serviceGroup: "SOFTWARE_LICENSE",
+      fields: {
+        intentLabel: "SOFTWARE_INSTALL",
+        software: "demo ide",
+        version: "1",
+        os: "macos",
+        approvedCatalogStatus: "approved",
+        businessPurpose: "application development",
+        licenseDuration: "30 days",
+        licenseType: "named-user",
+        approvalReference: "DEMO-LICENSE-1001",
+      },
+    },
+  ];
+  for (const item of cases) {
+    const request = {
+      ...intake(""),
+      mode: "structured" as const,
+      serviceGroup: item.serviceGroup,
+      fields: item.fields,
+    };
+    const canonical = extractIntake(request);
+    expect(verifyApproval(canonical).status, item.serviceGroup).toBe("verified");
+    expect(evaluatePolicy(canonical, verifyApproval(canonical))).toMatchObject({
+      action: "AUTO_APPROVE",
+      bucket: "ROUTINE",
+    });
+  }
 });
 it("requires evidence for model environment and recomputes privileged label risk", async () => {
   const input = intake("Need access help");
@@ -154,6 +227,16 @@ it("redacts JSON credentials, Vietnamese labels, URIs and keys including on comp
     );
     expect(await response.text()).not.toContain(value);
   }
+});
+it.each([
+  "token ABC123",
+  "credential ABC123",
+  "password ABC123",
+  "aws_secret_access_key=ABC123",
+])("redacts secret values without a colon: %s", (text) => {
+  const result = redact(text);
+  expect(result.text).not.toContain("ABC123");
+  expect(result.markers.length).toBeGreaterThan(0);
 });
 it("rejects cross-origin, oversized payload and malformed JSON without reflecting data", async () => {
   const send = (body: string, headers: Record<string, string> = {}) =>

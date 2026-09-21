@@ -1,19 +1,56 @@
 import { questionFor } from "./questions";
-import type { CanonicalRequest, Decision } from "./contracts";
+import { labelForField } from "./catalog";
+import type {
+  ApprovalScope,
+  ApprovalStatus,
+  CanonicalRequest,
+  Decision,
+  RiskSignal,
+} from "./contracts";
+
 import {
   bucketPriority,
   demoResourceLimits,
   guidanceRules,
   POLICY_VERSION,
+  productionDatabaseRule,
   riskRules,
+  securityServiceRule,
 } from "./policy-source";
 import { normalize, teamFor } from "./text";
 
 // Verified approval is supplied by a server-only verifier, never by input fields or model output.
 export type Approval = {
-  status: "not_required" | "pending" | "verified" | "invalid";
+  status: ApprovalStatus;
   reason?: string;
+  reference?: string;
+  authorizedRole?: string;
+  scope?: ApprovalScope;
+  expiresAt?: string;
 };
+type ApprovalResolver = (request: CanonicalRequest) => Approval;
+
+const placeholder =
+  /^(unknown|chua biet|khong biet|bat ky|default|gap|urgent|any|all|not provided|n\/a)$/i;
+
+function isMissing(field: string, value?: string) {
+  if (!value?.trim() || placeholder.test(normalize(value))) return true;
+  if (
+    field === "reason" &&
+    (/^(debug|test|needed|can gap|khac phuc|support)$/i.test(
+      normalize(value),
+    ) ||
+      value.trim().length < 8)
+  )
+    return true;
+  if (
+    field === "resourceScope" &&
+    /^(all|everything|toan bo)$/i.test(normalize(value))
+  )
+    return true;
+  return false;
+}
+
 export function missingFacts(request: CanonicalRequest): string[] {
   const { entities: e, serviceGroup, requestKind } = request;
   if (request.intentLabel === "DEVICE_RESET_GUIDANCE") return ["resetType"];
@@ -28,6 +65,7 @@ export function missingFacts(request: CanonicalRequest): string[] {
     )
   )
     return [];
+
   let required: string[];
   switch (serviceGroup) {
     case "DATABASE":
@@ -50,13 +88,7 @@ export function missingFacts(request: CanonicalRequest): string[] {
       ];
       break;
     case "GIT_PERMISSION":
-      required = [
-        "repository",
-        "environment",
-        "permission",
-        "duration",
-        "reason",
-      ];
+      required = ["provider", "repository", "permission", "duration", "reason"];
       break;
     case "CLOUD_GPU":
       required = [
@@ -64,21 +96,34 @@ export function missingFacts(request: CanonicalRequest): string[] {
         "environment",
         "duration",
         "purpose",
+        "budgetOrQuota",
         ...(/GPU/.test(request.intentLabel)
           ? ["gpuType", "quantity"]
           : ["cpu", "ram", "disk"]),
       ];
       break;
     case "DEVICE_BOOT":
-      required = ["deviceId", "location", "symptom", "requestedAction"];
+      required = [
+        "deviceId",
+        "location",
+        "symptom",
+        "urgency",
+        "requestedAction",
+      ];
       break;
     case "NETWORK_VPN":
       required = [
+        "service",
         "source",
         "target",
         "environment",
         "symptom",
         "requestedAction",
+        "urgency",
+        ...(/PORT|FIREWALL|PUBLIC|REMOTE/.test(request.intentLabel) ||
+        Boolean(e.protocol)
+          ? ["port"]
+          : []),
       ];
       break;
     case "KUBERNETES":
@@ -88,13 +133,30 @@ export function missingFacts(request: CanonicalRequest): string[] {
         "workload",
         "environment",
         "requestedAction",
+        ...(["restart", "scale"].includes(request.requestedAction)
+          ? ["duration"]
+          : []),
       ];
       break;
     case "CI_CD":
-      required = ["repository", "pipeline", "environment", "requestedAction"];
+      required = [
+        "repository",
+        "pipeline",
+        "environment",
+        "requestedAction",
+        "reason",
+      ];
       break;
     case "MONITORING":
-      required = ["service", "symptom", "startTime", "requestedAction"];
+      required = [
+        "service",
+        "environment",
+        "symptom",
+        "timeWindow",
+        "dashboardOrLogSource",
+        "requestedAction",
+        "urgency",
+      ];
       break;
     case "SOFTWARE_LICENSE":
       required = [
@@ -104,6 +166,7 @@ export function missingFacts(request: CanonicalRequest): string[] {
         "approvedCatalogStatus",
         "businessPurpose",
         "licenseDuration",
+        "licenseType",
       ];
       break;
     case "STORAGE":
@@ -114,8 +177,26 @@ export function missingFacts(request: CanonicalRequest): string[] {
         "destination",
       ];
       break;
+    case "SECURITY":
+      required = [
+        "assetOrService",
+        "environment",
+        "issue",
+        "evidence",
+        "requestedAction",
+        "urgency",
+        "reporterContact",
+      ];
+      break;
     default:
-      required = ["targetServiceOrDevice", "desiredOutcome"];
+      required = [
+        "summary",
+        "targetServiceOrDevice",
+        "environmentIfKnown",
+        "desiredOutcome",
+        "reason",
+        "urgency",
+      ];
   }
   // Only ask facts that can change this intent's decision; never demand access fields for diagnosis.
   const intent = request.intentLabel;
@@ -158,13 +239,7 @@ export function missingFacts(request: CanonicalRequest): string[] {
     required = ["pathOrBucket", "permission", "duration", "reason"];
   else if (requestKind === "INCIDENT")
     required = ["symptom", "affectedScope", "startTime"];
-  return required.filter(
-    (field) =>
-      !e[field]?.trim() ||
-      /^(unknown|chua biet|bat ky|default|gap|any|not provided)$/i.test(
-        normalize(e[field]),
-      ),
-  );
+  return required.filter((field) => isMissing(field, e[field]));
 }
 
 export function requiresApproval(request: CanonicalRequest) {
@@ -181,9 +256,27 @@ export function requiresApproval(request: CanonicalRequest) {
   );
 }
 
-export function evaluatePolicy(
+function questionForField(field: string) {
+  if (field === "resetType")
+    return "Bạn muốn khởi động lại (restart, không xóa file) hay factory reset (có thể mất dữ liệu)?";
+  if (field === "verifiedApproval")
+    return "Cung cấp approval reference có thể kiểm tra; approval phải khớp resource, quyền/action và thời hạn nào?";
+  if (field === "reason")
+    return "Mục đích nghiệp vụ/kỹ thuật cụ thể là gì (không chỉ ghi ‘debug’ hoặc ‘gấp’)?";
+  return `${labelForField(field)} cụ thể là gì?`;
+}
+
+function approvalFields(approval: Approval, request: CanonicalRequest) {
+  return {
+    approvalStatus: approval.status,
+    approvalReference:
+      approval.reference || request.entities.approvalReference || undefined,
+  };
+}
+
+function evaluateSinglePolicy(
   request: CanonicalRequest,
-  approval: Approval = { status: "pending" },
+  approval: Approval,
 ): Decision {
   const missing = missingFacts(request);
   if (requiresApproval(request) && approval.status !== "verified")
@@ -191,6 +284,22 @@ export function evaluatePolicy(
   const matched = riskRules.filter((rule) =>
     request.riskSignals.includes(rule.signal),
   );
+  const databaseAuthority =
+    request.serviceGroup === "DATABASE" &&
+    (request.environment === "production" ||
+      request.intentLabel === "DATABASE_EXPORT" ||
+      request.requestedAction === "export");
+  if (databaseAuthority && !matched.some((rule) => rule.id === "AUTH-001"))
+    matched.push({
+      ...productionDatabaseRule,
+      signal: "PRODUCTION_CHANGE" as RiskSignal,
+    });
+  if (request.serviceGroup === "SECURITY")
+    matched.push({
+      ...securityServiceRule,
+      signal: "INCIDENT" as RiskSignal,
+    });
+
   const base: Decision = {
     action: "NEEDS_INFORMATION",
     requestKind: request.requestKind,
@@ -202,12 +311,16 @@ export function evaluatePolicy(
     safeEvidence: request.evidence.map((item) => item.quote),
     missingFields: missing,
     questions: [],
+    targetedQuestions: [],
     userReason: "",
     adminReason: "",
     nextStep: "Bổ sung các thông tin bên dưới.",
     assignedTeam: teamFor(request.serviceGroup),
     policyVersion: POLICY_VERSION,
+    ...approvalFields(approval, request),
+    subrequestOutcomes: [],
   };
+
   if (matched.length) {
     const bucket = matched.reduce(
       (current, rule) =>
@@ -216,22 +329,26 @@ export function evaluatePolicy(
           : current,
       "BEYOND_AUTHORITY" as "SECURITY_RISK" | "BEYOND_AUTHORITY",
     );
+    const winning = matched.filter((rule) => rule.bucket === bucket);
     return {
       ...base,
       action: "ESCALATE",
       handlingMode: "HUMAN_REVIEW",
       riskLevel: matched.some(
-        (rule) => !rule.id.startsWith("FAIL") && rule.signal !== "USER_HANDOFF",
+        (rule) => !rule.id.startsWith("FAIL") && rule.id !== "HANDOFF-001",
       )
         ? "HIGH"
         : request.riskSignals.includes("USER_HANDOFF")
           ? "MEDIUM"
           : "UNKNOWN",
       bucket,
-      uncertaintyClass:
-        bucket === "SECURITY_RISK" ? "OUT_OF_POLICY" : "AUTHORITY_REQUIRED",
+      uncertaintyClass: winning.some(
+        (rule) => rule.uncertaintyClass === "OUT_OF_POLICY",
+      )
+        ? "OUT_OF_POLICY"
+        : "AUTHORITY_REQUIRED",
       ruleIds: [...new Set(matched.map((rule) => rule.id))],
-      userReason: matched.find((rule) => rule.bucket === bucket)!.reason,
+      userReason: winning[0].reason,
       adminReason: matched
         .map((rule) => `${rule.id}: ${rule.reason}`)
         .join(" "),
@@ -239,8 +356,12 @@ export function evaluatePolicy(
         bucket === "SECURITY_RISK"
           ? request.riskSignals.includes("PUBLIC_EXPOSURE")
             ? "Security / Network"
-            : "Security"
-          : base.assignedTeam,
+            : request.riskSignals.includes("DATA_EXPORT")
+              ? "Security / DBA/Data"
+              : "Security"
+          : databaseAuthority
+            ? "DBA/Data / Reviewer"
+            : base.assignedTeam,
       nextStep:
         "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
       questions: [],
@@ -265,7 +386,11 @@ export function evaluatePolicy(
               ],
     };
   }
-  if (approval.status === "invalid" && requiresApproval(request))
+
+  if (
+    requiresApproval(request) &&
+    !["not_required", "pending", "verified"].includes(approval.status)
+  )
     return {
       ...base,
       action: "ESCALATE",
@@ -273,19 +398,52 @@ export function evaluatePolicy(
       bucket: "BEYOND_AUTHORITY",
       uncertaintyClass: "AUTHORITY_REQUIRED",
       ruleIds: ["AUTH-007"],
-      userReason: "Approval không đúng phạm vi, quyền hoặc thời hạn.",
+      userReason:
+        "Approval bị từ chối, hết hạn, không xác minh được hoặc sai phạm vi.",
       adminReason: approval.reason ?? "Approval verification failed",
-      nextStep: "Reviewer yêu cầu approval đúng scope.",
+      questions: [
+        "Approval nào đúng role, resource, environment, action/quyền và thời hạn?",
+      ],
+      nextStep:
+        "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
     };
 
   const guide = guidanceRules.find((rule) =>
     rule.labels.some((label) => label === request.intentLabel),
   );
-  if (missing.length || request.intentLabel === "UNKNOWN_SUPPORT_REQUEST") {
-    const questions = [...new Set(missing)].slice(0, 3).map(questionFor);
+
+  if (
+    request.serviceGroup === "OTHER" ||
+    request.intentLabel === "UNKNOWN_SUPPORT_REQUEST"
+  ) {
+    const unresolved = [...new Set(missing)];
+
     return {
       ...base,
-      missingFields: [...new Set(missing)],
+      action: "ESCALATE",
+      handlingMode: "HUMAN_REVIEW",
+      bucket: "BEYOND_AUTHORITY",
+      uncertaintyClass: "OUT_OF_POLICY",
+      ruleIds: ["AUTH-005"],
+      missingFields: unresolved,
+      questions: unresolved.length
+        ? unresolved.map(questionForField)
+        : ["Request này thuộc service, owner và kết quả mong muốn cụ thể nào?"],
+      userReason: "Chưa ánh xạ được request vào service/owner trong policy.",
+      adminReason:
+        "AUTH-005: classifier/reviewer phải xác định owner; không tự chọn IT Helpdesk.",
+      assignedTeam: "Classifier/reviewer",
+      nextStep:
+        "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
+    };
+  }
+
+  if (missing.length) {
+    const uniqueMissing = [...new Set(missing)];
+    const questions = uniqueMissing.slice(0, 3).map(questionFor);
+    return {
+      ...base,
+      missingFields: uniqueMissing,
       questions,
       ruleIds: [
         request.intentLabel === "DEVICE_RESET_GUIDANCE"
@@ -296,10 +454,11 @@ export function evaluatePolicy(
       userReason:
         request.intentLabel === "DEVICE_RESET_GUIDANCE"
           ? questions[0]
-          : "Cần thêm dữ kiện liên quan để hỗ trợ đúng; chưa có dấu hiệu phải chuyển Security.",
-      adminReason: `Thiếu: ${missing.join(", ")}. Không suy diễn scope/approval.`,
+          : "Cần thêm dữ kiện cụ thể để đánh giá đúng phạm vi.",
+      adminReason: `Thiếu hoặc mơ hồ: ${uniqueMissing.join(", ")}. Không suy diễn scope/approval.`,
     };
   }
+
   if (guide && ["GUIDANCE", "SAFE_DIAGNOSTIC"].includes(request.requestKind)) {
     const medium = ["vpn", "wifi", "software", "account"].includes(guide.topic);
     return {
@@ -360,26 +519,76 @@ export function evaluatePolicy(
         "Demo quota: tối đa 2 GPU T4/A10, 4 CPU, 16 GB RAM, 100 GB disk, 8 giờ; cần người phụ trách xác nhận phần vượt giới hạn.",
       nextStep: "Nhân viên kiểm tra chi phí và khả năng cấp tài nguyên.",
     };
+
+  const nonProduction = !["production", "unknown"].includes(
+    request.environment,
+  );
+  const safeDeviceIntents = new Set([
+    "DEVICE_WONT_BOOT",
+    "DEVICE_FREEZE",
+    "DEVICE_SLOW",
+    "DEVICE_CRASH",
+    "DEVICE_BATTERY",
+    "DEVICE_DISPLAY",
+    "DEVICE_AUDIO",
+    "DEVICE_CAMERA",
+    "DEVICE_PRINTER",
+  ]);
+
   const allowed =
-    request.environment !== "production" &&
-    request.environment !== "unknown" &&
-    ((request.serviceGroup === "DATABASE" &&
+    (nonProduction &&
+      request.serviceGroup === "DATABASE" &&
+      request.intentLabel === "DATABASE_READ_ACCESS" &&
       ["read", "read-only"].includes(request.entities.permission)) ||
-      (request.serviceGroup === "ACCOUNT_ACCESS" &&
-        ["read-only", "standard", "read"].includes(
-          request.entities.accessType,
-        )) ||
-      (request.serviceGroup === "GIT_PERMISSION" &&
-        ["read", "read-only", "write"].includes(request.entities.permission)) ||
-      (request.serviceGroup === "CLOUD_GPU" &&
-        ["sandbox", "development"].includes(request.environment)) ||
-      (["CI_CD", "KUBERNETES", "MONITORING"].includes(request.serviceGroup) &&
-        ["view_logs", "diagnose", "rerun"].includes(request.requestedAction)));
-  if (
-    allowed ||
+    (nonProduction &&
+      request.serviceGroup === "ACCOUNT_ACCESS" &&
+      ["REQUEST_STANDARD_ACCESS", "REQUEST_READ_ACCESS"].includes(
+        request.intentLabel,
+      ) &&
+      ["read-only", "standard", "read"].includes(
+        request.entities.accessType,
+      )) ||
+    (request.serviceGroup === "GIT_PERMISSION" &&
+      ["GIT_READ_ACCESS", "GIT_WRITE_ACCESS"].includes(request.intentLabel) &&
+      ["read", "read-only", "triage", "write"].includes(
+        request.entities.permission,
+      )) ||
+    (request.serviceGroup === "CLOUD_GPU" &&
+      ["sandbox", "development"].includes(request.environment)) ||
+    (nonProduction &&
+      request.serviceGroup === "CI_CD" &&
+      ["view_logs", "diagnose", "rerun"].includes(request.requestedAction)) ||
+    (nonProduction &&
+      request.serviceGroup === "KUBERNETES" &&
+      ["view_logs", "diagnose", "restart", "scale"].includes(
+        request.requestedAction,
+      )) ||
+    (request.serviceGroup === "MONITORING" &&
+      ["view_logs", "view_metrics", "diagnose", "investigate"].includes(
+        request.requestedAction,
+      )) ||
+    (nonProduction &&
+      request.serviceGroup === "NETWORK_VPN" &&
+      request.requestedAction === "diagnose") ||
+    (request.serviceGroup === "SOFTWARE_LICENSE" &&
+      request.entities.approvedCatalogStatus === "approved") ||
     (request.serviceGroup === "DEVICE_BOOT" &&
-      request.requestedAction === "repair")
-  )
+      safeDeviceIntents.has(request.intentLabel) &&
+      ["repair", "diagnosis", "hardware_check", "boot_assistance"].includes(
+        request.requestedAction,
+      ));
+
+  if (allowed) {
+    const routineRule =
+      request.serviceGroup === "DATABASE"
+        ? "ROUTINE-002"
+        : request.serviceGroup === "CLOUD_GPU"
+          ? "ROUTINE-003"
+          : request.serviceGroup === "DEVICE_BOOT"
+            ? "ROUTINE-004"
+            : ["NETWORK_VPN", "MONITORING"].includes(request.serviceGroup)
+              ? "ROUTINE-005"
+              : "ROUTINE-001";
     return {
       ...base,
       action: "AUTO_APPROVE",
@@ -387,16 +596,17 @@ export function evaluatePolicy(
       riskLevel: "LOW",
       bucket: "ROUTINE",
       uncertaintyClass: "NONE",
-      ruleIds: ["ROUTINE-001"],
+      ruleIds: [routineRule],
       missingFields: [],
       questions: [],
       userReason:
         "Đủ điều kiện tạo workflow mô phỏng trong phạm vi đã xác minh.",
-      adminReason:
-        "Scope không production, quyền tối thiểu, đủ dữ kiện và approval cần thiết.",
+      adminReason: `${routineRule}: safe path đúng service/action; đủ dữ kiện và approval bắt buộc đã xác minh.`,
       nextStep:
         "Đã mô phỏng tiếp nhận; chưa có thao tác hạ tầng hay cấp quyền thật.",
     };
+  }
+
   return {
     ...base,
     action: "ESCALATE",
@@ -404,9 +614,95 @@ export function evaluatePolicy(
     bucket: "BEYOND_AUTHORITY",
     uncertaintyClass: "OUT_OF_POLICY",
     ruleIds: ["AUTH-005"],
+    questions: [
+      "Owner nào có thẩm quyền cho service/action này và safe path hoặc approval cụ thể là gì?",
+    ],
     userReason: "Phạm vi này chưa có rule tự xử lý an toàn.",
     adminReason:
-      "Không có safe execution path; reviewer xác định authority và integration.",
-    nextStep: "Chuyển team phụ trách xác nhận.",
+      "AUTH-005: không có safe execution path; reviewer xác định authority và integration.",
+    nextStep:
+      "Chuyển team phụ trách xác nhận owner, scope và phương án an toàn.",
   };
+}
+
+function approvalFor(
+  request: CanonicalRequest,
+  approval: Approval | ApprovalResolver,
+) {
+  return typeof approval === "function" ? approval(request) : approval;
+}
+
+export function evaluatePolicy(
+  request: CanonicalRequest,
+  approval: Approval | ApprovalResolver = { status: "pending" },
+): Decision {
+  const synchronizeQuestions = (decision: Decision): Decision => ({
+    ...decision,
+    targetedQuestions: decision.reviewerQuestions ?? decision.questions,
+  });
+  const parent = synchronizeQuestions(
+    evaluateSinglePolicy(request, approvalFor(request, approval)),
+  );
+  if (!request.subrequests.length) return parent;
+
+  const childDecisions = request.subrequests.map((part) => {
+    const child: CanonicalRequest = {
+      ...part,
+      subrequests: [],
+      redactions: [],
+      model: request.model,
+    };
+    return {
+      request: child,
+      decision: synchronizeQuestions(
+        evaluateSinglePolicy(child, approvalFor(child, approval)),
+      ),
+    };
+  });
+  const all = [parent, ...childDecisions.map((item) => item.decision)];
+  const winner = all.reduce((current, decision) =>
+    bucketPriority[decision.bucket] > bucketPriority[current.bucket]
+      ? decision
+      : current,
+  );
+  const riskRank = { UNKNOWN: 0, LOW: 1, MEDIUM: 2, HIGH: 3 } as const;
+  const riskLevel = all.reduce<Decision["riskLevel"]>(
+    (current, decision) =>
+      riskRank[decision.riskLevel] > riskRank[current]
+        ? decision.riskLevel
+        : current,
+    "UNKNOWN",
+  );
+  return synchronizeQuestions({
+    ...winner,
+    riskLevel,
+    ruleIds: [...new Set(all.flatMap((decision) => decision.ruleIds))],
+    safeEvidence: [
+      ...new Set(all.flatMap((decision) => decision.safeEvidence)),
+    ],
+    missingFields: [
+      ...new Set(all.flatMap((decision) => decision.missingFields)),
+    ],
+    questions: [
+      ...new Set(all.flatMap((decision) => decision.questions)),
+    ].slice(0, 3),
+    reviewerQuestions: [
+      ...new Set(all.flatMap((decision) => decision.reviewerQuestions ?? [])),
+    ],
+    userReason: `Ticket có ${childDecisions.length} yêu cầu con; áp dụng kết quả ưu tiên cao nhất. ${winner.userReason}`,
+    adminReason: `Evaluated ${childDecisions.length} subrequests independently. ${all
+      .map((decision) => `${decision.bucket}:${decision.ruleIds.join("+")}`)
+      .join("; ")}`,
+    subrequestOutcomes: childDecisions.map(
+      ({ request: child, decision }, index) => ({
+        index,
+        intentLabel: child.intentLabel,
+        serviceGroup: child.serviceGroup,
+        action: decision.action,
+        bucket: decision.bucket,
+        ruleIds: decision.ruleIds,
+        questions: decision.questions,
+      }),
+    ),
+  });
 }

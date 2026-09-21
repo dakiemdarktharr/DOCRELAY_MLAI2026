@@ -136,7 +136,9 @@ it.each(["APPROVE", "OVERRIDE"])(
         },
         "reviewer-demo",
       ),
-    ).rejects.toMatchObject({ code: "REVIEW_REQUIREMENTS_MISSING" });
+    ).rejects.toMatchObject({
+      code: action === "APPROVE" ? "INVALID_TRANSITION" : "MISSING_INFORMATION",
+    });
   },
 );
 it("all 20 concurrent idempotent responses have a final decision and single audit", async () => {
@@ -286,10 +288,14 @@ it("operation cannot launder access intent or bypass approval", async () => {
   await expect(
     reviewSupport(
       row.id,
-      { version: row.version, action: "APPROVE" },
+      {
+        version: row.version,
+        action: "APPROVE",
+        reason: "Judge regression check",
+      },
       "reviewer-demo",
     ),
-  ).rejects.toMatchObject({ code: "REVIEW_REQUIREMENTS_MISSING" });
+  ).rejects.toMatchObject({ code: "MISSING_INFORMATION" });
 });
 it("model ambiguity cannot produce guidance approval", async () => {
   const value = input("Restart laptop");
@@ -316,6 +322,7 @@ it("large GPU allocation cannot be auto-approved even with a hypothetical verifi
       purpose: "Synthetic test",
       gpuType: "a100",
       quantity: "64",
+      budgetOrQuota: "Synthetic quota review",
     },
   });
   expect(evaluatePolicy(canonical, { status: "verified" }).ruleIds).toContain(
@@ -373,8 +380,12 @@ it("structured cluster-admin intent still requires verified authority", async ()
   await expect(
     reviewSupport(
       row.id,
-      { version: row.version, action: "APPROVE" },
+      {
+        version: row.version,
+        action: "APPROVE",
+        reason: "Judge regression check",
+      },
       "reviewer-demo",
     ),
-  ).rejects.toMatchObject({ code: "REVIEW_REQUIREMENTS_MISSING" });
+  ).rejects.toMatchObject({ code: "MISSING_INFORMATION" });
 });

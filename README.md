@@ -5,6 +5,7 @@ Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js 
 
 Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đây chưa phải bản triển khai công khai mới.
 
+
 ## Bản public
 
 Bằng chứng triển khai lịch sử ngày 20/09/2026 (chưa kiểm tra lại trong lượt sửa này): [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
@@ -24,11 +25,14 @@ Mở http://localhost:3000. Nếu port đã có process khác, dùng `npm run de
 
 Input → redact → trích xuất facts và deterministic policy → preview ràng buộc với input → user xác nhận → lưu cùng decision/hướng dẫn → hỏi thêm / workflow mô phỏng / human review → audit → feedback.
 
+
 - Shutdown/restart: GUIDE-001, không hỏi device ID. Reset chưa rõ: hỏi restart hay factory reset.
 - VPN/Wi-Fi và troubleshooting trung bình: các bước đã kiểm duyệt, lựa chọn A hoàn thành / B còn lỗi / C giải thích bước đã chọn / D nhân viên hỗ trợ. C giữ trạng thái hướng dẫn và ghi lịch sử giải thích; D chuyển nhân viên. API CONFUSED cũ vẫn handoff để tương thích.
 - Production, quyền đặc quyền, secret, public exposure, bỏ kiểm soát bảo mật, wipe hoặc conflict: escalate; không có hạ tầng thật được gọi.
 - Thiếu scope/duration/approval xác minh: NEEDS_INFORMATION. Claim “manager đã approve” không là verified approval.
-- Reviewer có Approve, Reject, Request information, Stop, Override và hoàn tất mô phỏng. Reject/Override cần lý do; version guard chặn thao tác trên trạng thái cũ. SECURITY_RISK, hồ sơ đang cần thông tin, dữ kiện thiếu hoặc approval chưa xác minh không được approve/fulfill hay override sang approve. Server kiểm tra lại trong mỗi lần chuyển trạng thái. Quyết định policy ban đầu vẫn giữ khi người review thay trạng thái.
+- Mỗi subrequest được đánh giá độc lập; toàn ticket lấy precedence `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`. Form có scope chung nhưng chứa nhiều subrequest sẽ fail closed vì không thể gán scope chắc chắn.
+- Reviewer có Approve, Reject, Request information, Stop, Override và hoàn tất mô phỏng. Mọi quyết định reviewer cần lý do; version guard chặn thao tác trên trạng thái cũ. Request còn missing facts/approval không thể approve bằng action hoặc override; SECURITY_RISK không được approve/fulfill. Approval được kiểm tra lại trước khi hoàn tất workflow auto.
+
 
 `AUTO_APPROVE` chỉ cho phép hướng dẫn hoặc workflow mô phỏng; không cấp quyền, phát credential hoặc thay đổi production.
 
@@ -38,13 +42,13 @@ Sơ đồ dưới đây mô tả luồng từ intake, redact và trích xuất f
 
 ```mermaid
 flowchart TD
-  A[Người dùng nhập yêu cầu] --> B[Redact secret và giữ raw input]
+  A[Người dùng nhập yêu cầu] --> B[Redact secret trước model, lưu trữ và UI]
   B --> C{Loại yêu cầu?}
   C -->|Option có sẵn| D[Chuẩn hóa form]
   C -->|Other / free text| D
-  D --> E[LLM trích xuất facts]
+  D --> E[Trích xuất deterministic; model chỉ bổ sung facts có evidence]
   E --> F[Canonical request]
-  F --> G[Validate schema và kiểm tra mâu thuẫn]
+  F --> G[Tách và validate từng subrequest, kiểm tra mâu thuẫn]
   G --> H[Deterministic Policy Engine]
   H --> I{Đánh giá policy}
   I -->|GUIDANCE hoặc safe diagnostic| J[AUTO_APPROVE: trả lời hướng dẫn]
@@ -56,12 +60,13 @@ flowchart TD
   J --> N[Giải thích theo rule và hướng dẫn đã kiểm duyệt]
   K --> N
   L --> O[Câu hỏi deterministic theo intent và facts thiếu]
+
   M --> P[Tạo reviewer task]
   N --> Q[Hiển thị kết quả cho user]
   O --> Q
   P --> R[Reviewer console]
   R --> S{Reviewer action}
-  S -->|Approve| T[Simulated fulfillment]
+  S -->|Approve khi đủ facts| T[Simulated fulfillment]
   S -->|Reject| U[Thông báo từ chối]
   S -->|Stop| V[Dừng workflow]
   S -->|Override| W[Override có reason bắt buộc]
@@ -99,12 +104,13 @@ API dùng envelope `{success:true,data}` hoặc `{success:false,error:{code,mess
 | GET `/api/support/requests` hoặc `/[id]` | Queue 200 hồ sơ gần đây hoặc chi tiết; `?view=summary` trả danh sách nhẹ dùng bởi UI |
 | POST `/api/support/requests/[id]/feedback` | `{version,choice:RESOLVED|STILL_BROKEN|CONFUSED|ADMIN|EXPLAIN,step?:number}` |
 | POST `/api/support/requests/[id]/clarification` | `{version,rawText?,fields?}` chỉ khi NEEDS_INFORMATION |
-| POST `/api/review/[id]` | `{version,action,reason?,target?}`; target chỉ cho override |
+| POST `/api/review/[id]` | `{version,action,reason,target?}`; reason tối thiểu 8 ký tự cho mọi thao tác; target chỉ cho override |
+
 | GET `/api/support/events?requestId=UUID` | Audit an toàn; không có secret gốc hay chain-of-thought |
 | GET `/api/support/metrics` | Số đếm 200 hồ sơ synthetic gần nhất, không phải production accuracy |
 | GET `/api/support/health` | Marker `MLAI_SUPPORT_REFEREE_V3`, storage, provider, policy version; liveness, không kiểm tra DB/provider |
 
-Compatibility giữ `GET /api/health`, `POST /api/echo`, `GET /api/events` và sandbox `/api/llm-test`. Envelope echo thông thường không đổi; secret values nay redact và exception provider/DB không đưa vào response/log. Chi tiết thay đổi và thời hạn trong [migration note](mlai26_new/data/policy/support-v3-migration.md).
+Compatibility giữ `GET /api/health`, `POST /api/echo`, `GET /api/events` và sandbox `/api/llm-test`. Envelope echo thông thường không đổi; secret values nay redact và exception provider/DB không đưa vào response/log. Policy source v2 gốc được giữ nguyên theo baseline hash; mapping và contract runtime đã harden được ghi trong [POLICY-V4.md](mlai26_new/data/policy/POLICY-V4.md). Chi tiết migration ban đầu trong [migration note](mlai26_new/data/policy/support-v3-migration.md).
 
 ## Cấu trúc source
 
@@ -115,11 +121,11 @@ Không gộp thành một file: server secrets và model adapter không được
 ## Model và storage
 
 - `AI_PROVIDER=mock` mặc định, UI ghi rõ mock. `openai` cần `OPENAI_API_KEY`, `AI_MODEL`, `AI_ESCALATION_MODEL` phía server. Bộ regression dùng mock; smoke production ngày 20/09/2026 đã gọi live assistance thành công với gpt-4.1-mini.
-- Model trích xuất facts, không nhận quyền quyết định. Schema strict, evidence là quote trong input; scope/entity phải có evidence; risk được tính lại. Assistance chỉ chọn/reorder bước trong safe catalog. Explanation cho user/admin luôn dùng deterministic templates nên vẫn có khi model lỗi.
+- Model trích xuất facts, không nhận quyền quyết định. Schema strict, entity chỉ được dùng field thuộc đúng service, evidence là quote trong input; scope/entity phải có evidence; risk được tính lại. Một intent mà deterministic extraction không nhận ra không được model tự mở khóa auto path. Assistance chỉ chọn/reorder bước trong safe catalog. Explanation cho user/admin luôn dùng deterministic templates nên vẫn có khi model lỗi.
 - JSON mode không bảo đảm schema; Zod vẫn bắt buộc. Adapter chặn refusal/truncation/timeout, không tool calls, không retries, `store:false`, tối đa 20 lần gọi trong budget. [OpenAI structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
 - `MONGODB_URI` + `MONGODB_DB` lưu request, history và audit trong cùng document bằng optimistic version CAS. Collection riêng `v3_support_requests`, `v3_model_budgets`. Đã kiểm chứng live Mongo bằng workflow production và kết nối DB độc lập; chưa kiểm tra kịch bản chủ động restart cluster/failover.
 - PostgreSQL/Prisma và `DATABASE_URL` chỉ phục vụ generic event compatibility. Không migrate hoặc xóa dữ liệu cũ.
-- Production cần Mongo hoặc chủ động chọn `SUPPORT_STORAGE=memory-demo` (chỉ demo tạm); reviewer production cần `SUPPORT_ACCESS_MODE=public-demo`. Không dùng app public này cho dữ liệu thật hoặc authority thật.
+- Production cần Mongo hoặc chủ động chọn `SUPPORT_STORAGE=memory-demo` (chỉ demo tạm); queue/detail/mutation reviewer production fail closed trừ khi đặt rõ `SUPPORT_ACCESS_MODE=public-demo`. Public demo có process-local rate limit, không thay thế gateway rate limit hoặc SSO. Không dùng app public này cho dữ liệu thật hoặc authority thật.
 
 ## Verify và kiểm thử
 

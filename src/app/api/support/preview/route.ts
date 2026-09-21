@@ -1,5 +1,12 @@
-import { supportApi, supportBody } from "@/lib/support-http";
+import {
+  enforceDemoRateLimit,
+  supportApi,
+  supportBody,
+} from "@/lib/support-http";
 import { previewSupport } from "@/services/support";
 export async function POST(request: Request) {
-  return supportApi(async () => previewSupport(await supportBody(request)));
+  return supportApi(async () => {
+    enforceDemoRateLimit(request, "intake");
+    return previewSupport(await supportBody(request));
+  });
 }

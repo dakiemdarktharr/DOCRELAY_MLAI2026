@@ -81,3 +81,7 @@ For every meaningful change, record:
 ## Authorship clarification
 
 The team requirement is stricter than merely using an AI coding assistant: challenge-specific TypeScript/TSX core must be self-written by student members. AI-generated generic scaffold code is not evidence of student authorship for the challenge core. During Sprint 1, each member must own a vertical slice, make the commits, explain the code, and record any material AI assistance.
+
+## 2026-09-21 — Merge security fixes with UX/judge feedback
+
+Merged both histories from e98d91e and 2803b8e. Policy support-guidance-v4.1 retains scoped approval verification, full subrequest evaluation, reviewer reasons and audit metadata alongside bound previews and Vietnamese UX. Labelled fact fragments do not become false subrequests. Older abandoned receipts recover through optimistic version guards. Validation: 153 unit/integration, lint, production build and 26 fresh-server desktop/mobile E2E passed. Original 128 fixture expectations unchanged (55 matches, 73 mismatches). Live release evidence follows after deployment.

@@ -50,6 +50,18 @@ export function auditEvent(
       request.input.rawText || "Structured intake",
     ],
     missingFields: request.decision?.missingFields ?? [],
+    questions: request.decision?.questions ?? [],
+    targetedQuestions:
+      request.decision?.targetedQuestions ??
+      request.decision?.reviewerQuestions ??
+      [],
+    nextStep:
+      request.decision?.nextStep ?? "Chờ deterministic policy đánh giá.",
+    policyVersion: request.decision?.policyVersion ?? "intake-v1",
+    redactions: request.canonical?.redactions ?? [],
+    approvalStatus: request.decision?.approvalStatus ?? "pending",
+    approvalReference: request.decision?.approvalReference,
+    subrequestOutcomes: request.decision?.subrequestOutcomes ?? [],
     explanation,
   };
 }
@@ -69,7 +81,7 @@ export async function analyze(
   );
   return {
     canonical,
-    decision: evaluatePolicy(canonical, verifyApproval(canonical)),
+    decision: evaluatePolicy(canonical, verifyApproval),
   };
 }
 function fingerprintOf(input: SupportInput) {
@@ -104,10 +116,7 @@ async function completeAnalysis(
       );
     } catch (error) {
       result.canonical = modelFailure(result.canonical, error);
-      result.decision = evaluatePolicy(
-        result.canonical,
-        verifyApproval(result.canonical),
-      );
+      result.decision = evaluatePolicy(result.canonical, verifyApproval);
     }
   }
   return { ...result, assistance };
@@ -164,6 +173,17 @@ export async function submitSupport(
         "Mã gửi này đã dùng cho nội dung khác.",
         409,
       );
+    // Recover abandoned receipts from an interrupted older worker. The version
+    // guard still permits only one committed result; active workers get time to finish.
+    if (
+      !existing.decision &&
+      Date.now() - Date.parse(existing.updatedAt) > 60_000
+    ) {
+      const result = await completeAnalysis(input, safe.markers, options);
+      return updateSupportRequest(existing.id, existing.version, (draft) => {
+        applyAnalysis(draft, result);
+      });
+    }
     return waitForDecision(existing);
   }
   let cached: SupportPreview | null = null;
@@ -180,10 +200,7 @@ export async function submitSupport(
         "Thông tin đã đổi hoặc bản xem trước hết hạn. Vui lòng kiểm tra lại trước khi gửi.",
         409,
       );
-    const current = evaluatePolicy(
-      cached.canonical,
-      verifyApproval(cached.canonical),
-    );
+    const current = evaluatePolicy(cached.canonical, verifyApproval);
     if (
       current.action !== cached.decision.action ||
       JSON.stringify(current.ruleIds) !==
@@ -232,25 +249,32 @@ export async function submitSupport(
   }
   const result =
     cached ?? (await completeAnalysis(input, safe.markers, options));
-  const assistance = result.assistance;
-  return updateSupportRequest(request.id, 0, (draft) => {
-    draft.canonical = result.canonical;
-    draft.decision = result.decision;
-    if (assistance) draft.assistance.push(assistance);
-    draft.status =
-      result.decision.action === "AUTO_APPROVE"
-        ? "AUTO_APPROVED"
-        : result.decision.action === "ESCALATE"
-          ? "ESCALATED"
-          : "NEEDS_INFORMATION";
-    draft.events.push(
-      auditEvent(
-        draft,
-        "RECEIVED",
-        "DECISION",
-        "deterministic-policy",
-        result.decision.adminReason,
-      ),
-    );
-  });
+  return updateSupportRequest(request.id, 0, (draft) =>
+    applyAnalysis(draft, result),
+  );
+}
+
+function applyAnalysis(
+  draft: SupportRequest,
+  result: Awaited<ReturnType<typeof completeAnalysis>>,
+) {
+  const before = draft.status;
+  draft.canonical = result.canonical;
+  draft.decision = result.decision;
+  if (result.assistance) draft.assistance.push(result.assistance);
+  draft.status =
+    result.decision.action === "AUTO_APPROVE"
+      ? "AUTO_APPROVED"
+      : result.decision.action === "ESCALATE"
+        ? "ESCALATED"
+        : "NEEDS_INFORMATION";
+  draft.events.push(
+    auditEvent(
+      draft,
+      before,
+      "DECISION",
+      "deterministic-policy",
+      result.decision.adminReason,
+    ),
+  );
 }

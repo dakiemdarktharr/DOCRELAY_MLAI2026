@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { allFields, fieldOptions, validIntent } from "./catalog";
+import {
+  allFields,
+  catalog,
+  commonFields,
+  fieldOptions,
+  validIntent,
+} from "./catalog";
 import { requestKinds, serviceGroups } from "./contracts";
 
 export const supportInputSchema = z
@@ -33,6 +39,17 @@ export const supportInputSchema = z
           code: "custom",
           path: ["fields", key],
           message: "Giá trị không hợp lệ.",
+        });
+      if (
+        input.mode === "structured" &&
+        key !== "intentLabel" &&
+        !commonFields.includes(key) &&
+        !catalog[input.serviceGroup].fields.includes(key)
+      )
+        ctx.addIssue({
+          code: "custom",
+          path: ["fields", key],
+          message: "Field không thuộc service group đã chọn.",
         });
     }
     if (

@@ -103,6 +103,24 @@ export type CanonicalRequest = Extraction & {
   redactions: string[];
   model: { source: "deterministic" | "mock" | "openai"; failure?: string };
 };
+export type ApprovalStatus =
+  | "not_required"
+  | "pending"
+  | "verified"
+  | "rejected"
+  | "expired"
+  | "unverifiable"
+  | "invalid";
+export type ApprovalScope = "matched" | "mismatched" | "unknown";
+export type SubrequestOutcome = {
+  index: number;
+  intentLabel: string;
+  serviceGroup: ServiceGroup;
+  action: Action;
+  bucket: "ROUTINE" | "MISSING_INFO" | "SECURITY_RISK" | "BEYOND_AUTHORITY";
+  ruleIds: string[];
+  questions: string[];
+};
 export type Decision = {
   action: Action;
   requestKind: RequestKind;
@@ -119,11 +137,16 @@ export type Decision = {
   missingFields: string[];
   questions: string[];
   reviewerQuestions?: string[];
+  targetedQuestions: string[];
+
   userReason: string;
   adminReason: string;
   nextStep: string;
   assignedTeam: string;
   policyVersion: string;
+  approvalStatus: ApprovalStatus;
+  approvalReference?: string;
+  subrequestOutcomes: SubrequestOutcome[];
 };
 export type RequestStatus =
   | "RECEIVED"
@@ -160,6 +183,14 @@ export type AuditEvent = {
   ruleIds: string[];
   safeEvidence: string[];
   missingFields: string[];
+  questions: string[];
+  targetedQuestions: string[];
+  nextStep: string;
+  policyVersion: string;
+  redactions: string[];
+  approvalStatus: ApprovalStatus;
+  approvalReference?: string;
+  subrequestOutcomes: SubrequestOutcome[];
   explanation: string;
 };
 export type SupportRequest = {

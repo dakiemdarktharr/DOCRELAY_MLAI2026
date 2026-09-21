@@ -15,7 +15,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "DEVICE_SHUTDOWN_GUIDANCE DEVICE_RESTART_GUIDANCE DEVICE_RESET_GUIDANCE DEVICE_FACTORY_RESET DEVICE_WONT_BOOT DEVICE_FREEZE DEVICE_SLOW DEVICE_CRASH DEVICE_UPDATE_DRIVER DEVICE_BATTERY DEVICE_DISPLAY DEVICE_AUDIO DEVICE_CAMERA DEVICE_PRINTER DEVICE_LOST_STOLEN DEVICE_REPLACEMENT DEVICE_WIPE",
     ),
     fields: words(
-      "deviceType ownership symptom requestedAction deviceId location dataLossRisk backup",
+      "deviceType ownership symptom requestedAction deviceId location urgency dataLossRisk backup",
     ),
   },
   ACCOUNT_ACCESS: {
@@ -45,7 +45,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "VPN_SETUP VPN_LOGIN VPN_NOT_CONNECTING WIFI_NOT_WORKING NETWORK_UNREACHABLE DNS_RESOLUTION DNS_CHANGE PROXY_CONFIG FIREWALL_DIAGNOSTIC FIREWALL_CHANGE PORT_OPEN_REQUEST PUBLIC_EXPOSURE REMOTE_ACCESS BANDWIDTH_ISSUE CERTIFICATE_ERROR",
     ),
     fields: words(
-      "source target environment protocol port publicExposure requestedAction affectedUsers symptom",
+      "service source target environment protocol port publicExposure requestedAction affectedUsers symptom urgency",
     ),
   },
   SOFTWARE_LICENSE: {
@@ -55,7 +55,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "SOFTWARE_INSTALL SOFTWARE_UPDATE SOFTWARE_UNINSTALL SOFTWARE_CRASH SOFTWARE_COMPATIBILITY SOFTWARE_PERFORMANCE LICENSE_ACTIVATION LICENSE_REQUEST APPROVED_CATALOG_LOOKUP BROWSER_EXTENSION UNSIGNED_SOFTWARE UNAPPROVED_SOFTWARE DEVELOPER_TOOL_SETUP",
     ),
     fields: words(
-      "software version os requestedAction approvedCatalogStatus installationSource licenseDuration businessPurpose",
+      "software version os requestedAction approvedCatalogStatus installationSource licenseDuration licenseType businessPurpose approvalReference",
     ),
   },
   CLOUD_GPU: {
@@ -65,7 +65,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "CLOUD_SANDBOX CLOUD_VM_REQUEST GPU_REQUEST GPU_QUOTA GPU_CAPACITY CLOUD_STORAGE CLOUD_COST CLOUD_BUDGET PUBLIC_IP RESOURCE_SCALE RESOURCE_DELETE CLOUD_CREDENTIAL",
     ),
     fields: words(
-      "provider resourceType gpuType quantity cpu ram disk environment duration publicIp purpose estimatedCost cleanupPlan approvalStatus approvalReference",
+      "provider resourceType gpuType quantity cpu ram disk environment duration publicIp purpose budgetOrQuota estimatedCost cleanupPlan approvalStatus approvalReference",
     ),
   },
   KUBERNETES: {
@@ -85,7 +85,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "PIPELINE_VIEW_LOGS PIPELINE_RERUN PIPELINE_FAILED PIPELINE_PERMISSION PIPELINE_CONFIG_CHANGE STAGING_DEPLOY PRODUCTION_DEPLOY PRODUCTION_ROLLBACK SECRET_UPDATE RELEASE_APPROVAL BYPASS_APPROVAL_GATE",
     ),
     fields: words(
-      "repository pipeline environment requestedAction branchOrTag configChange secretChange rollbackPlan approvalReference",
+      "repository pipeline environment requestedAction reason branchOrTag configChange secretChange rollbackPlan approvalReference",
     ),
   },
   MONITORING: {
@@ -95,7 +95,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "MONITORING_VIEW_LOGS MONITORING_VIEW_METRICS ALERT_NOT_RECEIVED ALERT_FALSE_POSITIVE ALERT_THRESHOLD ALERT_ROUTING INCIDENT_REPORT INCIDENT_TRIAGE SERVICE_DEGRADED SERVICE_OUTAGE P1_INCIDENT P2_INCIDENT SLO_BREACH",
     ),
     fields: words(
-      "service alertId symptom startTime affectedScope severity requestedAction environment",
+      "service alertId symptom startTime timeWindow dashboardOrLogSource affectedScope severity requestedAction environment urgency",
     ),
   },
   STORAGE: {
@@ -115,7 +115,7 @@ export const catalog: Record<ServiceGroup, Service> = {
       "PHISHING_REPORT MALWARE_SUSPECTED SUSPICIOUS_LOGIN LOST_DEVICE_SECURITY SECRET_EXPOSURE CREDENTIAL_LEAK VULNERABILITY_REPORT POLICY_EXCEPTION MFA_DISABLE_REQUEST EDR_DISABLE_REQUEST SECURITY_INCIDENT DATA_BREACH AUDIT_EVIDENCE COMPLIANCE_QUESTION",
     ),
     fields: words(
-      "asset incidentType evidence detectedAt impact containmentRequested containsSecret containsCustomerData reporterContact",
+      "asset assetOrService environment incidentType issue evidence detectedAt impact requestedAction urgency containmentRequested containsSecret containsCustomerData reporterContact approvalReference incidentId",
     ),
   },
   GIT_PERMISSION: {
@@ -123,12 +123,12 @@ export const catalog: Record<ServiceGroup, Service> = {
     team: "DevOps",
     labels: words("GIT_READ_ACCESS GIT_WRITE_ACCESS GIT_ADMIN_ACCESS GIT_HELP"),
     fields: words(
-      "repository environment permission duration reason approvalReference",
+      "provider repository environment permission duration reason approvalReference",
     ),
   },
   OTHER: {
     label: "Khác / chưa rõ nhóm",
-    team: "IT Helpdesk",
+    team: "Classifier/reviewer",
     labels: words(
       "UNKNOWN_SUPPORT_REQUEST GENERAL_HOW_TO CROSS_FUNCTION_REQUEST UNCLASSIFIED_ACCESS UNCLASSIFIED_INCIDENT UNCLASSIFIED_CHANGE REQUEST_CLASSIFICATION_HELP",
     ),
@@ -158,10 +158,16 @@ export const fieldOptions: Record<string, string[]> = {
     "diagnose",
     "restart",
     "repair",
+    "boot_assistance",
+    "diagnosis",
+    "hardware_check",
     "replace",
     "wipe",
     "view_logs",
+    "view_metrics",
+    "investigate",
     "rerun",
+    "scale",
     "deploy",
     "change",
   ],
@@ -169,6 +175,7 @@ export const fieldOptions: Record<string, string[]> = {
   permission: [
     "read-only",
     "read",
+    "triage",
     "write",
     "admin",
     "root",
@@ -295,7 +302,14 @@ export const fieldLabels: Record<string, string> = {
   ownership: "Thiết bị thuộc ai",
   symptom: "Triệu chứng",
   reason: "Lý do",
+  incidentId: "Mã sự cố",
   resetType: "Cách đặt lại máy",
+  budgetOrQuota: "Quota/budget đã kiểm tra",
+  licenseType: "Loại license",
+  timeWindow: "Khoảng thời gian quan sát",
+  dashboardOrLogSource: "Dashboard/log source/alert ID",
+  assetOrService: "Asset hoặc service bị ảnh hưởng",
+  issue: "Vấn đề hoặc nghi vấn",
 };
 export function labelForField(name: string) {
   return fieldLabels[name] ?? name.replace(/([A-Z])/g, " $1");

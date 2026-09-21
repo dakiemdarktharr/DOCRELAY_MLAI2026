@@ -1,6 +1,15 @@
 # Status — UX and judge feedback — 21/09/2026
 
-## Current candidate (not deployed)
+## Release validation — 21/09/2026
+
+- Reconciled UX/judge commit `e98d91e` with remote security/workflow commit `2803b8e`; policy is `support-guidance-v4.1`. Both histories are preserved.
+- Combined validation: **153/153 unit/integration PASS**, lint PASS, build PASS, **26/26 desktop/mobile E2E PASS** on a fresh checkout server at port 3227.
+- Preserved remote rate limits, required reviewer reasons, per-subrequest evaluation, approval registry and expanded audit. Bound previews, Vietnamese UX, field-specific questions, resource limits and secret protection remain.
+- A labelled fact after a semicolon is attached to its request; independent risky subrequests still evaluate separately. Abandoned receipts older than 60 seconds can recover with a version guard.
+- Original fixtures: **55/128 match, 73 mismatches**; original expected values unchanged.
+- Push/deployment and live service verification requested by user; live results will be recorded after deployment.
+
+## Previous UX candidate validation (historical, before merge)
 
 - Branch `codex/ux-vng-refurbish`, base main `0764f1d`, isolated checkout `C:/Users/ANHKHOI/AppData/Local/Temp/mlai26-ux-refurbish-20260921`. Original workspace remains on its prior branch with the student's uncommitted `src/domain/contracts.ts` untouched.
 - Implemented U1–U11/B1: Vietnamese entry labels without login, one-column intake/preview, clear original question and current status, targeted clarification, explain-step separate from handoff, tracking link, staff queue/search, orange/white styling and AI mascot. Removed the four requested UI blocks. C01–C20 checklist not added.
@@ -25,6 +34,13 @@ The following sections are historical evidence for the previous release, retaine
 - Database mới `mlai26_support_v3_demo`: `v3_support_requests`, `v3_model_budgets`, index updatedAt. Đã xóa bốn DB LabPass cũ theo yêu cầu sau khi xác nhận bản mới hoạt động; giữ sample_mflix/admin/local.
 - Desktop/mobile public entry và không tràn ngang PASS. Reports: `artifacts/live-deployment-smoke.json`, `artifacts/mongodb-migration.json`; screenshots `production-help-*`.
 - Sau khi đồng bộ cập nhật main từ tác vụ khác: 87/87 unit/integration, lint/typecheck PASS; full E2E 24/24 là evidence trước deploy. Smoke live bổ sung trên bản production hiện tại, không gọi lại cả bộ Verify bằng paid model.
+
+## Policy hardening — 21/09/2026
+
+- Runtime policy đã nâng lên `support-guidance-v4`; policy-v2, Verify cases và Ground Truth gốc vẫn giữ nguyên hash.
+- Đã khóa các bypass phát hiện qua stress test: alternate security wording, database export, multi-subrequest, secret redaction thiếu dấu phân cách, model tự hạ unknown intent, reviewer approve khi còn missing facts, approval hết hạn/sai scope và audit thiếu metadata.
+- Subrequest được evaluate độc lập; `OTHER` route `Classifier/reviewer`; câu hỏi được lưu ở cả `questions` và alias contract `targetedQuestions`; audit lưu policy version, next step, redaction markers, approval và subrequest outcomes.
+- Verification sau hardening: unit/integration 102/102, E2E desktop/mobile 24/24, lint, typecheck và production build PASS. Các report/screenshot sinh trong lúc chạy được khôi phục, không đưa timestamp/UUID runtime vào thay đổi.
 
 ## Main đã nhận đầy đủ source
 

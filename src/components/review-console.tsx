@@ -243,7 +243,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               <fieldset disabled={pending} className="space-y-4">
                 <legend className="mb-3 font-bold">Thao tác xử lý</legend>
                 <label className="block">
-                  Lý do (bắt buộc khi từ chối hoặc điều chỉnh)
+                  Lý do (bắt buộc cho mọi quyết định của reviewer)
                   <Textarea
                     maxLength={1000}
                     value={reason}
@@ -277,10 +277,14 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                       }
                       disabled={
                         !canReview(selected.status, action) ||
-                        (["REJECT", "OVERRIDE"].includes(action) &&
-                          reason.trim().length < 8) ||
-                        ((selected.decision?.bucket === "SECURITY_RISK" ||
-                          !!selected.decision?.missingFields.length) &&
+                        reason.trim().length < 8 ||
+                        (["APPROVE", "FULFILL"].includes(action) &&
+                          (selected.status === "NEEDS_INFORMATION" ||
+                            selected.decision?.action === "NEEDS_INFORMATION" ||
+                            Boolean(
+                              selected.decision?.missingFields.length,
+                            ))) ||
+                        (selected.decision?.bucket === "SECURITY_RISK" &&
                           (action === "APPROVE" ||
                             action === "FULFILL" ||
                             (action === "OVERRIDE" &&

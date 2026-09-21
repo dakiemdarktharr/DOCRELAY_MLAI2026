@@ -1,6 +1,11 @@
 import OpenAI from "openai";
 import { z } from "zod";
-import { allFields, catalog, validIntent } from "@/domain/catalog";
+import {
+  allFields,
+  catalog,
+  commonFields,
+  validIntent,
+} from "@/domain/catalog";
 import {
   extractionSchema,
   type Assistance,
@@ -194,6 +199,11 @@ export async function extractWithModel(
     )
       throw new ModelFailure("MODEL_OUTPUT_INVALID");
     const model = parsed.data;
+    const serviceFields = new Set([
+      "intentLabel",
+      ...commonFields,
+      ...catalog[model.serviceGroup].fields,
+    ]);
     const source = [
       input.rawText,
       ...Object.entries(input.fields).map(([key, value]) => `${key}=${value}`),
@@ -205,6 +215,7 @@ export async function extractWithModel(
       Object.entries(model.entities).some(
         ([key, value]) =>
           !allFields.has(key) ||
+          !serviceFields.has(key) ||
           (value &&
             !model.evidence.some(
               (item) =>
@@ -213,6 +224,15 @@ export async function extractWithModel(
             )),
       ) ||
       redact(JSON.stringify(model)).markers.length
+    )
+      throw new ModelFailure("MODEL_EVIDENCE_INVALID");
+    // An LLM-only interpretation of otherwise unknown text cannot unlock an
+    // automatic guidance path. It may still extract facts for a reviewer, but
+    // auto handling needs an independently verifiable deterministic intent.
+    if (
+      baseline.intentLabel === "UNKNOWN_SUPPORT_REQUEST" &&
+      model.intentLabel !== "UNKNOWN_SUPPORT_REQUEST" &&
+      ["GUIDANCE", "SAFE_DIAGNOSTIC"].includes(model.requestKind)
     )
       throw new ModelFailure("MODEL_EVIDENCE_INVALID");
     if (
@@ -225,7 +245,16 @@ export async function extractWithModel(
       (baseline.environment !== "unknown" &&
         model.environment !== "unknown" &&
         baseline.environment !== model.environment) ||
-      ["environment", "permission", "system", "duration"].some(
+      [
+        "environment",
+        "permission",
+        "system",
+        "duration",
+        "provider",
+        "accessType",
+        "requestedAction",
+        "operation",
+      ].some(
         (key) =>
           baseline.entities[key] &&
           model.entities[key] &&
