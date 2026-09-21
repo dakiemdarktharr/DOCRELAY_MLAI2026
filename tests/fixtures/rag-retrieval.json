@@ -1,0 +1,272 @@
+[
+  {
+    "question": "Quên địa chỉ Gmail, tìm tên đăng nhập ở đâu?",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-username"
+  },
+  {
+    "question": "I forgot my Google username",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-username"
+  },
+  {
+    "question": "Tìm email google bằng số điện thoại khôi phục",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-username"
+  },
+  {
+    "question": "Không nhận được mã xác minh Google",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-code"
+  },
+  {
+    "question": "Google verification code missing",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-code"
+  },
+  {
+    "question": "Tôi không thấy email xác minh trong inbox",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-code"
+  },
+  {
+    "question": "Google không xác minh được tôi là chủ tài khoản",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-device"
+  },
+  {
+    "question": "Which device should I use for Google recovery?",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-device"
+  },
+  {
+    "question": "Dùng trình duyệt quen thuộc để khôi phục gmail như nào",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-recovery-device"
+  },
+  {
+    "question": "khôi phục tài khoản Google",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-google_recovery"
+  },
+  {
+    "question": "How to recover my Gmail account",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-google_recovery"
+  },
+  {
+    "question": "google account recovry",
+    "label": "GOOGLE_RECOVERY",
+    "expectedId": "support-kb-v1-google_recovery"
+  },
+  {
+    "question": "Tìm phiên bản phần mềm phù hợp Windows hay macOS",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-os"
+  },
+  {
+    "question": "Which operating system does this app need?",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-os"
+  },
+  {
+    "question": "Phần mềm có hỗ trợ hệ điều hành của tôi không",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-os"
+  },
+  {
+    "question": "Làm sao kiểm tra nhà phát hành trước khi tải",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-publisher"
+  },
+  {
+    "question": "How do I check the software publisher?",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-publisher"
+  },
+  {
+    "question": "Nguồn tải nào là website chính thức của nhà phát hành",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-publisher"
+  },
+  {
+    "question": "Trình cài đặt yêu cầu quyền quản trị thì làm gì",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-install-blocked"
+  },
+  {
+    "question": "Installation asks for administrator permission",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-install-blocked"
+  },
+  {
+    "question": "Không đủ quyền cài ứng dụng trên máy công ty",
+    "label": "SOFTWARE_GUIDE",
+    "expectedId": "support-kb-v1-software-install-blocked"
+  },
+  {
+    "question": "Trước khi dùng GPU cần chuẩn bị thông tin gì",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-preparation"
+  },
+  {
+    "question": "How do I prepare a GPU workload?",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-preparation"
+  },
+  {
+    "question": "Tôi cần mô tả framework và dữ liệu chạy GPU thế nào",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-preparation"
+  },
+  {
+    "question": "Làm sao dự trù chi phí dùng GPU",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-budget"
+  },
+  {
+    "question": "How can I estimate cloud GPU cost?",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-budget"
+  },
+  {
+    "question": "Tôi muốn theo dõi chi phí phiên GPU",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-budget"
+  },
+  {
+    "question": "Nhân viên có quota GPU miễn phí bao nhiêu",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-entitlement"
+  },
+  {
+    "question": "What is my company GPU quota?",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-entitlement"
+  },
+  {
+    "question": "Công ty cấp quyền sử dụng GPU thế nào",
+    "label": "CLOUD_GPU_GUIDE",
+    "expectedId": "support-kb-v1-gpu-entitlement"
+  },
+  {
+    "question": "Tôi có bao nhiêu ngày nghỉ phép ở VNG",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-leave"
+  },
+  {
+    "question": "How many annual leave days do VNG employees get?",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-leave"
+  },
+  {
+    "question": "Tìm chính sách nghỉ phép áp dụng cho tôi",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-leave"
+  },
+  {
+    "question": "VNG có được làm việc từ xa không",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-remote"
+  },
+  {
+    "question": "What is the remote work policy?",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-remote"
+  },
+  {
+    "question": "Quy định work from home của công ty",
+    "label": "COMPANY_POLICY",
+    "expectedId": "support-kb-v1-policy-remote"
+  },
+  {
+    "question": "Trang web bị lỗi nên kiểm tra thế nào",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-browser-help"
+  },
+  {
+    "question": "Browser page will not load",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-browser-help"
+  },
+  {
+    "question": "Website không tải trong trình duyệt",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-browser-help"
+  },
+  {
+    "question": "Tôi nên mô tả lỗi ứng dụng thế nào",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-explain-error"
+  },
+  {
+    "question": "How do I describe an error without technical jargon?",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-explain-error"
+  },
+  {
+    "question": "Thông tin nào cần ghi khi báo lỗi",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-explain-error"
+  },
+  {
+    "question": "Bữa sáng nhanh nên ăn gì",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-breakfast"
+  },
+  {
+    "question": "What is a quick breakfast?",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-breakfast"
+  },
+  {
+    "question": "Gợi ý ăn sáng trước khi đi làm",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-breakfast"
+  },
+  {
+    "question": "Làm bánh kem đơn giản",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-cake"
+  },
+  {
+    "question": "An easy cake recipe",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-cake"
+  },
+  {
+    "question": "công thức bánh kem tại nhà",
+    "label": "EVERYDAY",
+    "expectedId": "support-kb-v1-everyday-cake"
+  },
+  {
+    "question": "How can I recover a Google account?",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-google_recovery"
+  },
+  {
+    "question": "estimate GPU cost",
+    "label": "GENERAL_GUIDE",
+    "expectedId": "support-kb-v1-gpu-budget"
+  },
+  {
+    "question": "Tại sao Sao Mộc có vết đỏ lớn?",
+    "label": "GENERAL_GUIDE",
+    "expectedId": null
+  },
+  {
+    "question": "quantum entanglement history",
+    "label": "GENERAL_GUIDE",
+    "expectedId": null
+  },
+  {
+    "question": "xe đạp carbon nặng bao nhiêu",
+    "label": "GENERAL_GUIDE",
+    "expectedId": null
+  },
+  {
+    "question": "abcxyz và zzzqwerty là gì",
+    "label": "GENERAL_GUIDE",
+    "expectedId": null
+  }
+]
