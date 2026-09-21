@@ -89,3 +89,7 @@ Merged both histories from e98d91e and 2803b8e. Policy support-guidance-v4.1 ret
 ### Production verification follow-up
 
 Real OpenAI assistance and MongoDB submission/readback/reviewer/audit succeeded on deployment dpl_71e2uTywwY3Kqp4ipktDLSoX79rS. Found optional approvalReference converted to BSON null; set MongoClient ignoreUndefined so preview and stored API snapshots match. Added a regression reproducing an OpenAI-enabled reset ambiguity unnecessarily invoking extraction; deterministic INFO-RESET now asks the known clarification without a model call. No secrets or budget counters changed.
+
+### Final public release
+
+Source c0c5ea5 deployed as dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF to https://labpass-five.vercel.app. Final validation: 154 tests, lint, build, 26 desktop/mobile E2E and 17 live checks passed. Real OpenAI assistance and MongoDB persistence/audit verified through the deployed application. Evidence: RELEASE-VERIFICATION-2026-09-21.md and artifacts/live-final-verification.json. Budget unchanged.

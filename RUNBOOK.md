@@ -67,7 +67,7 @@ Live Mongo đã xác nhận qua production workflow và đọc document/audit b�
 
 ## Deploy
 
-Production hiện tại: https://labpass-five.vercel.app, Vercel project `labpass`, deployment `dpl_AZS54EPpARmgqwBJ11iqvGw6tsw6`, source main `08cca12`. Project/domain cũ đã được thay bằng Support v3 của repository này. MongoDB dùng `mlai26_support_v3_demo`; bốn DB LabPass cũ đã bị xóa theo yêu cầu. Không dùng lại cấu hình MONGODB_DB=labpass_demo.
+Production hiện tại: https://labpass-five.vercel.app, Vercel project `labpass`, deployment `dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF`, source main `c0c5ea5`. Bằng chứng ngày 21/09: 17/17 live checks PASS; xem RELEASE-VERIFICATION-2026-09-21.md. Project/domain cũ đã được thay bằng Support v3 của repository này. MongoDB dùng `mlai26_support_v3_demo`; bốn DB LabPass cũ đã bị xóa theo yêu cầu. Không dùng lại cấu hình MONGODB_DB=labpass_demo.
 
 Local: điền key vào `.env.local` (đã gitignore), đặt `AI_PROVIDER=openai`, `AI_MODEL=gpt-4.1-mini`, `AI_ESCALATION_MODEL=gpt-4.1-mini`, URI Mongo và đúng DB mới. Trên Vercel, key/URI phải là Secret và `SUPPORT_ACCESS_MODE=public-demo`. `SUPPORT_VERIFY_FAULTS=true` cho demo Verify có chủ ý; header chỉ mô phỏng lỗi, không thể ép approve. Dùng Mongo để lưu giữa serverless instances; `memory-demo` chỉ smoke ngắn và không bền vững. Không tự copy secret của dự án khác. Sau deploy kiểm tra marker, Submit → Reviewer → Audit và persistence rồi ghi URL/deployment ID vào STATUS.
 

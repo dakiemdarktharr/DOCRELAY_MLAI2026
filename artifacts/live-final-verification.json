@@ -1,0 +1,114 @@
+{
+  "timestamp": "2026-09-21T06:16:01.422Z",
+  "sourceCommit": "c0c5ea5fbc71f1a5541e2aab552bfa9249b4567a",
+  "deploymentId": "dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF",
+  "url": "https://labpass-five.vercel.app",
+  "checks": [
+    {
+      "name": "production policy and services",
+      "pass": true,
+      "details": {
+        "status": "ok",
+        "app": "MLAI_SUPPORT_REFEREE_V3",
+        "storage": "MONGODB",
+        "provider": "openai",
+        "policy": "support-guidance-v4.1",
+        "simulated": true
+      }
+    },
+    {
+      "name": "new entry labels",
+      "pass": true
+    },
+    {
+      "name": "real OpenAI validated assistance",
+      "pass": true,
+      "details": {
+        "source": "openai",
+        "action": "AUTO_APPROVE",
+        "failure": null,
+        "steps": 2
+      }
+    },
+    {
+      "name": "MongoDB preview-submit-independent GET exact match",
+      "pass": true,
+      "details": {
+        "requestId": "7f8c0e34-0e78-4e49-86ed-4874a9ac809d",
+        "version": 1
+      }
+    },
+    {
+      "name": "idempotency preserves snapshot",
+      "pass": true
+    },
+    {
+      "name": "explain retains employee workflow",
+      "pass": true
+    },
+    {
+      "name": "handoff retains real model history",
+      "pass": true
+    },
+    {
+      "name": "reviewer status and audit persist in MongoDB",
+      "pass": true,
+      "details": {
+        "version": 4,
+        "events": 5
+      }
+    },
+    {
+      "name": "summary readback",
+      "pass": true
+    },
+    {
+      "name": "reset clarification with real provider configured",
+      "pass": true,
+      "details": {
+        "action": "NEEDS_INFORMATION"
+      }
+    },
+    {
+      "name": "shutdown auto-guide",
+      "pass": true
+    },
+    {
+      "name": "missing database scope asks information",
+      "pass": true
+    },
+    {
+      "name": "reviewer cannot approve incomplete access",
+      "pass": true,
+      "details": {
+        "code": "INVALID_TRANSITION"
+      }
+    },
+    {
+      "name": "public exposure and secret fail-safe redaction",
+      "pass": true
+    },
+    {
+      "name": "security override blocked",
+      "pass": true,
+      "details": {
+        "code": "SECURITY_REVIEW_REQUIRED"
+      }
+    },
+    {
+      "name": "model unavailable fails safely",
+      "pass": true
+    },
+    {
+      "name": "unknown event id returns 404",
+      "pass": true
+    }
+  ],
+  "requestIds": [
+    "7f8c0e34-0e78-4e49-86ed-4874a9ac809d",
+    "e206c0f4-5d92-462f-81fe-f66ba4330639",
+    "a63b953b-fa4b-4963-bf00-cf554f0639ed",
+    "5807365a-df4c-42c1-b850-242ea5a10b35"
+  ],
+  "completedAt": "2026-09-21T06:16:16.399Z"
+}

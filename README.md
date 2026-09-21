@@ -8,7 +8,7 @@ Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối 
 
 ## Bản public
 
-Bản public cập nhật ngày 21/09/2026: [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Đã kiểm tra một lần assistance model thật và lưu/đọc/reviewer/audit trên MongoDB; xem [STATUS](STATUS.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
+Bản public cập nhật ngày 21/09/2026: [Tech Support Referee](https://labpass-five.vercel.app). Production dùng `AI_PROVIDER=openai`, model `gpt-4.1-mini` và MongoDB `mlai26_support_v3_demo`. Bản `c0c5ea5` đã qua 17/17 kiểm tra trực tiếp, gồm OpenAI thật và lưu/đọc/reviewer/audit trên MongoDB; xem [bằng chứng phát hành](RELEASE-VERIFICATION-2026-09-21.md). API key đặt trong `.env.local` ở máy và Vercel Secret, không commit. Budget demo giới hạn 20 lần gọi model cho database; khi hết budget, hệ thống fail-safe sang review.
 
 ## Chạy ứng dụng
 

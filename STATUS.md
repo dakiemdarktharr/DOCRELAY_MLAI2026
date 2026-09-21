@@ -1,4 +1,12 @@
-# Status — UX and judge feedback — 21/09/2026
+# Status — Production release — 21/09/2026
+
+## Current production
+
+- URL: https://labpass-five.vercel.app
+- Source `c0c5ea5`; deployment `dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF`, READY.
+- **17/17 live checks PASS**, including actual OpenAI assistance, MongoDB bound preview/submission/detail/audit readback, reviewer controls and reset clarification.
+- **154/154 tests**, lint, build and **26/26 desktop/mobile E2E PASS** on final source.
+- Full evidence and limits: [RELEASE-VERIFICATION-2026-09-21.md](RELEASE-VERIFICATION-2026-09-21.md).
 
 ## Release validation — 21/09/2026
 
@@ -7,7 +15,7 @@
 - Preserved remote rate limits, required reviewer reasons, per-subrequest evaluation, approval registry and expanded audit. Bound previews, Vietnamese UX, field-specific questions, resource limits and secret protection remain.
 - A labelled fact after a semicolon is attached to its request; independent risky subrequests still evaluate separately. Abandoned receipts older than 60 seconds can recover with a version guard.
 - Original fixtures: **55/128 match, 73 mismatches**; original expected values unchanged.
-- First production smoke confirmed real OpenAI and MongoDB persistence/reviewer/audit. Fixed BSON optional-field serialization and kept reset clarification deterministic with OpenAI enabled. Final deployment evidence follows in artifacts/live-final-verification.json.
+- First production smoke confirmed real OpenAI and MongoDB persistence/reviewer/audit. Fixed BSON optional-field serialization and kept reset clarification deterministic with OpenAI enabled. Final deployment evidence is in artifacts/live-final-verification.json.
 
 ## Previous UX candidate validation (historical, before merge)
 
@@ -26,7 +34,7 @@ The following sections are historical evidence for the previous release, retaine
 
 # Support migration status — 20/09/2026
 
-## Production — Vercel + MongoDB + OpenAI
+## Historical production — 20/09/2026
 
 - Public URL: https://labpass-five.vercel.app; deployment `dpl_AZS54EPpARmgqwBJ11iqvGw6tsw6`, source main `08cca12`. Vercel build PASS.
 - Runtime xác nhận `MLAI_SUPPORT_REFEREE_V3`, storage `MONGODB`, provider `openai`; AI_MODEL và AI_ESCALATION_MODEL dùng `gpt-4.1-mini`. Key mới do người dùng nhập, lưu Vercel Sensitive Secret.
