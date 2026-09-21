@@ -1,6 +1,7 @@
 import {
   supportApi,
   supportBody,
+  enforceDemoRateLimit,
   requireDemoReviewer,
   verifyModelOptions,
 } from "@/lib/support-http";
@@ -9,8 +10,13 @@ import { submitSupport } from "@/services/support";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   return supportApi(
-    async () =>
-      submitSupport(await supportBody(request), verifyModelOptions(request)),
+    async () => {
+      enforceDemoRateLimit(request, "intake");
+      return submitSupport(
+        await supportBody(request),
+        verifyModelOptions(request),
+      );
+    },
     201,
   );
 }

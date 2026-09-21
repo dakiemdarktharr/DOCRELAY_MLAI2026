@@ -62,6 +62,20 @@ export function AuditTimeline({ events }: { events: AuditEvent[] }) {
             </p>
             <p>Rules: {event.ruleIds.join(", ") || "Chờ đánh giá"}</p>
             <p>Thiếu: {event.missingFields.join(", ") || "Không"}</p>
+            <p>Policy: {event.policyVersion}</p>
+            <p>
+              Approval: {event.approvalStatus}
+              {event.approvalReference
+                ? ` · ${event.approvalReference}`
+                : ""}
+            </p>
+            <p>
+              Redaction markers: {event.redactions.join(", ") || "Không"}
+            </p>
+            <p>Next step: {event.nextStep}</p>
+            {event.questions.map((question) => (
+              <p key={question}>Câu hỏi: {question}</p>
+            ))}
             {event.safeEvidence.map((evidence, i) => (
               <p key={i} className="whitespace-pre-wrap">
                 {evidence}

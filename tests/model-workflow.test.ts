@@ -12,6 +12,7 @@ import {
 } from "@/lib/support-repository";
 import type { SupportInput } from "@/domain/contracts";
 import { guidanceTemplate } from "@/domain/guidance";
+import { evaluatePolicy } from "@/domain/policy";
 import { POST } from "@/app/api/support/requests/route";
 
 beforeEach(() => {
@@ -79,6 +80,26 @@ it("cannot lower deterministic risk by returning a benign model result", async (
   });
   expect(run).not.toHaveBeenCalled();
   expect(result.riskSignals).toContain("PUBLIC_EXPOSURE");
+});
+it("cannot unlock an auto path from an otherwise unknown deterministic intent", async () => {
+  const original = input("Please rotate the workstation");
+  const baseline = extractIntake(original);
+  const { subrequests: _s, redactions: _r, model: _m, ...facts } = baseline;
+  void _s;
+  void _r;
+  void _m;
+  const result = await extractWithModel(original, baseline, {
+    run: async () => ({
+      ...facts,
+      requestKind: "GUIDANCE",
+      serviceGroup: "DEVICE_BOOT",
+      intentLabel: "DEVICE_RESTART_GUIDANCE",
+      requestedAction: "guidance",
+      evidence: [{ field: "intentLabel", quote: "rotate" }],
+    }),
+  });
+  expect(result.model.failure).toBe("MODEL_EVIDENCE_INVALID");
+  expect(evaluatePolicy(result).action).toBe("ESCALATE");
 });
 it("rejects assistance commands outside the safe catalog", async () => {
   const canonical = extractIntake(input("VPN không kết nối"));

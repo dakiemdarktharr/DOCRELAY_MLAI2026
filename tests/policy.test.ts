@@ -75,6 +75,98 @@ describe("phase 2 deterministic policy", () => {
       bucket: "SECURITY_RISK",
     });
   });
+  it("evaluates every subrequest instead of inheriting a safe first intent", () => {
+    const decision = decide(
+      "How do I restart my laptop and grant write access to staging Redis",
+    );
+    expect(decision.action).not.toBe("AUTO_APPROVE");
+    expect(decision.subrequestOutcomes).toHaveLength(2);
+    expect(decision.subrequestOutcomes[1]).toMatchObject({
+      intentLabel: "DATABASE_WRITE_ACCESS",
+      action: "NEEDS_INFORMATION",
+    });
+  });
+  it.each([
+    "Please turn MFA off for debugging",
+    "Stop audit logging for troubleshooting",
+    "Turn EDR off for this installer",
+    "Make the database accessible from the Internet",
+  ])("recognizes alternate security-control wording: %s", (text) => {
+    expect(decide(text)).toMatchObject({
+      action: "ESCALATE",
+      bucket: "SECURITY_RISK",
+    });
+  });
+  it("never auto-approves database export or non-standard device work", () => {
+    const database = input("", {
+      intentLabel: "DATABASE_EXPORT",
+      system: "postgresql",
+      resourceScope: "demo_inventory",
+      environment: "staging",
+      permission: "read-only",
+      duration: "2 hours",
+      reason: "Create a controlled backup",
+      operation: "export",
+      dataSensitivity: "internal",
+    });
+    database.mode = "structured";
+    database.serviceGroup = "DATABASE";
+    expect(evaluatePolicy(extractIntake(database))).toMatchObject({
+      action: "ESCALATE",
+      ruleIds: expect.arrayContaining(["AUTH-001"]),
+    });
+
+    const device = input("", {
+      intentLabel: "DEVICE_UPDATE_DRIVER",
+      deviceId: "DEMO-LAPTOP-1",
+      location: "Lab",
+      symptom: "Driver is outdated",
+      urgency: "normal",
+      requestedAction: "repair",
+    });
+    device.mode = "structured";
+    device.serviceGroup = "DEVICE_BOOT";
+    expect(evaluatePolicy(extractIntake(device)).action).toBe("ESCALATE");
+  });
+  it("routes unknown requests to a classifier with a direct question", () => {
+    const other = input("", {
+      intentLabel: "UNKNOWN_SUPPORT_REQUEST",
+      summary: "Need a new internal tool",
+      targetServiceOrDevice: "Unknown service",
+      environmentIfKnown: "staging",
+      desiredOutcome: "Create a request",
+      reason: "Required for the support workflow",
+      urgency: "normal",
+    });
+    other.mode = "structured";
+    other.serviceGroup = "OTHER";
+    const decision = evaluatePolicy(extractIntake(other));
+    expect(decision).toMatchObject({
+      action: "ESCALATE",
+      assignedTeam: "Classifier/reviewer",
+      ruleIds: ["AUTH-005"],
+    });
+    expect(decision.questions.length).toBeGreaterThan(0);
+  });
+  it("keeps every Security service request in the reviewer flow", () => {
+    const request = input("", {
+      intentLabel: "COMPLIANCE_QUESTION",
+      assetOrService: "identity platform",
+      environment: "staging",
+      issue: "Need policy interpretation",
+      evidence: "Control requirement document",
+      requestedAction: "diagnose",
+      urgency: "normal",
+      reporterContact: "security-demo@example.test",
+    });
+    request.mode = "structured";
+    request.serviceGroup = "SECURITY";
+    expect(evaluatePolicy(extractIntake(request))).toMatchObject({
+      action: "ESCALATE",
+      bucket: "BEYOND_AUTHORITY",
+      ruleIds: expect.arrayContaining(["AUTH-010"]),
+    });
+  });
   it("redacts values before evidence and prevents prompt injection", () => {
     const value = "SYNTHETIC" + "_ONLY_VALUE_482";
     const decision = decide(

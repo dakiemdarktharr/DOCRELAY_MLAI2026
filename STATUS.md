@@ -9,6 +9,13 @@
 - Desktop/mobile public entry và không tràn ngang PASS. Reports: `artifacts/live-deployment-smoke.json`, `artifacts/mongodb-migration.json`; screenshots `production-help-*`.
 - Sau khi đồng bộ cập nhật main từ tác vụ khác: 87/87 unit/integration, lint/typecheck PASS; full E2E 24/24 là evidence trước deploy. Smoke live bổ sung trên bản production hiện tại, không gọi lại cả bộ Verify bằng paid model.
 
+## Policy hardening — 21/09/2026
+
+- Runtime policy đã nâng lên `support-guidance-v4`; policy-v2, Verify cases và Ground Truth gốc vẫn giữ nguyên hash.
+- Đã khóa các bypass phát hiện qua stress test: alternate security wording, database export, multi-subrequest, secret redaction thiếu dấu phân cách, model tự hạ unknown intent, reviewer approve khi còn missing facts, approval hết hạn/sai scope và audit thiếu metadata.
+- Subrequest được evaluate độc lập; `OTHER` route `Classifier/reviewer`; câu hỏi được lưu ở cả `questions` và alias contract `targetedQuestions`; audit lưu policy version, next step, redaction markers, approval và subrequest outcomes.
+- Verification sau hardening: unit/integration 102/102, E2E desktop/mobile 24/24, lint, typecheck và production build PASS. Các report/screenshot sinh trong lúc chạy được khôi phục, không đưa timestamp/UUID runtime vào thay đổi.
+
 ## Main đã nhận đầy đủ source
 
 Theo yêu cầu mới nhất, merge toàn bộ `codex/support-v3-migration` tại `89d62c4` vào `main`, bao gồm `src/`. Source và các file runtime/test/config giữ nguyên bản migration đã kiểm thử; thay đổi thêm chỉ cập nhật tài liệu trạng thái main. Bản `contracts.ts` chưa commit trong workspace chính được giữ nguyên, không đưa vào merge.

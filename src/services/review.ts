@@ -29,10 +29,7 @@ const reviewSchema = z
   })
   .strict()
   .superRefine((input, ctx) => {
-    if (
-      ["REJECT", "OVERRIDE"].includes(input.action) &&
-      input.reason.length < 8
-    )
+    if (input.reason.length < 8)
       ctx.addIssue({
         code: "custom",
         path: ["reason"],
@@ -47,8 +44,8 @@ const reviewSchema = z
   });
 export async function reviewSupport(id: string, value: unknown, actor: string) {
   const input = reviewSchema.parse(value);
-  const reason =
-    redact(input.reason).text || "Reviewer xác nhận thao tác demo.";
+  const redactedReason = redact(input.reason);
+  const reason = redactedReason.text || "Reviewer xác nhận thao tác demo.";
   return updateSupportRequest(id, input.version, (request) => {
     if (!canReview(request.status, input.action))
       throw new SupportError(
@@ -78,6 +75,28 @@ export async function reviewSupport(id: string, value: unknown, actor: string) {
         409,
       );
     if (
+      ["APPROVED_BY_HUMAN", "COMPLETED"].includes(target) &&
+      (request.status === "NEEDS_INFORMATION" ||
+        request.decision?.action === "NEEDS_INFORMATION" ||
+        Boolean(request.decision?.missingFields.length))
+    )
+      throw new SupportError(
+        "MISSING_INFORMATION",
+        "Không thể approve/fulfill khi dữ kiện hoặc approval bắt buộc còn thiếu.",
+        409,
+      );
+    if (
+      ["APPROVED_BY_HUMAN", "COMPLETED"].includes(target) &&
+      request.decision?.ruleIds.includes("AUTH-007") &&
+      (!request.canonical ||
+        verifyApproval(request.canonical).status !== "verified")
+    )
+      throw new SupportError(
+        "APPROVAL_INVALID",
+        "Approval vẫn chưa hợp lệ; cần bổ sung và phân tích lại trước khi approve.",
+        409,
+      );
+    if (
       input.action === "FULFILL" &&
       request.status === "AUTO_APPROVED" &&
       request.decision?.handlingMode !== "SIMULATED_WORKFLOW"
@@ -87,20 +106,38 @@ export async function reviewSupport(id: string, value: unknown, actor: string) {
         "Guidance cần phản hồi của người dùng; không phải workflow cấp quyền.",
         409,
       );
+    if (
+      input.action === "FULFILL" &&
+      request.status === "AUTO_APPROVED" &&
+      request.canonical
+    ) {
+      const current = evaluatePolicy(request.canonical, verifyApproval);
+      if (
+        current.action !== "AUTO_APPROVE" ||
+        current.handlingMode !== "SIMULATED_WORKFLOW"
+      )
+        throw new SupportError(
+          "APPROVAL_RECHECK_FAILED",
+          "Policy hoặc approval không còn hợp lệ tại thời điểm fulfill.",
+          409,
+        );
+    }
     const before = request.status;
     request.status = target;
-    request.events.push(
-      auditEvent(
-        request,
-        before,
-        input.action,
-        actor,
-        reason +
-          (target === "COMPLETED"
-            ? " Chỉ hoàn tất mô phỏng; không gọi công cụ hạ tầng."
-            : ""),
-      ),
+    const event = auditEvent(
+      request,
+      before,
+      input.action,
+      actor,
+      reason +
+        (target === "COMPLETED"
+          ? " Chỉ hoàn tất mô phỏng; không gọi công cụ hạ tầng."
+          : ""),
     );
+    event.redactions = [
+      ...new Set([...event.redactions, ...redactedReason.markers]),
+    ];
+    request.events.push(event);
   });
 }
 

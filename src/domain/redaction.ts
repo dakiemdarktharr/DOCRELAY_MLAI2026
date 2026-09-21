@@ -18,6 +18,13 @@ export function redact(text: string): { text: string; markers: string[] } {
     "TOKEN",
     "[REDACTED_TOKEN]",
   );
+  safe = safe.replace(
+    /\b((?:aws_secret_access_key|aws_session_token|client_secret|access_token|refresh_token|private_key)\s*=\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi,
+    (_, prefix: string) => {
+      markers.add("SECRET_VALUE");
+      return prefix + "[REDACTED]";
+    },
+  );
   replace(/\bBearer\s+[^\s,;]+/gi, "TOKEN", "Bearer [REDACTED_TOKEN]");
   replace(
     /\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g,
@@ -26,6 +33,16 @@ export function redact(text: string): { text: string; markers: string[] } {
   );
   safe = safe.replace(
     /\b((?:password|passwd|pwd|token|api[ _-]?key|secret|credential|mật khẩu|mat khau|private[ _-]?key)\s*["']?\s*(?:[:=]|\bis\b|là(?=\s))\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi,
+    (_, prefix: string) => {
+      markers.add("SECRET_VALUE");
+      return prefix + "[REDACTED]";
+    },
+  );
+  // Tickets frequently paste `token VALUE` without `=` or `:`. Keep common
+  // support phrases such as "password reset" intact, but redact value-like
+  // material before it reaches extraction, persistence, audit or a model.
+  safe = safe.replace(
+    /\b((?:password|passwd|pwd|token|api[ _-]?key|secret|credential|mật khẩu|mat khau)\s+)(?!reset\b|change\b|setup\b|policy\b|field\b)([A-Za-z0-9_./+@-]{6,})\b/gi,
     (_, prefix: string) => {
       markers.add("SECRET_VALUE");
       return prefix + "[REDACTED]";

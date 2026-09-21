@@ -128,7 +128,7 @@ test("reviewer rejection requires a reason and records audit", async ({
     page.getByRole("button", { name: "Reject", exact: true }),
   ).toBeDisabled();
   await page
-    .getByLabel("Lý do (bắt buộc với Reject / Override)")
+    .getByLabel("Lý do (bắt buộc cho mọi quyết định của reviewer)")
     .fill("Không đủ scope và approval trong demo.");
   await page.getByRole("button", { name: "Reject", exact: true }).click();
   await expect(page.getByRole("status")).toContainText("REJECTED");
@@ -202,7 +202,11 @@ test("security request cannot be approved and secret is absent from API/audit", 
   const { data } = JSON.parse(body);
   expect(data.decision.bucket).toBe("SECURITY_RISK");
   const rejected = await request.post(`/api/review/${data.id}`, {
-    data: { action: "APPROVE", version: data.version },
+    data: {
+      action: "APPROVE",
+      version: data.version,
+      reason: "Security risk must remain blocked",
+    },
   });
   expect(rejected.status()).toBe(409);
   const events = await request.get(`/api/support/events?requestId=${data.id}`);

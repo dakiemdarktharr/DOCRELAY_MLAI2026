@@ -22,6 +22,25 @@ const create = (rawText: string) =>
     confirmed: true,
     idempotencyKey: crypto.randomUUID(),
   });
+const createCompleteEscalation = () =>
+  submitSupport({
+    rawText: "",
+    mode: "structured",
+    serviceGroup: "DATABASE",
+    fields: {
+      intentLabel: "DATABASE_EXPORT",
+      system: "postgresql",
+      resourceScope: "demo_inventory",
+      environment: "staging",
+      permission: "read-only",
+      duration: "2 hours",
+      reason: "Create a controlled backup",
+      operation: "export",
+      dataSensitivity: "internal",
+    },
+    confirmed: true,
+    idempotencyKey: crypto.randomUUID(),
+  });
 
 it.each(["CONFUSED", "ADMIN"])(
   "feedback %s creates reviewer work and keeps assistance history",
@@ -64,7 +83,7 @@ it("a user can resolve guidance but cannot resolve an escalated production reque
   ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
 });
 it("review actions are versioned, keep the policy result, and block invalid transitions", async () => {
-  const request = await create("Grant production admin");
+  const request = await createCompleteEscalation();
   const action = {
     action: "APPROVE",
     version: request.version,
@@ -85,6 +104,7 @@ it("review actions are versioned, keep the policy result, and block invalid tran
   ).toHaveLength(1);
   expect(canReview("STOPPED", "APPROVE")).toBe(false);
   expect(canReview("COMPLETED", "OVERRIDE")).toBe(false);
+  expect(canReview("NEEDS_INFORMATION", "APPROVE")).toBe(false);
 });
 it("security risk cannot be approved or overridden into approval", async () => {
   const request = await create("Open public RDP port 3389");
@@ -123,6 +143,33 @@ it("reject and override require a meaningful reason; sensitive reasons are redac
   );
   expect(JSON.stringify(rejected)).not.toContain(secret);
 });
+it("cannot approve or override a request with unresolved facts", async () => {
+  const request = await create("Need database access");
+  expect(request.status).toBe("NEEDS_INFORMATION");
+  await expect(
+    reviewSupport(
+      request.id,
+      {
+        action: "APPROVE",
+        version: request.version,
+        reason: "Trying to bypass missing facts",
+      },
+      "reviewer",
+    ),
+  ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
+  await expect(
+    reviewSupport(
+      request.id,
+      {
+        action: "OVERRIDE",
+        target: "APPROVED_BY_HUMAN",
+        version: request.version,
+        reason: "Trying to bypass missing facts",
+      },
+      "reviewer",
+    ),
+  ).rejects.toMatchObject({ code: "MISSING_INFORMATION" });
+});
 it("reset clarification produces restart guidance and retains prior audit", async () => {
   const request = await create("Làm sao reset máy?");
   const result = await clarifySupport(request.id, {
@@ -160,22 +207,34 @@ it("request information and override remain auditable human actions", async () =
   expect(override.decision).toEqual(original.decision);
 });
 it("only an approved simulation can complete; stopped work cannot resume", async () => {
-  const original = await create("Grant production admin");
+  const original = await createCompleteEscalation();
   await expect(
     reviewSupport(
       original.id,
-      { version: original.version, action: "FULFILL" },
+      {
+        version: original.version,
+        action: "FULFILL",
+        reason: "Attempt fulfillment before approval",
+      },
       "reviewer-demo",
     ),
   ).rejects.toMatchObject({ code: "INVALID_TRANSITION" });
   const approved = await reviewSupport(
     original.id,
-    { version: original.version, action: "APPROVE" },
+    {
+      version: original.version,
+      action: "APPROVE",
+      reason: "Reviewed export scope for simulation",
+    },
     "reviewer-demo",
   );
   const completed = await reviewSupport(
     original.id,
-    { version: approved.version, action: "FULFILL" },
+    {
+      version: approved.version,
+      action: "FULFILL",
+      reason: "Complete the approved simulated workflow",
+    },
     "reviewer-demo",
   );
   expect(completed.status).toBe("COMPLETED");
@@ -183,7 +242,11 @@ it("only an approved simulation can complete; stopped work cannot resume", async
   const another = await create("VPN không kết nối");
   const stopped = await reviewSupport(
     another.id,
-    { version: another.version, action: "STOP" },
+    {
+      version: another.version,
+      action: "STOP",
+      reason: "Stop this synthetic support workflow",
+    },
     "reviewer-demo",
   );
   await expect(

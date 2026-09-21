@@ -71,7 +71,7 @@ export function detectedRisks(raw: string): RiskSignal[] {
   );
   if (
     exposure &&
-    /\b(?:port|inbound|rdp|vnc|ssh|expose|exposure|open|mo|remote|public ip)\b/.test(
+    /\b(?:port|inbound|rdp|vnc|ssh|expose|exposed|exposure|accessible|access from|internet facing|open|mo|remote|public ip)\b/.test(
       text,
     )
   )
@@ -79,7 +79,7 @@ export function detectedRisks(raw: string): RiskSignal[] {
   if (
     asserted(
       text,
-      /(?:disable|turn off|tat|bo)\s+(?:the |agent |security )?(?:mfa|2fa|edr|audit|logging|security control|approval prompt|password)/,
+      /(?:(?:disable|turn off|stop|remove|deactivate|tat|dung|bo)\s+(?:the |agent |security )?(?:mfa|2fa|edr|audit(?: logging)?|logging|security control|approval prompt|password)|(?:turn|switch)\s+(?:the |agent |security )?(?:mfa|2fa|edr|audit(?: logging)?|logging|security control)\s+off)/,
     )
   )
     risks.add("SECURITY_CONTROL");
@@ -123,7 +123,7 @@ export function detectedRisks(raw: string): RiskSignal[] {
     risks.add("PRIVILEGED");
   if (
     asserted(text, /production|\bprod\b/) &&
-    /write|ghi|update|sua|delete|xoa|drop|deploy|rollback|admin|root|read access|read only access|select access|cap.{0,12}quyen|database|\bdb\b/.test(
+    /write|ghi|update|sua|delete|xoa|drop|deploy|rollback|admin|root|read access|read only access|select access|cap.{0,12}quyen/.test(
       text,
     )
   )
@@ -225,6 +225,8 @@ function classify(text: string): [ServiceGroup, string, RequestKind] {
       )
     )
       return ["DATABASE", "DATABASE_QUERY_HELP", "GUIDANCE"];
+    if (/\b(?:export|dump|copy data|xuat du lieu|sao chep du lieu)\b/.test(text))
+      return ["DATABASE", "DATABASE_EXPORT", "CONFIGURATION_CHANGE"];
     return [
       "DATABASE",
       /write|ghi|update|ddl/.test(text)
@@ -306,6 +308,22 @@ export function extractText(rawText: string): Extraction {
   }
   const gpu = text.match(/\b(a100|h100|t4|a10)\b/);
   if (gpu) entities.gpuType = gpu[1];
+  const semanticAction =
+    intentLabel === "DATABASE_EXPORT"
+      ? "export"
+      : intentLabel === "DEVICE_WIPE"
+        ? "wipe"
+        : intentLabel === "DEVICE_FACTORY_RESET"
+          ? "factory reset"
+          : intentLabel === "PORT_OPEN_REQUEST"
+            ? "change"
+            : requestKind === "GUIDANCE"
+              ? "guidance"
+              : requestKind === "SAFE_DIAGNOSTIC"
+                ? "diagnose"
+                : requestKind === "ACCESS_REQUEST"
+                  ? "access"
+                  : "request";
   return {
     language: /[ăâđêôơưáàạảãéèẹẻẽíìịỉĩóòọỏõúùụủũýỳỵỷỹ]/i.test(rawText)
       ? /\b(access|help|production|read|write|vpn|reset|admin)\b/i.test(rawText)
@@ -317,14 +335,7 @@ export function extractText(rawText: string): Extraction {
     intentLabel,
     entities,
     environment,
-    requestedAction:
-      requestKind === "GUIDANCE"
-        ? "guidance"
-        : requestKind === "SAFE_DIAGNOSTIC"
-          ? "diagnose"
-          : requestKind === "ACCESS_REQUEST"
-            ? "access"
-            : "request",
+    requestedAction: semanticAction,
     riskSignals,
     missingFields: [],
     evidence: [{ field: "input", quote: rawText || "Structured intake" }],
@@ -363,7 +374,16 @@ export function extractIntake(
   );
   const risks = new Set(extracted.riskSignals);
   // Selected service is a routing hint, not a risk override. Explicit facts are checked independently.
-  for (const key of ["environment", "permission", "system", "duration"]) {
+  for (const key of [
+    "environment",
+    "permission",
+    "system",
+    "duration",
+    "provider",
+    "accessType",
+    "requestedAction",
+    "operation",
+  ]) {
     if (
       fields[key] &&
       extracted.entities[key] &&
@@ -377,6 +397,14 @@ export function extractIntake(
     extracted.intentLabel !== "UNKNOWN_SUPPORT_REQUEST" &&
     input.rawText &&
     selectedIntent !== extracted.intentLabel
+  )
+    risks.add("CONFLICT");
+  if (
+    input.mode === "structured" &&
+    input.rawText &&
+    input.serviceGroup !== "OTHER" &&
+    extracted.serviceGroup !== "OTHER" &&
+    input.serviceGroup !== extracted.serviceGroup
   )
     risks.add("CONFLICT");
   if (
@@ -454,7 +482,9 @@ export function extractIntake(
     risks.add("SECRET");
   if (
     environment === "production" &&
-    (requestKind === "ACCESS_REQUEST" ||
+    ((requestKind === "ACCESS_REQUEST" &&
+      (serviceGroup !== "DATABASE" ||
+        !["read", "read-only"].includes(entities.permission ?? ""))) ||
       requestKind === "CONFIGURATION_CHANGE" ||
       (["DATABASE", "CLOUD_GPU", "KUBERNETES", "CI_CD"].includes(
         serviceGroup,
@@ -497,11 +527,20 @@ export function extractIntake(
     risks.add("DATA_EXPORT");
   const parts = input.rawText
     .split(
-      /(?:\n|;|\.\s+|\b(?:nhưng|nhung|but|tiện thể|tien the|ngoài ra|ngoai ra|and also)\b)/i,
+      /(?:\n|;|\.\s+|\b(?:nhưng|nhung|but|tiện thể|tien the|ngoài ra|ngoai ra|and also|and then|then|đồng thời|dong thoi|cùng lúc|cung luc)\b|\band\s+(?=(?:grant|give|open|disable|turn|export|deploy|delete|restart|create|cap|mo|tat|xuat|trien khai)\b))/i,
     )
     .map((part) => part.trim())
     .filter(Boolean);
-  const subrequests = parts.length > 1 ? parts.map(extractText) : [];
+  let subrequests = parts.length > 1 ? parts.map(extractText) : [];
+  if (
+    extracted.intentLabel === "DEVICE_RESTART_GUIDANCE" &&
+    /(?:khong|not)\s+factory reset/.test(normalize(input.rawText))
+  )
+    subrequests = subrequests.filter(
+      (part) => part.intentLabel !== "DEVICE_RESET_GUIDANCE",
+    );
+  if (subrequests.length > 1 && Object.keys(fields).length)
+    risks.add("CONFLICT");
   subrequests.forEach((part) =>
     part.riskSignals.forEach((risk) => risks.add(risk)),
   );

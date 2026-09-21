@@ -46,6 +46,14 @@ export function auditEvent(
       request.input.rawText || "Structured intake",
     ],
     missingFields: request.decision?.missingFields ?? [],
+    questions: request.decision?.questions ?? [],
+    targetedQuestions: request.decision?.targetedQuestions ?? [],
+    nextStep: request.decision?.nextStep ?? "Chờ deterministic policy đánh giá.",
+    policyVersion: request.decision?.policyVersion ?? "intake-v1",
+    redactions: request.canonical?.redactions ?? [],
+    approvalStatus: request.decision?.approvalStatus ?? "pending",
+    approvalReference: request.decision?.approvalReference,
+    subrequestOutcomes: request.decision?.subrequestOutcomes ?? [],
     explanation,
   };
 }
@@ -65,7 +73,7 @@ export async function analyze(
   );
   return {
     canonical,
-    decision: evaluatePolicy(canonical, verifyApproval(canonical)),
+    decision: evaluatePolicy(canonical, verifyApproval),
   };
 }
 export async function previewSupport(value: unknown) {
@@ -102,8 +110,55 @@ export async function submitSupport(
         "Mã gửi này đã dùng cho nội dung khác.",
         409,
       );
-    return existing;
+    if (existing.decision) return existing;
   }
+  const result = await analyze(input, safe.markers, options);
+  let assistance = null;
+  if (
+    result.decision.action === "AUTO_APPROVE" &&
+    ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
+  ) {
+    try {
+      assistance = await createAssistance(
+        result.canonical,
+        result.decision.handlingMode === "LLM_ASSIST",
+        options,
+      );
+    } catch (error) {
+      result.canonical = modelFailure(result.canonical, error);
+      result.decision = evaluatePolicy(result.canonical, verifyApproval);
+    }
+  }
+
+  const applyResult = (draft: SupportRequest, before: SupportRequest["status"]) => {
+    draft.canonical = result.canonical;
+    draft.decision = result.decision;
+    if (assistance) draft.assistance.push(assistance);
+    draft.status =
+      result.decision.action === "AUTO_APPROVE"
+        ? "AUTO_APPROVED"
+        : result.decision.action === "ESCALATE"
+          ? "ESCALATED"
+          : "NEEDS_INFORMATION";
+    draft.events.push(
+      auditEvent(
+        draft,
+        before,
+        "DECISION",
+        "deterministic-policy",
+        result.decision.adminReason,
+      ),
+    );
+  };
+
+  // Recover an old/incomplete receipt using the same idempotency key. New
+  // submissions are evaluated before insertion so an unexpected failure can
+  // no longer leave a permanently stuck RECEIVED record.
+  if (existing)
+    return updateSupportRequest(existing.id, existing.version, (draft) =>
+      applyResult(draft, draft.status),
+    );
+
   const now = new Date().toISOString();
   const request: SupportRequest = {
     id: input.idempotencyKey,
@@ -124,58 +179,20 @@ export async function submitSupport(
       request,
       null,
       "RECEIVED",
-      "employee-demo",
+      "anonymous-demo-user",
       "Đã tiếp nhận input đã redact; chưa có hành động thực thi.",
     ),
   );
-  if (!(await insertSupportRequest(request))) {
-    const winner = await getSupportRequest(request.id);
-    if (!winner || winner.fingerprint !== fingerprint)
-      throw new SupportError(
-        "IDEMPOTENCY_CONFLICT",
-        "Mã gửi bị trùng nội dung khác.",
-        409,
-      );
-    return winner;
-  }
-  const result = await analyze(input, safe.markers, options);
-  let assistance = null;
-  if (
-    result.decision.action === "AUTO_APPROVE" &&
-    ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
-  ) {
-    try {
-      assistance = await createAssistance(
-        result.canonical,
-        result.decision.handlingMode === "LLM_ASSIST",
-        options,
-      );
-    } catch (error) {
-      result.canonical = modelFailure(result.canonical, error);
-      result.decision = evaluatePolicy(
-        result.canonical,
-        verifyApproval(result.canonical),
-      );
-    }
-  }
-  return updateSupportRequest(request.id, 0, (draft) => {
-    draft.canonical = result.canonical;
-    draft.decision = result.decision;
-    if (assistance) draft.assistance.push(assistance);
-    draft.status =
-      result.decision.action === "AUTO_APPROVE"
-        ? "AUTO_APPROVED"
-        : result.decision.action === "ESCALATE"
-          ? "ESCALATED"
-          : "NEEDS_INFORMATION";
-    draft.events.push(
-      auditEvent(
-        draft,
-        "RECEIVED",
-        "DECISION",
-        "deterministic-policy",
-        result.decision.adminReason,
-      ),
+  applyResult(request, "RECEIVED");
+  request.version = 1;
+  request.updatedAt = new Date().toISOString();
+  if (await insertSupportRequest(request)) return request;
+  const winner = await getSupportRequest(request.id);
+  if (!winner || winner.fingerprint !== fingerprint)
+    throw new SupportError(
+      "IDEMPOTENCY_CONFLICT",
+      "Mã gửi bị trùng nội dung khác.",
+      409,
     );
-  });
+  return winner;
 }

@@ -18,7 +18,6 @@ export function canReview(status: RequestStatus, action: ReviewAction) {
   if (action === "FULFILL")
     return status === "AUTO_APPROVED" || status === "APPROVED_BY_HUMAN";
   if (action === "OVERRIDE") return [...decided, "REJECTED"].includes(status);
-  if (action === "APPROVE")
-    return ["ESCALATED", "NEEDS_INFORMATION"].includes(status);
+  if (action === "APPROVE") return status === "ESCALATED";
   return decided.includes(status);
 }

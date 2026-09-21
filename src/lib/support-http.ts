@@ -2,6 +2,10 @@ import { z } from "zod";
 import { errorResponse, successResponse } from "./api-response";
 import { SupportError } from "./support-repository";
 
+type RateWindow = { startedAt: number; count: number };
+type SupportHttpRuntime = { supportRateLimits?: Map<string, RateWindow> };
+const httpRuntime = globalThis as typeof globalThis & SupportHttpRuntime;
+
 export async function supportApi(work: () => Promise<unknown>, status = 200) {
   try {
     return successResponse(await work(), { status });
@@ -82,6 +86,33 @@ export function requireDemoReviewer() {
       403,
     );
   return "public-demo-reviewer";
+}
+export function enforceDemoRateLimit(
+  request: Request,
+  scope: "intake" | "mutation",
+) {
+  if (process.env.NODE_ENV !== "production") return;
+  const now = Date.now();
+  const windowMs = 60_000;
+  const limit = scope === "intake" ? 30 : 15;
+  const client =
+    request.headers.get("x-real-ip") ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "anonymous";
+  const key = `${scope}:${client}`;
+  const limits = (httpRuntime.supportRateLimits ??= new Map());
+  const current = limits.get(key);
+  if (!current || now - current.startedAt >= windowMs) {
+    limits.set(key, { startedAt: now, count: 1 });
+    return;
+  }
+  if (current.count >= limit)
+    throw new SupportError(
+      "RATE_LIMITED",
+      "Quá nhiều yêu cầu demo. Thử lại sau một phút.",
+      429,
+    );
+  current.count += 1;
 }
 export const requestId = (id: string) => z.string().uuid().parse(id);
 export function verifyModelOptions(request: Request) {
