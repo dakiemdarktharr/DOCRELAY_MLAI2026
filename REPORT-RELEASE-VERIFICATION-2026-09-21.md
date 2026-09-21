@@ -5,7 +5,7 @@
 - Deployment: `dpl_8uFvh41TniLMzoSaB2TjYNZmE5jr` (READY)
 - Completed verification: `2026-09-21T07:12:30.024Z`
 - Policy: support-guidance-v4.2
-- Evidence: [27 live checks](artifacts/report-live-verification.json), [E2E report](artifacts/e2e-results.json), [23-item recheck](DOCRELAY-ERRORS-RECHECK.md).
+- Evidence: [27 live checks](artifacts/report-live-verification.json), [E2E report](artifacts/e2e-results.json), [23-item recheck](VNG-SUPPORT-ERRORS-RECHECK.md).
 
 ## Results
 

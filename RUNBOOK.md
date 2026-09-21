@@ -1,3 +1,24 @@
+# VNG Support — vận hành hiện tại
+
+Website: https://vng-support.vercel.app. Project Vercel `vng-support`, ID `prj_hmxBwMixxSLC7fZzeGXI6o6VV5Rh` giữ nguyên. Domain mới là project domain production; alias cũ vẫn dùng được. GitHub repository giữ `dakiemdarktharr/DOCRELAY_MLAI2026`.
+
+## Deploy
+
+Sau QA, tại checkout sạch đã commit, xác nhận `.vercel/project.json` có đúng project ID trên và projectName `vng-support`. Không tạo project mới. Nếu cần liên kết lại, dùng `vercel link --project vng-support --scope acne-a6cd`.
+
+```powershell
+$releaseRevision = git rev-parse HEAD
+vercel --prod --yes --env "APP_REVISION=$releaseRevision"
+```
+
+Kiểm tra https://vng-support.vercel.app/api/support/health: revision khớp commit, policy v5, durable true, storage MongoDB. Health không gọi OpenAI. Kiểm tra home/header/mascot và hai lối vào. Chỉ gọi model thật khi cần, trong cap đã được duyệt; không reset budget.
+
+GitHub auto-deploy chưa kết nối; push main không thay thế lệnh deploy. Secret đã ở Vercel phải được giữ; đổi tên không đòi hỏi gửi lại key. Database `mlai26_support_v3_demo` và collection/compatibility ID không đổi.
+
+## Knowledge khi đổi thương hiệu
+
+Ba bài GREETING/IDENTITY/CAPABILITIES dùng ID revision 2. Upsert chỉ thêm revision mới khi có lượt retrieval đầu tiên. Revision 1 không xóa nhưng bị loại khỏi retrieval, kể cả khi revision 2 hết hạn. Article khác giữ revision hiện tại. Requests/history và câu trả lời đã lưu vẫn là bằng chứng tại thời điểm tạo. Regression có kiểm tra corpus chứa cả hai revision và hết hạn.
+
 # Conversation / RAG operations — 21/09/2026
 
 - Keep the existing Vercel project and MongoDB database. First conversation retrieval idempotently seeds `v3_support_knowledge`; it does not delete requests or old records. Account needs collection/index/upsert permissions. Public users cannot write knowledge articles.
@@ -15,7 +36,7 @@
 - Default `/verify` runs `submission-4`. Select `de-a-v3` for 3 auto / 2 escalate. Each run saves to MongoDB `v3_verify_runs`; copy `/verify?run=<id>`. Reload, stop after the current case, or resume unfinished cases. Server calls the production request API and stores server-derived actual results.
 - Queue/audit default excludes new Verify cases. Select Case Verify or All to inspect them. Historical untagged records remain unchanged.
 - `GET /api/support/requests?view=page&limit=30&cursor=0&q=VPN&origin=support&status=pending` returns `{items,total,nextCursor}` inside the normal envelope. `GET /api/support/events?view=page` uses the same query contract. `limit` max 100; cursor is an offset. Existing summary/full array routes retain compatibility limits. Metrics aggregate all stored support records including synthetic Verify.
-- Owner authorized 10 additional model attempts on 21/09/2026: production AI_MAX_ATTEMPTS=30, code ceiling=30, default remains 20. Existing lifetime counter stays intact; no reset. Further increases require owner authorization.
+- Owner authorized a cumulative cap of 50 attempts on 21/09/2026: production AI_MAX_ATTEMPTS=50, code ceiling=50, local default remains 20. Existing lifetime counter stays intact; no reset. Further increases require owner authorization.
 - On Vercel, MongoDB is mandatory even if SUPPORT_STORAGE is set to memory-demo. `/api/support/health` pings DB and reports storage/durable/provider/policy/sourceRevision. Health does not make a paid model call.
 - Deploy this existing project with `vercel --prod --yes --env APP_REVISION=<full git SHA>` after tests. Check health SHA against the source commit. Never print or commit environment values. Do not reset AI budget to make a smoke pass.
 - Support audit's source of truth remains embedded `v3_support_requests.data.events`. Legacy echo events use MongoDB `legacy_events` when MONGODB_URI exists, and keep their API shape. Prisma remains a local legacy fallback only. No historical data is dropped.

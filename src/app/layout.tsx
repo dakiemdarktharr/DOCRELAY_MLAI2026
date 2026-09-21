@@ -10,9 +10,9 @@ const nunito = localFont({
   display: "swap",
 });
 export const metadata: Metadata = {
-  title: "VNG Support Referee | MLAI Project",
+  title: "VNG Support | Trợ lý hỗ trợ",
   description:
-    "Hỗ trợ kỹ thuật, hướng dẫn an toàn và chuyển reviewer theo policy xác định.",
+    "Trò chuyện, giải đáp câu hỏi thường ngày và hỗ trợ kỹ thuật với AI, nguồn tham khảo và quy trình xử lý rõ ràng.",
 };
 
 export default function RootLayout({

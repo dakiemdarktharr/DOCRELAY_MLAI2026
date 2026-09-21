@@ -1,3 +1,14 @@
+# VNG Support naming release — 2026-09-21
+
+- Owner requested README workflow/description update, main commit and Vercel naming consistency; GitHub repository rename deferred to owner.
+- Audited main ff4dd13 and passed baseline 218 tests, lint/build. Kept the student contracts.ts draft in the original workspace untouched.
+- Renamed existing Vercel project labpass to vng-support with CLI (browser session had no login); added verified production domain vng-support.vercel.app, retained old alias, updated public URL configuration. Same project ID, secrets, DB and model budget.
+- Updated UI/package/model identity and versioned three knowledge articles. Preserved old Mongo documents but excluded superseded identity IDs from retrieval. Regression verifies old identity cannot reappear after replacement expiry.
+- Rewrote README around current conversation/RAG/web/policy/reviewer workflow. Renamed branded mascot and two document filenames, updated links and preserved historical report provenance.
+- Local unit suite now 219 PASS, lint/build PASS. First E2E detected two stale title expectations (desktop/mobile); changed only expected brand to VNG Support and reran the suite. Deployment verification follows in STATUS.
+
+---
+
 # Build Log
 
 ## Conversation, RAG and policy v5 — 2026-09-21

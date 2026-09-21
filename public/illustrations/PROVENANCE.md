@@ -1,6 +1,6 @@
 # Support mascot illustration
 
-`support-mascot.png` generated on 2026-09-21 with the built-in imagegen tool under the user's approved mascot direction. Original AI interpretation inspired by NAVI by VNGGames, not an official VNG asset or claim of endorsement. No original mascot artwork was copied into this repository. Local Nunito license remains in src/app/fonts; no Gilroy imported.
+`vng-support-mascot.png` generated on 2026-09-21 with the built-in imagegen tool under the user's approved mascot direction. Original AI interpretation inspired by NAVI by VNGGames, not an official VNG asset or claim of endorsement. No original mascot artwork was copied into this repository. Local Nunito license remains in src/app/fonts; no Gilroy imported.
 
 Research references:
 - VNGGames GameVerse 2026 introduction: https://vng.com.vn/news/press-release/vnggames-gameverse-2026.html

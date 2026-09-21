@@ -165,7 +165,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
             {!visibleRequests.length && (
               <div className="text-center py-6">
                 <Image
-                  src="/illustrations/support-mascot.png"
+                  src="/illustrations/vng-support-mascot.png"
                   width={110}
                   height={110}
                   alt=""

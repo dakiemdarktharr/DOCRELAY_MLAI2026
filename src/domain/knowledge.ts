@@ -12,8 +12,17 @@ export type KnowledgeArticle = {
   version: number;
 };
 const checkedAt = "2026-09-21";
+const rebrandedLabels: ConversationLabel[] = [
+  "GREETING",
+  "IDENTITY",
+  "CAPABILITIES",
+];
+// Keep old Mongo documents for provenance, but never retrieve superseded identity text.
+export const supersededKnowledgeIds = rebrandedLabels.map(
+  (label) => `support-kb-v1-${label.toLowerCase()}`,
+);
 const project: AnswerSource = {
-  title: "Khả năng của DOCRELAY",
+  title: "Khả năng của VNG Support",
   url: "https://github.com/dakiemdarktharr/DOCRELAY_MLAI2026",
   scope: "project",
   checkedAt,
@@ -37,14 +46,14 @@ const entries: Array<
     "GREETING",
     "Chào hỏi",
     ["chao", "hello", "hi"],
-    "Xin chào! Mình là trợ lý DOCRELAY. Bạn có thể hỏi chuyện thường ngày, nhờ hướng dẫn sử dụng ứng dụng hoặc mô tả lỗi bằng lời của mình. Bạn đang muốn tìm hiểu điều gì?",
+    "Xin chào! Mình là trợ lý VNG Support. Bạn có thể hỏi chuyện thường ngày, nhờ hướng dẫn sử dụng ứng dụng hoặc mô tả lỗi bằng lời của mình. Bạn đang muốn tìm hiểu điều gì?",
     [project],
   ],
   [
     "IDENTITY",
     "Tên trợ lý",
     ["ten", "name", "ai"],
-    "Mình là trợ lý AI DOCRELAY, đồng hành với bạn trong việc tìm câu trả lời và hỗ trợ kỹ thuật. Mình có thể giải thích và hướng dẫn; việc cấp quyền hay thay đổi hệ thống cần quy trình riêng.",
+    "Mình là trợ lý AI VNG Support, đồng hành với bạn trong việc tìm câu trả lời và hỗ trợ kỹ thuật. Mình có thể giải thích và hướng dẫn; việc cấp quyền hay thay đổi hệ thống cần quy trình riêng.",
     [project],
   ],
   [
@@ -99,13 +108,13 @@ const entries: Array<
 ];
 export const knowledgeSeed: KnowledgeArticle[] = entries.map(
   ([label, title, keywords, answer, sources]) => ({
-    _id: `support-kb-v1-${label.toLowerCase()}`,
+    _id: `support-kb-v${rebrandedLabels.includes(label) ? 2 : 1}-${label.toLowerCase()}`,
     label,
     title,
     keywords,
     answer,
     sources,
-    version: 1,
+    version: rebrandedLabels.includes(label) ? 2 : 1,
     reviewedAt: checkedAt,
     expiresAt: "2026-12-20T00:00:00.000Z",
   }),

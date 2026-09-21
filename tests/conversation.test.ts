@@ -99,14 +99,14 @@ it.each(["unavailable", "invalid"] as const)(
 it("calls the answer model once with retrieved evidence and validates model labels without authority", async () => {
   const run = vi.fn(async () => ({
     label: "IDENTITY",
-    text: "Mình là trợ lý DOCRELAY, có thể hướng dẫn bạn và giải đáp câu hỏi.",
-    knowledgeIds: ["support-kb-v1-identity"],
+    text: "Mình là trợ lý VNG Support, có thể hướng dẫn bạn và giải đáp câu hỏi.",
+    knowledgeIds: ["support-kb-v2-identity"],
   }));
   const row = await submitSupport(input("bạn tên gì"), { run });
   expect(run).toHaveBeenCalledOnce();
   expect(run.mock.calls[0]).toBeDefined();
   expect(row.assistance[0].answer?.knowledgeIds).toContain(
-    "support-kb-v1-identity",
+    "support-kb-v2-identity",
   );
 });
 it.each([
@@ -334,4 +334,22 @@ it.each([
       "GOOGLE_RECOVERY",
     ),
   ).not.toThrow();
+});
+
+it("does not retrieve superseded Mongo identity articles or revive them after replacement expiry", () => {
+  const current = knowledgeSeed.find((row) => row.label === "IDENTITY")!;
+  const previous = {
+    ...current,
+    _id: "support-kb-v1-identity",
+    version: 1,
+    answer: "Historical identity",
+    expiresAt: "2027-12-20T00:00:00.000Z",
+  };
+  const rows = [previous, current];
+  expect(
+    rankKnowledge(rows, "bạn tên gì", "IDENTITY", Date.parse("2026-09-21")),
+  ).toEqual([current]);
+  expect(
+    rankKnowledge(rows, "bạn tên gì", "IDENTITY", Date.parse("2027-01-01")),
+  ).toEqual([]);
 });

@@ -13,10 +13,10 @@ export function AnswerBubble({
         <p className="assistant-byline">
           ✦{" "}
           {item.source === "openai"
-            ? "DOCRELAY · AI trả lời"
+            ? "VNG Support · AI trả lời"
             : item.source === "mock"
-              ? "DOCRELAY · Câu trả lời mẫu"
-              : "DOCRELAY · Hướng dẫn đã kiểm duyệt"}
+              ? "VNG Support · Câu trả lời mẫu"
+              : "VNG Support · Hướng dẫn đã kiểm duyệt"}
         </p>
         {item.answer ? (
           <>

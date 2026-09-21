@@ -1,4 +1,6 @@
-# DOCRELAY report recheck — 2026-09-21
+# VNG Support — report recheck, 2026-09-21
+
+Tên file/tiêu đề đổi từ DOCRELAY; các kết quả, nguồn báo cáo và deployment bên dưới là bằng chứng lịch sử tại thời điểm kiểm tra.
 
 Input report: DOCRELAY_ERRORS_AND_NEGATIVE_IMPACTS.docx supplied by user. Report observations are hypotheses to recheck; baseline main 0b14538, deployed source c0c5ea5. Original student workspace draft stays untouched. Baseline: 154 tests and lint pass; build passed.
 
@@ -22,7 +24,7 @@ Expected files: src/domain/{contracts,input,guidance,questions,text,policy}.ts, 
 | E02 Không rõ thao tác đầu | Đã khắc phục | Trang chào có một câu chỉ nút cần chọn và ví dụ VPN; hai lối vào tiếng Việt, không login. |
 | E03 Verify 5 thay vì 4 case | Đã khắc phục | Default `submission-4`; giữ riêng Đề A 5 case, 3 auto/2 escalate. E2E chạy cả hai. |
 | E04 Không lưu lần Verify | Đã khắc phục | `v3_verify_runs`, bảng expected/actual/pass/fail/time/rule; link tải lại, dừng/tiếp tục. |
-| E05 Thiếu slide/video | Bổ sung bản kỹ thuật | `submission/DOCRELAY-5-SLIDES.pptx`, video raw local mock. Nhóm cần xác nhận trước khi nộp. |
+| E05 Thiếu slide/video | Bổ sung bản kỹ thuật | `submission/VNG-SUPPORT-5-SLIDES.pptx`, video raw local mock. Nhóm cần xác nhận trước khi nộp. |
 | E06 Build log chưa một trang | Đã bổ sung | `submission/BUILD-LOG-ONE-PAGE.pdf`, đúng một trang. Bản log dài vẫn giữ lịch sử. |
 | E07 Hướng dẫn chung chung | Cải thiện có kiểm thử | Shutdown trả lời trực tiếp; VPN dựa OS/lỗi timeout và câu hỏi tiếp theo. Chưa phải chẩn đoán toàn bộ thiết bị. |
 | E08 LLM chỉ chọn template | Đã mở rộng có giới hạn | Model viết summary, giải thích từng bước, expectedResult/nextQuestion với evidence trích từ input. Bước thao tác và quyền vẫn do code. |

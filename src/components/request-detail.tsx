@@ -103,7 +103,7 @@ export function RequestDetail({ id }: { id: string }) {
             {request.status === "COMPLETED" && (
               <Image
                 className="completion-mascot"
-                src="/illustrations/support-mascot.png"
+                src="/illustrations/vng-support-mascot.png"
                 width={100}
                 height={100}
                 alt="Nhân vật đồng hành mỉm cười"
