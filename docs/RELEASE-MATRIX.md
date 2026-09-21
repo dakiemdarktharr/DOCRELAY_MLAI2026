@@ -1,9 +1,10 @@
 # Release matrix — integrated source and deployment evidence
 
-Source rechecked at `9d9ab053806250c72eea0b7b8b17f43f875252c1`. This is a deployment-preparation snapshot: repository integration, QA, human review and live operation are separate claims.
+Runtime source rechecked at `9d9ab053806250c72eea0b7b8b17f43f875252c1`, then deployed with documentation corrections as `01a20a7128b58a0e09e8e6f6ed1fe10a1f4a85a3`. Repository integration, QA, human review and live operation are separate claims. [Fresh deployment receipt](releases/01a20a7.md) records the actual deployment and read-only checks; the receipt commit itself changes documentation only.
 
 | Layer | Source / policy | Evidence and limits |
 | --- | --- | --- |
+| Verified public deployment | 01a20a7; support-guidance-v5.2 | READY dpl_J4sT4LpVHb73sMSXiEKQnkaHjm8q at https://vng-support.vercel.app. Health matched SHA/policy and performed Mongo ping; six main pages returned HTTP 200. No paid-model call or workflow-persistence test. |
 | Inspected main | 9d9ab05; support-guidance-v5.2 | Contains all twelve files from the two release-fix packages. No package reapplication is needed. |
 | Knowledge release fix | 4ad01e8 | Runtime schema validation per Mongo knowledge document, boundary regressions and governance documentation are committed. Malformed neighbors no longer abort retrieval. |
 | Verify release fix | 276c264, 5161a6e, dcce69c, 9d9ab05 | UUID-validated exact-ID page query/readback, compatibility/retry regressions and old-request coverage are committed. |
