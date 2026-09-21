@@ -14,12 +14,13 @@ const querySchema = z.object({
   q: z.string().trim().max(200).default(""),
   status: z.enum(["all", "pending"]).default("all"),
   origin: z.enum(["all", "support", "verify"]).default("all"),
+  requestId: z.string().uuid().optional(),
 });
 export function parseSupportQuery(url: string) {
   const params = new URL(url).searchParams;
   return querySchema.parse(
     Object.fromEntries(
-      ["cursor", "limit", "q", "status", "origin"]
+      ["cursor", "limit", "q", "status", "origin", "requestId"]
         .filter((key) => params.has(key))
         .map((key) => [key, params.get(key)]),
     ),
@@ -30,6 +31,7 @@ type Row = { _id: string; data: SupportRequest };
 const pending = ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"];
 function filterFor(query: SupportQuery): Filter<Row> {
   const filter: Filter<Row> = {};
+  if (query.requestId) filter._id = query.requestId;
   if (query.status === "pending") filter["data.status"] = { $in: pending };
   if (query.origin !== "all")
     filter["data.input.verifyRunId"] = { $exists: query.origin === "verify" };
@@ -46,6 +48,7 @@ async function memoryRows(query: SupportQuery) {
   const rows = await listSupportRequests(true);
   return rows.filter(
     (row) =>
+      (!query.requestId || row.id === query.requestId) &&
       (query.status === "all" || pending.includes(row.status)) &&
       (query.origin === "all" ||
         Boolean(row.input.verifyRunId) === (query.origin === "verify")) &&
