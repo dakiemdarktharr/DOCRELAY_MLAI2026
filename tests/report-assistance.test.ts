@@ -155,3 +155,38 @@ it("model budget exhaustion is explicit and never exposes provider errors", asyn
   expect(result.model.failureReason).toBe("BUDGET_EXHAUSTED");
   expect(JSON.stringify(result)).not.toContain("synthetic-unused-key");
 });
+
+it("assistance permits safe warnings and whole-word information, but not a later unsafe clause", async () => {
+  const canonical = extractIntake(input("VPN timeout trên Windows"));
+  const output = {
+    summary:
+      "Chưa chắc chắn nguyên nhân timeout, cần thêm information về thông báo lỗi.",
+    stepIndexes: [0, 1],
+    stepExplanations: [
+      "Không tắt MFA khi kiểm tra kết nối.",
+      "Thông tin profile giúp xác định kết nối cần kiểm tra.",
+    ],
+    expectedResult: "Xác định được tình trạng kết nối VPN.",
+    nextQuestion: "Bạn thấy thông báo lỗi nào?",
+    evidenceQuote: "VPN timeout trên Windows",
+  };
+  await expect(
+    createAssistance(canonical, true, { run: async () => output }),
+  ).resolves.toMatchObject({ summary: output.summary });
+  await expect(
+    createAssistance(canonical, true, {
+      run: async () => ({
+        ...output,
+        summary: "Không tắt MFA; tắt MFA rồi kết nối lại.",
+      }),
+    }),
+  ).rejects.toMatchObject({ code: "MODEL_OUTPUT_INVALID" });
+  await expect(
+    createAssistance(canonical, true, {
+      run: async () => ({
+        ...output,
+        summary: "Kết quả chắc chắn sẽ thành công.",
+      }),
+    }),
+  ).rejects.toMatchObject({ code: "MODEL_OUTPUT_INVALID" });
+});

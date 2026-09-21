@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-21T07:02:22.866Z",
-  "sourceCommit": "cdf2b1ec252a3290b309fae9969a85271c75201d",
-  "deploymentId": "dpl_4HE1sUpUC4EZ9X6yAoib6RPZ91Fw",
+  "timestamp": "2026-09-21T07:07:27.759Z",
+  "sourceCommit": "0e092995fc8c0cd28682628212c51532aa7d558f",
+  "deploymentId": "dpl_GHVK3EnbFExMmjGV66izAr6ASAF9",
   "url": "https://labpass-five.vercel.app",
   "checks": [
     {
@@ -14,7 +14,7 @@
         "durable": true,
         "provider": "openai",
         "policy": "support-guidance-v4.2",
-        "sourceRevision": "cdf2b1ec252a3290b309fae9969a85271c75201d",
+        "sourceRevision": "0e092995fc8c0cd28682628212c51532aa7d558f",
         "simulated": true
       }
     },
@@ -22,7 +22,7 @@
       "name": "source SHA matches deployed code",
       "pass": true,
       "details": {
-        "sourceRevision": "cdf2b1ec252a3290b309fae9969a85271c75201d"
+        "sourceRevision": "0e092995fc8c0cd28682628212c51532aa7d558f"
       }
     },
     {
@@ -40,7 +40,7 @@
         "source": null,
         "action": "ESCALATE",
         "failure": "MODEL_OUTPUT_INVALID",
-        "failureReason": null,
+        "failureReason": "UNSAFE_PROSE",
         "steps": 0
       }
     },
@@ -55,7 +55,7 @@
       "name": "MongoDB preview-submit-independent GET exact match",
       "pass": true,
       "details": {
-        "requestId": "5c5edad2-ab24-4be7-9cc7-18a5252dfb3f",
+        "requestId": "a469685f-6e6f-452b-bf58-ddd9afdbee71",
         "version": 1
       }
     },
@@ -120,7 +120,7 @@
       "name": "four-case production Verify all pass",
       "pass": true,
       "details": {
-        "runId": "ad892bef-32da-414a-82e8-cf69465364e3",
+        "runId": "ac3d20d3-3495-4506-ac2e-496ce30c5501",
         "results": [
           {
             "caseId": "submission-shutdown",
@@ -197,7 +197,7 @@
       "name": "MongoDB pagination reads distinct pages",
       "pass": true,
       "details": {
-        "total": 117
+        "total": 125
       }
     },
     {
@@ -208,7 +208,7 @@
       "name": "MongoDB aggregate count matches total",
       "pass": true,
       "details": {
-        "total": 117
+        "total": 125
       }
     },
     {
@@ -217,11 +217,11 @@
     }
   ],
   "requestIds": [
-    "5c5edad2-ab24-4be7-9cc7-18a5252dfb3f",
-    "1b8fc000-03ba-4aab-a284-98f95b2fd281",
-    "19ad29f8-e7a8-4f9b-a8b1-eba60c77f118",
-    "c7406b7b-502f-4a0f-b206-f5bfe3bb5fb2"
+    "a469685f-6e6f-452b-bf58-ddd9afdbee71",
+    "c5b9a781-7723-4e12-859a-4b5d5e5490e7",
+    "1eee6434-55e6-463f-b50d-862632d9ae46",
+    "87e8498a-be42-4668-a112-42b7475514e7"
   ],
-  "verifyRunId": "ad892bef-32da-414a-82e8-cf69465364e3",
-  "completedAt": "2026-09-21T07:02:50.442Z"
+  "verifyRunId": "ac3d20d3-3495-4506-ac2e-496ce30c5501",
+  "completedAt": "2026-09-21T07:07:43.926Z"
 }

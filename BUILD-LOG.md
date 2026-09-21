@@ -118,3 +118,6 @@ Final E2E repetition exposed a pack-selection race: Verify enabled controls befo
 
 
 The first newly authorized live model call was rejected by output validation. Enforced provider-side strict JSON schema, exact evidence choices and valid step indexes in addition to existing server validation. Added safe categorical validation diagnostics without saving rejected model prose. Original safety checks and token/call ceilings remain in force.
+
+
+Live diagnostics narrowed rejection to the prose guard. Reproduced false positives for safe negated warnings and substrings (information contains format). Reused existing local-negation detection and added word boundaries; affirmative dangerous clauses and certainty claims still fail. Added regression for both allowed warnings and a later unsafe clause.

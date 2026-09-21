@@ -17,6 +17,7 @@ import { guidanceTemplate } from "@/domain/guidance";
 import {
   extractIntake,
   normalizeFact,
+  asserted,
   detectedRisks,
   normalize,
 } from "@/domain/text";
@@ -448,8 +449,14 @@ export async function createAssistance(
       data.expectedResult,
       data.nextQuestion,
     ].join(" ");
-    const forbidden =
-      /https?:|www\.|```|\b(?:sudo|powershell|cmd\.exe|curl|wget|kubectl|chmod|regedit|netsh)\b|\b(?:run|execute|chay|thuc thi)\s+(?:command|lenh|script)|(?:grant|cap)\s+(?:quyen|access)|(?:disable|turn off|tat)\s+(?:mfa|edr|firewall)|(?:xoa|delete|wipe|format|factory reset)|(?:approved|da duyet|guaranteed|chac chan)/i;
+    const proseText = normalize(prose).replace(
+      /\bchua chac chan\b/g,
+      "chua ro",
+    );
+    const commands =
+      /https?:|www\.|```|\b(?:sudo|powershell|cmd\.exe|curl|wget|kubectl|chmod|regedit|netsh)\b|\b(?:run|execute|chay|thuc thi)\s+(?:command|lenh|script)\b/;
+    const unsafeActions =
+      /\b(?:grant|cap)\s+(?:quyen|access)\b|\b(?:disable|turn off|tat)\s+(?:mfa|edr|firewall)\b|\b(?:xoa|delete|wipe|format|factory reset)\b|\b(?:approved|da duyet|guaranteed|chac chan)\b/;
     if (
       data.stepIndexes.length !== data.stepExplanations.length ||
       new Set(data.stepIndexes).size !== data.stepIndexes.length
@@ -464,7 +471,7 @@ export async function createAssistance(
     const proseRisk = detectedRisks(prose)[0];
     if (proseRisk)
       throw new ModelFailure("MODEL_OUTPUT_INVALID", `PROSE_${proseRisk}`);
-    if (forbidden.test(normalize(prose)))
+    if (commands.test(proseText) || asserted(proseText, unsafeActions))
       throw new ModelFailure("MODEL_OUTPUT_INVALID", "UNSAFE_PROSE");
     return {
       ...template,

@@ -31,7 +31,7 @@ export function normalizeFact(value: string) {
     .replace(/\b(?:ngay|days?)\b/g, "days");
 }
 // Negation is local to the matched phrase; it cannot cancel a later risky subrequest.
-function asserted(text: string, pattern: RegExp) {
+export function asserted(text: string, pattern: RegExp) {
   const matcher = new RegExp(pattern.source, "g");
   for (const match of text.matchAll(matcher)) {
     const prefix =
