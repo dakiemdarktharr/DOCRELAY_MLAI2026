@@ -1,16 +1,19 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
-import type { AuditEvent } from "@/domain/contracts";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { AuditEvent, ResultPage } from "@/domain/contracts";
 import { browserApi } from "@/lib/browser-api";
 import { Alert, Button, Card, Input } from "@/components/ui";
 import { AuditTimeline } from "@/components/support-history";
 export default function AuditPage() {
-  const sequence = useRef(0);
-  const [events, setEvents] = useState<AuditEvent[]>([]),
-    [id, setId] = useState(""),
+  const sequence = useRef(0),
+    [events, setEvents] = useState<AuditEvent[]>([]),
+    [query, setQuery] = useState(""),
+    [origin, setOrigin] = useState("support"),
     [error, setError] = useState(""),
-    [pending, setPending] = useState(false);
+    [pending, setPending] = useState(false),
+    [cursor, setCursor] = useState<string | null>(null),
+    [total, setTotal] = useState(0);
   const [metrics, setMetrics] = useState<{
     total: number;
     resolvedFeedback: number;
@@ -18,87 +21,129 @@ export default function AuditPage() {
     modelFailures: number;
     pendingReview: number;
   } | null>(null);
+  const load = useCallback(
+    async (next: string | null = null) => {
+      const current = ++sequence.current;
+      setPending(true);
+      try {
+        const params = new URLSearchParams({
+          view: "page",
+          q: query,
+          origin,
+          limit: "30",
+          ...(next ? { cursor: next } : {}),
+        });
+        const page = await browserApi<ResultPage<AuditEvent>>(
+          `/api/support/events?${params}`,
+        );
+        if (current === sequence.current) {
+          setEvents((previous) =>
+            next ? [...previous, ...page.items] : page.items,
+          );
+          setCursor(page.nextCursor);
+          setTotal(page.total);
+          setError("");
+        }
+      } catch (e) {
+        if (current === sequence.current)
+          setError(e instanceof Error ? e.message : "Không tải được lịch sử.");
+      } finally {
+        if (current === sequence.current) setPending(false);
+      }
+    },
+    [query, origin],
+  );
   useEffect(() => {
-    const current = ++sequence.current;
-    void browserApi<AuditEvent[]>("/api/support/events")
-      .then((rows) => {
-        if (sequence.current === current) setEvents(rows);
-      })
-      .catch(() => setError("Không thể tải audit."));
+    const tracker = sequence;
+    const timer = setTimeout(() => void load(), 250);
+    return () => {
+      clearTimeout(timer);
+      tracker.current++;
+    };
+  }, [load]);
+  useEffect(() => {
     void browserApi<typeof metrics>("/api/support/metrics")
       .then(setMetrics)
-      .catch(() => setError("Không thể tải metrics."));
+      .catch(() => setError("Không tải được số liệu."));
   }, []);
-  async function load() {
-    setPending(true);
-    const current = ++sequence.current;
-    try {
-      const rows = await browserApi<AuditEvent[]>(
-        `/api/support/events${id ? `?requestId=${encodeURIComponent(id)}` : ""}`,
-      );
-      if (sequence.current === current) {
-        setEvents(rows);
-        setError("");
-      }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Không thể tải audit.");
-    } finally {
-      setPending(false);
-    }
-  }
   return (
     <main className="page page-narrow space-y-6">
       <div>
         <p className="eyebrow">LỊCH SỬ XỬ LÝ</p>
         <h1>Mỗi quyết định, một dấu vết.</h1>
       </div>
-      <p className="text-sm text-slate-600">
-        300 sự kiện mới nhất trong 200 hồ sơ demo gần đây. Lọc theo mã yêu cầu
-        để xem toàn bộ lịch sử của hồ sơ đó.
+      <p>
+        Tìm bằng nội dung hoặc mã yêu cầu. Các trang tiếp theo giữ lại khả năng
+        tìm hồ sơ cũ; case Verify có bộ lọc riêng.
       </p>
       {metrics && (
         <Card>
           <p>
-            Hồ sơ: {metrics.total} · Đã tự giải quyết:{" "}
+            Tổng hồ sơ: {metrics.total} · Đã tự giải quyết:{" "}
             {metrics.resolvedFeedback} · Chuyển người: {metrics.handoffs} · Lỗi
             trợ lý: {metrics.modelFailures} · Chờ xử lý: {metrics.pendingReview}
           </p>
-          <p className="mt-2 text-xs text-slate-500">
-            Số đếm dữ liệu giả lập; không phải độ chính xác trên dữ liệu thực
-            tế.
+          <p className="text-sm">
+            Tổng số dữ liệu demo đã lưu, gồm Verify; không phải kết quả đo trên
+            người dùng thật.
           </p>
         </Card>
       )}
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
+        onSubmit={(e) => {
+          e.preventDefault();
           void load();
         }}
-        className="flex flex-wrap items-end gap-3"
+        className="space-y-3"
       >
-        <label className="min-w-0 flex-1">
-          Mã yêu cầu
+        <label>
+          Nội dung hoặc mã yêu cầu
           <Input
-            value={id}
-            onChange={(event) => setId(event.target.value)}
-            placeholder="UUID hoặc để trống"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ví dụ: VPN hoặc mã yêu cầu"
           />
+        </label>
+        <label>
+          Nguồn dữ liệu
+          <select value={origin} onChange={(e) => setOrigin(e.target.value)}>
+            <option value="support">Người dùng gửi</option>
+            <option value="verify">Case Verify</option>
+            <option value="all">Tất cả</option>
+          </select>
         </label>
         <Button disabled={pending}>Lọc / tải lại</Button>
       </form>
       {error && <Alert tone="error">{error}</Alert>}
       <Card aria-busy={pending}>
-        {pending ? (
-          <p role="status">Đang tải lịch sử…</p>
-        ) : events.length ? (
+        <p role="status">
+          {pending ? "Đang tải lịch sử…" : `${events.length}/${total} sự kiện`}
+        </p>
+        {events.length ? (
           <AuditTimeline events={events} />
         ) : (
-          <p>Chưa có event phù hợp.</p>
+          !pending && <p>Chưa có sự kiện phù hợp.</p>
+        )}
+        {cursor && (
+          <Button
+            disabled={pending}
+            variant="secondary"
+            onClick={() => void load(cursor)}
+          >
+            Tải thêm lịch sử
+          </Button>
         )}
       </Card>
-      <Link className="text-accent underline" href="/legacy/audit">
-        Generic event log (compatibility)
-      </Link>
+      <details>
+        <summary>Nhật ký API cũ</summary>
+        <p>
+          Echo chỉ ghi sự kiện tương thích riêng. Mọi quyết định hỗ trợ nằm
+          trong nhật ký ở trên.
+        </p>
+        <Link className="text-accent underline" href="/legacy/audit">
+          Mở nhật ký echo cũ
+        </Link>
+      </details>
     </main>
   );
 }

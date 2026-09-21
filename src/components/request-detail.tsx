@@ -232,7 +232,11 @@ export function RequestDetail({ id }: { id: string }) {
                 }}
               >
                 <fieldset disabled={pending} className="space-y-4">
-                  {(request.decision?.missingFields ?? [])
+                  {(
+                    request.decision?.clarificationFields ??
+                    request.decision?.missingFields?.slice(0, 3) ??
+                    []
+                  )
                     .slice(0, 3)
                     .map((field) =>
                       field === "verifiedApproval"

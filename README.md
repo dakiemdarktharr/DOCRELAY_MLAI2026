@@ -3,8 +3,14 @@
 
 Demo hỗ trợ kỹ thuật Đề A, phát triển tiếp từ generic Next.js skeleton trong repository này. Dữ liệu, approval và policy đều synthetic; không phải policy chính thức của VNG. Hai lối vào **Tôi cần hỗ trợ** và **Dành cho nhân viên** không yêu cầu đăng nhập trong demo công khai.
 
-Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đã tích hợp với các sửa bảo mật trên main; policy hiện tại là `support-guidance-v4.1`.
+Bản cập nhật ngày 21/09/2026 trên `codex/ux-vng-refurbish` tiếp nối main `0764f1d`: giao diện tiếng Việt, nền trắng/cam, mascot minh họa bằng AI lấy cảm hứng từ NAVI và sửa feedback giám khảo. Không khởi tạo lại dự án, không sửa bản nháp của sinh viên. Xem [UX-JUDGE-MIGRATION.md](UX-JUDGE-MIGRATION.md) cho audit, mapping BUG-01–21 và giới hạn kiểm chứng. Đã tích hợp với các sửa bảo mật trên main; policy hiện tại là `support-guidance-v4.2`.
 
+
+## Đối chiếu báo cáo lỗi ngày 21/09/2026
+
+Xem [kết quả E01–E23](DOCRELAY-ERRORS-RECHECK.md) và [gói nộp bài](submission/README.md). Verify mặc định 4 case, lưu từng lần chạy và tải lại qua URL; bộ Đề A 5 case vẫn được giữ. Reviewer/audit có phân trang, tìm kiếm phía server và bộ lọc Verify riêng. Câu hỏi bổ sung ưu tiên tối đa 3 mục. AI giải thích theo tình huống nhưng bước thao tác và authority vẫn do policy kiểm soát.
+
+Nhóm xác nhận chưa có phản hồi người dùng thật. Số test và demo synthetic không thay thế bằng chứng đó.
 
 ## Bản public
 

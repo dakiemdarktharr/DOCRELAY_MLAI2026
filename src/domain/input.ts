@@ -18,9 +18,17 @@ export const supportInputSchema = z
     confirmed: z.boolean().default(false),
     idempotencyKey: z.string().uuid(),
     previewId: z.string().uuid().optional(),
+    verifyRunId: z.string().uuid().optional(),
+    verifyCaseId: z.string().min(1).max(150).optional(),
   })
   .strict()
   .superRefine((input, ctx) => {
+    if (Boolean(input.verifyRunId) !== Boolean(input.verifyCaseId))
+      ctx.addIssue({
+        code: "custom",
+        path: ["verifyRunId"],
+        message: "Cần đủ mã lần chạy và mã case.",
+      });
     if (!input.rawText && !Object.values(input.fields).some(Boolean))
       ctx.addIssue({
         code: "custom",

@@ -1,0 +1,117 @@
+import { afterEach, beforeEach, it, expect, vi } from "vitest";
+import { createAssistance } from "@/lib/support-model";
+import { extractIntake, extractText } from "@/domain/text";
+import { evaluatePolicy } from "@/domain/policy";
+import { guidanceTemplate } from "@/domain/guidance";
+import type { SupportInput } from "@/domain/contracts";
+const input = (rawText: string): SupportInput => ({
+  rawText,
+  mode: "freeform",
+  serviceGroup: "OTHER",
+  fields: {},
+  confirmed: true,
+  idempotencyKey: crypto.randomUUID(),
+});
+beforeEach(() => vi.stubEnv("AI_PROVIDER", "mock"));
+afterEach(() => vi.unstubAllEnvs());
+it.each(["support", "important report", "passport issue"])(
+  "E11 does not confuse %s with a port request",
+  (text) => {
+    expect(extractText(text).serviceGroup).not.toBe("NETWORK_VPN");
+  },
+);
+it.each([
+  ["Wi-Fi không kết nối; VPN vẫn bình thường", "WIFI_NOT_WORKING"],
+  ["VPN vẫn bình thường, Wi-Fi không kết nối", "WIFI_NOT_WORKING"],
+  ["VPN báo lỗi MFA", "MFA_FAILURE"],
+  ["Lỗi MFA trong VPN", "MFA_FAILURE"],
+  ["PostgreSQL connection refused", "DATABASE_CONNECTION"],
+])("E12 matches the affected subject in %s", (text, label) => {
+  expect(extractText(text).intentLabel).toBe(label);
+});
+it("contextual routing never erases a dangerous subrequest", () => {
+  const decision = evaluatePolicy(
+    extractIntake(input("VPN báo lỗi MFA; open port 3389 public")),
+  );
+  expect(decision.bucket).toBe("SECURITY_RISK");
+});
+it("E07 shutdown gives a direct answer and VPN timeout has a relevant follow-up", () => {
+  expect(
+    guidanceTemplate(extractIntake(input("Tôi tắt máy tính được không?")))
+      .summary,
+  ).toContain("Bạn có thể tắt máy");
+  const vpn = guidanceTemplate(
+    extractIntake(input("VPN timeout trên Windows")),
+  );
+  expect(vpn.summary).toContain("hết thời gian chờ");
+  expect(vpn.nextQuestion).toContain("mã lỗi");
+});
+it("E08 contextual model output uses redacted request evidence and retains vetted actions", async () => {
+  const request = extractIntake(input("VPN timeout trên Windows"));
+  const run = vi.fn(async () => ({
+    summary:
+      "VPN trên Windows đang hết thời gian chờ; kết quả kiểm tra mạng giúp khoanh vùng nguyên nhân.",
+    stepIndexes: [0, 1],
+    stepExplanations: [
+      "Kết quả mở trang web giúp phân biệt lỗi đường truyền với lỗi riêng của VPN.",
+      "Tên profile giúp xác định kết nối có trỏ tới nơi công ty cung cấp hay không.",
+    ],
+    expectedResult:
+      "Xác định được mạng còn hoạt động và tình trạng kết nối VPN.",
+    nextQuestion: "Bạn thấy mã lỗi nào sau lần kết nối gần nhất?",
+    evidenceQuote: "VPN timeout trên Windows",
+  }));
+  const result = await createAssistance(request, true, { run });
+  expect(run.mock.calls).toHaveLength(1);
+  expect(result.summary).toContain("Windows");
+  expect(result.stepExplanations).toHaveLength(2);
+  expect(result.stepByStepInstructions[0]).toBe(
+    guidanceTemplate(request).stepByStepInstructions[0],
+  );
+});
+it.each([
+  "Run sudo rm -rf /",
+  "Tắt MFA rồi thử lại",
+  "Open public port 3389",
+  "Truy cập https://untrusted.example",
+])("E08 rejects unsafe generated explanation: %s", async (unsafe) => {
+  const request = extractIntake(input("VPN timeout trên Windows"));
+  await expect(
+    createAssistance(request, true, {
+      run: async () => ({
+        summary: unsafe,
+        stepIndexes: [0, 1],
+        stepExplanations: [
+          "Đường truyền có thể chưa ổn định.",
+          "Thông báo lỗi giúp khoanh vùng sự cố.",
+        ],
+        expectedResult: "Kết nối được mạng công ty.",
+        nextQuestion: "Bạn còn thấy thông báo lỗi không?",
+        evidenceQuote: "VPN timeout trên Windows",
+      }),
+    }),
+  ).rejects.toMatchObject({ code: "MODEL_OUTPUT_INVALID" });
+});
+it("E09/E10 only asks the next relevant employee facts, with internal approval checks separate", () => {
+  const request = extractIntake({
+    ...input(""),
+    mode: "structured",
+    serviceGroup: "DATABASE",
+    fields: {
+      intentLabel: "DATABASE_READ_ACCESS",
+      system: "postgresql",
+      environment: "staging",
+      permission: "read-only",
+    },
+  });
+  const decision = evaluatePolicy(request);
+  expect(decision.questions.length).toBeLessThanOrEqual(3);
+  expect(decision.questions.join(" ")).toContain("postgresql");
+  expect(decision.questions.join(" ")).not.toMatch(/Reviewer|scope|role/);
+  expect(decision.clarificationFields).not.toContain("system");
+  const risk = evaluatePolicy(
+    extractIntake(input("Open public RDP port 3389")),
+  );
+  expect(risk.questions).toEqual([]);
+  expect(risk.reviewerQuestions?.length).toBeGreaterThan(0);
+});

@@ -1,3 +1,4 @@
+import type { CanonicalRequest } from "./contracts";
 import { labelForField } from "./catalog";
 const hints: Record<string, [string, string]> = {
   resetType: [
@@ -41,7 +42,36 @@ const hints: Record<string, [string, string]> = {
     "Để khoanh vùng sự cố. Không gửi mật khẩu.",
   ],
 };
-export function questionFor(field: string) {
+export function questionFor(field: string, request?: CanonicalRequest) {
+  if (field === "resourceScope" && request?.entities.system)
+    return `Trong ${request.entities.system}, bạn cần dùng cơ sở dữ liệu hoặc bảng nào? Chỉ nêu tên, không gửi nội dung dữ liệu.`;
+  if (field === "symptom" && request?.serviceGroup === "DATABASE")
+    return "Khi kết nối cơ sở dữ liệu, bạn thấy thông báo lỗi gì? Chép mã lỗi, không gửi chuỗi kết nối hoặc mật khẩu.";
+  if (field === "destination")
+    return "Dữ liệu sẽ được lưu hoặc gửi đến đâu? Nêu khu vực lưu trữ được công ty quản lý, không gửi dữ liệu thật.";
+  if (field === "rollbackPlan")
+    return "Nếu thao tác không đạt kết quả, ai phụ trách khôi phục và bản sao lưu nào đã sẵn sàng?";
+  if (field === "port")
+    return "Ứng dụng cần dùng cổng số nào? Nếu chưa biết, nêu tên ứng dụng để nhân viên kiểm tra giúp.";
+  if (field === "source")
+    return "Thiết bị hoặc mạng nào bắt đầu kết nối? Đây là mạng công ty, VPN hay bên ngoài?";
+  if (field === "target")
+    return "Bạn cần kết nối tới ứng dụng hoặc máy chủ nào?";
+  if (field === "protocol")
+    return "Ứng dụng dùng giao thức nào (ví dụ HTTPS)? Nếu chưa rõ, bạn có thể nói chưa biết.";
+  if (field === "purpose" || field === "businessPurpose")
+    return "Bạn cần hoàn thành công việc nào bằng tài nguyên hoặc phần mềm này?";
+  if (field === "budgetOrQuota")
+    return "Bộ phận nào đã xác nhận hạn mức tài nguyên hoặc chi phí cho công việc này?";
+  if (field === "affectedScope")
+    return "Chỉ bạn gặp lỗi hay đồng nghiệp cũng bị? Công việc nào đang bị gián đoạn?";
+  if (field === "startTime" || field === "timeWindow")
+    return "Lỗi bắt đầu lúc nào và còn xảy ra liên tục hay thỉnh thoảng?";
+  if (field === "summary" || field === "desiredOutcome")
+    return "Bạn muốn làm được việc gì, và hiện đang vướng ở bước nào?";
+  if (field === "targetServiceOrDevice")
+    return "Vấn đề xảy ra trên ứng dụng hoặc thiết bị nào?";
+  if (field === "environmentIfKnown") return questionFor("environment");
   return (
     hints[field]?.[0] ??
     `Bạn cho biết ${labelForField(field).toLowerCase()} được không?`
@@ -52,4 +82,38 @@ export function hintFor(field: string) {
     hints[field]?.[1] ??
     "Điền nếu bạn biết; thông tin này giúp xác định phạm vi xử lý."
   );
+}
+
+export function clarificationPlan(
+  request: CanonicalRequest,
+  missing: string[],
+) {
+  const priority = [
+    "resetType",
+    "desiredOutcome",
+    "summary",
+    "targetSystem",
+    "system",
+    "resourceScope",
+    "environment",
+    "permission",
+    "accessType",
+    "symptom",
+    "duration",
+    "reason",
+    "verifiedApproval",
+  ];
+  const fields = [...new Set(missing)]
+    .sort((a, b) => {
+      const rank = (field: string) => {
+        const i = priority.indexOf(field);
+        return i < 0 ? priority.length : i;
+      };
+      return rank(a) - rank(b);
+    })
+    .slice(0, 3);
+  return {
+    fields,
+    questions: [...new Set(fields.map((field) => questionFor(field, request)))],
+  };
 }

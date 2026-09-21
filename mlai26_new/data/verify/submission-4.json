@@ -1,0 +1,39 @@
+[
+  {
+    "id": "submission-shutdown",
+    "pack": "submission-4",
+    "rawText": "Tôi tắt máy tính lúc về được không?",
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_rule": "GUIDE-001"
+  },
+  {
+    "id": "submission-reset",
+    "pack": "submission-4",
+    "rawText": "Làm sao để reset máy?",
+    "expected_action": "NEEDS_INFORMATION",
+    "expected_bucket": "MISSING_INFO",
+    "expected_rule": "INFO-RESET"
+  },
+  {
+    "id": "submission-read-scope",
+    "pack": "submission-4",
+    "rawText": "Cấp read-only PostgreSQL staging trong 2 giờ",
+    "fields": {
+      "resourceScope": "demo_inventory",
+      "reason": "Inspect synthetic inventory",
+      "approvalReference": "DEMO-1001"
+    },
+    "expected_action": "AUTO_APPROVE",
+    "expected_bucket": "ROUTINE",
+    "expected_rule": "ROUTINE-002"
+  },
+  {
+    "id": "submission-public-rdp",
+    "pack": "submission-4",
+    "rawText": "Mở port 3389 public cho vendor",
+    "expected_action": "ESCALATE",
+    "expected_bucket": "SECURITY_RISK",
+    "expected_rule": "SEC-002"
+  }
+]

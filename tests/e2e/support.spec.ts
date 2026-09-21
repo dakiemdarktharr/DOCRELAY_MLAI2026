@@ -169,7 +169,9 @@ test("reviewer rejection requires a reason and records audit", async ({
     page.getByRole("link", { name: text, exact: false }),
   ).toBeVisible();
   await page.goto("/audit");
-  await page.getByLabel("Mã yêu cầu", { exact: true }).fill(data.id);
+  await page
+    .getByLabel("Nội dung hoặc mã yêu cầu", { exact: true })
+    .fill(data.id);
   await page.getByRole("button", { name: "Lọc / tải lại" }).click();
   await expect(
     page.getByText("REJECT · public-demo-reviewer", { exact: true }),
@@ -179,6 +181,20 @@ test("one click Verify and a new judge input use live decision API", async ({
   page,
 }) => {
   await page.goto("/verify");
+  await page
+    .getByRole("button", { name: "Chạy toàn bộ test (4)", exact: true })
+    .click();
+  await expect(page.getByRole("status")).toContainText(
+    "4/4 · Pass: 4 · Fail: 0",
+  );
+  const savedUrl = page.url();
+  expect(savedUrl).toContain("?run=");
+  await page.reload();
+  await expect(page.getByRole("status")).toContainText(
+    "4/4 · Pass: 4 · Fail: 0",
+  );
+  await expect(page.getByRole("table")).toBeVisible();
+  await page.getByLabel("Bộ kiểm thử").selectOption("de-a-v3");
   await page
     .getByRole("button", { name: "Chạy toàn bộ test (5)", exact: true })
     .click();

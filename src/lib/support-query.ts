@@ -1,0 +1,213 @@
+import { z } from "zod";
+import type { Filter } from "mongodb";
+import type {
+  AuditEvent,
+  ResultPage,
+  SupportRequest,
+  SupportSummary,
+} from "@/domain/contracts";
+import { supportDatabase, listSupportRequests } from "./support-repository";
+
+const querySchema = z.object({
+  cursor: z.coerce.number().int().min(0).max(1000000).default(0),
+  limit: z.coerce.number().int().min(1).max(100).default(30),
+  q: z.string().trim().max(200).default(""),
+  status: z.enum(["all", "pending"]).default("all"),
+  origin: z.enum(["all", "support", "verify"]).default("all"),
+});
+export function parseSupportQuery(url: string) {
+  const params = new URL(url).searchParams;
+  return querySchema.parse(
+    Object.fromEntries(
+      ["cursor", "limit", "q", "status", "origin"]
+        .filter((key) => params.has(key))
+        .map((key) => [key, params.get(key)]),
+    ),
+  );
+}
+export type SupportQuery = z.infer<typeof querySchema>;
+type Row = { _id: string; data: SupportRequest };
+const pending = ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"];
+function filterFor(query: SupportQuery): Filter<Row> {
+  const filter: Filter<Row> = {};
+  if (query.status === "pending") filter["data.status"] = { $in: pending };
+  if (query.origin !== "all")
+    filter["data.input.verifyRunId"] = { $exists: query.origin === "verify" };
+  if (query.q) {
+    const literal = query.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    filter.$or = ["data.id", "data.originalQuestion", "data.input.rawText"].map(
+      (field) => ({ [field]: { $regex: literal, $options: "i" } }),
+    );
+  }
+  return filter;
+}
+async function memoryRows(query: SupportQuery) {
+  // Only used for explicitly temporary local tests/development.
+  const rows = await listSupportRequests(true);
+  return rows.filter(
+    (row) =>
+      (query.status === "all" || pending.includes(row.status)) &&
+      (query.origin === "all" ||
+        Boolean(row.input.verifyRunId) === (query.origin === "verify")) &&
+      `${row.id} ${row.originalQuestion || row.input.rawText}`
+        .toLocaleLowerCase()
+        .includes(query.q.toLocaleLowerCase()),
+  );
+}
+export async function supportPage(
+  query: SupportQuery,
+): Promise<ResultPage<SupportSummary>> {
+  const db = supportDatabase();
+  const collection = db?.collection<Row>("v3_support_requests");
+  const filter = filterFor(query);
+  const rows = collection
+    ? await collection
+        .find(filter, {
+          projection: {
+            "data.id": 1,
+            "data.version": 1,
+            "data.status": 1,
+            "data.createdAt": 1,
+            "data.updatedAt": 1,
+            "data.originalQuestion": 1,
+            "data.input.rawText": 1,
+            "data.canonical.serviceGroup": 1,
+            "data.decision.action": 1,
+          },
+        })
+        .sort({ "data.createdAt": -1, _id: -1 })
+        .skip(query.cursor)
+        .limit(query.limit)
+        .toArray()
+    : (await memoryRows(query))
+        .sort(
+          (a, b) =>
+            b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
+        )
+        .slice(query.cursor, query.cursor + query.limit)
+        .map((data) => ({ data }));
+  const total = collection
+    ? await collection.countDocuments(filter)
+    : (await memoryRows(query)).length;
+  return {
+    items: rows.map(({ data: row }) => ({
+      id: row.id,
+      version: row.version,
+      status: row.status,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      title: (
+        row.originalQuestion ||
+        row.input.rawText ||
+        "Yêu cầu theo danh mục"
+      ).slice(0, 140),
+      serviceGroup: row.canonical?.serviceGroup ?? "OTHER",
+      action: row.decision?.action ?? null,
+    })),
+    total,
+    nextCursor:
+      query.cursor + rows.length < total
+        ? String(query.cursor + rows.length)
+        : null,
+  };
+}
+export async function auditPage(
+  query: SupportQuery,
+): Promise<ResultPage<AuditEvent>> {
+  const db = supportDatabase();
+  if (db) {
+    const rows = await db
+      .collection<Row>("v3_support_requests")
+      .aggregate<{ items: AuditEvent[]; count: { total: number }[] }>([
+        { $match: filterFor(query) },
+        { $project: { events: "$data.events" } },
+        { $unwind: "$events" },
+        { $replaceRoot: { newRoot: "$events" } },
+        { $sort: { timestamp: -1, id: -1 } },
+        {
+          $facet: {
+            items: [{ $skip: query.cursor }, { $limit: query.limit }],
+            count: [{ $count: "total" }],
+          },
+        },
+      ])
+      .toArray();
+    const items = rows[0]?.items ?? [],
+      total = rows[0]?.count[0]?.total ?? 0;
+    return {
+      items,
+      total,
+      nextCursor:
+        query.cursor + items.length < total
+          ? String(query.cursor + items.length)
+          : null,
+    };
+  }
+  const rows = (await memoryRows(query))
+    .flatMap((row) => row.events)
+    .sort(
+      (a, b) =>
+        b.timestamp.localeCompare(a.timestamp) || b.id.localeCompare(a.id),
+    );
+  return {
+    items: rows.slice(query.cursor, query.cursor + query.limit),
+    total: rows.length,
+    nextCursor:
+      query.cursor + query.limit < rows.length
+        ? String(query.cursor + query.limit)
+        : null,
+  };
+}
+export async function supportMetrics() {
+  const db = supportDatabase();
+  if (db) {
+    const result = await db
+      .collection<Row>("v3_support_requests")
+      .aggregate<ReturnType<typeof countMetrics>>([
+        {
+          $group: {
+            _id: null,
+            total: { $sum: 1 },
+            resolvedFeedback: {
+              $sum: {
+                $cond: [{ $in: ["RESOLVED", "$data.feedback.choice"] }, 1, 0],
+              },
+            },
+            handoffs: {
+              $sum: {
+                $cond: [{ $in: ["HANDOFF", "$data.events.action"] }, 1, 0],
+              },
+            },
+            modelFailures: {
+              $sum: {
+                $cond: [
+                  { $ifNull: ["$data.canonical.model.failure", false] },
+                  1,
+                  0,
+                ],
+              },
+            },
+            pendingReview: {
+              $sum: { $cond: [{ $in: ["$data.status", pending] }, 1, 0] },
+            },
+          },
+        },
+        { $project: { _id: 0 } },
+      ])
+      .toArray();
+    return result[0] ?? countMetrics([]);
+  }
+  return countMetrics(await listSupportRequests(true));
+}
+function countMetrics(rows: SupportRequest[]) {
+  return {
+    total: rows.length,
+    resolvedFeedback: rows.filter((r) =>
+      r.feedback.some((f) => f.choice === "RESOLVED"),
+    ).length,
+    handoffs: rows.filter((r) => r.events.some((e) => e.action === "HANDOFF"))
+      .length,
+    modelFailures: rows.filter((r) => r.canonical?.model.failure).length,
+    pendingReview: rows.filter((r) => pending.includes(r.status)).length,
+  };
+}

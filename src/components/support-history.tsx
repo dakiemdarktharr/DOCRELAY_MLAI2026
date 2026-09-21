@@ -17,13 +17,20 @@ export function AssistanceHistory({
             {item.source === "mock"
               ? "Hướng dẫn mẫu"
               : item.source === "openai"
-                ? "Trợ lý chọn các bước đã kiểm duyệt"
+                ? "Trợ lý giải thích theo tình huống; bước thao tác đã kiểm duyệt"
                 : "Hướng dẫn an toàn"}{" "}
             · {new Date(item.timestamp).toLocaleString("vi-VN")}
           </p>
           <ol className="ml-5 list-decimal space-y-3">
-            {item.stepByStepInstructions.map((step) => (
-              <li key={step}>{step}</li>
+            {item.stepByStepInstructions.map((step, stepIndex) => (
+              <li key={step}>
+                {step}
+                {item.stepExplanations?.[stepIndex] && (
+                  <p className="mt-1 text-sm text-slate-600">
+                    {item.stepExplanations[stepIndex]}
+                  </p>
+                )}
+              </li>
             ))}
           </ol>
           <p className="mt-4 text-sm text-amber-800">{item.warning}</p>

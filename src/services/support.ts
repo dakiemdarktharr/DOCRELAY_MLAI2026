@@ -1,3 +1,4 @@
+import { validateVerificationInput } from "./verification";
 import { createHash, randomUUID } from "node:crypto";
 import type {
   AuditEvent,
@@ -164,6 +165,7 @@ export async function submitSupport(
       "Xác nhận preview trước khi gửi.",
       422,
     );
+  await validateVerificationInput(input);
   const fingerprint = fingerprintOf(input);
   const existing = await getSupportRequest(input.idempotencyKey);
   if (existing) {

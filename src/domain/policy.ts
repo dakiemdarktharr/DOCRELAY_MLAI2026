@@ -1,5 +1,4 @@
-import { questionFor } from "./questions";
-import { labelForField } from "./catalog";
+import { questionFor, clarificationPlan } from "./questions";
 import type {
   ApprovalScope,
   ApprovalStatus,
@@ -256,16 +255,6 @@ export function requiresApproval(request: CanonicalRequest) {
   );
 }
 
-function questionForField(field: string) {
-  if (field === "resetType")
-    return "Bạn muốn khởi động lại (restart, không xóa file) hay factory reset (có thể mất dữ liệu)?";
-  if (field === "verifiedApproval")
-    return "Cung cấp approval reference có thể kiểm tra; approval phải khớp resource, quyền/action và thời hạn nào?";
-  if (field === "reason")
-    return "Mục đích nghiệp vụ/kỹ thuật cụ thể là gì (không chỉ ghi ‘debug’ hoặc ‘gấp’)?";
-  return `${labelForField(field)} cụ thể là gì?`;
-}
-
 function approvalFields(approval: Approval, request: CanonicalRequest) {
   return {
     approvalStatus: approval.status,
@@ -402,7 +391,10 @@ function evaluateSinglePolicy(
         "Approval bị từ chối, hết hạn, không xác minh được hoặc sai phạm vi.",
       adminReason: approval.reason ?? "Approval verification failed",
       questions: [
-        "Approval nào đúng role, resource, environment, action/quyền và thời hạn?",
+        "Bạn có mã phê duyệt mới cho đúng hệ thống và thời hạn cần dùng không?",
+      ],
+      reviewerQuestions: [
+        "Xác minh người duyệt, phạm vi tài nguyên, quyền và thời hạn trên hệ thống phê duyệt.",
       ],
       nextStep:
         "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
@@ -427,8 +419,11 @@ function evaluateSinglePolicy(
       ruleIds: ["AUTH-005"],
       missingFields: unresolved,
       questions: unresolved.length
-        ? unresolved.map(questionForField)
-        : ["Request này thuộc service, owner và kết quả mong muốn cụ thể nào?"],
+        ? clarificationPlan(request, unresolved).questions
+        : ["Bạn muốn làm được việc gì và vấn đề xảy ra ở ứng dụng nào?"],
+      reviewerQuestions: [
+        "Xác định nhóm phụ trách và phạm vi chính sách trước khi tiếp nhận.",
+      ],
       userReason: "Chưa ánh xạ được request vào service/owner trong policy.",
       adminReason:
         "AUTH-005: classifier/reviewer phải xác định owner; không tự chọn IT Helpdesk.",
@@ -440,10 +435,12 @@ function evaluateSinglePolicy(
 
   if (missing.length) {
     const uniqueMissing = [...new Set(missing)];
-    const questions = uniqueMissing.slice(0, 3).map(questionFor);
+    const plan = clarificationPlan(request, uniqueMissing);
+    const questions = plan.questions;
     return {
       ...base,
       missingFields: uniqueMissing,
+      clarificationFields: plan.fields,
       questions,
       ruleIds: [
         request.intentLabel === "DEVICE_RESET_GUIDANCE"
@@ -614,8 +611,9 @@ function evaluateSinglePolicy(
     bucket: "BEYOND_AUTHORITY",
     uncertaintyClass: "OUT_OF_POLICY",
     ruleIds: ["AUTH-005"],
-    questions: [
-      "Owner nào có thẩm quyền cho service/action này và safe path hoặc approval cụ thể là gì?",
+    questions: [],
+    reviewerQuestions: [
+      "Ai có thẩm quyền xử lý dịch vụ này và phương án an toàn nào đã được xác nhận?",
     ],
     userReason: "Phạm vi này chưa có rule tự xử lý an toàn.",
     adminReason:

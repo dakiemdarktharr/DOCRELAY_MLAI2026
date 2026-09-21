@@ -93,3 +93,12 @@ Real OpenAI assistance and MongoDB submission/readback/reviewer/audit succeeded 
 ### Final public release
 
 Source c0c5ea5 deployed as dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF to https://labpass-five.vercel.app. Final validation: 154 tests, lint, build, 26 desktop/mobile E2E and 17 live checks passed. Real OpenAI assistance and MongoDB persistence/audit verified through the deployed application. Evidence: RELEASE-VERIFICATION-2026-09-21.md and artifacts/live-final-verification.json. Budget unchanged.
+
+
+## 2026-09-21 — DOCX error report recheck
+
+Codex/Astra read all 23 findings against current runtime and history. Added persisted Verify runs, a default four-case pack (preserving De A five cases), server pagination/search and full counts, contextual model explanations bound to curated actions, targeted clarification and reviewer audit navigation. New regression suites add 21 tests to baseline 154. Original Ground Truth unchanged (55 match / 73 mismatch).
+
+Validation: 175 unit/integration, lint, production build, 26 desktop/mobile E2E and a dedicated Stop/Override/audit video test passed. Tests use a new port 3227 server with mock/memory. Live production results are recorded separately after deployment. Formatted new code for student readability.
+
+Created a five-slide technical draft, a one-page build log and raw local mock video. Owner confirmed no real-user feedback exists. No interviews, participant data, cost totals or time savings were invented. Student draft remains untouched. Main history is retained and AI contribution is disclosed. Runtime authority and actual infrastructure operations were deliberately kept separate: the public demo never executes real provisioning.

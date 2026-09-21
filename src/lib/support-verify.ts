@@ -1,3 +1,4 @@
+import submission from "../../mlai26_new/data/verify/submission-4.json";
 import versioned from "../../mlai26_new/data/verify/support-v3.json";
 import official from "../../mlai26_new/data/verify/verify_cases.json";
 import synthetic from "../../mlai26_new/data/ground-truth/synthetic_tickets.json";
@@ -33,6 +34,16 @@ const originals = (
     expected_bucket: row.expected_bucket,
   }));
 export const supportVerifyCases: VerifyCase[] = [
+  ...submission.map((row) => ({
+    ...row,
+    fields: row.fields
+      ? Object.fromEntries(
+          Object.entries(row.fields).filter(
+            (entry): entry is [string, string] => typeof entry[1] === "string",
+          ),
+        )
+      : undefined,
+  })),
   ...versioned.map((row) => ({
     ...row,
     fields: row.fields
@@ -57,11 +68,13 @@ export type VerifyResult = {
   pass: boolean;
   persistence?: { pass: boolean; checks: string[] };
   error?: string;
+  httpStatus?: number;
 };
 // Browser and integration tests use this same HTTP contract. No direct policy shortcut.
 export async function runSupportCase(
   item: VerifyCase,
   fetcher: typeof fetch = fetch,
+  provenance?: { runId: string; requestId: string },
 ): Promise<VerifyResult> {
   const result: VerifyResult = {
     caseId: item.id,
@@ -84,12 +97,19 @@ export async function runSupportCase(
         rawText: item.rawText,
         fields: item.fields ?? {},
         confirmed: true,
-        idempotencyKey: crypto.randomUUID(),
+        idempotencyKey: provenance?.requestId ?? crypto.randomUUID(),
+        ...(provenance
+          ? { verifyRunId: provenance.runId, verifyCaseId: item.id }
+          : {}),
       }),
     });
     const body = await response.json();
     if (!response.ok || body.success !== true)
-      return { ...result, error: body.error?.message ?? "API error" };
+      return {
+        ...result,
+        httpStatus: response.status,
+        error: body.error?.message ?? "API error",
+      };
     const request = body.data as SupportRequest;
     const actual = request.decision;
     if (!actual)

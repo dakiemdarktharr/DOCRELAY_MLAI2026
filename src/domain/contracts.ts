@@ -97,6 +97,8 @@ export type SupportInput = {
   confirmed: boolean;
   idempotencyKey: string;
   previewId?: string;
+  verifyRunId?: string;
+  verifyCaseId?: string;
 };
 export type CanonicalRequest = Extraction & {
   subrequests: Extraction[];
@@ -137,6 +139,7 @@ export type Decision = {
   missingFields: string[];
   questions: string[];
   reviewerQuestions?: string[];
+  clarificationFields?: string[];
   targetedQuestions: string[];
 
   userReason: string;
@@ -160,6 +163,8 @@ export type RequestStatus =
   | "COMPLETED";
 export type Assistance = {
   summary: string;
+  stepExplanations?: string[];
+  contextEvidence?: string;
   stepByStepInstructions: string[];
   options: string[];
   expectedResult: string;
@@ -225,6 +230,11 @@ export type SupportSummary = Pick<
   SupportRequest,
   "id" | "version" | "status" | "createdAt" | "updatedAt"
 > & { title: string; serviceGroup: ServiceGroup; action: Action | null };
+export type ResultPage<T> = {
+  items: T[];
+  nextCursor: string | null;
+  total: number;
+};
 export function pendingReview(status: RequestStatus) {
   return ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"].includes(
     status,

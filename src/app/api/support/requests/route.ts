@@ -1,3 +1,4 @@
+import { supportPage, parseSupportQuery } from "@/lib/support-query";
 import {
   supportApi,
   supportBody,
@@ -12,20 +13,19 @@ import {
 import { submitSupport } from "@/services/support";
 export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
-  return supportApi(
-    async () => {
-      enforceDemoRateLimit(request, "intake");
-      return submitSupport(
-        await supportBody(request),
-        verifyModelOptions(request),
-      );
-    },
-    201,
-  );
+  return supportApi(async () => {
+    enforceDemoRateLimit(request, "intake");
+    return submitSupport(
+      await supportBody(request),
+      verifyModelOptions(request),
+    );
+  }, 201);
 }
 export async function GET(request: Request) {
   return supportApi(async () => {
     requireDemoReviewer();
+    if (request && new URL(request.url).searchParams.get("view") === "page")
+      return supportPage(parseSupportQuery(request.url));
     return request &&
       new URL(request.url).searchParams.get("view") === "summary"
       ? listSupportSummaries()

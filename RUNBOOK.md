@@ -92,3 +92,15 @@ Bản production hiện tại được triển khai bằng Vercel CLI và đã x
 ## Live release verification — 21/09/2026
 
 User authorized main push, production deployment and actual MongoDB/OpenAI verification. Local regression remains mock/memory. Production smoke uses only synthetic requests and a bounded real OpenAI assistance call. Verify preview -> submit -> independent GET -> explain -> handoff -> reviewer -> audit. MongoDB mode has no memory fallback when MONGODB_URI is set. MongoClient ignores undefined optional values to keep stored API snapshots stable. Do not reset lifetime model budget. Direct Atlas TCP from this machine was refused; deployment API read/write tests exercise Atlas from Vercel. See artifacts/live-release-verification.json and final release evidence for exact source/deployment IDs.
+
+
+## Report fixes: Verify, storage, pagination and release identity
+
+- Default `/verify` runs `submission-4`. Select `de-a-v3` for 3 auto / 2 escalate. Each run saves to MongoDB `v3_verify_runs`; copy `/verify?run=<id>`. Reload, stop after the current case, or resume unfinished cases. Server calls the production request API and stores server-derived actual results.
+- Queue/audit default excludes new Verify cases. Select Case Verify or All to inspect them. Historical untagged records remain unchanged.
+- `GET /api/support/requests?view=page&limit=30&cursor=0&q=VPN&origin=support&status=pending` returns `{items,total,nextCursor}` inside the normal envelope. `GET /api/support/events?view=page` uses the same query contract. `limit` max 100; cursor is an offset. Existing summary/full array routes retain compatibility limits. Metrics aggregate all stored support records including synthetic Verify.
+- On Vercel, MongoDB is mandatory even if SUPPORT_STORAGE is set to memory-demo. `/api/support/health` pings DB and reports storage/durable/provider/policy/sourceRevision. Health does not make a paid model call.
+- Deploy this existing project with `vercel --prod --yes --env APP_REVISION=<full git SHA>` after tests. Check health SHA against the source commit. Never print or commit environment values. Do not reset AI budget to make a smoke pass.
+- Support audit's source of truth remains embedded `v3_support_requests.data.events`. Legacy echo events use MongoDB `legacy_events` when MONGODB_URI exists, and keep their API shape. Prisma remains a local legacy fallback only. No historical data is dropped.
+- Model prose explains curated steps and requires an exact input evidence quote. Invalid/risky/unanchored output fails safe. Local E2E uses mock; run live OpenAI separately and record whether contextual fields were returned.
+- Public Verify runs are demo artifacts, not trusted records of real employee activity. Rate-limited runs retain completed cases; wait one minute and resume. Current routes retain 20 recent run summaries; a known older run ID remains accessible.

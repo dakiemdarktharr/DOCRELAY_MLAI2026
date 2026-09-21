@@ -1,3 +1,4 @@
+import { normalize } from "./text";
 import { intentName } from "./presentation";
 import type { Assistance, CanonicalRequest } from "./contracts";
 import { guidanceRules, type GuidanceTopic } from "./policy-source";
@@ -112,8 +113,27 @@ export function guidanceTemplate(
     item.labels.some((label) => label === request.intentLabel),
   );
   const topic = rule?.topic ?? "general";
+  const context = normalize(
+    request.evidence.map((item) => item.quote).join(" "),
+  );
+  const platform = /windows/.test(context)
+    ? "Windows"
+    : /macos|macbook|mac os/.test(context)
+      ? "macOS"
+      : "";
+  const vpnTimeout =
+    topic === "vpn" && /timeout|timed out|het thoi gian/.test(context);
+  const summary = vpnTimeout
+    ? "VPN hết thời gian chờ kết nối. Hãy kiểm tra đường truyền trước, rồi thử lại một lần."
+    : topic === "vpn"
+      ? `Hãy kiểm tra kết nối VPN${platform ? ` trên ${platform}` : ""} từ Internet đến ứng dụng, không thay cài đặt bảo mật.`
+      : request.intentLabel === "DEVICE_SHUTDOWN_GUIDANCE"
+        ? "Bạn có thể tắt máy sau khi lưu công việc và chờ các cập nhật đang chạy hoàn tất."
+        : request.intentLabel === "DEVICE_RESTART_GUIDANCE"
+          ? "Khởi động lại có thể giúp máy hoạt động bình thường; lưu công việc trước để tránh mất phần chưa lưu."
+          : intentName(request.intentLabel);
   return {
-    summary: intentName(request.intentLabel),
+    summary,
     stepByStepInstructions:
       round > 0
         ? [
@@ -128,7 +148,12 @@ export function guidanceTemplate(
       "Có thể xác định bước tiếp theo phù hợp với nhu cầu; nếu chưa, chuyển cho nhân viên hỗ trợ.",
     warning:
       "Không gửi mật khẩu hoặc mã xác minh. Dừng lại nếu thấy yêu cầu xóa dữ liệu hoặc tắt bảo vệ thiết bị.",
-    nextQuestion: "Sau các bước này, vấn đề còn xảy ra không?",
+    nextQuestion:
+      topic === "vpn"
+        ? "VPN đã kết nối được chưa? Nếu chưa, thông báo hoặc mã lỗi hiện tại là gì?"
+        : topic === "account"
+          ? "Bạn thấy thông báo sai mật khẩu, tài khoản bị khóa hay lỗi xác minh?"
+          : "Sau bước vừa thử, hiện tượng đã thay đổi như thế nào?",
     canPassToAdmin: true,
   };
 }

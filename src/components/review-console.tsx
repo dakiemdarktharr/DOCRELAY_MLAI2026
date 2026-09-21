@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  pendingReview,
+  type ResultPage,
   type SupportSummary,
   type RequestStatus,
   type SupportRequest,
@@ -17,6 +17,7 @@ import { SupportResult } from "@/components/support-result";
 import { AssistanceHistory, AuditTimeline } from "@/components/support-history";
 
 export function ReviewConsole({ requestId }: { requestId?: string }) {
+  const sequence = useRef(0);
   const [requests, setRequests] = useState<SupportSummary[]>([]),
     [selected, setSelected] = useState<SupportRequest | null>(null);
   const [reason, setReason] = useState(""),
@@ -25,23 +26,48 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
     [error, setError] = useState("");
   const [filter, setFilter] = useState("pending");
   const [search, setSearch] = useState("");
-  async function refresh() {
-    try {
-      setRequests(
-        await browserApi<SupportSummary[]>(
-          "/api/support/requests?view=summary",
-        ),
-      );
-      setError("");
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Không thể tải queue.");
-    }
-  }
+  const [origin, setOrigin] = useState("support");
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [total, setTotal] = useState(0);
+  const refresh = useCallback(
+    async (cursor: string | null = null) => {
+      const current = ++sequence.current;
+      try {
+        const params = new URLSearchParams({
+          view: "page",
+          q: search,
+          status: filter,
+          origin,
+          limit: "30",
+          ...(cursor ? { cursor } : {}),
+        });
+        const page = await browserApi<ResultPage<SupportSummary>>(
+          `/api/support/requests?${params}`,
+        );
+        if (current !== sequence.current) return;
+        setRequests((previous) =>
+          cursor ? [...previous, ...page.items] : page.items,
+        );
+        setNextCursor(page.nextCursor);
+        setTotal(page.total);
+        setError("");
+      } catch (error) {
+        if (current === sequence.current)
+          setError(
+            error instanceof Error ? error.message : "Không thể tải danh sách.",
+          );
+      }
+    },
+    [search, filter, origin],
+  );
   useEffect(() => {
-    void browserApi<SupportSummary[]>("/api/support/requests?view=summary")
-      .then(setRequests)
-      .catch(() => setError("Không thể tải queue."));
-  }, []);
+    const tracker = sequence;
+    const timer = setTimeout(() => void refresh(), 250);
+    return () => {
+      clearTimeout(timer);
+      tracker.current++;
+    };
+  }, [refresh]);
   useEffect(() => {
     if (!requestId) return;
     void browserApi<SupportRequest>(
@@ -85,13 +111,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
     OVERRIDE: "Điều chỉnh quyết định",
     FULFILL: "Hoàn tất mô phỏng",
   };
-  const visibleRequests = requests.filter(
-    (request) =>
-      (filter === "all" || pendingReview(request.status)) &&
-      `${request.id} ${request.title}`
-        .toLowerCase()
-        .includes(search.toLowerCase()),
-  );
+  const visibleRequests = requests;
   return (
     <main className="page page-enter space-y-6">
       <div>
@@ -104,7 +124,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
         {!requestId && (
           <Card>
             <div className="section-heading">
-              <h2>Yêu cầu cần xử lý ({visibleRequests.length})</h2>
+              <h2>Yêu cầu phù hợp ({total})</h2>
               <Button
                 variant="secondary"
                 onClick={() => void refresh()}
@@ -128,7 +148,18 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 onChange={(event) => setFilter(event.target.value)}
               >
                 <option value="pending">Đang chờ xử lý</option>
-                <option value="all">Tất cả 200 yêu cầu gần đây</option>
+                <option value="all">Tất cả trạng thái</option>
+              </select>
+            </label>
+            <label>
+              Nguồn yêu cầu
+              <select
+                value={origin}
+                onChange={(event) => setOrigin(event.target.value)}
+              >
+                <option value="support">Người dùng gửi</option>
+                <option value="verify">Case Verify</option>
+                <option value="all">Tất cả</option>
               </select>
             </label>
             {!visibleRequests.length && (
@@ -171,6 +202,17 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 </li>
               ))}
             </ul>
+            <p>
+              Đang hiển thị {requests.length}/{total} yêu cầu.
+            </p>
+            {nextCursor && (
+              <Button
+                variant="secondary"
+                onClick={() => void refresh(nextCursor)}
+              >
+                Tải thêm yêu cầu
+              </Button>
+            )}
           </Card>
         )}
         {requestId && selected ? (
@@ -179,9 +221,23 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               ← Danh sách yêu cầu
             </Link>
             <p role="status" className="break-all text-sm">
-              {selected.id} · v{selected.version} ·{" "}
+              {displayId(selected.id)} ·{" "}
               <strong>{statusLabels[selected.status]}</strong>
             </p>
+            <div className="flex flex-wrap gap-3">
+              <a className="button secondary" href="#review-actions">
+                Dừng / điều chỉnh xử lý
+              </a>
+              <a className="button secondary" href="#request-audit">
+                Xem nhật ký quyết định
+              </a>
+            </div>
+            <details>
+              <summary>Mã đối chiếu kỹ thuật</summary>
+              <p className="break-all">
+                {selected.id} · phiên bản {selected.version}
+              </p>
+            </details>
             <div className="support-columns review-comparison">
               <Card>
                 <h2 className="font-bold">
@@ -232,7 +288,12 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 <p>{item.text}</p>
               </Card>
             ))}
-            <Card>
+            <Card id="review-actions">
+              <p className="mb-3">
+                Dừng xử lý chặn các bước tiếp theo. Điều chỉnh quyết định luôn
+                cần lý do và được ghi vào nhật ký; không xóa lịch sử hoặc hoàn
+                tác hạ tầng thật.
+              </p>
               {(!!selected.decision?.missingFields.length ||
                 selected.decision?.bucket === "SECURITY_RISK") && (
                 <p className="mb-3 text-sm text-amber-900">
@@ -302,7 +363,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 </div>
               </fieldset>
             </Card>
-            <Card>
+            <Card id="request-audit">
               <h2 className="mb-4 font-bold">Lịch sử xử lý</h2>
               <AuditTimeline events={selected.events} />
             </Card>

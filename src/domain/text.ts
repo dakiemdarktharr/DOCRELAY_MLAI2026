@@ -179,7 +179,7 @@ function environmentOf(text: string): Environment {
   return "unknown";
 }
 
-function classify(text: string): [ServiceGroup, string, RequestKind] {
+function classifyFallback(text: string): [ServiceGroup, string, RequestKind] {
   if (
     /chuyen.{0,20}admin|pass.{0,15}admin|human (?:agent|reviewer)|khong hieu/.test(
       text,
@@ -285,6 +285,76 @@ function classify(text: string): [ServiceGroup, string, RequestKind] {
   if (/how to|lam sao|huong dan|cach su dung/.test(text))
     return ["OTHER", "GENERAL_HOW_TO", "GUIDANCE"];
   return ["OTHER", "UNKNOWN_SUPPORT_REQUEST", "OTHER"];
+}
+
+// Specific symptom/subject pairs compete by specificity before broad catalog hints.
+// Mentions of an unaffected system are not requests to change that system.
+function classify(text: string): [ServiceGroup, string, RequestKind] {
+  const relevant = text.replace(
+    /\b(?:vpn|wi fi|wifi|mfa)\s+(?:is working|works fine|van binh thuong|binh thuong|khong bi loi)\b/g,
+    " ",
+  );
+  const candidates: Array<{
+    score: number;
+    group: ServiceGroup;
+    label: string;
+    pattern: RegExp;
+  }> = [
+    {
+      score: 4,
+      group: "ACCOUNT_ACCESS",
+      label: "MFA_FAILURE",
+      pattern:
+        /\bmfa\b.{0,25}(?:fail|error|khong|loi)|(?:loi|error|failed).{0,12}\bmfa\b/,
+    },
+    {
+      score: 3,
+      group: "NETWORK_VPN",
+      label: "VPN_LOGIN",
+      pattern:
+        /\bvpn\b.{0,30}(?:authentication failed|sai mat khau|dang nhap that bai)/,
+    },
+    {
+      score: 2,
+      group: "NETWORK_VPN",
+      label: "VPN_NOT_CONNECTING",
+      pattern:
+        /\bvpn\b.{0,30}(?:not connect|khong ket noi|loi|fail|timeout|timed out)|(?:loi|khong ket noi|cannot connect to).{0,15}\bvpn\b/,
+    },
+    {
+      score: 2,
+      group: "NETWORK_VPN",
+      label: "WIFI_NOT_WORKING",
+      pattern:
+        /\b(?:wi fi|wifi)\b.{0,30}(?:not work|not connect|khong|loi)|(?:khong ket noi|cannot connect to).{0,15}\b(?:wi fi|wifi)\b/,
+    },
+    {
+      score: 2,
+      group: "DEVICE_BOOT",
+      label: "DEVICE_PRINTER",
+      pattern:
+        /(?:printer|may in).{0,30}(?:loi|error|not print|khong in|ket giay)/,
+    },
+    {
+      score: 2,
+      group: "DATABASE",
+      label: "DATABASE_CONNECTION",
+      pattern:
+        /(?:postgresql|postgres|mysql|database).{0,30}(?:connection failed|connection refused|khong ket noi|loi ket noi)|(?:loi ket noi|cannot connect to).{0,15}(?:postgresql|postgres|mysql|database)/,
+    },
+  ];
+  const matches = candidates.filter((candidate) =>
+    candidate.pattern.test(relevant),
+  );
+  if (matches.length) {
+    const best = Math.max(...matches.map((candidate) => candidate.score)),
+      winners = matches.filter((candidate) => candidate.score === best);
+    if (winners.length === 1)
+      return [winners[0].group, winners[0].label, "SAFE_DIAGNOSTIC"];
+    // Ambiguous simultaneous symptoms require clarification/classification; never infer authority.
+    return ["OTHER", "CROSS_FUNCTION_REQUEST", "OTHER"];
+  }
+  return classifyFallback(relevant);
 }
 
 export function extractText(rawText: string): Extraction {

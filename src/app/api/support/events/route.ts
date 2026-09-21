@@ -1,3 +1,4 @@
+import { auditPage, parseSupportQuery } from "@/lib/support-query";
 import { supportApi, requestId, requireDemoReviewer } from "@/lib/support-http";
 import {
   getSupportRequest,
@@ -8,6 +9,8 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   return supportApi(async () => {
     requireDemoReviewer();
+    if (new URL(request.url).searchParams.get("view") === "page")
+      return auditPage(parseSupportQuery(request.url));
     const id = new URL(request.url).searchParams.get("requestId");
     if (id) {
       const row = await getSupportRequest(requestId(id));

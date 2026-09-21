@@ -41,7 +41,10 @@ export default function Home() {
             <ArrowRight size={22} />
           </Link>
         </div>
-        <p className="welcome-note">Bắt đầu ngay, không cần đăng nhập.</p>
+        <p className="welcome-note">
+          Bắt đầu: chọn “Tôi cần hỗ trợ”, nhập “VPN không kết nối” rồi xem hướng
+          dẫn. Không cần đăng nhập.
+        </p>
       </section>
       <div className="welcome-art">
         <span className="hello-note" aria-hidden="true">

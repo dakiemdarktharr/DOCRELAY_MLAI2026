@@ -1,20 +1,15 @@
 "use client";
+import type { VerifyRun } from "@/domain/verification";
 import Link from "next/link";
-import { useState } from "react";
-import {
-  supportVerifyCases,
-  runSupportCase,
-  verifyPersistence,
-  type VerifyResult,
-} from "@/lib/support-verify";
+import { useEffect, useRef, useState } from "react";
+import { supportVerifyCases, verifyPersistence } from "@/lib/support-verify";
 import { Alert, Button, Card, Textarea } from "@/components/ui";
 import { browserApi } from "@/lib/browser-api";
 import type { SupportRequest } from "@/domain/contracts";
 import { SupportResult } from "@/components/support-result";
 
 export default function VerifyPage() {
-  const [pack, setPack] = useState("de-a-v3"),
-    [results, setResults] = useState<VerifyResult[]>([]),
+  const [pack, setPack] = useState("submission-4"),
     [running, setRunning] = useState(false);
   const [readback, setReadback] = useState("");
   const [judge, setJudge] = useState(""),
@@ -24,17 +19,88 @@ export default function VerifyPage() {
     pack === "all"
       ? supportVerifyCases
       : supportVerifyCases.filter((item) => item.pack === pack);
-  async function run() {
-    setRunning(true);
-    setResults([]);
-    setError("");
+  const [currentRun, setCurrentRun] = useState<VerifyRun | null>(null);
+  const [history, setHistory] = useState<
+    Array<{
+      id: string;
+      pack: string;
+      status: string;
+      completed: number;
+      total: number;
+    }>
+  >([]);
+  const stop = useRef(false);
+  const results = currentRun?.results ?? [];
+  async function loadRun(id: string) {
     try {
-      for (const item of cases) {
-        const result = await runSupportCase(item);
-        setResults((current) => [...current, result]);
+      const row = await browserApi<VerifyRun>(`/api/support/verify-runs/${id}`);
+      setCurrentRun(row);
+      setPack(row.pack);
+      window.history.replaceState(null, "", `/verify?run=${id}`);
+    } catch {
+      setError("Không tải được lần kiểm thử.");
+    }
+  }
+  useEffect(() => {
+    void browserApi<typeof history>("/api/support/verify-runs")
+      .then(setHistory)
+      .catch(() => setError("Không tải được lịch sử Verify."));
+    const id = new URLSearchParams(window.location.search).get("run");
+    if (id) void loadRun(id);
+  }, []);
+  async function run(resume = false) {
+    setRunning(true);
+    setError("");
+    stop.current = false;
+    let row: VerifyRun | null = null;
+    try {
+      row =
+        resume && currentRun
+          ? await browserApi<VerifyRun>(
+              `/api/support/verify-runs/${currentRun.id}`,
+              { action: "resume" },
+            )
+          : await browserApi<VerifyRun>("/api/support/verify-runs", { pack });
+      setCurrentRun(row);
+      window.history.replaceState(null, "", `/verify?run=${row.id}`);
+      for (const entry of row.cases) {
+        if (stop.current) break;
+        if (row.results.some((result) => result.caseId === entry.caseId))
+          continue;
+        row = await browserApi<VerifyRun>(
+          `/api/support/verify-runs/${row.id}/cases`,
+          { caseId: entry.caseId },
+        );
+        setCurrentRun(row);
       }
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Không thể tiếp tục Verify. Kết quả đã chạy vẫn được lưu; dùng Tiếp tục.",
+      );
     } finally {
       setRunning(false);
+      if (row) await loadRun(row.id);
+      void browserApi<typeof history>("/api/support/verify-runs")
+        .then(setHistory)
+        .catch(() => setError("Không tải được lịch sử Verify."));
+    }
+  }
+  async function stopRun() {
+    stop.current = true;
+    try {
+      if (currentRun)
+        setCurrentRun(
+          await browserApi<VerifyRun>(
+            `/api/support/verify-runs/${currentRun.id}`,
+            { action: "stop" },
+          ),
+        );
+    } catch {
+      setError(
+        "Không lưu được trạng thái dừng. Lần chạy trên trang đã dừng; tải lại để kiểm tra.",
+      );
     }
   }
   async function runJudge() {
@@ -65,9 +131,10 @@ export default function VerifyPage() {
         <h1>Đối chiếu, không đoán.</h1>
       </div>
       <Alert>
-        Mỗi case tạo hồ sơ qua API dùng chung, rồi đọc lại chi tiết, audit, danh
-        sách và metrics. Bộ Đề A v3 có 3 auto / 2 escalate. Fixture gốc được giữ
-        nguyên; mismatch phản ánh thay đổi policy, không tự đổi expected.
+        Bộ nộp bài có 4 case, gồm một trường hợp phải chuyển người phụ trách. Bộ
+        Đề A riêng vẫn có 3 auto / 2 escalate. Mỗi lần chạy được lưu để tải lại;
+        các case gọi cùng decision API của ứng dụng. Fixture gốc và expected
+        được giữ nguyên.
       </Alert>
       <fieldset disabled={running} className="flex flex-wrap items-end gap-3">
         <label>
@@ -77,9 +144,12 @@ export default function VerifyPage() {
             value={pack}
             onChange={(event) => {
               setPack(event.target.value);
-              setResults([]);
+              setCurrentRun(null);
             }}
           >
+            <option value="submission-4">
+              Bộ nộp bài — 4 case (có chuyển tiếp)
+            </option>
             <option value="de-a-v3">
               Đề A v3 — 5 case (3 auto / 2 escalate)
             </option>
@@ -95,10 +165,59 @@ export default function VerifyPage() {
             <option value="all">Toàn bộ các bộ kiểm thử</option>
           </select>
         </label>
-        <Button onClick={() => void run()}>
+        <Button onClick={() => void run(false)}>
           Chạy toàn bộ test ({cases.length})
         </Button>
       </fieldset>
+      {currentRun && (
+        <Card>
+          <h2>Lần kiểm thử {currentRun.id.slice(0, 8)}</h2>
+          <p>
+            Bắt đầu: {new Date(currentRun.createdAt).toLocaleString("vi-VN")} ·{" "}
+            {currentRun.status}
+          </p>
+          <Link
+            className="text-accent underline"
+            href={`/verify?run=${currentRun.id}`}
+          >
+            Liên kết kết quả đã lưu
+          </Link>
+          {running ? (
+            <Button variant="danger" onClick={() => void stopRun()}>
+              Dừng sau case hiện tại
+            </Button>
+          ) : (
+            currentRun.status !== "COMPLETE" && (
+              <Button onClick={() => void run(true)}>
+                Tiếp tục lần kiểm thử
+              </Button>
+            )
+          )}
+          <p className="text-sm">
+            Có thể rời trang rồi mở lại liên kết này. Khi bị giới hạn tốc độ,
+            chờ một phút và bấm Tiếp tục.
+          </p>
+        </Card>
+      )}
+      {!!history.length && (
+        <details>
+          <summary>Lịch sử kiểm thử gần đây</summary>
+          <ul>
+            {history.map((row) => (
+              <li key={row.id}>
+                <button
+                  className="text-accent underline"
+                  disabled={running}
+                  onClick={() => void loadRun(row.id)}
+                >
+                  {row.pack} · {row.completed}/{row.total} ·{" "}
+                  {row.id.slice(0, 8)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       <p role="status">
         {running ? "Đang chạy… " : ""}
         {results.length}/{cases.length} · Pass:{" "}
@@ -106,6 +225,49 @@ export default function VerifyPage() {
         {results.filter((result) => !result.pass).length}
       </p>
       {error && <Alert tone="error">{error}</Alert>}
+      {!!results.length && (
+        <div
+          className="overflow-x-auto"
+          tabIndex={0}
+          aria-label="Bảng kết quả Verify"
+        >
+          <table className="w-full text-left text-sm">
+            <caption>Kết quả của lần kiểm thử đã lưu</caption>
+            <thead>
+              <tr>
+                {[
+                  "Case",
+                  "Kỳ vọng",
+                  "Thực tế",
+                  "Kết quả",
+                  "Thời điểm",
+                  "Quy tắc",
+                ].map((text) => (
+                  <th className="p-2 border-b" key={text}>
+                    {text}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((result) => (
+                <tr key={result.caseId}>
+                  <td className="p-2">{result.caseId}</td>
+                  <td className="p-2">{result.expected.action}</td>
+                  <td className="p-2">{result.actual?.action ?? "ERROR"}</td>
+                  <td className="p-2">{result.pass ? "PASS" : "FAIL"}</td>
+                  <td className="p-2 whitespace-nowrap">
+                    {new Date(result.timestamp).toLocaleTimeString("vi-VN")}
+                  </td>
+                  <td className="p-2">
+                    {result.actual?.ruleIds.join(", ") ?? "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="space-y-3">
         {results.map((result) => (
           <Card key={result.caseId}>

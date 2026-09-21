@@ -26,7 +26,7 @@ const runtime = globalThis as typeof globalThis & Runtime;
 function memory() {
   return (runtime.supportV3Requests ??= new Map());
 }
-function database() {
+export function supportDatabase() {
   if (process.env.MONGODB_URI) {
     runtime.supportV3Mongo ??= new MongoClient(process.env.MONGODB_URI, {
       maxPoolSize: 3,
@@ -41,7 +41,8 @@ function database() {
   }
   if (
     process.env.NODE_ENV === "production" &&
-    process.env.SUPPORT_STORAGE !== "memory-demo"
+    (process.env.VERCEL === "1" ||
+      process.env.SUPPORT_STORAGE !== "memory-demo")
   )
     throw new SupportError(
       "STORAGE_UNAVAILABLE",
@@ -69,14 +70,16 @@ export function supportStorageMode() {
 export async function getSupportRequest(
   id: string,
 ): Promise<SupportRequest | null> {
-  const db = database();
+  const db = supportDatabase();
   const row = db
     ? (await supportRequests(db).findOne({ _id: id }))?.data
     : memory().get(id);
   return row ? structuredClone(row) : null;
 }
-export async function listSupportRequests(): Promise<SupportRequest[]> {
-  const db = database();
+export async function listSupportRequests(
+  allForLocal = false,
+): Promise<SupportRequest[]> {
+  const db = supportDatabase();
   if (db) {
     await ensureSupportRequestIndex(db);
     return (
@@ -90,13 +93,13 @@ export async function listSupportRequests(): Promise<SupportRequest[]> {
   return structuredClone(
     [...memory().values()]
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
-      .slice(0, 200),
+      .slice(0, allForLocal ? undefined : 200),
   );
 }
 export async function insertSupportRequest(
   request: SupportRequest,
 ): Promise<boolean> {
-  const db = database();
+  const db = supportDatabase();
   if (db) {
     try {
       await supportRequests(db).insertOne({ _id: request.id, data: request });
@@ -130,7 +133,7 @@ export async function updateSupportRequest(
   update(draft);
   draft.version = version + 1;
   draft.updatedAt = new Date().toISOString();
-  const db = database();
+  const db = supportDatabase();
   if (db) {
     const result = await db
       .collection<Document>("v3_support_requests")
@@ -153,7 +156,7 @@ export async function updateSupportRequest(
   return structuredClone(draft);
 }
 export async function reserveModelAttempt(): Promise<boolean> {
-  const db = database();
+  const db = supportDatabase();
   const configured = Number(process.env.AI_MAX_ATTEMPTS ?? 20);
   const limit =
     Number.isInteger(configured) && configured >= 0
@@ -194,7 +197,7 @@ export function resetSupportTestStore() {
 }
 
 export async function saveSupportPreview(preview: SupportPreview) {
-  const db = database();
+  const db = supportDatabase();
   if (db) {
     const collection = db.collection<SupportPreview>("v3_support_previews");
     await collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
@@ -210,13 +213,13 @@ export async function saveSupportPreview(preview: SupportPreview) {
 export async function getSupportPreview(
   id: string,
 ): Promise<SupportPreview | null> {
-  const db = database();
+  const db = supportDatabase();
   return db
     ? db.collection<SupportPreview>("v3_support_previews").findOne({ id })
     : structuredClone(runtime.supportV3Previews?.get(id) ?? null);
 }
 export async function listSupportSummaries(): Promise<SupportSummary[]> {
-  const db = database();
+  const db = supportDatabase();
   // Additive API: the legacy full-list contract remains available during migration.
   const rows = db
     ? (

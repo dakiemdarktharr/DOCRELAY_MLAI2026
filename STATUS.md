@@ -1,6 +1,12 @@
+# Report fixes — 21/09/2026
+
+Policy `support-guidance-v4.2`. Đã đối chiếu 23 mục, bổ sung Verify runs, phân trang/tìm kiếm, contextual assistance, câu hỏi có trọng tâm và minh bạch dữ liệu. Xem [DOCRELAY-ERRORS-RECHECK.md](DOCRELAY-ERRORS-RECHECK.md).
+
+175 unit/integration, lint/build, 26 desktop/mobile E2E + 1 Stop/Override/video E2E pass. Bằng chứng người dùng thật chưa có (chủ dự án xác nhận). Slide 5 trang, build log một trang và video local mock nằm trong `submission/`. Trạng thái deploy mới ghi sau kiểm chứng live.
+
 # Status — Production release — 21/09/2026
 
-## Current production
+## Previous production (before report fixes)
 
 - URL: https://labpass-five.vercel.app
 - Source `c0c5ea5`; deployment `dpl_9EUsGJXDWeHpaw6KGMh9YSQkWFwF`, READY.
