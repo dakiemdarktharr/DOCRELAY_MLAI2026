@@ -1,5 +1,13 @@
 # Build Log
 
+## Conversation, RAG and policy v5 — 2026-09-21
+
+- User requested direct everyday/help answers, highlighted 400ms/200ms bubbles, MongoDB RAG, public internet lookup and resilience to benign instruction-override prefixes. Existing main worktree used; student's uncommitted original workspace untouched.
+- Baseline 177 tests, lint/build passed. Added read-only gate before unnecessary extraction, Mongo curated knowledge with expiry/provenance, bounded official web lookup/cache, validated answer generation, follow-up risk reevaluation and answer audit. Public policy is explicitly separate from internal authorization.
+- Removed automatic reviewer escalation only for recognized read-only conversations, including model outages. Operational extraction/assistance fail-closed, reviewer transitions, compatibility APIs and original Ground Truth expectations remain. No budget reset, database deletion or new dependencies.
+- Candidate validation: 212 tests, lint and 29 E2E pass (one existing mobile video duplicate skipped). Production build/live evidence recorded at release. Research used official Google recovery, VNG annual-report HR overview and OpenAI Responses web-search documentation.
+
+
 ## UX and judge feedback — 2026-09-21
 
 - Tool: Astra/Codex. User approved U1–U11/B1 and requested fixes from three judge feedback files before commit. Existing prototype/AI provenance retained; new commits do not rewrite authorship or contest dates.

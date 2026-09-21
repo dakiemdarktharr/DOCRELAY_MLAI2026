@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T07:09:49.849Z",
+  "generatedAt": "2026-09-21T07:56:17.358Z",
   "provider": "mock",
   "route": "/api/support/requests",
   "total": 128,
@@ -7,7 +7,7 @@
   "results": [
     {
       "caseId": "verify-001-github-access",
-      "timestamp": "2026-09-21T07:09:48.954Z",
+      "timestamp": "2026-09-21T07:56:16.134Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -22,7 +22,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e19bd3f9-c4c1-433f-bf41-bbb0c0592418",
+      "requestId": "a54312a8-4c1b-4dd8-9805-e83f4b379552",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -69,7 +69,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -126,7 +126,7 @@
     },
     {
       "caseId": "verify-002-small-sandbox",
-      "timestamp": "2026-09-21T07:09:48.960Z",
+      "timestamp": "2026-09-21T07:56:16.138Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -141,7 +141,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "48fa3c57-8860-48d0-ab04-653c311918fb",
+      "requestId": "94ac12fb-74f2-4836-b8b5-d28759185b28",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -183,7 +183,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "DEV-4821",
         "subrequestOutcomes": [
@@ -238,7 +238,7 @@
     },
     {
       "caseId": "verify-003-etl-missing-specs",
-      "timestamp": "2026-09-21T07:09:48.980Z",
+      "timestamp": "2026-09-21T07:56:16.156Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -253,7 +253,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f523df34-e9b6-435d-8e6d-71a7e923e6a8",
+      "requestId": "5dd66a3a-f329-4ee2-bbb8-290751984460",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -301,7 +301,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -356,7 +356,7 @@
     },
     {
       "caseId": "verify-004-production-db-write",
-      "timestamp": "2026-09-21T07:09:48.988Z",
+      "timestamp": "2026-09-21T07:56:16.161Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -371,7 +371,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "51eb24c8-3bc9-4ecd-a63e-c952bdaf964b",
+      "requestId": "d7635ab3-9a95-4425-b037-f56f4ff7aad5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -421,7 +421,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-002+AUTH-001; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -476,7 +476,7 @@
     },
     {
       "caseId": "verify-005-public-rdp-blockchain",
-      "timestamp": "2026-09-21T07:09:48.993Z",
+      "timestamp": "2026-09-21T07:56:16.169Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -491,7 +491,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d7c49983-baad-44e8-a514-5dd3e3f8741b",
+      "requestId": "bb7bc36c-8d8c-4e0f-acae-cfef3f46b718",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -540,7 +540,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-002+SEC-003; SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002+SEC-003; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -590,7 +590,7 @@
     },
     {
       "caseId": "TC001",
-      "timestamp": "2026-09-21T07:09:48.999Z",
+      "timestamp": "2026-09-21T07:56:16.173Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -605,7 +605,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c9b7b202-63ee-4c59-958d-84100d0875ac",
+      "requestId": "b71ed6c5-731f-4ee4-8c20-b6e060042683",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -650,7 +650,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -692,7 +692,7 @@
     },
     {
       "caseId": "TC002",
-      "timestamp": "2026-09-21T07:09:49.004Z",
+      "timestamp": "2026-09-21T07:56:16.177Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -707,7 +707,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7e28ba98-4e37-4280-a883-7a154e1b4be7",
+      "requestId": "cb59bb6c-9045-4cfe-9a5e-374be899f9f1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -758,7 +758,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002; MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -816,7 +816,7 @@
     },
     {
       "caseId": "TC003",
-      "timestamp": "2026-09-21T07:09:49.010Z",
+      "timestamp": "2026-09-21T07:56:16.181Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -831,7 +831,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "aa1faecc-a578-4454-96dc-f2818b5d73d0",
+      "requestId": "228b5dfd-54f1-4949-8bf9-941c53a4b800",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -877,7 +877,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -934,7 +934,7 @@
     },
     {
       "caseId": "TC004",
-      "timestamp": "2026-09-21T07:09:49.014Z",
+      "timestamp": "2026-09-21T07:56:16.186Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -949,7 +949,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9f4bd2f5-356a-4d2b-b324-ea394933e28e",
+      "requestId": "eda735e0-026a-499a-b8b2-4a6341df7fc7",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -988,7 +988,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-003; MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -1032,7 +1032,7 @@
     },
     {
       "caseId": "TC005",
-      "timestamp": "2026-09-21T07:09:49.018Z",
+      "timestamp": "2026-09-21T07:56:16.190Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -1047,7 +1047,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "92a197a0-34d1-4874-9e38-0658f4e2f953",
+      "requestId": "eed6d59d-3a94-44d1-ad93-93487fe07017",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -1092,7 +1092,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "Cloud/ML Infra",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "DATA-8821",
         "subrequestOutcomes": [
@@ -1135,7 +1135,7 @@
     },
     {
       "caseId": "TC006",
-      "timestamp": "2026-09-21T07:09:49.023Z",
+      "timestamp": "2026-09-21T07:56:16.195Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1150,7 +1150,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "eb969c03-31e8-42c3-a811-878561e7074c",
+      "requestId": "7a645561-0f3e-4887-b47c-395c48411b3b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1198,7 +1198,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -1253,7 +1253,7 @@
     },
     {
       "caseId": "TC007",
-      "timestamp": "2026-09-21T07:09:49.028Z",
+      "timestamp": "2026-09-21T07:56:16.200Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1268,7 +1268,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d1603ff9-0f44-486e-985a-1530b6b0ab44",
+      "requestId": "2c0a0e02-55c6-4195-b5f5-8652db04ebbc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1311,7 +1311,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -1366,7 +1366,7 @@
     },
     {
       "caseId": "TC008",
-      "timestamp": "2026-09-21T07:09:49.032Z",
+      "timestamp": "2026-09-21T07:56:16.207Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -1381,7 +1381,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8c6ef728-5f67-40f7-8477-f9c841e505ed",
+      "requestId": "2a643b84-e179-493e-9644-35bc61664b3b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1425,7 +1425,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -1480,7 +1480,7 @@
     },
     {
       "caseId": "TC009",
-      "timestamp": "2026-09-21T07:09:49.035Z",
+      "timestamp": "2026-09-21T07:56:16.213Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1495,7 +1495,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ab5cd827-1e9f-4a25-8ad8-96885e6d8d9f",
+      "requestId": "1e04214c-0082-47b0-a349-e0c0ca9599cf",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -1537,7 +1537,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-002+AUTH-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -1576,7 +1576,7 @@
     },
     {
       "caseId": "TC010",
-      "timestamp": "2026-09-21T07:09:49.040Z",
+      "timestamp": "2026-09-21T07:56:16.219Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1591,7 +1591,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5ad4d846-2977-4955-9747-2d1f4f055278",
+      "requestId": "4c4e4a24-a0b1-48f5-8e7d-a3be5835e132",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -1642,7 +1642,7 @@
         "adminReason": "Evaluated 4 subrequests independently. SECURITY_RISK:SEC-005+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -1711,7 +1711,7 @@
     },
     {
       "caseId": "TC011",
-      "timestamp": "2026-09-21T07:09:49.045Z",
+      "timestamp": "2026-09-21T07:56:16.225Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -1726,7 +1726,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b9e80f58-6b4d-42d6-a30f-c62ac5c6e975",
+      "requestId": "bbd5d0cb-e2c7-4457-b840-fd853ae49ee8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1774,7 +1774,7 @@
         "adminReason": "Evaluated 4 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -1845,7 +1845,7 @@
     },
     {
       "caseId": "TC012",
-      "timestamp": "2026-09-21T07:09:49.051Z",
+      "timestamp": "2026-09-21T07:56:16.231Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -1860,7 +1860,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7d798457-0239-49e7-83fc-5244f203f3b2",
+      "requestId": "4152d8fe-14b2-4169-8da2-a5bfff818e8a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -1901,7 +1901,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003+AUTH-002; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-003+AUTH-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -1954,7 +1954,7 @@
     },
     {
       "caseId": "TC013",
-      "timestamp": "2026-09-21T07:09:49.057Z",
+      "timestamp": "2026-09-21T07:56:16.245Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -1969,7 +1969,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8dedbeb1-6150-461d-8ad5-42f86bbc5671",
+      "requestId": "69096f1f-d702-4391-853d-4edcf8bcf3ab",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -2012,7 +2012,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -2050,7 +2050,7 @@
     },
     {
       "caseId": "TC014",
-      "timestamp": "2026-09-21T07:09:49.061Z",
+      "timestamp": "2026-09-21T07:56:16.254Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -2065,7 +2065,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ea00eb71-a157-4e8d-a6de-2b7346d933ad",
+      "requestId": "4e8669b9-2920-41b9-85de-d91bf658c60a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -2107,7 +2107,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-001+AUTH-002; SECURITY_RISK:SEC-001+AUTH-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -2145,7 +2145,7 @@
     },
     {
       "caseId": "TC015",
-      "timestamp": "2026-09-21T07:09:49.064Z",
+      "timestamp": "2026-09-21T07:56:16.261Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -2160,7 +2160,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "dbc0e1ef-9350-4838-91bd-b483e4c04e19",
+      "requestId": "e0d3802a-b3e3-4487-b44f-fa11da51de4a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -2206,7 +2206,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-008; BEYOND_AUTHORITY:AUTH-002+AUTH-008; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "IT Helpdesk",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -2260,7 +2260,7 @@
     },
     {
       "caseId": "gt-routine-001-github-monorepo",
-      "timestamp": "2026-09-21T07:09:49.070Z",
+      "timestamp": "2026-09-21T07:56:16.266Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2275,7 +2275,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "0464174a-76b7-4935-948c-2e636758f06e",
+      "requestId": "19072743-ffe4-41d0-ad16-4da6718e37bd",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -2323,7 +2323,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "DevOps",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "IAM-2187",
         "subrequestOutcomes": [
@@ -2382,7 +2382,7 @@
     },
     {
       "caseId": "gt-routine-002-confluence-rdp-runbook",
-      "timestamp": "2026-09-21T07:09:49.073Z",
+      "timestamp": "2026-09-21T07:56:16.273Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2397,7 +2397,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "11b3066d-98f5-42f1-bc3f-73b5c6e5cfb2",
+      "requestId": "1727aa76-d044-4897-85c7-25bdbd9a0b64",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2440,7 +2440,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -2495,7 +2495,7 @@
     },
     {
       "caseId": "gt-routine-003-jira-firewall-review",
-      "timestamp": "2026-09-21T07:09:49.077Z",
+      "timestamp": "2026-09-21T07:56:16.284Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2510,7 +2510,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "54e1f5e0-1813-484f-aa08-9d92a684878d",
+      "requestId": "fd5df48e-336b-4cb3-99d6-222c0c6d3c5f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2553,7 +2553,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "IAM-2210",
         "subrequestOutcomes": [
@@ -2609,7 +2609,7 @@
     },
     {
       "caseId": "gt-routine-004-vpn-data-oncall",
-      "timestamp": "2026-09-21T07:09:49.081Z",
+      "timestamp": "2026-09-21T07:56:16.290Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2624,7 +2624,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "63cd4498-5a08-42ab-9a09-1b8a50c5bef4",
+      "requestId": "ca81fbac-bf2d-41e9-ab9e-1639f9a3ae82",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2666,7 +2666,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "ONB-774",
         "subrequestOutcomes": [
@@ -2721,7 +2721,7 @@
     },
     {
       "caseId": "gt-routine-005-sandbox-webhook",
-      "timestamp": "2026-09-21T07:09:49.086Z",
+      "timestamp": "2026-09-21T07:56:16.297Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2736,7 +2736,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "92ec7a6c-d6bb-4527-b6a5-ef8e7c40b603",
+      "requestId": "60655314-2512-4356-90ac-d3d461566e44",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2785,7 +2785,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "DEVX-930",
         "subrequestOutcomes": [
@@ -2842,7 +2842,7 @@
     },
     {
       "caseId": "gt-routine-006-sandbox-dbt-parser",
-      "timestamp": "2026-09-21T07:09:49.092Z",
+      "timestamp": "2026-09-21T07:56:16.305Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2857,7 +2857,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "eac5c0f2-a3c7-4cc5-aba7-28312c547bce",
+      "requestId": "4cecfe86-8893-4793-b00b-76396be142c4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -2906,7 +2906,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "DATA-1842",
         "subrequestOutcomes": [
@@ -2963,7 +2963,7 @@
     },
     {
       "caseId": "gt-routine-007-github-blockchain-audit",
-      "timestamp": "2026-09-21T07:09:49.098Z",
+      "timestamp": "2026-09-21T07:56:16.311Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -2978,7 +2978,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ec86522f-62ae-47e9-ab32-de49c7c59843",
+      "requestId": "25e7f7b5-e521-4836-8d94-5963dd724402",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3024,7 +3024,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "DevOps",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "SEC-441",
         "subrequestOutcomes": [
@@ -3083,7 +3083,7 @@
     },
     {
       "caseId": "gt-routine-008-jira-game-incident",
-      "timestamp": "2026-09-21T07:09:49.103Z",
+      "timestamp": "2026-09-21T07:56:16.318Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3098,7 +3098,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f0c66b83-648d-4cf0-9ea7-5c5fea207838",
+      "requestId": "fe1b58a9-c9f2-40d4-a443-931e2bcaf65b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3146,7 +3146,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "INC-5572",
         "subrequestOutcomes": [
@@ -3205,7 +3205,7 @@
     },
     {
       "caseId": "gt-routine-009-confluence-prod-db-sop",
-      "timestamp": "2026-09-21T07:09:49.109Z",
+      "timestamp": "2026-09-21T07:56:16.324Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3220,7 +3220,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "78c05191-eba5-4029-ae74-f421b7b47c40",
+      "requestId": "944b3a34-2c68-4ee0-89f3-b83772bc18c3",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3269,7 +3269,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "LMS-306",
         "subrequestOutcomes": [
@@ -3325,7 +3325,7 @@
     },
     {
       "caseId": "gt-routine-010-vpn-qa-network",
-      "timestamp": "2026-09-21T07:09:49.114Z",
+      "timestamp": "2026-09-21T07:56:16.331Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3340,7 +3340,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d8b02ec5-b547-477d-bece-c5e19e622323",
+      "requestId": "b9913eed-bfa9-4e11-a90c-f37048ad83c0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -3386,7 +3386,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "QA-9931",
         "subrequestOutcomes": [
@@ -3443,7 +3443,7 @@
     },
     {
       "caseId": "gt-routine-011-sandbox-k3s",
-      "timestamp": "2026-09-21T07:09:49.119Z",
+      "timestamp": "2026-09-21T07:56:16.339Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3458,7 +3458,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7d837296-5e19-4a4b-b01b-994e8daf8528",
+      "requestId": "54142154-da98-47b4-97d9-9cfb6523176a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -3508,7 +3508,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-007; SECURITY_RISK:SEC-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "CLOUD-612",
         "subrequestOutcomes": [
@@ -3561,7 +3561,7 @@
     },
     {
       "caseId": "gt-routine-012-github-actions-read",
-      "timestamp": "2026-09-21T07:09:49.126Z",
+      "timestamp": "2026-09-21T07:56:16.348Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3576,7 +3576,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d8b956e5-1346-49f2-81c4-ba58fdc3b254",
+      "requestId": "ccc42017-9bf2-4a17-bfd6-0e5334bc5c5d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3621,7 +3621,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "IAM-2264",
         "subrequestOutcomes": [
@@ -3675,7 +3675,7 @@
     },
     {
       "caseId": "gt-routine-013-confluence-kafka-docs",
-      "timestamp": "2026-09-21T07:09:49.133Z",
+      "timestamp": "2026-09-21T07:56:16.356Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3690,7 +3690,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "14f94c99-9f0f-482a-81f5-0989cca2918f",
+      "requestId": "a9cb2105-ce9c-4313-930f-fdc47474411a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3736,7 +3736,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "ARC-128",
         "subrequestOutcomes": [
@@ -3795,7 +3795,7 @@
     },
     {
       "caseId": "gt-routine-014-jira-dataops-board",
-      "timestamp": "2026-09-21T07:09:49.137Z",
+      "timestamp": "2026-09-21T07:56:16.365Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3810,7 +3810,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e54f76cf-c5ac-4d8e-beef-d06c0300d478",
+      "requestId": "369e8cf5-6be9-4188-a2f6-210d0cab4ad2",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -3863,7 +3863,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "HD-7712",
         "subrequestOutcomes": [
@@ -3922,7 +3922,7 @@
     },
     {
       "caseId": "gt-routine-015-sandbox-otel",
-      "timestamp": "2026-09-21T07:09:49.141Z",
+      "timestamp": "2026-09-21T07:56:16.374Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -3937,7 +3937,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3c9cfcb0-7a26-49a6-a9fd-463908dc3e0c",
+      "requestId": "abe05b0b-d041-4865-9734-bf34b934bdea",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -3982,7 +3982,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "Cloud/ML Infra",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "OBS-509",
         "subrequestOutcomes": [
@@ -4025,7 +4025,7 @@
     },
     {
       "caseId": "gt-missing-001-etl-generic",
-      "timestamp": "2026-09-21T07:09:49.145Z",
+      "timestamp": "2026-09-21T07:56:16.383Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4040,7 +4040,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "59e65748-762c-487a-bb3d-f1052d5597eb",
+      "requestId": "7ab8e29b-9ddc-4092-9f5d-0713b545eef0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4087,7 +4087,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4128,7 +4128,7 @@
     },
     {
       "caseId": "gt-missing-002-airflow-worker",
-      "timestamp": "2026-09-21T07:09:49.149Z",
+      "timestamp": "2026-09-21T07:56:16.391Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4143,7 +4143,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "df74eaa9-aea7-4078-bd34-bd0ca724d462",
+      "requestId": "82f5f8b5-4435-45a4-a294-f19a78d3feb0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4190,7 +4190,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4231,7 +4231,7 @@
     },
     {
       "caseId": "gt-missing-003-kafka-connect",
-      "timestamp": "2026-09-21T07:09:49.154Z",
+      "timestamp": "2026-09-21T07:56:16.402Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4246,7 +4246,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e27b9cbb-ae62-455c-8652-b35d6ce7b25c",
+      "requestId": "aabb3305-3ab4-44ea-acad-53beda7f09aa",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4281,7 +4281,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4320,7 +4320,7 @@
     },
     {
       "caseId": "gt-missing-004-debezium-cdc",
-      "timestamp": "2026-09-21T07:09:49.158Z",
+      "timestamp": "2026-09-21T07:56:16.408Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4335,7 +4335,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "11227df2-57c7-4bc1-aac6-1b76ebaf3679",
+      "requestId": "1cb29a50-bcd0-4f7f-9fe0-444af409752e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4378,7 +4378,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4433,7 +4433,7 @@
     },
     {
       "caseId": "gt-missing-005-spark-driver",
-      "timestamp": "2026-09-21T07:09:49.161Z",
+      "timestamp": "2026-09-21T07:56:16.415Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4448,7 +4448,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6a7f013b-8f50-441c-8af7-d04ac64983d8",
+      "requestId": "0d4bfe90-1067-48c7-b2f4-2d454e80e3e2",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4484,7 +4484,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4537,7 +4537,7 @@
     },
     {
       "caseId": "gt-missing-006-flink-etl",
-      "timestamp": "2026-09-21T07:09:49.167Z",
+      "timestamp": "2026-09-21T07:56:16.422Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4552,7 +4552,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b223d7df-220e-4c94-b675-e4863dbdf304",
+      "requestId": "465762ed-eb4f-4838-9761-6934cace3ec3",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4600,7 +4600,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4655,7 +4655,7 @@
     },
     {
       "caseId": "gt-missing-007-dbt-runner",
-      "timestamp": "2026-09-21T07:09:49.171Z",
+      "timestamp": "2026-09-21T07:56:16.429Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4670,7 +4670,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8b7d9ff2-edcb-4520-8f07-4f491f052030",
+      "requestId": "8ca9b692-1e3d-4f13-8855-84c7a395eece",
       "actual": {
         "action": "NEEDS_INFORMATION",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -4708,7 +4708,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Bổ sung các thông tin bên dưới.",
         "assignedTeam": "Cloud/ML Infra",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -4754,7 +4754,7 @@
     },
     {
       "caseId": "gt-missing-008-postgres-uat",
-      "timestamp": "2026-09-21T07:09:49.176Z",
+      "timestamp": "2026-09-21T07:56:16.437Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4769,7 +4769,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7aec15c1-9827-41ce-8687-1917e9560ebd",
+      "requestId": "13dcc998-0356-4810-9708-15c2b63b497b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4811,7 +4811,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4852,7 +4852,7 @@
     },
     {
       "caseId": "gt-missing-009-redis-test",
-      "timestamp": "2026-09-21T07:09:49.180Z",
+      "timestamp": "2026-09-21T07:56:16.443Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4867,7 +4867,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "4f65a2eb-0358-4bdd-af3b-8f4a09248dc9",
+      "requestId": "493fbe2a-9d78-459d-8f6f-95863200bb9b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -4911,7 +4911,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -4966,7 +4966,7 @@
     },
     {
       "caseId": "gt-missing-010-mongodb-qa",
-      "timestamp": "2026-09-21T07:09:49.184Z",
+      "timestamp": "2026-09-21T07:56:16.448Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -4981,7 +4981,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6244c70a-52ac-4b36-862c-b2eeafc98f68",
+      "requestId": "a17feb83-d3ff-4c45-8291-6388183604ce",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -5027,7 +5027,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -5070,7 +5070,7 @@
     },
     {
       "caseId": "gt-missing-011-clickhouse-analytics",
-      "timestamp": "2026-09-21T07:09:49.188Z",
+      "timestamp": "2026-09-21T07:56:16.454Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5085,7 +5085,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "28e65e7b-babb-40f1-b7f7-cc9b74038e1b",
+      "requestId": "c3aa6a9a-415b-4d54-a1cb-f040137f5220",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5128,7 +5128,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5169,7 +5169,7 @@
     },
     {
       "caseId": "gt-missing-012-trino-coordinator",
-      "timestamp": "2026-09-21T07:09:49.192Z",
+      "timestamp": "2026-09-21T07:56:16.460Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5184,7 +5184,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "39df091a-b944-44f1-a2ab-4ece46f42651",
+      "requestId": "fe6d562b-e158-45d8-97ed-656c7604d454",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5231,7 +5231,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5272,7 +5272,7 @@
     },
     {
       "caseId": "gt-missing-013-feature-store-etl",
-      "timestamp": "2026-09-21T07:09:49.197Z",
+      "timestamp": "2026-09-21T07:56:16.468Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5287,7 +5287,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8ae3ecb9-e364-4ab5-baef-02642ac7df65",
+      "requestId": "8e73fb17-b912-44c1-b1ef-daa2db1e7f41",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5335,7 +5335,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5390,7 +5390,7 @@
     },
     {
       "caseId": "gt-missing-014-data-quality-runner",
-      "timestamp": "2026-09-21T07:09:49.202Z",
+      "timestamp": "2026-09-21T07:56:16.477Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5405,7 +5405,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "eb2dde27-145b-47a0-ae9d-eb15bfb0c69f",
+      "requestId": "3d26d0a2-fc75-47e3-b96c-69dfa0905143",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5453,7 +5453,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5508,7 +5508,7 @@
     },
     {
       "caseId": "gt-missing-015-temporal-worker",
-      "timestamp": "2026-09-21T07:09:49.207Z",
+      "timestamp": "2026-09-21T07:56:16.486Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -5523,7 +5523,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "fce3dc18-e4fb-44da-8098-b6a1c715a7ae",
+      "requestId": "b11169a5-f4e0-439d-b071-936ff4d41165",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5571,7 +5571,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5626,7 +5626,7 @@
     },
     {
       "caseId": "gt-security-001-public-rdp-blockchain",
-      "timestamp": "2026-09-21T07:09:49.211Z",
+      "timestamp": "2026-09-21T07:56:16.494Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5641,7 +5641,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b13b6f6f-6671-4a39-88a1-31341112291f",
+      "requestId": "bc7e1381-c456-42ec-8ad2-2c957f8f3dfc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -5680,7 +5680,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002+SEC-003; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002+SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5719,7 +5719,7 @@
     },
     {
       "caseId": "gt-security-002-public-ssh-bypass",
-      "timestamp": "2026-09-21T07:09:49.215Z",
+      "timestamp": "2026-09-21T07:56:16.499Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5734,7 +5734,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e3cda1bd-ae03-48d9-a9c9-b55a9f05e7d5",
+      "requestId": "3bb94447-fdc6-4646-a41a-5dd8f1308162",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -5777,7 +5777,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5815,7 +5815,7 @@
     },
     {
       "caseId": "gt-security-003-torrent-dataset",
-      "timestamp": "2026-09-21T07:09:49.219Z",
+      "timestamp": "2026-09-21T07:56:16.505Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5830,7 +5830,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "93b170de-bc6b-4932-821f-b098e2f65d85",
+      "requestId": "8f3e49b0-7305-4462-bd30-da4b680c777c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -5869,7 +5869,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-006; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-006",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -5908,7 +5908,7 @@
     },
     {
       "caseId": "gt-security-004-crypto-miner-benchmark",
-      "timestamp": "2026-09-21T07:09:49.223Z",
+      "timestamp": "2026-09-21T07:56:16.515Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -5923,7 +5923,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e7cf7b2c-0aba-4787-b012-5803ca73f81a",
+      "requestId": "c07fd7a4-d634-48e4-ad9a-d9814d11ae53",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -5963,7 +5963,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-006; SECURITY_RISK:SEC-006; SECURITY_RISK:SEC-006",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -5999,7 +5999,7 @@
     },
     {
       "caseId": "gt-security-005-ngrok-reverse-tunnel",
-      "timestamp": "2026-09-21T07:09:49.227Z",
+      "timestamp": "2026-09-21T07:56:16.523Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6014,7 +6014,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "959e867c-ab74-4e6e-ae31-9385cf089a5f",
+      "requestId": "400c3d3c-1d3e-4d31-951a-956a319e055d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6059,7 +6059,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-003; MISSING_INFO:INFO-001; SECURITY_RISK:SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6100,7 +6100,7 @@
     },
     {
       "caseId": "gt-security-006-public-jupyter",
-      "timestamp": "2026-09-21T07:09:49.232Z",
+      "timestamp": "2026-09-21T07:56:16.534Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6115,7 +6115,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7e101d40-4bf8-47ba-b26e-b9ca81e29163",
+      "requestId": "24b9d36f-5114-46a5-bb2c-6fa41b44b1d1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6155,7 +6155,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-001+SEC-002; SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-001+SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6191,7 +6191,7 @@
     },
     {
       "caseId": "gt-security-007-docker-daemon-public",
-      "timestamp": "2026-09-21T07:09:49.237Z",
+      "timestamp": "2026-09-21T07:56:16.544Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6206,7 +6206,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1ad89645-f22e-4cc8-ab0f-80f43ee0b47a",
+      "requestId": "35c3b3d2-6646-46c3-aa7a-c184874ccef4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6244,7 +6244,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6282,7 +6282,7 @@
     },
     {
       "caseId": "gt-security-008-kubernetes-api-public",
-      "timestamp": "2026-09-21T07:09:49.243Z",
+      "timestamp": "2026-09-21T07:56:16.551Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6297,7 +6297,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "60ad2f9b-e2c7-4007-81c4-703a7b8fc8a6",
+      "requestId": "3124cd94-9ede-407a-844f-93a9f5c1a81c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6338,7 +6338,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-003; MISSING_INFO:INFO-001; SECURITY_RISK:SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6377,7 +6377,7 @@
     },
     {
       "caseId": "gt-security-009-public-redis",
-      "timestamp": "2026-09-21T07:09:49.248Z",
+      "timestamp": "2026-09-21T07:56:16.560Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6392,7 +6392,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5ec5e276-20bc-441e-bca7-a9de607d5e09",
+      "requestId": "da8818a9-f5f9-4541-8708-1f0a6bf910f9",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6435,7 +6435,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6487,7 +6487,7 @@
     },
     {
       "caseId": "gt-security-010-public-postgres-urgent",
-      "timestamp": "2026-09-21T07:09:49.253Z",
+      "timestamp": "2026-09-21T07:56:16.569Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6502,7 +6502,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "32b8b1b5-7534-4f14-8b7d-8479460f2a62",
+      "requestId": "3cd8a446-7deb-40ee-b8a6-3e266b15fcc9",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -6544,7 +6544,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -6582,7 +6582,7 @@
     },
     {
       "caseId": "gt-security-011-public-grafana",
-      "timestamp": "2026-09-21T07:09:49.258Z",
+      "timestamp": "2026-09-21T07:56:16.579Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6597,7 +6597,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a06caf3f-0d18-4a11-a777-eb48b29fcc48",
+      "requestId": "49e513a9-87e4-40ad-a41f-a723db30eeb8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6634,7 +6634,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; MISSING_INFO:INFO-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6672,7 +6672,7 @@
     },
     {
       "caseId": "gt-security-012-disable-edr-driver",
-      "timestamp": "2026-09-21T07:09:49.264Z",
+      "timestamp": "2026-09-21T07:56:16.589Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6687,7 +6687,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b2d181bd-0d47-436e-8fa0-16b5c609ed70",
+      "requestId": "65a6533d-5b1a-4d4e-be72-e9aa3a705bef",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6727,7 +6727,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-003+SEC-006; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-003+SEC-006",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6767,7 +6767,7 @@
     },
     {
       "caseId": "gt-security-013-torrent-build-cache",
-      "timestamp": "2026-09-21T07:09:49.270Z",
+      "timestamp": "2026-09-21T07:56:16.597Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6782,7 +6782,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "c7ff5424-893e-456d-b624-cd752ab2a1b1",
+      "requestId": "1dcdb69a-5e06-4cc9-b21c-1ebd373b3503",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -6821,7 +6821,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-006; SECURITY_RISK:SEC-006; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6860,7 +6860,7 @@
     },
     {
       "caseId": "gt-security-014-public-ethereum-rpc",
-      "timestamp": "2026-09-21T07:09:49.276Z",
+      "timestamp": "2026-09-21T07:56:16.607Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6875,7 +6875,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e8c295ba-0772-435c-bf11-1c81a32d7275",
+      "requestId": "f2861314-07b1-47f9-9879-899ba0375686",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -6918,7 +6918,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -6956,7 +6956,7 @@
     },
     {
       "caseId": "gt-security-015-conflicting-github-rdp",
-      "timestamp": "2026-09-21T07:09:49.283Z",
+      "timestamp": "2026-09-21T07:56:16.616Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -6971,7 +6971,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9830cf5b-dd33-4097-83c9-d31198a1e074",
+      "requestId": "fef29d01-02ba-49ac-8ad8-9d9de041641d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -7015,7 +7015,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; MISSING_INFO:INFO-001+INFO-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -7054,7 +7054,7 @@
     },
     {
       "caseId": "gt-authority-001-pubg-prod-write",
-      "timestamp": "2026-09-21T07:09:49.290Z",
+      "timestamp": "2026-09-21T07:56:16.622Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7069,7 +7069,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "03112845-4793-4cca-8a7d-d70d13357282",
+      "requestId": "1b7b0dce-0815-4782-87f3-b2a558d69a51",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7116,7 +7116,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-003+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-002+AUTH-001; SECURITY_RISK:SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7169,7 +7169,7 @@
     },
     {
       "caseId": "gt-authority-002-zalopay-prod-read",
-      "timestamp": "2026-09-21T07:09:49.296Z",
+      "timestamp": "2026-09-21T07:56:16.629Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7184,7 +7184,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a722cea7-ec48-486c-b8e7-e001b8bbf665",
+      "requestId": "412e8ecf-a2a6-4b9d-bb4b-0c929d7af85d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7229,7 +7229,7 @@
         "adminReason": "Evaluated 4 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7296,7 +7296,7 @@
     },
     {
       "caseId": "gt-authority-003-zalo-prod-write",
-      "timestamp": "2026-09-21T07:09:49.305Z",
+      "timestamp": "2026-09-21T07:56:16.637Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7311,7 +7311,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a3d3d1be-20d4-43ec-a597-70cee89e6682",
+      "requestId": "475091b5-6980-4793-9963-a092e4356435",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7355,7 +7355,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7394,7 +7394,7 @@
     },
     {
       "caseId": "gt-authority-004-vnggames-schema-migration",
-      "timestamp": "2026-09-21T07:09:49.313Z",
+      "timestamp": "2026-09-21T07:56:16.644Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7409,7 +7409,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ea6e2781-8a87-4140-8f0a-57c9fd1797ed",
+      "requestId": "798c8244-dce8-4e41-a7ba-cb8d9f43dac0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7454,7 +7454,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7507,7 +7507,7 @@
     },
     {
       "caseId": "gt-authority-005-prod-service-account",
-      "timestamp": "2026-09-21T07:09:49.320Z",
+      "timestamp": "2026-09-21T07:56:16.650Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7522,7 +7522,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "4a795405-4601-4113-9e9a-4f69c0d36b62",
+      "requestId": "4182d7ad-f1cf-4035-8d41-a0ce7772bd28",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7562,7 +7562,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-001+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; SECURITY_RISK:SEC-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7598,7 +7598,7 @@
     },
     {
       "caseId": "gt-authority-006-prod-read-replica",
-      "timestamp": "2026-09-21T07:09:49.327Z",
+      "timestamp": "2026-09-21T07:56:16.658Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7613,7 +7613,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "05180e1c-050f-49b1-a0cd-575b2310da7c",
+      "requestId": "90e55dcf-1b52-42e8-a8cb-3b07f44d9339",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -7656,7 +7656,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7709,7 +7709,7 @@
     },
     {
       "caseId": "gt-authority-007-production-dump",
-      "timestamp": "2026-09-21T07:09:49.336Z",
+      "timestamp": "2026-09-21T07:56:16.666Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7724,7 +7724,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f15a9795-635a-4e1f-94dc-b02d1978f308",
+      "requestId": "5ffa1c47-99e4-4407-be8f-a5c97970562d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -7772,7 +7772,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-005+AUTH-002+AUTH-001; SECURITY_RISK:SEC-005+AUTH-001; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -7815,7 +7815,7 @@
     },
     {
       "caseId": "gt-authority-008-eleven-gpu",
-      "timestamp": "2026-09-21T07:09:49.344Z",
+      "timestamp": "2026-09-21T07:56:16.674Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7830,7 +7830,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d2f5fa41-0b3a-42db-b1db-dcc95f508b67",
+      "requestId": "daad7e5b-c943-496d-991b-fec418146d81",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -7875,7 +7875,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -7916,7 +7916,7 @@
     },
     {
       "caseId": "gt-authority-009-twelve-a100",
-      "timestamp": "2026-09-21T07:09:49.351Z",
+      "timestamp": "2026-09-21T07:56:16.681Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -7931,7 +7931,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "194ed6ec-1f0d-426b-8d9a-7f45b54d1632",
+      "requestId": "7f0bc9b2-de1f-47fd-9423-d9aced974fc8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -7975,7 +7975,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -8030,7 +8030,7 @@
     },
     {
       "caseId": "gt-authority-010-twenty-four-h100",
-      "timestamp": "2026-09-21T07:09:49.358Z",
+      "timestamp": "2026-09-21T07:56:16.689Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8045,7 +8045,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d6743e90-7d1d-4704-a97c-ce126b80f6d9",
+      "requestId": "f5cb3f47-3a98-4903-95cc-5718d5bed5ca",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8089,7 +8089,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -8130,7 +8130,7 @@
     },
     {
       "caseId": "gt-authority-011-ray-sixteen-gpu",
-      "timestamp": "2026-09-21T07:09:49.365Z",
+      "timestamp": "2026-09-21T07:56:16.696Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8145,7 +8145,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3bcdff96-4374-46ce-a9e3-ce429a86fe14",
+      "requestId": "e648b0c0-78e9-45e6-80d2-9fc46483ca7b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8191,7 +8191,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -8246,7 +8246,7 @@
     },
     {
       "caseId": "gt-authority-012-forty-gpu-render",
-      "timestamp": "2026-09-21T07:09:49.372Z",
+      "timestamp": "2026-09-21T07:56:16.703Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8261,7 +8261,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7756ecd8-0c82-4d6e-a756-3440bcb0f715",
+      "requestId": "38152d26-080e-43d1-952f-9cb92ae6decc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8306,7 +8306,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -8347,7 +8347,7 @@
     },
     {
       "caseId": "gt-authority-013-obfuscated-sixty-four-gpu",
-      "timestamp": "2026-09-21T07:09:49.380Z",
+      "timestamp": "2026-09-21T07:56:16.711Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8362,7 +8362,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "516205ee-675a-4cdf-9ca7-8ef1c7bc8786",
+      "requestId": "13da939e-e8d3-461b-81a7-c253a5772857",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -8406,7 +8406,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -8447,7 +8447,7 @@
     },
     {
       "caseId": "gt-authority-014-prod-inference-twenty-gpu",
-      "timestamp": "2026-09-21T07:09:49.386Z",
+      "timestamp": "2026-09-21T07:56:16.720Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8462,7 +8462,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "57eeafcf-650d-4328-9ac8-d1e1ac66fe83",
+      "requestId": "85d107a0-4fa2-4244-a310-dea86dfeb928",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -8510,7 +8510,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Cloud/ML Infra",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -8567,7 +8567,7 @@
     },
     {
       "caseId": "gt-authority-015-prod-db-and-gpu",
-      "timestamp": "2026-09-21T07:09:49.392Z",
+      "timestamp": "2026-09-21T07:56:16.730Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -8582,7 +8582,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "145c773b-a4e5-43a8-9882-07e185bbc29d",
+      "requestId": "0b4c849c-81c9-4459-9b5e-ce280913d0ba",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8624,7 +8624,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-009+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-009",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -8662,7 +8662,7 @@
     },
     {
       "caseId": "xcf-routine-001-hr-confluence-onboarding",
-      "timestamp": "2026-09-21T07:09:49.399Z",
+      "timestamp": "2026-09-21T07:56:16.741Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8677,7 +8677,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a64244f9-199e-4bd5-8e09-1e75cf36d77e",
+      "requestId": "5fe56dc3-7a47-4ede-b191-252f38946b78",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8724,7 +8724,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "HRIS-184",
         "subrequestOutcomes": [
@@ -8784,7 +8784,7 @@
     },
     {
       "caseId": "xcf-routine-002-finance-vpn-month-end",
-      "timestamp": "2026-09-21T07:09:49.406Z",
+      "timestamp": "2026-09-21T07:56:16.753Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8799,7 +8799,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "b6595bc7-dd58-443e-bc02-41c47c499879",
+      "requestId": "f6a3eb03-1b17-446b-91e1-f072a4b4131e",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8840,7 +8840,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-007",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "FIN-4421",
         "subrequestOutcomes": [
@@ -8880,7 +8880,7 @@
     },
     {
       "caseId": "xcf-routine-003-legal-jira-dsar",
-      "timestamp": "2026-09-21T07:09:49.414Z",
+      "timestamp": "2026-09-21T07:56:16.764Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -8895,7 +8895,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "37d8f02f-f3b3-4422-94d6-82a48ffe00a9",
+      "requestId": "6f2f5b2c-a46f-4a9c-92db-9250e38e0efc",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -8942,7 +8942,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "IAM-2390",
         "subrequestOutcomes": [
@@ -9002,7 +9002,7 @@
     },
     {
       "caseId": "xcf-routine-004-procurement-github-sbom",
-      "timestamp": "2026-09-21T07:09:49.421Z",
+      "timestamp": "2026-09-21T07:56:16.772Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9017,7 +9017,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "47e622f5-39c4-4c98-ab42-43fee0e0090d",
+      "requestId": "9b542f00-ab20-4966-a1bc-ebdf1ad66b25",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9062,7 +9062,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "DevOps",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "PROC-771",
         "subrequestOutcomes": [
@@ -9119,7 +9119,7 @@
     },
     {
       "caseId": "xcf-routine-005-salesops-jira-crm",
-      "timestamp": "2026-09-21T07:09:49.429Z",
+      "timestamp": "2026-09-21T07:56:16.782Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9134,7 +9134,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "274f5750-059b-4ea2-bb0c-8bb27f353cbf",
+      "requestId": "785c5e96-3c62-41b3-9742-4608d612a5ca",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9178,7 +9178,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "CRM-1182",
         "subrequestOutcomes": [
@@ -9221,7 +9221,7 @@
     },
     {
       "caseId": "xcf-routine-006-marketing-sandbox-webhook",
-      "timestamp": "2026-09-21T07:09:49.437Z",
+      "timestamp": "2026-09-21T07:56:16.792Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9236,7 +9236,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "904a8dd4-ed4f-4a0e-a5bd-288a7707f3d1",
+      "requestId": "d4ec9bb0-3ab4-4ca2-add9-23a993881e71",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9285,7 +9285,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "MKT-904",
         "subrequestOutcomes": [
@@ -9342,7 +9342,7 @@
     },
     {
       "caseId": "xcf-routine-007-customer-care-vpn",
-      "timestamp": "2026-09-21T07:09:49.444Z",
+      "timestamp": "2026-09-21T07:56:16.803Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9357,7 +9357,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "19cf40ad-f48f-499d-8bd9-897ef3695cad",
+      "requestId": "29fb9d2d-7b58-4a3c-85c9-c6cc64796f40",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9398,7 +9398,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001; MISSING_INFO:INFO-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "CC-6302",
         "subrequestOutcomes": [
@@ -9439,7 +9439,7 @@
     },
     {
       "caseId": "xcf-routine-008-facilities-jira-maintenance",
-      "timestamp": "2026-09-21T07:09:49.453Z",
+      "timestamp": "2026-09-21T07:56:16.814Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9454,7 +9454,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7ded5bf0-2d6b-4590-9204-93c4891fad8a",
+      "requestId": "c4b0bb6a-e117-4e9f-8925-ee0f7912164a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9500,7 +9500,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "IAM-2414",
         "subrequestOutcomes": [
@@ -9559,7 +9559,7 @@
     },
     {
       "caseId": "xcf-routine-009-audit-confluence-controls",
-      "timestamp": "2026-09-21T07:09:49.463Z",
+      "timestamp": "2026-09-21T07:56:16.826Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9574,7 +9574,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "53a6ade0-570a-4814-81be-35e484ac56f5",
+      "requestId": "0911a8d9-5c11-4c93-ba2c-dc74474c2a93",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9618,7 +9618,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "IAM/IT",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "AUD-510",
         "subrequestOutcomes": [
@@ -9661,7 +9661,7 @@
     },
     {
       "caseId": "xcf-routine-010-comms-sandbox-preview",
-      "timestamp": "2026-09-21T07:09:49.470Z",
+      "timestamp": "2026-09-21T07:56:16.836Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9676,7 +9676,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "af529187-3e78-45dd-b1e4-3f23ec56523d",
+      "requestId": "4abda57d-cef3-47db-9715-3862a5a168b1",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -9721,7 +9721,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-007; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer yêu cầu approval hợp lệ đúng scope; không nhận secret hoặc ảnh nhạy cảm.",
         "assignedTeam": "Cloud/ML Infra",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "COM-318",
         "subrequestOutcomes": [
@@ -9764,7 +9764,7 @@
     },
     {
       "caseId": "xcf-routine-011-eventops-vpn",
-      "timestamp": "2026-09-21T07:09:49.478Z",
+      "timestamp": "2026-09-21T07:56:16.846Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9779,7 +9779,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "6de0b316-b1b1-4a8a-b0c9-437117cdfcc2",
+      "requestId": "a749a074-33ed-400e-ac15-708a23d96dec",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -9815,7 +9815,7 @@
         "adminReason": "Evaluated 2 subrequests independently. ROUTINE:GUIDE-007; ROUTINE:GUIDE-007; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "approvalReference": "EVT-205",
         "subrequestOutcomes": [
@@ -9852,7 +9852,7 @@
     },
     {
       "caseId": "xcf-routine-012-executive-confluence-boardpack",
-      "timestamp": "2026-09-21T07:09:49.486Z",
+      "timestamp": "2026-09-21T07:56:16.859Z",
       "expected": {
         "action": "AUTO_APPROVE",
         "bucket": "ROUTINE"
@@ -9867,7 +9867,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "cab69d6f-aba9-4bbe-8d99-fc3e6643f0dc",
+      "requestId": "669290b7-0dfd-4f0e-a707-cf5a8c4314d0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -9916,7 +9916,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-002+AUTH-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "unverifiable",
         "approvalReference": "IAM-2450",
         "subrequestOutcomes": [
@@ -9972,7 +9972,7 @@
     },
     {
       "caseId": "xcf-missing-001-hr-payroll-etl",
-      "timestamp": "2026-09-21T07:09:49.494Z",
+      "timestamp": "2026-09-21T07:56:16.870Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -9987,7 +9987,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f011c60e-7daf-40dc-9989-79bf4a5f508c",
+      "requestId": "75afee2f-b503-460d-9102-6498354d9d74",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10035,7 +10035,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10092,7 +10092,7 @@
     },
     {
       "caseId": "xcf-missing-002-finance-bank-etl",
-      "timestamp": "2026-09-21T07:09:49.502Z",
+      "timestamp": "2026-09-21T07:56:16.882Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10107,7 +10107,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5945cb8c-8931-451e-ae0c-3530cef65e63",
+      "requestId": "785ec0c3-f75e-4ee9-8441-de54fba75c21",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10155,7 +10155,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10210,7 +10210,7 @@
     },
     {
       "caseId": "xcf-missing-003-legal-ediscovery-db",
-      "timestamp": "2026-09-21T07:09:49.511Z",
+      "timestamp": "2026-09-21T07:56:16.893Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10225,7 +10225,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "35f5980f-ad0b-438c-941f-7362f4f607b3",
+      "requestId": "54d2b35e-a0fe-4eb5-bfab-04c558281185",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10269,7 +10269,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10310,7 +10310,7 @@
     },
     {
       "caseId": "xcf-missing-004-procurement-vendor-db",
-      "timestamp": "2026-09-21T07:09:49.520Z",
+      "timestamp": "2026-09-21T07:56:16.910Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10325,7 +10325,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "65a36da7-035e-4bc7-a111-cb7dda132b2b",
+      "requestId": "af7e1d75-283d-4607-aebe-39c119b973f5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10369,7 +10369,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10410,7 +10410,7 @@
     },
     {
       "caseId": "xcf-missing-005-sales-crm-etl",
-      "timestamp": "2026-09-21T07:09:49.529Z",
+      "timestamp": "2026-09-21T07:56:16.923Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10425,7 +10425,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "cf063175-89e2-4cf0-a5b5-e15612462c93",
+      "requestId": "89abdb00-e5fb-42e1-88b5-3098c66f0743",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10473,7 +10473,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10528,7 +10528,7 @@
     },
     {
       "caseId": "xcf-missing-006-marketing-attribution-etl",
-      "timestamp": "2026-09-21T07:09:49.537Z",
+      "timestamp": "2026-09-21T07:56:16.935Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10543,7 +10543,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "08035611-d73d-4d4a-b992-105f4a21e7a7",
+      "requestId": "6e9cc933-6c7b-4372-b3ab-ba6a17f4ac1c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10590,7 +10590,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10631,7 +10631,7 @@
     },
     {
       "caseId": "xcf-missing-007-care-transcript-db",
-      "timestamp": "2026-09-21T07:09:49.545Z",
+      "timestamp": "2026-09-21T07:56:16.946Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10646,7 +10646,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "5b19502b-3ef1-432d-b6e6-c3cbfc4f27a9",
+      "requestId": "3737aac9-ac7f-4da1-a495-fbdb843f531a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10690,7 +10690,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10731,7 +10731,7 @@
     },
     {
       "caseId": "xcf-missing-008-facilities-iot-db",
-      "timestamp": "2026-09-21T07:09:49.553Z",
+      "timestamp": "2026-09-21T07:56:16.957Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10746,7 +10746,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "e43ddcdd-0658-4f04-9915-f957718bec45",
+      "requestId": "ef448507-99b1-457d-8e5f-f5814a902f04",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10791,7 +10791,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10846,7 +10846,7 @@
     },
     {
       "caseId": "xcf-missing-009-audit-evidence-server",
-      "timestamp": "2026-09-21T07:09:49.561Z",
+      "timestamp": "2026-09-21T07:56:16.969Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10861,7 +10861,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "06509308-0fbc-40d8-9f70-721a8d20bf3f",
+      "requestId": "d7ebaaad-5c67-454e-bf99-4085fefc3902",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -10909,7 +10909,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -10964,7 +10964,7 @@
     },
     {
       "caseId": "xcf-missing-010-esg-reporting-db",
-      "timestamp": "2026-09-21T07:09:49.571Z",
+      "timestamp": "2026-09-21T07:56:16.979Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -10979,7 +10979,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "46273eb0-faf0-43cd-8746-d2e132c7cac5",
+      "requestId": "d2b59df5-abdb-4dfa-81ae-5582a942ea98",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11023,7 +11023,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11064,7 +11064,7 @@
     },
     {
       "caseId": "xcf-missing-011-comms-media-db",
-      "timestamp": "2026-09-21T07:09:49.579Z",
+      "timestamp": "2026-09-21T07:56:16.990Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -11079,7 +11079,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a4361e62-82a5-418b-ad75-04b50648700e",
+      "requestId": "eae6bca4-4a63-4ec8-840f-d19b930761c0",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11123,7 +11123,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11164,7 +11164,7 @@
     },
     {
       "caseId": "xcf-missing-012-risk-fraud-etl",
-      "timestamp": "2026-09-21T07:09:49.587Z",
+      "timestamp": "2026-09-21T07:56:17.002Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "MISSING_INFO"
@@ -11179,7 +11179,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d374c7b6-f84d-4887-9cf8-ca32975a9567",
+      "requestId": "99ea3036-f420-4520-9da5-60efcb737f8d",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11227,7 +11227,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11282,7 +11282,7 @@
     },
     {
       "caseId": "xcf-security-001-hr-anydesk-bypass",
-      "timestamp": "2026-09-21T07:09:49.598Z",
+      "timestamp": "2026-09-21T07:56:17.012Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11297,7 +11297,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9bc1f686-3b57-41f9-8320-689cd6404f95",
+      "requestId": "f2c2d141-4027-4b05-b5c3-e18de8d2b173",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -11344,7 +11344,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-003; MISSING_INFO:INFO-001+INFO-005; SECURITY_RISK:SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -11384,7 +11384,7 @@
     },
     {
       "caseId": "xcf-security-002-finance-disable-edr",
-      "timestamp": "2026-09-21T07:09:49.607Z",
+      "timestamp": "2026-09-21T07:56:17.025Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11399,7 +11399,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "fd83de5c-d4c6-4706-be6e-3b2153dbd06f",
+      "requestId": "060fd240-5f32-4606-941d-7aeaeb03ccba",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11436,7 +11436,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-001+SEC-002+SEC-006; SECURITY_RISK:SEC-001; SECURITY_RISK:SEC-002+SEC-006",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11473,7 +11473,7 @@
     },
     {
       "caseId": "xcf-security-003-legal-public-rdp",
-      "timestamp": "2026-09-21T07:09:49.616Z",
+      "timestamp": "2026-09-21T07:56:17.040Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11488,7 +11488,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3c630a92-fb46-4ac9-9a2f-8a17233206c2",
+      "requestId": "5b8e2449-6d3f-4476-ac96-40d566e268e4",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11535,7 +11535,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-002; MISSING_INFO:INFO-001+INFO-005; SECURITY_RISK:SEC-002; MISSING_INFO:INFO-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11589,7 +11589,7 @@
     },
     {
       "caseId": "xcf-security-004-procurement-public-sftp",
-      "timestamp": "2026-09-21T07:09:49.625Z",
+      "timestamp": "2026-09-21T07:56:17.054Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11604,7 +11604,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "ef5a3648-fd19-4880-9c52-ad26d80bf8eb",
+      "requestId": "ac9738f1-9b24-44f7-a88e-a6136af12e1a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11647,7 +11647,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11685,7 +11685,7 @@
     },
     {
       "caseId": "xcf-security-005-marketing-torrent-assets",
-      "timestamp": "2026-09-21T07:09:49.635Z",
+      "timestamp": "2026-09-21T07:56:17.066Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11700,7 +11700,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "1ef461ac-9ea2-4c4b-b16e-a95e81d2693e",
+      "requestId": "a61156e8-b890-45b1-860c-e202e0200834",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -11739,7 +11739,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-006; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-006",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11778,7 +11778,7 @@
     },
     {
       "caseId": "xcf-security-006-care-remote-debug-port",
-      "timestamp": "2026-09-21T07:09:49.643Z",
+      "timestamp": "2026-09-21T07:56:17.076Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11793,7 +11793,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "9ed444ef-42c6-4752-ae2c-56e395383d1f",
+      "requestId": "09ca2501-1e61-42cd-93af-0844f5c06633",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11835,7 +11835,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11873,7 +11873,7 @@
     },
     {
       "caseId": "xcf-security-007-facilities-public-nvr",
-      "timestamp": "2026-09-21T07:09:49.653Z",
+      "timestamp": "2026-09-21T07:56:17.089Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11888,7 +11888,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8ddb6354-4055-4a71-b301-f8b50d8d40b6",
+      "requestId": "ed029196-e15f-44cb-ac91-1357787b8c43",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -11931,7 +11931,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -11969,7 +11969,7 @@
     },
     {
       "caseId": "xcf-security-008-comms-cracked-font-pack",
-      "timestamp": "2026-09-21T07:09:49.667Z",
+      "timestamp": "2026-09-21T07:56:17.102Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -11984,7 +11984,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "716c8bda-5531-49c3-a8d8-ca6449f9dd32",
+      "requestId": "23d5548a-e6bd-4ebc-be0d-e708c815b343",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -12034,7 +12034,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-006; SECURITY_RISK:SEC-006; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12076,7 +12076,7 @@
     },
     {
       "caseId": "xcf-security-009-event-public-vnc",
-      "timestamp": "2026-09-21T07:09:49.681Z",
+      "timestamp": "2026-09-21T07:56:17.115Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12091,7 +12091,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "f7d12c55-c88d-450c-8aab-a386ebc7d21a",
+      "requestId": "c058451f-5331-4406-a855-6b4c780eef6a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -12134,7 +12134,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -12172,7 +12172,7 @@
     },
     {
       "caseId": "xcf-security-010-sales-sideload-extension",
-      "timestamp": "2026-09-21T07:09:49.692Z",
+      "timestamp": "2026-09-21T07:56:17.126Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12187,7 +12187,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d89d65ff-2b6f-4aca-8dce-0264f5030caa",
+      "requestId": "ce0f10bb-6d96-4e0d-b574-a07399d12181",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -12228,7 +12228,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-003+SEC-006; SECURITY_RISK:SEC-006; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-003",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -12278,7 +12278,7 @@
     },
     {
       "caseId": "xcf-security-011-executive-bypass-mfa",
-      "timestamp": "2026-09-21T07:09:49.702Z",
+      "timestamp": "2026-09-21T07:56:17.138Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12293,7 +12293,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "2b2fe226-8df5-4b74-bae2-564e08ae5e4e",
+      "requestId": "ccd6056d-a8cd-43b7-b5fd-aeab00c6812f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -12328,7 +12328,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; ROUTINE:GUIDE-006; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -12363,7 +12363,7 @@
     },
     {
       "caseId": "xcf-security-012-esg-public-blockchain-rpc",
-      "timestamp": "2026-09-21T07:09:49.713Z",
+      "timestamp": "2026-09-21T07:56:17.153Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "SECURITY_RISK"
@@ -12378,7 +12378,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "0c1b4ada-adfb-45f2-973a-764b0663f54e",
+      "requestId": "a77d794f-061e-4451-bbb4-da09042502d8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ROUTINE_WORKFLOW",
@@ -12425,7 +12425,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-002; BEYOND_AUTHORITY:AUTH-005; SECURITY_RISK:SEC-002",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / Network",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12463,7 +12463,7 @@
     },
     {
       "caseId": "xcf-authority-001-finance-zalopay-prod-read",
-      "timestamp": "2026-09-21T07:09:49.722Z",
+      "timestamp": "2026-09-21T07:56:17.167Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12478,7 +12478,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "0a89986c-b04e-46d6-8b38-a8a02a4e4204",
+      "requestId": "48fccfab-5a9d-46cf-83b8-709fde07fd14",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -12532,7 +12532,7 @@
         "adminReason": "Evaluated 4 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12603,7 +12603,7 @@
     },
     {
       "caseId": "xcf-authority-002-care-zalopay-prod-write",
-      "timestamp": "2026-09-21T07:09:49.732Z",
+      "timestamp": "2026-09-21T07:56:17.184Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12618,7 +12618,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "95708aee-c8bb-431d-9b45-84b529688cbf",
+      "requestId": "d33b612f-5768-44d8-b193-4b3abc9a5827",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "SAFE_DIAGNOSTIC",
@@ -12652,7 +12652,7 @@
         "adminReason": "Evaluated 2 subrequests independently. BEYOND_AUTHORITY:AUTH-002; ROUTINE:GUIDE-002; BEYOND_AUTHORITY:AUTH-002+AUTH-001",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "IT Helpdesk",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12687,7 +12687,7 @@
     },
     {
       "caseId": "xcf-authority-003-legal-zalo-prod-read",
-      "timestamp": "2026-09-21T07:09:49.741Z",
+      "timestamp": "2026-09-21T07:56:17.200Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12702,7 +12702,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "60776f28-d54e-4f3c-aaa5-668c3ace6556",
+      "requestId": "2e946532-101e-47e5-b0fc-11ef30cb4cbd",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -12754,7 +12754,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12811,7 +12811,7 @@
     },
     {
       "caseId": "xcf-authority-004-privacy-zalo-export",
-      "timestamp": "2026-09-21T07:09:49.751Z",
+      "timestamp": "2026-09-21T07:56:17.216Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12826,7 +12826,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "3702a365-dc87-4338-94d6-f83391228ada",
+      "requestId": "184418b2-57ee-4e30-9416-9e57283f8a9b",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -12873,7 +12873,7 @@
         "adminReason": "Evaluated 3 subrequests independently. SECURITY_RISK:SEC-005+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -12926,7 +12926,7 @@
     },
     {
       "caseId": "xcf-authority-005-marketing-zalo-segmentation",
-      "timestamp": "2026-09-21T07:09:49.762Z",
+      "timestamp": "2026-09-21T07:56:17.233Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -12941,7 +12941,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8501aab6-7e67-4292-948e-33c6b9045e10",
+      "requestId": "9f28e96c-498e-436b-96ce-3a7bbf1f1d5c",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -12985,7 +12985,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -13038,7 +13038,7 @@
     },
     {
       "caseId": "xcf-authority-006-gameops-vnggames-write",
-      "timestamp": "2026-09-21T07:09:49.773Z",
+      "timestamp": "2026-09-21T07:56:17.248Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13053,7 +13053,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "0a7e1eaa-f203-40a0-9395-0bc2ea58428d",
+      "requestId": "42b3adbb-057b-45ed-a2ce-060ec1307ed5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -13098,7 +13098,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -13151,7 +13151,7 @@
     },
     {
       "caseId": "xcf-authority-007-audit-production-read",
-      "timestamp": "2026-09-21T07:09:49.784Z",
+      "timestamp": "2026-09-21T07:56:17.264Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13166,7 +13166,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d699daf1-2a3e-4fe6-b412-22197d72ab53",
+      "requestId": "d17442b3-dcb3-4cbb-be2d-f547f4234654",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "CONFIGURATION_CHANGE",
@@ -13215,7 +13215,7 @@
         "adminReason": "Evaluated 2 subrequests independently. SECURITY_RISK:SEC-005+AUTH-002+AUTH-001; BEYOND_AUTHORITY:AUTH-001; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "Security / DBA/Data",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -13256,7 +13256,7 @@
     },
     {
       "caseId": "xcf-authority-008-risk-prod-write",
-      "timestamp": "2026-09-21T07:09:49.795Z",
+      "timestamp": "2026-09-21T07:56:17.280Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13271,7 +13271,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "8edd73b8-59de-4b9e-8d6d-de083daece1b",
+      "requestId": "46eb6169-a46f-4488-a509-956e7666ed9a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "ACCESS_REQUEST",
@@ -13321,7 +13321,7 @@
         "adminReason": "Evaluated 3 subrequests independently. BEYOND_AUTHORITY:AUTH-003+AUTH-002+AUTH-009+AUTH-001; BEYOND_AUTHORITY:AUTH-002+AUTH-009+AUTH-001; BEYOND_AUTHORITY:AUTH-005; MISSING_INFO:INFO-001+INFO-005",
         "nextStep": "Reviewer kiểm tra evidence và phạm vi; hệ thống không thực hiện thay đổi thật.",
         "assignedTeam": "DBA/Data / Reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "pending",
         "subrequestOutcomes": [
           {
@@ -13377,7 +13377,7 @@
     },
     {
       "caseId": "xcf-authority-009-creative-render-gpu",
-      "timestamp": "2026-09-21T07:09:49.807Z",
+      "timestamp": "2026-09-21T07:56:17.299Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13392,7 +13392,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "a5729f27-ef67-4448-9038-ab1eefc04661",
+      "requestId": "352b4e59-2286-4cf2-8f91-4bf09a530ba8",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13436,7 +13436,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -13477,7 +13477,7 @@
     },
     {
       "caseId": "xcf-authority-010-localization-dubbing-gpu",
-      "timestamp": "2026-09-21T07:09:49.818Z",
+      "timestamp": "2026-09-21T07:56:17.316Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13492,7 +13492,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "7faa21e7-e569-4934-9ebb-a4589810daad",
+      "requestId": "55c539fb-54dd-463c-b918-60830dea982f",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13538,7 +13538,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -13593,7 +13593,7 @@
     },
     {
       "caseId": "xcf-authority-011-hr-resume-gpu",
-      "timestamp": "2026-09-21T07:09:49.829Z",
+      "timestamp": "2026-09-21T07:56:17.331Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13608,7 +13608,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "d42f79fc-9c53-4f0f-8c72-063a5003e142",
+      "requestId": "ab2e04e9-7547-4554-934b-ec44fbd7985a",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13653,7 +13653,7 @@
         "adminReason": "Evaluated 2 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {
@@ -13694,7 +13694,7 @@
     },
     {
       "caseId": "xcf-authority-012-comms-video-gpu",
-      "timestamp": "2026-09-21T07:09:49.839Z",
+      "timestamp": "2026-09-21T07:56:17.346Z",
       "expected": {
         "action": "ESCALATE",
         "bucket": "BEYOND_AUTHORITY"
@@ -13709,7 +13709,7 @@
           "metrics:pass"
         ]
       },
-      "requestId": "450f9df3-78c5-4aee-a384-4e4764fc1fda",
+      "requestId": "6edc33ce-5eec-40dd-b991-41d29c5bc4f5",
       "actual": {
         "action": "ESCALATE",
         "requestKind": "OTHER",
@@ -13755,7 +13755,7 @@
         "adminReason": "Evaluated 3 subrequests independently. MISSING_INFO:INFO-001+INFO-005; MISSING_INFO:INFO-001+INFO-005; BEYOND_AUTHORITY:AUTH-005; BEYOND_AUTHORITY:AUTH-005",
         "nextStep": "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
         "assignedTeam": "Classifier/reviewer",
-        "policyVersion": "support-guidance-v4.2",
+        "policyVersion": "support-guidance-v5.0",
         "approvalStatus": "not_required",
         "subrequestOutcomes": [
           {

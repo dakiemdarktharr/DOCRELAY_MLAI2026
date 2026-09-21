@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { ConversationContext, ConversationLabel } from "./conversation";
 
 export const requestKinds = [
   "GUIDANCE",
@@ -101,6 +102,7 @@ export type SupportInput = {
   verifyCaseId?: string;
 };
 export type CanonicalRequest = Extraction & {
+  conversation?: ConversationContext;
   subrequests: Extraction[];
   redactions: string[];
   model: {
@@ -165,7 +167,24 @@ export type RequestStatus =
   | "REJECTED"
   | "STOPPED"
   | "COMPLETED";
+export type AnswerSource = {
+  title: string;
+  url: string;
+  scope: "public" | "project";
+  checkedAt: string;
+};
+export type ConversationAnswer = {
+  text: string;
+  label: ConversationLabel;
+  sources: AnswerSource[];
+  knowledgeIds: string[];
+  retrieval: "mongodb" | "memory" | "unavailable";
+  webSearch: "used" | "disabled" | "not_needed" | "unavailable";
+  fallbackReason?: string;
+  ignoredOverride: boolean;
+};
 export type Assistance = {
+  answer?: ConversationAnswer;
   summary: string;
   stepExplanations?: string[];
   contextEvidence?: string;

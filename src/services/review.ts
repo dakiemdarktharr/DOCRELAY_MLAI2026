@@ -1,3 +1,4 @@
+import { createConversationAnswer } from "@/lib/conversation-model";
 import { explainStep } from "@/domain/guidance";
 import { z } from "zod";
 import { canReview } from "@/domain/transitions";
@@ -236,15 +237,17 @@ export async function feedbackSupport(id: string, value: unknown) {
   let failedCanonical = null;
   if (
     input.choice === "STILL_BROKEN" &&
-    snapshot.assistance.length < 3 &&
+    (snapshot.canonical?.conversation || snapshot.assistance.length < 3) &&
     snapshot.canonical
   ) {
     try {
-      nextAssistance = await createAssistance(
-        snapshot.canonical,
-        snapshot.decision?.handlingMode === "LLM_ASSIST",
-        { assistanceRound: snapshot.assistance.length },
-      );
+      nextAssistance = snapshot.canonical.conversation
+        ? await createConversationAnswer(snapshot.canonical)
+        : await createAssistance(
+            snapshot.canonical,
+            snapshot.decision?.handlingMode === "LLM_ASSIST",
+            { assistanceRound: snapshot.assistance.length },
+          );
     } catch (error) {
       failedCanonical = modelFailure(snapshot.canonical, error);
     }
@@ -338,10 +341,12 @@ export async function clarifySupport(id: string, value: unknown) {
     ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
   ) {
     try {
-      assistance = await createAssistance(
-        result.canonical,
-        result.decision.handlingMode === "LLM_ASSIST",
-      );
+      assistance = result.canonical.conversation
+        ? await createConversationAnswer(result.canonical)
+        : await createAssistance(
+            result.canonical,
+            result.decision.handlingMode === "LLM_ASSIST",
+          );
     } catch (error) {
       result.canonical = modelFailure(result.canonical, error);
       result.decision = evaluatePolicy(result.canonical, verifyApproval);

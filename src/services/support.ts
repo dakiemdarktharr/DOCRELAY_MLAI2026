@@ -1,3 +1,8 @@
+import {
+  conversationRoute,
+  conversationalCanonical,
+} from "@/domain/conversation";
+import { createConversationAnswer } from "@/lib/conversation-model";
 import { validateVerificationInput } from "./verification";
 import { createHash, randomUUID } from "node:crypto";
 import type {
@@ -75,11 +80,11 @@ export async function analyze(
   markers: string[],
   options: ModelOptions = {},
 ): Promise<{ canonical: CanonicalRequest; decision: Decision }> {
-  const canonical = await extractWithModel(
-    input,
-    extractIntake(input, markers),
-    options,
-  );
+  const baseline = extractIntake(input, markers);
+  const conversation = conversationRoute(input, baseline);
+  const canonical = conversation
+    ? conversationalCanonical(baseline, conversation)
+    : await extractWithModel(input, baseline, options);
   return {
     canonical,
     decision: evaluatePolicy(canonical, verifyApproval),
@@ -98,7 +103,7 @@ function fingerprintOf(input: SupportInput) {
     )
     .digest("hex");
 }
-async function completeAnalysis(
+export async function completeAnalysis(
   input: SupportInput,
   markers: string[],
   options: ModelOptions = {},
@@ -110,11 +115,13 @@ async function completeAnalysis(
     ["GUIDE", "LLM_ASSIST"].includes(result.decision.handlingMode)
   ) {
     try {
-      assistance = await createAssistance(
-        result.canonical,
-        result.decision.handlingMode === "LLM_ASSIST",
-        options,
-      );
+      assistance = result.canonical.conversation
+        ? await createConversationAnswer(result.canonical, options)
+        : await createAssistance(
+            result.canonical,
+            result.decision.handlingMode === "LLM_ASSIST",
+            options,
+          );
     } catch (error) {
       result.canonical = modelFailure(result.canonical, error);
       result.decision = evaluatePolicy(result.canonical, verifyApproval);
@@ -270,6 +277,26 @@ function applyAnalysis(
       : result.decision.action === "ESCALATE"
         ? "ESCALATED"
         : "NEEDS_INFORMATION";
+  if (result.assistance?.answer) {
+    const answer = result.assistance.answer;
+    draft.events.push(
+      auditEvent(
+        draft,
+        before,
+        "ANSWER",
+        result.assistance.source,
+        JSON.stringify({
+          label: answer.label,
+          knowledgeIds: answer.knowledgeIds,
+          sources: answer.sources.map((source) => source.url),
+          retrieval: answer.retrieval,
+          webSearch: answer.webSearch,
+          fallbackReason: answer.fallbackReason,
+          ignoredOverride: answer.ignoredOverride,
+        }),
+      ),
+    );
+  }
   draft.events.push(
     auditEvent(
       draft,

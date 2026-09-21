@@ -1,7 +1,7 @@
 import { statusLabels } from "@/domain/presentation";
 import { labelForField } from "@/domain/catalog";
 import type { SupportRequest, AuditEvent } from "@/domain/contracts";
-import { Card } from "./ui";
+import { AnswerBubble } from "./answer-bubble";
 
 export function AssistanceHistory({
   items,
@@ -11,7 +11,7 @@ export function AssistanceHistory({
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <Card key={`${item.timestamp}-${index}`}>
+        <AnswerBubble item={item} key={`${item.timestamp}-${index}`}>
           <h2 className="text-lg font-bold">{item.summary}</h2>
           <p className="my-2 text-xs text-slate-500">
             {item.source === "mock"
@@ -38,7 +38,7 @@ export function AssistanceHistory({
             Kết quả mong đợi: {item.expectedResult}
           </p>
           <p className="mt-2 font-semibold">{item.nextQuestion}</p>
-        </Card>
+        </AnswerBubble>
       ))}
     </div>
   );
