@@ -1,3 +1,15 @@
+# RAG hardening candidate — chưa commit / chưa deploy — 21/09/2026
+
+- Hai package AI-assisted từ base `7c26caec36b608779af86196efc2b6cf766c6a21`: Tiến Khoa phụ trách corpus/retrieval/benchmark; Duy Anh phụ trách answer validation/cache/UI. Người nhận chưa thực hiện review; không ghi nhận thay họ.
+- Bản tích hợp có 24 bài hướng dẫn công khai, retrieval có trọng số và synonym, kiểm tra corpus theo manifest, evidence trích nguyên văn, cache giới hạn câu hỏi phổ thông và thông báo thiếu chính sách nội bộ đã xác minh.
+- Policy candidate `support-guidance-v5.1`; preview của policy cũ phải được tạo lại. Deterministic policy vẫn quyết định authority cuối cùng.
+- Kiểm thử local/mock: 243 unit/integration pass; lint/build pass; E2E 31 pass + 1 skip video trùng. A độc lập: 222 tests; B độc lập: 240 tests. Chi tiết kết quả kiểm thử cuối nằm trong QA-RESULTS của package.
+- Bộ 54 câu synthetic dùng phát triển: hit@1 92%, recall@3 100% trên 50 câu có đáp án; 4/4 câu ngoài corpus abstain. Đây không phải số đo held-out hay người dùng thật.
+- Không gọi OpenAI thật, không thay Mongo production, không deploy, không reset/nâng cap 50 trong đợt này. Bằng chứng live bên dưới thuộc release cũ, không chứng minh candidate.
+- Giới hạn: chưa có tài liệu nội bộ được phép công bố; lexical retrieval, không vector search; quote match không chứng minh toàn bộ câu trả lời được nguồn hỗ trợ; không đảm bảo chống mọi prompt injection.
+
+---
+
 # VNG Support — đổi tên và cập nhật workflow, 21/09/2026
 
 - Website mới: https://vng-support.vercel.app. Vercel project `vng-support` giữ cùng ID/database; domain cũ vẫn tương thích. GitHub repository chưa đổi tên theo yêu cầu.
