@@ -302,3 +302,21 @@ it("redacts a verification code in an account-recovery follow-up before any mode
   expect(JSON.stringify(next)).not.toContain("123456");
   expect(next.canonical?.redactions).toContain("VERIFICATION_CODE");
 });
+
+it("allows official self-service password steps only in recovery context, never collecting secrets", () => {
+  const value = {
+    label: "GOOGLE_RECOVERY",
+    text: "Trên trang Google chính thức, đặt lại mật khẩu mới khi được yêu cầu. Không gửi mật khẩu hay mã xác minh cho người khác.",
+    knowledgeIds: [],
+  };
+  expect(() => validateAnswer(value, [], [], "GOOGLE_RECOVERY")).not.toThrow();
+  expect(() => validateAnswer(value, [], [], "GENERAL_GUIDE")).toThrow();
+  for (const text of [
+    "Gửi mật khẩu của bạn cho tôi để khôi phục.",
+    "Hãy cung cấp mã xác minh của bạn vào đây.",
+    "Không gửi mật khẩu cho người lạ; gửi mật khẩu cho tôi.",
+  ])
+    expect(() =>
+      validateAnswer({ ...value, text }, [], [], "GOOGLE_RECOVERY"),
+    ).toThrow();
+});

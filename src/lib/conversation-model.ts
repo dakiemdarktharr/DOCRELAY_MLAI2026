@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   conversationLabels,
   type ConversationContext,
+  type ConversationLabel,
 } from "@/domain/conversation";
 import type {
   Assistance,
@@ -155,7 +156,23 @@ export async function retrievePublicWeb(
         input: plan.query,
       }),
     });
-    if (!response.ok) throw new Error("unavailable");
+    if (!response.ok) {
+      const failure = await response.json().catch(() => null);
+      const code = z
+        .object({
+          error: z.object({
+            code: z.string().nullable().optional(),
+            param: z.string().nullable().optional(),
+          }),
+        })
+        .safeParse(failure);
+      const detail = code.success
+        ? [code.data.error.code, code.data.error.param]
+            .filter((value) => value && /^[a-zA-Z0-9_.-]{1,80}$/.test(value))
+            .join(":")
+        : "";
+      throw new Error(`HTTP_${response.status}:${detail}`);
+    }
     const parsed = responseSchema.parse(await response.json());
     if (
       !parsed.output.some(
@@ -203,8 +220,20 @@ export async function retrievePublicWeb(
       );
     }
     return { ...result, state: "used" as const };
-  } catch {
-    return { text: "", sources: [], state: "unavailable" as const };
+  } catch (error) {
+    const reason =
+      error instanceof Error &&
+      /^HTTP_\d{3}:[a-zA-Z0-9_.:-]*$/.test(error.message)
+        ? error.message
+        : error instanceof z.ZodError
+          ? "INVALID_WEB_RESPONSE"
+          : "WEB_UNAVAILABLE";
+    return {
+      text: "",
+      sources: [],
+      state: "unavailable" as const,
+      failureReason: reason,
+    };
   }
 }
 
@@ -219,6 +248,7 @@ export function validateAnswer(
   value: unknown,
   sources: AnswerSource[],
   allowedIds: string[],
+  contextLabel?: ConversationLabel,
 ) {
   const parsed = answerSchema.parse(
     typeof value === "string" ? JSON.parse(value) : value,
@@ -226,12 +256,24 @@ export function validateAnswer(
   if (parsed.knowledgeIds.some((id) => !allowedIds.includes(id)))
     throw new ModelFailure("MODEL_EVIDENCE_INVALID");
   const text = normalize(parsed.text);
-  const risks = detectedRisks(parsed.text).filter(
-    (risk) => risk !== "USER_HANDOFF",
+  const recovery =
+    contextLabel === "GOOGLE_RECOVERY" && parsed.label === "GOOGLE_RECOVERY";
+  const sharing = asserted(
+    text.replace(/\bdung (gui|chia se|cung cap)/g, "khong $1"),
+    /(?:gui|chia se|cung cap|send|share|paste)[^,;.\n]{0,45}(?:mat khau|password|ma xac minh|otp|verification code)/,
   );
+  const otherSecret =
+    /private key|kubeconfig|api key|credential|secret|bearer/.test(text);
+  const risks = detectedRisks(parsed.text).filter(
+    (risk) =>
+      risk !== "USER_HANDOFF" &&
+      !(risk === "SECRET" && recovery && !sharing && !otherSecret),
+  );
+  if (risks.length)
+    throw new ModelFailure("MODEL_OUTPUT_INVALID", `PROSE_${risks[0]}`);
   if (
     redact(parsed.text).markers.length ||
-    risks.length ||
+    sharing ||
     /```|\b(?:sudo|powershell|cmd\.exe|curl|wget|kubectl|chmod|regedit|netsh)\b/.test(
       text,
     ) ||
@@ -323,6 +365,7 @@ export async function createConversationAnswer(
       value,
       sources,
       articles.map((article) => article._id),
+      context.label,
     );
     source = process.env.AI_PROVIDER === "openai" ? "openai" : "mock";
   } catch (error) {
@@ -348,6 +391,7 @@ export async function createConversationAnswer(
       knowledgeIds: answer.knowledgeIds,
       retrieval,
       webSearch: web.state,
+      webFailureReason: "failureReason" in web ? web.failureReason : undefined,
       fallbackReason,
       ignoredOverride: context.ignoredOverride,
     },
