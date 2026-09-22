@@ -5,6 +5,14 @@ node_modules
 artifacts
 test-results
 playwright-report
+submission
+deliverables
+.task-worktrees
+coverage
+out
+.firecrawl
+prisma/dev.db
+*.tsbuildinfo
 .codex
 .agents
 *.log
