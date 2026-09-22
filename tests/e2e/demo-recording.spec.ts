@@ -1,14 +1,16 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { mkdir } from "node:fs/promises";
 
 test("record a raw demo and verify reviewer override, stop and audit", async ({
   browser,
+  extraHTTPHeaders,
 }, info) => {
   test.skip(
     info.project.name !== "chromium",
     "One desktop recording is sufficient.",
   );
   const context = await browser.newContext({
+    extraHTTPHeaders,
     baseURL: "http://127.0.0.1:3227",
     viewport: { width: 1280, height: 720 },
     recordVideo: {
@@ -17,6 +19,9 @@ test("record a raw demo and verify reviewer override, stop and audit", async ({
     },
   });
   const page = await context.newPage();
+  await page.addInitScript(() => {
+    for (const role of ["intro", "sender", "reviewer"]) sessionStorage.setItem(`vng-guide-v1:${role}`, "seen");
+  });
   const video = page.video();
   try {
     await page.goto("/");
@@ -26,7 +31,7 @@ test("record a raw demo and verify reviewer override, stop and audit", async ({
     await page
       .getByLabel("Mô tả yêu cầu", { exact: true })
       .fill("Tôi tắt máy tính lúc về được không?");
-    await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+    await page.getByRole("button", { name: "Gửi", exact: true }).click();
     await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
     await expect(page).toHaveURL(/\/requests\/[a-f0-9-]+$/);
     await expect(page.getByText("Trạng thái:")).toContainText(

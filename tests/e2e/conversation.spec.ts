@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 test("conversation answers before confirmation, wraps and continues without a reviewer", async ({
   page,
 }, info) => {
@@ -6,7 +6,7 @@ test("conversation answers before confirmation, wraps and continues without a re
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("làm sao khôi phục tài khoản google");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   const bubble = page.getByRole("article", { name: "Câu trả lời của trợ lý" });
   await expect(bubble).toContainText("Google");
   await expect(
@@ -70,7 +70,7 @@ test("safe diagnosis exposes potential fixes and accepts a contextual follow-up"
 }) => {
   await page.goto("/workspace");
   await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill("mất kết nối mạng");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(page.getByLabel("Chẩn đoán khả dĩ")).toBeVisible();
   await expect(page.getByText("Cách khắc phục có thể thử")).toBeVisible();
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();

@@ -1,5 +1,7 @@
 # VNG Support
 
+[Hướng dẫn giám khảo và QR](docs/JUDGE-ONBOARDING.md): popup lần đầu theo tab, mũi tên thao tác cho hai vai trò và nút **URL / QR** mở trang chọn vai trò trên điện thoại. Nút bắt đầu phản hồi được đổi thành **Gửi**.
+
 Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. The release/deployment information below remains historical and does not claim this follow-up is deployed.
 
 > **Source và deployment:** main được kiểm tra tại `9d9ab05`, đã chứa cả hai package release-fix: kiểm tra schema knowledge và Verify readback theo UUID. Policy hiện tại là v5.2. Xem [release matrix](docs/RELEASE-MATRIX.md) để đối chiếu source, QA và deployment thực tế; Git commit không tự chứng minh human review.

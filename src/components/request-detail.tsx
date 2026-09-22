@@ -76,7 +76,7 @@ export function RequestDetail({ id }: { id: string }) {
             ? "Nhân viên đã duyệt; đang chờ hoàn tất xử lý mô phỏng."
             : "";
   return (
-    <main className="page page-narrow space-y-6">
+    <main className="page page-narrow space-y-6" data-guide-stage="sender-result">
       <div>
         <p className="eyebrow">THEO DÕI HỖ TRỢ</p>
         <h1>Yêu cầu {displayId(id)}</h1>
@@ -85,7 +85,7 @@ export function RequestDetail({ id }: { id: string }) {
       {!request && !error && <p role="status">Đang tải…</p>}
       {request && (
         <>
-          <Card className="request-status">
+          <Card className="request-status" data-guide="sender-result">
             <p role="status">
               Trạng thái: <strong>{statusLabels[request.status]}</strong>
             </p>
@@ -178,6 +178,7 @@ export function RequestDetail({ id }: { id: string }) {
                     Hỏi tiếp
                     <Textarea
                       aria-label="Hỏi tiếp"
+                      data-guide="sender-followup"
                       placeholder="Ví dụ: Tôi đã thử nhưng mạng vẫn không kết nối"
                       value={followup}
                       onChange={(event) => setFollowup(event.target.value)}
@@ -186,7 +187,7 @@ export function RequestDetail({ id }: { id: string }) {
                       maxLength={2000}
                     />
                   </label>
-                  <Button type="submit">Gửi câu hỏi</Button>
+                  <Button type="submit" data-guide="sender-followup-send">Gửi câu hỏi</Button>
                   <Button
                     type="button"
                     variant="secondary"
@@ -201,7 +202,7 @@ export function RequestDetail({ id }: { id: string }) {
             </Card>
           )}
           {active && (
-            <fieldset disabled={pending} className="space-y-4">
+            <fieldset disabled={pending} className="space-y-4" data-guide={canGuide && !latest?.answer ? "sender-feedback" : undefined}>
               {canGuide && !latest?.answer && (
                 <>
                   <div className="support-actions">
@@ -308,18 +309,19 @@ export function RequestDetail({ id }: { id: string }) {
                     Thông tin làm rõ (không bắt buộc)
                     <Textarea
                       aria-label="Thông tin làm rõ"
+                      data-guide="sender-followup"
                       value={clarification}
                       onChange={(event) => setClarification(event.target.value)}
                       maxLength={4000}
                     />
                   </label>
-                  <Button type="submit">Gửi bổ sung</Button>
+                  <Button type="submit" data-guide="sender-followup-send">Gửi bổ sung</Button>
                 </fieldset>
               </form>
             </Card>
           )}
           <details className="panel">
-            <summary>Lịch sử yêu cầu và hướng dẫn</summary>
+            <summary data-guide="sender-history">Lịch sử yêu cầu và hướng dẫn</summary>
             {request.decision && request.canonical && currentNote && (
               <SupportResult
                 decision={request.decision}

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("generic routes are reachable", async ({ page }) => {
   for (const route of [

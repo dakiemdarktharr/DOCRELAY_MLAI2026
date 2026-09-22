@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("missing reviewer request has a persistent error and recovery instead of an endless spinner", async ({ page }) => {
   let queueReads = 0;
@@ -22,7 +22,7 @@ test("natural VPN and reset journeys preserve safe guidance while risky requests
   ]) {
     await page.goto("/send-help");
     await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill(text);
-    await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+    await page.getByRole("button", { name: "Gửi", exact: true }).click();
     await page.getByRole("button", { name: /^(Xác nhận và gửi yêu cầu|Lưu và tiếp tục trò chuyện)$/ }).click();
     await expect(page.getByRole("heading", { name: "Vấn đề bạn đã gửi" })).toBeVisible();
     if (text.includes("reset")) {

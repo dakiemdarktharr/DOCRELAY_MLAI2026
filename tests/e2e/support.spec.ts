@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./fixtures";
 
 test.beforeEach(async ({ request }) => {
   const response = await request.get("/api/support/health");
@@ -10,7 +10,7 @@ test.beforeEach(async ({ request }) => {
 async function submit(page: Page, text: string) {
   await page.goto("/workspace");
   await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill(text);
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
   await expect(page).toHaveURL(/\/requests\/[a-f0-9-]+$/);
   await expect(page.getByText("Trạng thái:")).toBeVisible();
@@ -108,7 +108,7 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
   await page
     .getByLabel("Nhu cầu cụ thể", { exact: true })
     .selectOption("DEVICE_RESTART_GUIDANCE");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Có thể hỗ trợ an toàn" }),
   ).toBeVisible();
@@ -116,7 +116,7 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("Grant write access to production DB");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Cần người phụ trách xem xét" }),
   ).toBeVisible();

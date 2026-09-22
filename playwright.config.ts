@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   webServer: {
     command:
-      "node node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port 3227",
+      `node node_modules/next/dist/bin/next ${process.env.SUPPORT_E2E_PRODUCTION === "true" ? "start" : "dev"} --hostname 127.0.0.1 --port 3227`,
     url: "http://127.0.0.1:3227/api/support/health",
     reuseExistingServer: false,
     env: {
