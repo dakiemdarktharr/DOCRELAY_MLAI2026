@@ -1,4 +1,4 @@
-> Current release work: main `7909f0c` has been integrated with policy v5.3, judge onboarding and QR access. The user authorized Vercel deployment after checks; see [release readiness](docs/VERCEL-READINESS.md). The older snapshot below is historical and does not establish the current deployed revision. The two-package requirement no longer applies.
+> Latest verified production: source `5b03aeb`, policy v5.3, READY on [vng-support.vercel.app](https://vng-support.vercel.app). [Deployment receipt](docs/releases/5b03aeb.md) records 355 unit tests, 67 E2E passes and live desktop/mobile checks. The older snapshot below is historical; the two-package requirement no longer applies.
 > Package provenance: hai package AI-assisted, package base `532b123c7f78a3d6c0dd03058ef113d255c272b7`, current main head `bea350303d5812c7a72873e2cc592de9f9c2acf2`. Human review chưa được xác nhận; receipt triển khai cũ chỉ là lịch sử. Bản sửa tài liệu này không tạo project, đổi cấu hình hay deploy Vercel.
 
 # VNG Support status — integrated release fixes
