@@ -293,7 +293,7 @@ function classifyFallback(text: string): [ServiceGroup, string, RequestKind] {
 // Mentions of an unaffected system are not requests to change that system.
 function classify(text: string): [ServiceGroup, string, RequestKind] {
   const relevant = text.replace(
-    /\b(?:vpn|wi fi|wifi|mfa)\s+(?:is working|works fine|van binh thuong|binh thuong|khong bi loi)\b/g,
+    /\b(?:vpn|wi fi|wifi|mfa)\s+(?:is working|works fine|van binh thuong|binh thuong|khong bi loi|van vao web duoc)\b/g,
     " ",
   );
   const candidates: Array<{
@@ -516,7 +516,10 @@ export function extractIntake(
     selectedIntent &&
     extracted.intentLabel !== "UNKNOWN_SUPPORT_REQUEST" &&
     input.rawText &&
-    selectedIntent !== extracted.intentLabel
+    selectedIntent !== extracted.intentLabel &&
+    !(selectedIntent === "DEVICE_RESET_GUIDANCE" &&
+      extracted.intentLabel === "DEVICE_RESTART_GUIDANCE" &&
+      fields.resetType === "restart")
   )
     risks.add("CONFLICT");
   if (
@@ -683,7 +686,10 @@ export function extractIntake(
       const factLabel =
         label &&
         [...allFields].some((field) => normalize(field) === normalize(label));
-      if (factLabel && requests.length)
+      // These complete, bounded questions add no operation or scope. Do not
+      // discard arbitrary unknown fragments, or extra actions hidden in prose.
+      const guidanceFollowup = /^(?:(?:toi|minh) (?:can|nen) (?:kiem tra|bat dau) tu dau|ban huong dan(?: giup toi)? duoc khong)[?.!]*$/.test(normalize(fragment));
+      if ((factLabel || guidanceFollowup) && requests.length)
         requests[requests.length - 1] += `; ${fragment}`;
       else requests.push(fragment);
       return requests;
@@ -696,6 +702,15 @@ export function extractIntake(
     subrequests = subrequests.filter(
       (part) => part.intentLabel !== "DEVICE_RESET_GUIDANCE",
     );
+  // A reset question followed by an explicit, harmless restart clarification
+  // describes one intent. Full-input risks/fact conflicts remain authoritative.
+  if (
+    extracted.intentLabel === "DEVICE_RESTART_GUIDANCE" &&
+    subrequests.length > 1 &&
+    subrequests.every((part) =>
+      ["DEVICE_RESET_GUIDANCE", "DEVICE_RESTART_GUIDANCE"].includes(part.intentLabel) &&
+      part.riskSignals.length === 0)
+  ) subrequests = [];
   if (subrequests.length > 1 && Object.keys(fields).length)
     risks.add("CONFLICT");
   subrequests.forEach((part) =>
