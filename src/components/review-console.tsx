@@ -18,6 +18,7 @@ import { AssistanceHistory, AuditTimeline } from "@/components/support-history";
 
 export function ReviewConsole({ requestId }: { requestId?: string }) {
   const sequence = useRef(0);
+  const detailSequence = useRef(0);
   const [requests, setRequests] = useState<SupportSummary[]>([]),
     [selected, setSelected] = useState<SupportRequest | null>(null);
   const [reason, setReason] = useState(""),
@@ -61,21 +62,36 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
     [search, filter, origin],
   );
   useEffect(() => {
+    if (requestId) return;
     const tracker = sequence;
     const timer = setTimeout(() => void refresh(), 250);
     return () => {
       clearTimeout(timer);
       tracker.current++;
     };
-  }, [refresh]);
-  useEffect(() => {
+  }, [refresh, requestId]);
+  const loadSelected = useCallback(async () => {
     if (!requestId) return;
-    void browserApi<SupportRequest>(
-      `/api/support/requests/${encodeURIComponent(requestId)}`,
-    )
-      .then(setSelected)
-      .catch(() => setError("Không thể tải yêu cầu."));
+    const current = ++detailSequence.current;
+    setSelected(null);
+    setError("");
+    try {
+      const row = await browserApi<SupportRequest>(`/api/support/requests/${encodeURIComponent(requestId)}`);
+      if (current === detailSequence.current) setSelected(row);
+    } catch (error) {
+      if (current === detailSequence.current)
+        setError(error instanceof Error ? error.message : "Không thể tải yêu cầu.");
+    }
   }, [requestId]);
+  useEffect(() => {
+    const tracker = detailSequence;
+    setSelected(null);
+    setReason("");
+    setError("");
+    setTarget("NEEDS_INFORMATION");
+    void loadSelected();
+    return () => { tracker.current++; };
+  }, [loadSelected]);
   async function act(action: ReviewAction) {
     if (!selected) return;
     setPending(true);
@@ -92,7 +108,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
       );
       setSelected(updated);
       setReason("");
-      await refresh();
+      if (!requestId) await refresh();
     } catch (error) {
       setError(
         error instanceof Error
@@ -215,7 +231,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
             )}
           </Card>
         )}
-        {requestId && selected ? (
+        {requestId && selected?.id === requestId ? (
           <div className="min-w-0 space-y-5">
             <Link href="/review" className="button secondary">
               ← Danh sách yêu cầu
@@ -368,8 +384,13 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               <AuditTimeline events={selected.events} />
             </Card>
           </div>
-        ) : requestId && !error ? (
-          <p role="status">Đang tải yêu cầu…</p>
+        ) : requestId ? (
+          error ? (
+            <div className="flex flex-wrap gap-3">
+              <Button variant="secondary" onClick={() => void loadSelected()}>Thử tải lại yêu cầu</Button>
+              <Link href="/review" className="button secondary">← Danh sách yêu cầu</Link>
+            </div>
+          ) : <p role="status">Đang tải yêu cầu…</p>
         ) : null}
       </div>
     </main>
