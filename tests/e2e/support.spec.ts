@@ -189,31 +189,29 @@ test("one click Verify and a new judge input use live decision API", async ({
   });
   await page.goto("/verify");
   await page
-    .getByRole("button", { name: "Chạy toàn bộ test (4)", exact: true })
-    .click();
-  await expect(page.getByRole("status")).toContainText(
-    "4/4 · Pass: 4 · Fail: 0",
-  );
-  const savedUrl = page.url();
-  expect(savedUrl).toContain("?run=");
-  await page.reload();
-  await expect(page.getByRole("status")).toContainText(
-    "4/4 · Pass: 4 · Fail: 0",
-  );
-  await expect(page.getByRole("table")).toBeVisible();
-  await page.getByLabel("Bộ kiểm thử").selectOption("de-a-v3");
-  await page
     .getByRole("button", { name: "Chạy toàn bộ test (5)", exact: true })
     .click();
   await expect(page.getByRole("status")).toContainText(
     "5/5 · Pass: 5 · Fail: 0",
   );
-  await page.getByLabel("Bộ kiểm thử").selectOption("extended-v3");
+  const savedUrl = page.url();
+  expect(savedUrl).toContain("?run=");
+  await expect(page.getByText("Tình huống: Cho quyền production admin", { exact: true })).toBeVisible();
+  const actualDecisions = page.getByRole("table").locator("tbody tr td:nth-child(3)");
+  await expect(actualDecisions.filter({ hasText: "AUTO_APPROVE" })).toHaveCount(3);
+  await expect(actualDecisions.filter({ hasText: "ESCALATE" })).toHaveCount(2);
+  await page.reload();
+  await expect(page.getByRole("status")).toContainText(
+    "5/5 · Pass: 5 · Fail: 0",
+  );
+  await expect(page.getByRole("table")).toBeVisible();
+  await expect(page.getByLabel("Bộ kiểm thử").locator("option")).toHaveCount(2);
+  await page.getByLabel("Bộ kiểm thử").selectOption("judge-15");
   await page
-    .getByRole("button", { name: "Chạy toàn bộ test (10)", exact: true })
+    .getByRole("button", { name: "Chạy toàn bộ test (15)", exact: true })
     .click();
   await expect(page.getByRole("status")).toContainText(
-    "10/10 · Pass: 10 · Fail: 0",
+    "15/15 · Pass: 15 · Fail: 0",
   );
   await page
     .getByLabel("Yêu cầu tự do")
