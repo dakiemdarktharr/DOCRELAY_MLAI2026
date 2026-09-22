@@ -7,11 +7,14 @@ import { Alert, Button, Card, Textarea } from "@/components/ui";
 import { browserApi } from "@/lib/browser-api";
 import type { SupportRequest } from "@/domain/contracts";
 import { SupportResult } from "@/components/support-result";
+import { EmployeeIdentityFields } from "@/components/employee-identity-fields";
+import { hasEmployeeIdentity, identityRequiredMessage } from "@/domain/employee-identity";
 
 export default function VerifyPage() {
   const [pack, setPack] = useState("de-a-v3"),
     [running, setRunning] = useState(false);
   const [readback, setReadback] = useState("");
+  const [identity, setIdentity] = useState<Record<string, string>>({});
   const [judge, setJudge] = useState(""),
     [judged, setJudged] = useState<SupportRequest | null>(null),
     [error, setError] = useState("");
@@ -120,12 +123,17 @@ export default function VerifyPage() {
   }
   async function runJudge() {
     if (activeOperation.current || loadingRun.current) return;
+    if (!hasEmployeeIdentity(identity)) {
+      setError(identityRequiredMessage);
+      return;
+    }
     activeOperation.current = true;
     setRunning(true);
     setError("");
     try {
       const row = await browserApi<SupportRequest>("/api/support/requests", {
         rawText: judge,
+        fields: identity,
         confirmed: true,
         idempotencyKey: crypto.randomUUID(),
       });
@@ -339,12 +347,16 @@ export default function VerifyPage() {
           để kiểm tra reviewer và audit.
         </p>
         <form
+          noValidate
           onSubmit={(event) => {
             event.preventDefault();
             void runJudge();
           }}
           className="space-y-3"
         >
+          <fieldset disabled={busy}>
+            <EmployeeIdentityFields fields={identity} onChange={setIdentity} />
+          </fieldset>
           <label className="block">
             Yêu cầu tự do
             <Textarea

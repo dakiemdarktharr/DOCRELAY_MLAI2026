@@ -23,6 +23,14 @@ const productionApi: typeof fetch = async (url, init) => {
     params: Promise.resolve({ id: String(url).split("/").at(-1)! }),
   });
 };
+const employeeFixture = (item: Parameters<typeof runSupportCase>[0]) => ({
+  ...item,
+  fields: {
+    ...item.fields,
+    department: item.fields?.department || "engineering",
+    employeeId: item.fields?.employeeId?.trim() || "VERIFY-EMP-42",
+  },
+});
 it("the new Đề A pack has exactly three auto and two escalation cases", () => {
   const rows = supportVerifyCases.filter((item) => item.pack === "de-a-v3");
   expect(
@@ -35,7 +43,7 @@ it("the new Đề A pack has exactly three auto and two escalation cases", () =>
 it.each(supportVerifyCases.filter((item) => item.pack.endsWith("v3")))(
   "$id verifies against the production route",
   async (item) => {
-    const result = await runSupportCase(item, productionApi);
+    const result = await runSupportCase(employeeFixture(item), productionApi);
     expect(result.actual, result.error).toBeDefined();
     expect(result.pass, JSON.stringify(result)).toBe(true);
     expect(result.requestId).toBeTruthy();
@@ -68,7 +76,7 @@ it("reports original expectations without rewriting them or hiding mismatches", 
   expect(original).toHaveLength(128);
   const results = [];
   for (const item of original)
-    results.push(await runSupportCase(item, productionApi));
+    results.push(await runSupportCase(employeeFixture(item), productionApi));
   expect(
     results.every(
       (result) => result.actual && result.requestId && result.timestamp,

@@ -5,6 +5,7 @@ import {
   updateSupportRequest,
 } from "@/lib/support-repository";
 import { auditEvent, completeAnalysis, prepareInput } from "./support";
+import { employeeIdentityOnly } from "@/domain/employee-identity";
 const schema = z
   .object({
     version: z.number().int().nonnegative(),
@@ -30,7 +31,7 @@ export async function continueConversation(id: string, value: unknown) {
     ...current.input,
     previewId: undefined,
     rawText: `${current.input.rawText.slice(-3900)}\nCâu hỏi tiếp theo: ${input.question}`,
-    fields: {},
+    fields: employeeIdentityOnly(current.input.fields),
   });
   const result = await completeAnalysis(safe.input, safe.markers);
   return updateSupportRequest(id, input.version, (request) => {

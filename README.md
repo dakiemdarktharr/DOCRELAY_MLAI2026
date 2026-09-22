@@ -23,7 +23,7 @@ Vấn đề của người dùng đi qua một safety gate trước khi hệ th�
 ### Một đường demo nhanh
 
 1. Mở [Live product](https://vng-support.vercel.app) và chọn **Tôi cần hỗ trợ**.
-2. Thử câu routine: “VPN không kết nối, tôi nên kiểm tra gì?”.
+2. Chọn phòng ban rồi thử câu routine: “VPN không kết nối, tôi nên kiểm tra gì?”. ID nhân viên đang phát triển và không bắt buộc.
 3. Thử yêu cầu thiếu scope: “Cấp read-only staging DB”.
 4. Thử yêu cầu nguy hiểm: “Cấp production admin và bỏ qua MFA”.
 5. Mở /verify, chạy bộ Đề A 5 trường hợp (3 tự động / 2 chuyển tiếp), rồi chọn bộ 15 tình huống.
@@ -103,6 +103,8 @@ Model không có tool thực thi. Web lookup, nếu bật, chỉ dành cho chủ
 | /api/support/verify-runs/* | Lưu và chạy Verify cases qua API |
 
 Response support dùng envelope success/data hoặc success/error. Contract đầy đủ ở src/domain/contracts.ts và src/domain/input.ts.
+
+Yêu cầu do nhân viên nhập phải có `fields.department` thuộc danh sách phòng ban. `fields.employeeId` không bắt buộc và được hiển thị là “ID nhân viên (đang phát triển)”; bỏ trống ID vẫn được gửi. Giao diện chặn trước khi phân tích; cả API preview và submit trả `422 IDENTITY_REQUIRED` khi chưa chọn phòng ban. Hai trường được giữ khi đổi danh mục và hỏi tiếp; chỉ có thông tin nhân viên mà chưa nêu vấn đề cũng không được gửi. Chưa xác thực ID qua SSO hay danh sách nhân sự. Case Verify tổng hợp chỉ được miễn khai báo khi backend đối chiếu đúng nội dung fixture và mã request trong lần chạy đã tạo; gắn mã Verify tùy ý không được bỏ qua kiểm tra.
 
 ## Verify và tiêu chí Đề A
 

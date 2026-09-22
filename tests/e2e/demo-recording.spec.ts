@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
+import { fillEmployeeIdentity } from "./intake-helpers";
 
 test("record a raw demo and verify reviewer override, stop and audit", async ({
   browser,
@@ -23,6 +24,7 @@ test("record a raw demo and verify reviewer override, stop and audit", async ({
     await page
       .getByRole("link", { name: "Tôi cần hỗ trợ", exact: true })
       .click();
+    await fillEmployeeIdentity(page);
     await page
       .getByLabel("Mô tả yêu cầu", { exact: true })
       .fill("Tôi tắt máy tính lúc về được không?");
