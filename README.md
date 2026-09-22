@@ -2,7 +2,7 @@
 
 [Hướng dẫn giám khảo và QR](docs/JUDGE-ONBOARDING.md): popup lần đầu theo tab, mũi tên thao tác cho hai vai trò và nút **URL / QR** mở trang chọn vai trò trên điện thoại. Nút bắt đầu phản hồi được đổi thành **Gửi**.
 
-Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. The release/deployment information below remains historical and does not claim this follow-up is deployed.
+Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. Production now runs source `5b03aeb` with these changes: [verified deployment receipt](docs/releases/5b03aeb.md). Earlier release statements remain historical.
 
 > **Đề A — The Escalation Referee.** Một trợ lý hỗ trợ kỹ thuật biết trả lời việc an toàn, hỏi phần còn thiếu và chuyển người thật khi yêu cầu có rủi ro hoặc vượt quyền.
 
