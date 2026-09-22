@@ -3,6 +3,8 @@
 
 # VNG Support status — integrated release fixes
 
+> Hồ sơ nộp mới dựa trên source `7909f0c`: [submission/README.md](submission/README.md). Commit này thêm phòng ban bắt buộc và ghi nhận 331 test pass / 1 hash-policy fail từ upstream. Chưa chạy lại runtime suite hoặc xác minh deployment trong lần làm hồ sơ. Các đoạn “current main = bea3503” bên dưới là snapshot lịch sử; không dùng để xác định HEAD hiện tại.
+
 [Release matrix](docs/RELEASE-MATRIX.md) is the current reference for source, policy, deployment and evidence boundaries.
 
 Current main head is `bea350303d5812c7a72873e2cc592de9f9c2acf2`; the package base is historical.
