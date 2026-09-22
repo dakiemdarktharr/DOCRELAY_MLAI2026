@@ -1,4 +1,4 @@
-> Phát hành hai package: Chủ dự án đã yêu cầu rõ agent commit cả hai package và deploy để chuyển cho tester. Thay đổi là AI-assisted; việc commit theo yêu cầu này không chứng minh Tiến Khoa hoặc Duy Anh đã human review hay tự viết code. Source package dựa trên main 532b123c7f78a3d6c0dd03058ef113d255c272b7. Kết quả/receipt triển khai cũ ở phần dưới chỉ là lịch sử; đối chiếu SHA đang chạy qua /api/support/health trước khi dùng làm bằng chứng.
+> Hai package là AI-assisted và đã được tích hợp vào current main `bea350303d5812c7a72873e2cc592de9f9c2acf2` từ base `532b123c7f78a3d6c0dd03058ef113d255c272b7`. Human review chưa được xác nhận. Receipt triển khai cũ chỉ là lịch sử; file này không tuyên bố current main đã được deploy.
 
 # Submission material status
 
@@ -8,4 +8,4 @@ Existing VNG-SUPPORT-5-SLIDES.pptx, BUILD-LOG-ONE-PAGE.pdf and DEMO-LOCAL-MOCK.w
 
 The new packages deliver executable fixes/tests, evaluation tooling and evidence protocols. They do not supply three real participants, approved quotes, held-out measurements or a new live receipt. Follow USER-STUDY-PROTOCOL.md and fill USER-FEEDBACK-TEMPLATE.md only after real work.
 
-Both new patches are AI-assisted pending human review/commit. Existing artifacts remain unchanged for provenance; refresh slides/video after owners accept the implementation. Contest authorship/eligibility is not established by packaging or Git identity alone.
+Both new patches are AI-assisted and committed on main; human review remains pending.

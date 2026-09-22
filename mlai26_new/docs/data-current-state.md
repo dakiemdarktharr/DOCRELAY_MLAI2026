@@ -1,13 +1,15 @@
-# VNG Sentinel — Báo cáo hiện trạng dữ liệu
+# Historical snapshot — VNG Sentinel data state (2026-09-20)
 
 Ngày cập nhật: 2026-09-20  
 Dự án: OrganizationAI VN — Challenge A: The Escalation Referee
+
+> Đây là snapshot lịch sử trước khi runtime policy và judge packs hiện tại được tích hợp. Không dùng file này làm nguồn hiện trạng. Xem [README root](../../README.md), [judge datasets](../../docs/JUDGE-DATASETS.md), [data README](../data/README.md) và code trong repository root.
 
 ## 1. Tóm tắt
 
 Thư mục `data/` hiện có **133 ticket cases** dạng synthetic:
 
-- 5 case cho Verify Harness.
+- 5 case trong fixture Verify gốc (`verify_cases.json`), gồm 2 AUTO và 3 ESCALATE; các pack judge hiện tại được mô tả riêng ở `support-v3.json` và `judge-15.json`.
 - 60 case kỹ thuật mở rộng.
 - 48 case liên phòng ban.
 - 15 case adversarial theo bộ yêu cầu gần nhất.
@@ -19,7 +21,9 @@ Toàn bộ dữ liệu hiện tại là synthetic. Tên hệ thống, phòng ban
 
 | File | Số lượng | Vai trò |
 |---|---:|---|
-| `data/verify/verify_cases.json` | 5 | Bộ test nhanh cho Verify Harness |
+| `data/verify/verify_cases.json` | 5 | Fixture gốc lịch sử: 2 AUTO / 3 ESCALATE |
+| `data/verify/support-v3.json` | 15 | Gồm pack `de-a-v3` 5 case và `extended-v3` 10 case |
+| `data/verify/judge-15.json` | 15 | Pack judge hiện tại dành cho 15 tình huống |
 | `data/ground-truth/extended_ticket_cases.json` | 60 | Case kỹ thuật và Data Ops mở rộng |
 | `data/ground-truth/enterprise_cross_function_cases.json` | 48 | Case liên phòng ban trong doanh nghiệp |
 | `data/ground-truth/synthetic_tickets.json` | 15 | Bộ test adversarial theo phân bố 5/3/3/4 |
@@ -89,15 +93,9 @@ Các case chủ yếu thiếu CPU, RAM, instance size, throughput hoặc timefra
 
 ### Verify cases
 
-`verify_cases.json` hiện dùng schema 5 field:
+File `verify_cases.json` là fixture gốc lịch sử: 5 case gồm 2 `ROUTINE` AUTO và 3 case cần `ESCALATE` vì thiếu thông tin, vượt thẩm quyền hoặc rủi ro bảo mật. Fixture này được giữ nguyên để regression/provenance.
 
-```text
-id
-ticket_content
-expected_action
-expected_bucket
-expected_reasoning_keyword
-```
+Judge-facing hiện tại dùng hai pack khác: `support-v3.json` với `pack=de-a-v3` (5 case, 3 AUTO / 2 ESCALATE) và `judge-15.json` (15 tình huống). Không sửa fixture gốc để làm kết quả đẹp hơn.
 
 ### Ground Truth mở rộng
 
@@ -127,29 +125,13 @@ route_to
 
 ## 6. Vấn đề cần lưu ý
 
-### 6.1. Verify Harness chưa đúng phân bố ban đầu
+### 6.1. Phân biệt fixture gốc và judge packs hiện tại
 
-`verify_cases.json` hiện có:
+Snapshot này từng ghi `verify_cases.json` là Verify Harness nhanh và đề xuất đổi phân bố. Đó là trạng thái lịch sử. Fixture gốc hiện vẫn giữ nguyên 2 AUTO / 3 ESCALATE; pack Đề A đúng 3 AUTO / 2 ESCALATE là `support-v3.json` với `pack=de-a-v3`, còn bộ judge mở rộng là `judge-15.json`. Xem [docs/JUDGE-DATASETS.md](../../docs/JUDGE-DATASETS.md).
 
-- 2 case `ROUTINE`.
-- 1 case `MISSING_INFO`.
-- 1 case `BEYOND_AUTHORITY`.
-- 1 case `SECURITY_RISK`.
+### 6.2. Policy integration — trạng thái lịch sử
 
-Nếu bám đúng yêu cầu ban đầu của đề A, Verify Harness nên có **3 case Routine và 2 case Escalate**. Cần quyết định lại một case trước khi nối vào runner.
-
-### 6.2. Policy source đã có, nhưng decision engine chưa được tích hợp
-
-Thư mục `data/policy/` hiện có policy source `policy-v2`:
-
-- `service-catalog.csv`.
-- `required-fields.md`.
-- `approval-authority-matrix.csv`.
-- `decision-rules.md`.
-- `routing-matrix.csv`.
-- `glossary.md`.
-
-Policy này đã có `rule_id`, required fields, precedence, targeted next step, authority role và approval verification contract. Tuy nhiên, source code vẫn chưa có typed deterministic evaluator, server-side approval verifier, redaction boundary hoặc policy tests. Do đó chưa thể coi policy là đã vận hành cho tới khi decision-engine lane tích hợp và kiểm thử các file này.
+Snapshot này từng ghi policy source chưa được tích hợp. Runtime hiện tại đã có deterministic evaluator ở `src/domain/policy.ts`, rule source ở `src/domain/policy-source.ts`, policy version `support-guidance-v5.2` và regression tests. Các file policy-v2 trong thư mục này vẫn là provenance/nguồn đề xuất synthetic; không được đọc đoạn lịch sử này như mô tả runtime hiện tại.
 
 ### 6.3. Chưa có expected structured extraction
 
@@ -164,15 +146,9 @@ Các case chưa lưu đầy đủ:
 
 Các field này cần thiết để kiểm thử LLM extraction, Explainable AI và safety validator.
 
-### 6.4. Các thư mục dữ liệu còn trống
+### 6.4. Trạng thái thư mục dữ liệu trong snapshot
 
-Hiện trạng:
-
-```text
-data/adversarial/  — có hidden_adversarial_cases.json (5 case)
-data/demo/         — chưa có file
-data/policy/       — chưa có file
-```
+Tại thời điểm snapshot, `data/adversarial/` đã có hidden cases và `data/demo/` chưa có file. `data/policy/` thực tế đã có policy source; phần “chưa có file” trong bản cũ là không chính xác. Runtime evaluator hiện nằm ở repository root, không nằm trong `mlai26_new/data/`.
 
 ## 7. Dữ liệu còn thiếu
 
@@ -267,19 +243,11 @@ Dữ liệu người dùng thật không nên synthetic. Sprint 2 cần:
 - Một cải tiến sản phẩm bắt nguồn từ feedback.
 - Ít nhất một bất cập phát sinh khi sử dụng hệ thống.
 
-## 8. Thứ tự đề xuất
+## 8. Thứ tự đề xuất — kế hoạch lịch sử
 
-1. Chỉnh Verify Harness về phân bố 3 Routine / 2 Escalate.
-2. Chốt canonical `SupportRequest` schema dùng chung cho form và free text, gồm approval evidence contract.
-3. Chuyển `policy-v2` thành typed deterministic evaluator và test precedence.
-4. Bổ sung expected extraction, evidence và escalation question.
-5. Tạo intake fixtures cho các form thường dùng.
-6. Tách hidden adversarial dataset.
-7. Tạo workflow, audit và override fixtures.
-8. Sau đó mới kết nối decision engine và UI.
+Danh sách dưới đây là kế hoạch tại ngày 2026-09-20, giữ lại để provenance. Các mục Verify/policy integration đã thay đổi sau đó; không dùng danh sách này làm backlog hiện tại.
 
-## 9. Kết luận
+## 9. Kết luận của snapshot
 
-Dữ liệu hiện tại đã đủ để bắt đầu thiết kế và kiểm thử sơ bộ cho bốn bucket của đề A, đặc biệt ở các mảng Data Ops, database, cloud resource, network và cross-functional request.
+Tại thời điểm 2026-09-20, tài liệu kết luận dữ liệu chưa đủ cho dispatcher hoàn chỉnh. Đây là kết luận lịch sử. Runtime hiện tại và ranh giới judge pack được mô tả ở [README root](../../README.md), [docs/JUDGE-DATASETS.md](../../docs/JUDGE-DATASETS.md), `src/domain/` và `src/services/verification.ts`.
 
-Tuy nhiên, dữ liệu hiện tại **chưa đủ để vận hành một hệ thống dispatcher hoàn chỉnh** vì policy source chưa được tích hợp thành evaluator đã kiểm thử, và còn thiếu structured extraction ground truth, intake form fixtures, workflow/audit fixtures cùng bằng chứng Verify end-to-end. Đây là các phần cần bổ sung trước khi đánh giá chất lượng của deterministic validation và Explainable AI.

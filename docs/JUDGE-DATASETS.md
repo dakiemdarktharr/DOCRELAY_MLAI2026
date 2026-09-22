@@ -1,6 +1,6 @@
 # Hai bộ kiểm thử dành cho giám khảo
 
-Source tích hợp từ hai package trên base 532b123c7f78a3d6c0dd03058ef113d255c272b7 theo yêu cầu chủ dự án commit/deploy. AI-assisted, chưa có human review hoặc commit của người nhận. Dữ liệu synthetic; policy support-guidance-v5.2 không phải policy nội bộ được VNG xác nhận.
+Hai package được tích hợp từ base `532b123c7f78a3d6c0dd03058ef113d255c272b7`; current main head là `bea350303d5812c7a72873e2cc592de9f9c2acf2`. Thay đổi AI-assisted, chưa có human review được xác nhận. Dữ liệu synthetic; policy support-guidance-v5.2 không phải policy nội bộ được VNG xác nhận.
 
 ## Cách chạy
 

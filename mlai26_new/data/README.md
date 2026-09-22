@@ -1,6 +1,8 @@
 # Synthetic datasets
 
-- `verify/verify_cases.json`: 5 case cố định cho Verify Harness 90 giây, gồm 3 AUTO và 2 ESCALATE.
+- `verify/verify_cases.json`: fixture gốc lịch sử gồm 5 case, 2 AUTO và 3 ESCALATE; giữ nguyên cho regression/provenance, không phải pack judge-facing hiện tại.
+- `verify/support-v3.json`: pack `de-a-v3` hiện dùng cho Đề A, 5 case gồm 3 AUTO và 2 ESCALATE.
+- `verify/judge-15.json`: pack judge hiện dùng, gồm 15 tình huống và được chạy qua cùng decision API.
 - `ground-truth/extended_ticket_cases.json`: 60 case mở rộng dùng để phát triển, regression test và đánh giá độ ổn định trên các ngách kỹ thuật.
 - `ground-truth/enterprise_cross_function_cases.json`: 48 case thực tế liên phòng ban, gồm HR, Finance, Legal, Procurement, Sales, Marketing, Customer Care, Facilities, Audit, Risk, Comms, Event Ops và Executive Office.
 - `adversarial/hidden_adversarial_cases.json`: 5 hidden adversarial cases, tách riêng khỏi bộ demo/Verify, gồm prompt injection, nhầm staging/production, bypass vì khẩn cấp, mâu thuẫn giữa form và free text, và request trộn routine với nguy hiểm.

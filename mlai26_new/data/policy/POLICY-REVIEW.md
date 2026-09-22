@@ -1,5 +1,7 @@
 # Policy review and refinement record
 
+> Đây là biên bản review lịch sử của policy-v2. Các mục “remaining implementation work” mô tả trạng thái trước khi runtime hiện tại được tích hợp; runtime hiện tại dùng `src/domain/policy-source.ts`, `src/domain/policy.ts` và policy `support-guidance-v5.2`.
+
 Date: `2026-09-20`  
 Policy version after review: `policy-v2`  
 Scope: synthetic/proposed challenge policy only; not an official VNG policy.
