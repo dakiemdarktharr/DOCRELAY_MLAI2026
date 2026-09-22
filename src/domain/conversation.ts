@@ -1,6 +1,7 @@
 import { hasInstructionAttack } from "./answer-safety";
 import type { CanonicalRequest, SupportInput } from "./contracts";
 import { normalize } from "./text";
+import { isEmployeeIdentityField } from "./employee-identity";
 
 export const conversationLabels = [
   "GREETING",
@@ -61,6 +62,7 @@ export function conversationRoute(
     Object.entries(input.fields).some(
       ([key, value]) =>
         value &&
+        !isEmployeeIdentityField(key) &&
         !(
           key === "intentLabel" &&
           /GUIDANCE|GENERAL_HOW_TO|COMPLIANCE_QUESTION|LOOKUP/.test(value)

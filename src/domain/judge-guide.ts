@@ -11,6 +11,7 @@ export const guideStages: Record<string, { role: GuideRole; steps: GuideStep[] }
     role: "sender",
     steps: [
       { target: "sender-mode", title: "1. Chọn cách gửi", text: "Bấm “Mô tả vấn đề” để viết tự do, hoặc “Chọn theo danh mục” để chọn nhu cầu cụ thể.", advanceOn: "click" },
+      { target: "sender-identity", title: "Chọn phòng ban", text: "Chọn phòng ban để gửi yêu cầu. ID nhân viên là mục đang phát triển, có thể để trống; khi thử nghiệm chỉ dùng dữ liệu minh họa.", advanceOn: "change" },
       { target: "sender-group", title: "2. Chọn nhóm hỗ trợ", text: "Chọn nhóm phù hợp. Chưa rõ thì giữ “Tôi chưa biết nhóm nào” và bấm Tiếp theo.", advanceOn: "change" },
       { target: "sender-intent", title: "3. Chọn nhu cầu", text: "Chọn việc cần hỗ trợ rồi điền các ô xuất hiện bên dưới. Chỉ nhập dữ liệu minh họa, không nhập mật khẩu.", advanceOn: "change" },
       { target: "sender-fields", title: "Điền thông tin theo danh mục", text: "Điền các ô bạn biết trong khung được chỉ. Không cần bịa thông tin còn thiếu. Khi xong, bấm Tiếp theo để thêm mô tả hoặc gửi yêu cầu." },

@@ -1,10 +1,13 @@
 import { expect, freshTest as test } from "./fixtures";
+import { employeeIdentity, fillEmployeeIdentity } from "./intake-helpers";
 
 test("structured sender tour points to the fields before the description", async ({ page }) => {
   await page.goto("/send-help");
   await page.getByRole("button", { name: "Đã hiểu", exact: true }).click();
   const tip = page.getByRole("region", { name: "Hướng dẫn thao tác" });
   await page.getByRole("button", { name: "Chọn theo danh mục", exact: true }).click();
+  await expect(tip).toContainText("Chọn phòng ban");
+  await fillEmployeeIdentity(page);
   await page.getByLabel("Nhóm hỗ trợ", { exact: true }).selectOption("DATABASE");
   await expect(tip).toContainText("3. Chọn nhu cầu");
   await page.getByLabel("Nhu cầu cụ thể", { exact: true }).selectOption("DATABASE_READ_ACCESS");
@@ -48,6 +51,8 @@ test("sender follows actual controls, sees feedback and does not repeat after re
   const tip = page.getByRole("region", { name: "Hướng dẫn thao tác" });
   await expect(tip).toContainText("1. Chọn cách gửi");
   await page.getByRole("button", { name: "Mô tả vấn đề", exact: true }).click();
+  await expect(tip).toContainText("Chọn phòng ban");
+  await fillEmployeeIdentity(page);
   await expect(tip).toContainText("2. Chọn nhóm hỗ trợ");
   await page.getByLabel("Nhóm hỗ trợ", { exact: true }).selectOption("NETWORK_VPN");
   await expect(tip).toContainText("4. Mô tả tình huống");
@@ -81,7 +86,7 @@ test("sender follows actual controls, sees feedback and does not repeat after re
 
 test("reviewer tour is independent and never executes a decision automatically", async ({ page, request }, info) => {
   const response = await request.post("/api/support/requests", { data: {
-    rawText: "Mở port 3389 public", mode: "freeform", serviceGroup: "OTHER", fields: {}, confirmed: true, idempotencyKey: crypto.randomUUID(),
+    ...employeeIdentity, rawText: "Mở port 3389 public", mode: "freeform", serviceGroup: "OTHER", confirmed: true, idempotencyKey: crypto.randomUUID(),
   } });
   expect(response.ok()).toBe(true);
   const { data: row } = await response.json();

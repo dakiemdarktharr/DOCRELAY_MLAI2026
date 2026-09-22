@@ -2,6 +2,8 @@ import { beforeEach, expect, it, vi } from "vitest";
 import { submitSupport } from "@/services/support";
 import { clarifySupport } from "@/services/review";
 import { resetSupportTestStore } from "@/lib/support-repository";
+import { extractIntake } from "@/domain/text";
+import { supportInputSchema } from "@/domain/input";
 
 beforeEach(() => {
   vi.stubEnv("AI_PROVIDER", "mock");
@@ -9,6 +11,36 @@ beforeEach(() => {
   resetSupportTestStore();
 });
 const submit = (rawText: string) => submitSupport({ rawText, confirmed: true, idempotencyKey: crypto.randomUUID() });
+
+it("identity does not create a conflict between multiple support needs", () => {
+  const input = supportInputSchema.parse({
+    rawText: "Restart my laptop; VPN không kết nối",
+    idempotencyKey: crypto.randomUUID(),
+  });
+  const before = extractIntake(input);
+  const after = extractIntake({
+    ...input,
+    fields: { department: "engineering", employeeId: "EMP-42" },
+  });
+  expect(after.subrequests.length).toBeGreaterThan(1);
+  expect(after.riskSignals).toEqual(before.riskSignals);
+  expect(after.riskSignals).not.toContain("CONFLICT");
+});
+
+it("keeps department and employee ID from structured intake", async () => {
+  const row = await submitSupport({
+    mode: "structured",
+    serviceGroup: "OTHER",
+    rawText: "Tôi cần hướng dẫn sử dụng hệ thống.",
+    fields: { department: "engineering", employeeId: "EMP-42" },
+    confirmed: true,
+    idempotencyKey: crypto.randomUUID(),
+  });
+  expect(row.input.fields).toMatchObject({
+    department: "engineering",
+    employeeId: "EMP-42",
+  });
+});
 
 it.each([
   "Sáng nay VPN không kết nối, Wi-Fi vẫn vào web được. Tôi cần kiểm tra từ đâu?",

@@ -7,6 +7,13 @@ import {
   commonFields,
   labelForField,
 } from "@/domain/catalog";
+import {
+  employeeIdentityOnly,
+  hasEmployeeIdentity,
+  identityRequiredMessage,
+  isEmployeeIdentityField,
+} from "@/domain/employee-identity";
+import { EmployeeIdentityFields } from "@/components/employee-identity-fields";
 import { intentName, optionName } from "@/domain/presentation";
 import { extractIntake } from "@/domain/text";
 import { missingFacts } from "@/domain/policy";
@@ -66,6 +73,20 @@ export default function WorkspacePage() {
     setError("");
   }
   async function analyze() {
+    if (busy) return;
+    if (!hasEmployeeIdentity(input.fields)) {
+      setError(identityRequiredMessage);
+      return;
+    }
+    if (
+      !input.rawText.trim() &&
+      !Object.entries(input.fields).some(
+        ([field, value]) => !isEmployeeIdentityField(field) && value.trim(),
+      )
+    ) {
+      setError("Nhập mô tả yêu cầu hoặc chọn một nhu cầu cụ thể trong danh mục.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -112,7 +133,9 @@ export default function WorkspacePage() {
       rawText: "",
       fields: { intentLabel: input.fields.intentLabel ?? "" },
     }),
-  ).filter((field) => allFields.has(field) && field !== "resetType");
+  ).filter(
+    (field) => allFields.has(field) && field !== "resetType" && !isEmployeeIdentityField(field),
+  );
   const initialFields = required.slice(0, 3);
   const extraFields = [
     ...new Set([
@@ -120,7 +143,9 @@ export default function WorkspacePage() {
       ...commonFields,
       ...catalog[input.serviceGroup].fields,
     ]),
-  ].filter((field) => !initialFields.includes(field));
+  ].filter(
+    (field) => !initialFields.includes(field) && !isEmployeeIdentityField(field),
+  );
   function fieldControl(field: string) {
     return (
       <SupportField
@@ -135,7 +160,6 @@ export default function WorkspacePage() {
   }
   return (
     <main className="page page-narrow page-enter" data-guide-stage={preview ? "sender-preview" : "sender-form"}>
-      <p className="eyebrow">HỖ TRỢ KỸ THUẬT</p>
       <h1>Tôi cần hỗ trợ</h1>
       <p className="page-description">
         Bạn có thể hỏi chuyện thường ngày hoặc mô tả điều đang gặp. Không cần
@@ -157,13 +181,21 @@ export default function WorkspacePage() {
               variant={input.mode === mode ? "primary" : "secondary"}
               aria-pressed={input.mode === mode}
               disabled={busy || !!preview}
-              onClick={() => edit({ mode, fields: {}, requestKind: undefined })}
+              onClick={() => {
+                if (mode !== input.mode)
+                  edit({
+                    mode,
+                    fields: employeeIdentityOnly(input.fields),
+                    requestKind: undefined,
+                  });
+              }}
             >
               {mode === "freeform" ? "Mô tả vấn đề" : "Chọn theo danh mục"}
             </Button>
           ))}
         </div>
         <form
+          noValidate
           className="space-y-5"
           onSubmit={(event) => {
             event.preventDefault();
@@ -175,6 +207,10 @@ export default function WorkspacePage() {
             className="intake-fields space-y-5"
             hidden={!!preview}
           >
+            <div data-guide="sender-identity"><EmployeeIdentityFields
+              fields={input.fields}
+              onChange={(fields) => edit({ fields })}
+            /></div>
             <label>
               Nhóm hỗ trợ
               <select
@@ -184,7 +220,7 @@ export default function WorkspacePage() {
                 onChange={(event) =>
                   edit({
                     serviceGroup: event.target.value as ServiceGroup,
-                    fields: {},
+                    fields: employeeIdentityOnly(input.fields),
                   })
                 }
               >
@@ -221,7 +257,12 @@ export default function WorkspacePage() {
                     data-guide="sender-intent"
                     value={input.fields.intentLabel ?? ""}
                     onChange={(event) =>
-                      edit({ fields: { intentLabel: event.target.value } })
+                      edit({
+                        fields: {
+                          ...employeeIdentityOnly(input.fields),
+                          intentLabel: event.target.value,
+                        },
+                      })
                     }
                   >
                     <option value="">Chọn nhu cầu</option>

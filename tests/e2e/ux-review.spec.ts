@@ -1,4 +1,5 @@
 import { expect, test } from "./fixtures";
+import { fillEmployeeIdentity } from "./intake-helpers";
 
 test("missing reviewer request has a persistent error and recovery instead of an endless spinner", async ({ page }) => {
   let queueReads = 0;
@@ -21,6 +22,7 @@ test("natural VPN and reset journeys preserve safe guidance while risky requests
     "Mở port 3389 public để vendor vào sửa giúp máy chủ.",
   ]) {
     await page.goto("/send-help");
+    await fillEmployeeIdentity(page);
     await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill(text);
     await page.getByRole("button", { name: "Gửi", exact: true }).click();
     await page.getByRole("button", { name: /^(Xác nhận và gửi yêu cầu|Lưu và tiếp tục trò chuyện)$/ }).click();

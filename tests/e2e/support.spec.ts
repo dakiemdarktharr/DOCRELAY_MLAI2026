@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "./fixtures";
+import { employeeIdentity, fillEmployeeIdentity } from "./intake-helpers";
 
 test.beforeEach(async ({ request }) => {
   const response = await request.get("/api/support/health");
@@ -9,6 +10,7 @@ test.beforeEach(async ({ request }) => {
 });
 async function submit(page: Page, text: string) {
   await page.goto("/workspace");
+  await fillEmployeeIdentity(page);
   await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill(text);
   await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
@@ -105,6 +107,7 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
   await page
     .getByRole("button", { name: "Chọn theo danh mục", exact: true })
     .click();
+  await fillEmployeeIdentity(page);
   await page
     .getByLabel("Nhu cầu cụ thể", { exact: true })
     .selectOption("DEVICE_RESTART_GUIDANCE");
@@ -128,6 +131,7 @@ test("reviewer rejection requires a reason and records audit", async ({
   const text = `Grant production admin - demo ${crypto.randomUUID().slice(0, 8)}`;
   const response = await request.post("/api/support/requests", {
     data: {
+      ...employeeIdentity,
       rawText: text,
       confirmed: true,
       idempotencyKey: crypto.randomUUID(),
@@ -189,35 +193,34 @@ test("one click Verify and a new judge input use live decision API", async ({
   });
   await page.goto("/verify");
   await page
-    .getByRole("button", { name: "Chạy toàn bộ test (4)", exact: true })
-    .click();
-  await expect(page.getByRole("status")).toContainText(
-    "4/4 · Pass: 4 · Fail: 0",
-  );
-  const savedUrl = page.url();
-  expect(savedUrl).toContain("?run=");
-  await page.reload();
-  await expect(page.getByRole("status")).toContainText(
-    "4/4 · Pass: 4 · Fail: 0",
-  );
-  await expect(page.getByRole("table")).toBeVisible();
-  await page.getByLabel("Bộ kiểm thử").selectOption("de-a-v3");
-  await page
     .getByRole("button", { name: "Chạy toàn bộ test (5)", exact: true })
     .click();
   await expect(page.getByRole("status")).toContainText(
     "5/5 · Pass: 5 · Fail: 0",
   );
-  await page.getByLabel("Bộ kiểm thử").selectOption("extended-v3");
+  const savedUrl = page.url();
+  expect(savedUrl).toContain("?run=");
+  await expect(page.getByText("Tình huống: Cho quyền production admin", { exact: true })).toBeVisible();
+  const actualDecisions = page.getByRole("table").locator("tbody tr td:nth-child(3)");
+  await expect(actualDecisions.filter({ hasText: "AUTO_APPROVE" })).toHaveCount(3);
+  await expect(actualDecisions.filter({ hasText: "ESCALATE" })).toHaveCount(2);
+  await page.reload();
+  await expect(page.getByRole("status")).toContainText(
+    "5/5 · Pass: 5 · Fail: 0",
+  );
+  await expect(page.getByRole("table")).toBeVisible();
+  await expect(page.getByLabel("Bộ kiểm thử").locator("option")).toHaveCount(2);
+  await page.getByLabel("Bộ kiểm thử").selectOption("judge-15");
   await page
-    .getByRole("button", { name: "Chạy toàn bộ test (10)", exact: true })
+    .getByRole("button", { name: "Chạy toàn bộ test (15)", exact: true })
     .click();
   await expect(page.getByRole("status")).toContainText(
-    "10/10 · Pass: 10 · Fail: 0",
+    "15/15 · Pass: 15 · Fail: 0",
   );
   await page
     .getByLabel("Yêu cầu tự do")
     .fill("Please help me restart my personal laptop after saving my work");
+  await fillEmployeeIdentity(page);
   await page.getByRole("button", { name: "Đánh giá input mới" }).click();
   await expect(
     page.getByRole("link", { name: "Xem hướng dẫn / chuyển admin" }),
@@ -229,6 +232,7 @@ test("security request cannot be approved and secret is absent from API/audit", 
   const secret = "SYNTHETIC" + "_E2E_991";
   const response = await request.post("/api/support/requests", {
     data: {
+      ...employeeIdentity,
       rawText: `Open RDP public 3389; password=${secret}`,
       confirmed: true,
       idempotencyKey: crypto.randomUUID(),

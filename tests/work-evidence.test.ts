@@ -51,6 +51,17 @@ it("keeps a supplied path exact and does not claim it has opened the file", asyn
   expect(row.canonical?.workEvidence?.sourceChecks.at(-1)?.result).toContain("chưa có connector");
 });
 
+it("keeps evidence-first routing when intake includes the required department", async () => {
+  const row = await submitSupport({
+    ...input("Tìm nguyên nhân traffic giảm 32% tuần này từ dashboard Analytics."),
+    fields: { department: "engineering", employeeId: "EMP-SYNTHETIC-01" },
+  });
+  expect(row.status).toBe("NEEDS_INFORMATION");
+  expect(row.canonical?.workEvidence?.kind).toBe("analytics");
+  expect(row.decision?.reviewerQuestions).toEqual([]);
+  expect(row.input.fields.department).toBe("engineering");
+});
+
 it.each(["ADMIN", "CONFUSED"])("does not turn missing source into REVIEW via %s", async (choice) => {
   const row = await submitSupport(input("Tóm tắt quyết định cuộc họp sáng nay"));
   await expect(feedbackSupport(row.id, { version: row.version, choice })).rejects.toMatchObject({ code: "REVIEW_NOT_READY" });

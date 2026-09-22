@@ -139,9 +139,20 @@ export const catalog: Record<ServiceGroup, Service> = {
 };
 
 export const commonFields = words(
-  "impact environment urgency desiredOutcome approvalStatus dataSensitivity",
+  "impact environment urgency desiredOutcome approvalStatus dataSensitivity department employeeId",
 );
 export const fieldOptions: Record<string, string[]> = {
+  department: [
+    "it",
+    "engineering",
+    "product",
+    "sales",
+    "marketing",
+    "finance",
+    "human_resources",
+    "operations",
+    "other",
+  ],
   resetType: ["unknown", "restart", "factory_reset"],
   environment: ["unknown", "sandbox", "development", "staging", "production"],
   environmentIfKnown: [
@@ -218,6 +229,8 @@ export const fieldOptions: Record<string, string[]> = {
   protocol: ["TCP", "UDP", "HTTPS", "SSH", "RDP", "Other"],
 };
 export const fieldLabels: Record<string, string> = {
+  department: "Phòng ban",
+  employeeId: "ID nhân viên (đang phát triển)",
   impact: "Mức độ ảnh hưởng",
   urgency: "Mức độ khẩn cấp",
   desiredOutcome: "Bạn muốn đạt được điều gì",
