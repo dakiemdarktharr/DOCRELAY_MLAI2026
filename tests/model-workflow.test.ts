@@ -24,7 +24,7 @@ afterEach(() => vi.unstubAllEnvs());
 const input = (rawText: string): SupportInput => ({
   rawText,
   serviceGroup: "OTHER",
-  fields: {},
+  fields: { department: "engineering", employeeId: "EMP-42" },
   mode: "freeform",
   confirmed: true,
   idempotencyKey: crypto.randomUUID(),

@@ -2,23 +2,23 @@
 import type { VerifyRun } from "@/domain/verification";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { supportVerifyCases, verifyPersistence } from "@/lib/support-verify";
+import { supportVerifyCases, verifyPersistence, judgePackIds } from "@/lib/support-verify";
 import { Alert, Button, Card, Textarea } from "@/components/ui";
 import { browserApi } from "@/lib/browser-api";
 import type { SupportRequest } from "@/domain/contracts";
 import { SupportResult } from "@/components/support-result";
+import { EmployeeIdentityFields } from "@/components/employee-identity-fields";
+import { hasEmployeeIdentity, identityRequiredMessage } from "@/domain/employee-identity";
 
 export default function VerifyPage() {
-  const [pack, setPack] = useState("submission-4"),
+  const [pack, setPack] = useState("de-a-v3"),
     [running, setRunning] = useState(false);
   const [readback, setReadback] = useState("");
+  const [identity, setIdentity] = useState<Record<string, string>>({});
   const [judge, setJudge] = useState(""),
     [judged, setJudged] = useState<SupportRequest | null>(null),
     [error, setError] = useState("");
-  const cases =
-    pack === "all"
-      ? supportVerifyCases
-      : supportVerifyCases.filter((item) => item.pack === pack);
+  const cases = supportVerifyCases.filter((item) => item.pack === pack);
   const [currentRun, setCurrentRun] = useState<VerifyRun | null>(null);
   const [history, setHistory] = useState<
     Array<{
@@ -44,7 +44,7 @@ export default function VerifyPage() {
       const row = await browserApi<VerifyRun>(`/api/support/verify-runs/${id}`);
       if (sequence !== loadSequence.current) return;
       setCurrentRun(row);
-      setPack(row.pack);
+      setPack(judgePackIds.includes(row.pack) ? row.pack : "de-a-v3");
       window.history.replaceState(null, "", `/verify?run=${id}`);
     } catch {
       if (sequence === loadSequence.current) setError("Không tải được lần kiểm thử.");
@@ -123,12 +123,17 @@ export default function VerifyPage() {
   }
   async function runJudge() {
     if (activeOperation.current || loadingRun.current) return;
+    if (!hasEmployeeIdentity(identity)) {
+      setError(identityRequiredMessage);
+      return;
+    }
     activeOperation.current = true;
     setRunning(true);
     setError("");
     try {
       const row = await browserApi<SupportRequest>("/api/support/requests", {
         rawText: judge,
+        fields: identity,
         confirmed: true,
         idempotencyKey: crypto.randomUUID(),
       });
@@ -152,10 +157,10 @@ export default function VerifyPage() {
         <h1>Đối chiếu, không đoán.</h1>
       </div>
       <Alert>
-        Bộ nộp bài có 4 case, gồm một trường hợp phải chuyển người phụ trách. Bộ
-        Đề A riêng vẫn có 3 auto / 2 escalate. Mỗi lần chạy được lưu để tải lại;
-        các case gọi cùng decision API của ứng dụng. Fixture gốc và expected
-        được giữ nguyên.
+        Hai bộ dữ liệu mô phỏng: 15 tình huống gồm thiếu thông tin, ngoài quy
+        định và vượt thẩm quyền; 5 trường hợp Đề A gồm 3 tự động xử lý và 2
+        chuyển tiếp. Mỗi bộ chạy bằng một nút, qua cùng API xử lý yêu cầu và
+        kiểm tra lại nhật ký. Đây không phải kết quả thử nghiệm người dùng thật.
       </Alert>
       <fieldset disabled={busy} className="flex flex-wrap items-end gap-3">
         <label>
@@ -168,22 +173,12 @@ export default function VerifyPage() {
               setCurrentRun(null);
             }}
           >
-            <option value="submission-4">
-              Bộ nộp bài — 4 case (có chuyển tiếp)
-            </option>
             <option value="de-a-v3">
-              Đề A v3 — 5 case (3 auto / 2 escalate)
+              Đề A — 5 trường hợp (3 tự động / 2 chuyển tiếp)
             </option>
-            <option value="extended-v3">
-              Migration v3 — hướng dẫn, model, conflict
+            <option value="judge-15">
+              Bộ dữ liệu kiểm thử — 15 tình huống
             </option>
-            <option value="official-original">
-              Verify gốc — expected không sửa
-            </option>
-            <option value="ground-truth-original">
-              Ground Truth gốc — 123 case
-            </option>
-            <option value="all">Toàn bộ các bộ kiểm thử</option>
           </select>
         </label>
         <Button onClick={() => void run(false)}>
@@ -208,7 +203,7 @@ export default function VerifyPage() {
               Dừng sau case hiện tại
             </Button>
           ) : (
-            currentRun.status !== "COMPLETE" && (
+            currentRun.status !== "COMPLETE" && judgePackIds.includes(currentRun.pack) && (
               <Button disabled={busy} onClick={() => void run(true)}>
                 Tiếp tục lần kiểm thử
               </Button>
@@ -224,7 +219,7 @@ export default function VerifyPage() {
         <details>
           <summary>Lịch sử kiểm thử gần đây</summary>
           <ul>
-            {history.map((row) => (
+            {history.filter((row) => judgePackIds.includes(row.pack)).map((row) => (
               <li key={row.id}>
                 <button
                   className="text-accent underline"
@@ -242,7 +237,7 @@ export default function VerifyPage() {
       <p role="status">
         {loading ? "Đang tải kết quả đã lưu… " : ""}
         {running ? "Đang chạy… " : ""}
-        {results.length}/{cases.length} · Pass:{" "}
+        {results.length}/{currentRun?.cases.length ?? cases.length} · Pass:{" "}
         {results.filter((result) => result.pass).length} · Fail:{" "}
         {results.filter((result) => !result.pass).length}
       </p>
@@ -301,6 +296,9 @@ export default function VerifyPage() {
                 {result.pass ? "PASS" : "FAIL"}
               </strong>
             </div>
+            <p>
+              Tình huống: {supportVerifyCases.find((item) => item.id === result.caseId)?.rawText ?? "Xem input trong hồ sơ đã lưu."}
+            </p>
             <p className="text-xs text-slate-500">{result.timestamp}</p>
             <p>
               Expected: {result.expected.action} · {result.expected.bucket}{" "}
@@ -349,12 +347,16 @@ export default function VerifyPage() {
           để kiểm tra reviewer và audit.
         </p>
         <form
+          noValidate
           onSubmit={(event) => {
             event.preventDefault();
             void runJudge();
           }}
           className="space-y-3"
         >
+          <fieldset disabled={busy}>
+            <EmployeeIdentityFields fields={identity} onChange={setIdentity} />
+          </fieldset>
           <label className="block">
             Yêu cầu tự do
             <Textarea
@@ -385,9 +387,6 @@ export default function VerifyPage() {
           </div>
         )}
       </Card>
-      <Link className="text-accent underline" href="/legacy/verify">
-        Generic echo Verify (compatibility)
-      </Link>
     </main>
   );
 }

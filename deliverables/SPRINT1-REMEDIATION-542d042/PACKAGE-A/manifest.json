@@ -1,0 +1,116 @@
+{
+  "package": "PACKAGE-A — DECISION-SAFETY-AND-USER-CLARITY",
+  "owner": "Human Owner A",
+  "preparedBy": "AI assistant (Claude Code)",
+  "preparedAt": "2026-09-22",
+  "status": "PREPARED — the AI never committed, pushed, merged, tagged or deployed anything",
+  "base": {
+    "commit": "542d042097ff7ac2e73f1619f5543d513937d814",
+    "branch": "main",
+    "policy": "support-guidance-v5.2",
+    "originalWorktreeStatus": "main worktree clean at base commit. The owner checkout's only untracked file was SPRINT1-QUALIFICATION-GAP-REPORT.md (evidence, not part of this package). Test runs modify artifacts/original-fixture-evaluation.json and artifacts/rag-retrieval-evaluation.json as side effects; restore them before committing (they are excluded from every patch)."
+  },
+  "scope": {
+    "goal": "Repair the decision/fallback path so safe automation remains useful, risky requests receive specific handoff questions, and end users do not see internal diagnostics.",
+    "allowedFiles": [
+      "src/lib/support-model.ts",
+      "src/services/support.ts",
+      "src/domain/questions.ts",
+      "src/components/support-result.tsx",
+      "tests/model-workflow.test.ts",
+      "tests/support-api.test.ts",
+      "tests/support-verify.test.ts",
+      "tests/new-input-fallback.test.ts"
+    ],
+    "forbiddenFiles": [
+      "all Verify page, policy page, header, review/audit page files",
+      "release docs, CI, deployment config",
+      "database schema/migrations",
+      "fixture expected outputs",
+      "all Owner B files"
+    ],
+    "notes": [
+      "All behavior changes live in the allowed files only. policy.ts was intentionally NOT modified: the FAIL-branch question enrichment happens in the service layer (services/support.ts) using the preserved deterministic canonical, while adminReason keeps raw rule text for reviewers.",
+      "No ground truth, fixture expected outputs or Verify case compositions were changed."
+    ]
+  },
+  "investigation": {
+    "method": "Deterministic local model fault injection (x-support-model-simulation header / ModelOptions.fault) against base 542d042; no production requests were made by the AI.",
+    "findings": [
+      "CONFIRMED on base: routine VPN input with invalid/unavailable model output escalates FAIL-002/FAIL-001 with only the generic handoff question 'Xác nhận phạm vi và người có thẩm quyền xử lý.' — the preserved deterministic intent (VPN_NOT_CONNECTING) is not used by the questions.",
+      "CONFIRMED on base: risky public-port (9443/3389) inputs keep SEC-002 with concrete questions even under fault (deterministic risk pre-empts the model). Left unchanged.",
+      "CONFIRMED on base: authority inputs (production admin) keep AUTH-002/AUTH-003 with owner/approval questions even under fault. Left unchanged.",
+      "CONFIRMED on base: missing-info inputs ask up to 3 clarification questions; the brief requires the single most decision-relevant field.",
+      "CONFIRMED on base: FAIL escalation userReason exposes engine wording ('Model trả dữ liệu không đúng schema...') to requesters; the reviewer-only details show raw bucket IDs.",
+      "NOT REPRODUCED in 542d042: the generic-question observations reported on deployed SHA 01a20a7 exist in 542d042 only as described above; no other regression was found."
+    ]
+  },
+  "requiredChecks": [
+    "npm test",
+    "npm run lint",
+    "npm run typecheck (after npm run db:generate on a clean clone)",
+    "npm run build",
+    "npm run test:e2e (existing specs; new Package A behavior is covered by unit/integration tests)"
+  ],
+  "acceptanceCriteria": [
+    "All new tests fail before the relevant patch and pass afterward (recorded: 15 of 23 new tests fail on unpatched base).",
+    "Invalid model output never produces a confident unsafe result (ESCALATE with FAIL rule remains).",
+    "Public-port fallback questions are concrete, not generic.",
+    "User-facing page does not expose raw internal failure codes.",
+    "Existing Verify behavior and audit diagnostics remain intact (324 total tests pass, verify packs unchanged)."
+  ],
+  "rollback": {
+    "method": "This package only touches its own allowed files and is file-disjoint from Package B. To roll back: `git revert <commit>...` for each of the six commits (reverse order), or `git checkout 542d042 -- <allowed files>` after dropping the six commits. No database, environment or deployment state is touched.",
+    "verifyAfterRollback": "npm test && npm run lint && npm run typecheck"
+  },
+  "commits": [
+    {
+      "index": 1,
+      "message": "fix(model): preserve deterministic context after invalid model output",
+      "files": ["src/lib/support-model.ts", "src/services/support.ts", "tests/new-input-fallback.test.ts"],
+      "explains": "modelFailure() contract comment; enrichFailureHandoff() built from the preserved canonical; friendly userReason for FAIL escalations; first test block."
+    },
+    {
+      "index": 2,
+      "message": "fix(questions): generate specific security and authority handoff questions",
+      "files": ["src/domain/questions.ts", "src/services/support.ts", "tests/new-input-fallback.test.ts"],
+      "explains": "failureHandoffQuestions() per service group; concrete hints for accessType/service/urgency/affectedUsers/publicExposure/databaseType; support.ts switches to the new helper; second test block."
+    },
+    {
+      "index": 3,
+      "message": "fix(policy): keep missing-information questions minimal and evidence-based",
+      "files": ["src/domain/questions.ts", "tests/new-input-fallback.test.ts"],
+      "explains": "clarificationPlan() asks exactly one decision-relevant field (policy.ts consumes this plan unchanged); third test block."
+    },
+    {
+      "index": 4,
+      "message": "fix(result): separate requester guidance from internal diagnostics",
+      "files": ["src/components/support-result.tsx", "tests/new-input-fallback.test.ts"],
+      "explains": "requesterReason() helper: plain-language reason when a model failure escalated; reviewer audience keeps decision.adminReason; fourth test block."
+    },
+    {
+      "index": 5,
+      "message": "feat(result): present Vietnamese uncertainty categories with internal IDs",
+      "files": ["src/components/support-result.tsx", "tests/new-input-fallback.test.ts"],
+      "explains": "BUCKET_LABELS_VI + bucketLabel(); employee category line and reviewer details show Vietnamese label with the internal ID as secondary detail; fifth test block."
+    },
+    {
+      "index": 6,
+      "message": "test(fallback): cover routine, risky, missing-info, authority, retry, and readback paths",
+      "files": ["tests/new-input-fallback.test.ts"],
+      "explains": "Full fallback matrix through the production API contract (POST + fault header, idempotent retry, detail readback, independent re-runs)."
+    }
+  ],
+  "aiPreparedEvidence": {
+    "baseQA": "301 tests pass on base 542d042",
+    "prePatch": "new-input-fallback.test.ts on base: 15 failed / 8 passed (guards), as required",
+    "postSeries": "324 tests pass, lint pass, typecheck pass (after prisma generate), build pass",
+    "notRun": ["Playwright E2E (browser binaries absent on the AI machine) — human check"]
+  },
+  "neverClaimed": [
+    "human review or human commits",
+    "live deployment or production model calls",
+    "real-user outcomes or user studies",
+    "organizer approval"
+  ]
+}

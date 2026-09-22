@@ -1,7 +1,9 @@
 import { expect, test } from "./fixtures";
+import { fillEmployeeIdentity } from "./intake-helpers";
 
 test("missing business artefact shows a structured request and stays out of review", async ({ page }) => {
   await page.goto("/workspace");
+  await fillEmployeeIdentity(page);
   await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill("Tìm nguyên nhân traffic giảm 32% tuần này từ dashboard Analytics.");
   await page.getByRole("button", { name: "Gửi", exact: true }).click();
   const evidence = page.getByRole("region", { name: "Yêu cầu bổ sung dữ liệu" });

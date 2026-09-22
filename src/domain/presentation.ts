@@ -164,6 +164,15 @@ export const intentLabels: Record<string, string> = {
   REQUEST_CLASSIFICATION_HELP: "Nhờ xác định nhóm hỗ trợ",
 };
 const optionLabels: Record<string, string> = {
+  it: "Công nghệ thông tin",
+  engineering: "Kỹ thuật",
+  product: "Sản phẩm",
+  sales: "Kinh doanh",
+  marketing: "Marketing",
+  finance: "Tài chính",
+  human_resources: "Nhân sự",
+  operations: "Vận hành",
+  other: "Khác",
   factory_reset: "Khôi phục cài đặt gốc (có thể mất dữ liệu)",
   unknown: "Tôi không biết",
   Unknown: "Tôi không biết",

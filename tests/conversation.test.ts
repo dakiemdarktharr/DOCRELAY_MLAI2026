@@ -16,7 +16,7 @@ import type { SupportInput } from "@/domain/contracts";
 const input = (rawText: string): SupportInput => ({
   rawText,
   serviceGroup: "OTHER",
-  fields: {},
+  fields: { department: "engineering", employeeId: "EMP-42" },
   mode: "freeform",
   confirmed: true,
   idempotencyKey: crypto.randomUUID(),
@@ -189,6 +189,7 @@ it("keeps preview answer unchanged on submit, supports follow-up and explicit hu
   });
   expect(next.status).toBe("AUTO_APPROVED");
   expect(next.assistance).toHaveLength(2);
+  expect(next.input.fields).toEqual(original.fields);
   await expect(
     continueConversation(saved.id, {
       version: saved.version,
@@ -201,6 +202,7 @@ it("keeps preview answer unchanged on submit, supports follow-up and explicit hu
   });
   expect(handoff.status).toBe("ESCALATED");
   expect(handoff.assistance).toHaveLength(2);
+  expect(handoff.input.fields).toEqual(original.fields);
 });
 it("a dangerous follow-up is evaluated again instead of inheriting chat authority", async () => {
   const row = await submitSupport(input("xin chào"));

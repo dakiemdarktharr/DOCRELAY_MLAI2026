@@ -137,7 +137,7 @@ export function RequestDetail({ id }: { id: string }) {
                 "Yêu cầu theo danh mục"}
             </blockquote>
           </Card>
-          {currentNote && request.events.at(-1)?.actor.includes("reviewer") && (
+          {request.events.at(-1)?.actor.includes("reviewer") && (
             <Card>
               <h2>Phản hồi của nhân viên</h2>
               <p>{request.events.at(-1)?.explanation}</p>

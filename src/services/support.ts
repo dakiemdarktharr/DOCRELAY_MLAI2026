@@ -4,6 +4,7 @@ import {
 } from "@/domain/conversation";
 import { createConversationAnswer } from "@/lib/conversation-model";
 import { workEvidencePlan } from "@/domain/work-evidence";
+import { isEmployeeIdentityField } from "@/domain/employee-identity";
 import { retrieveKnowledge } from "@/lib/support-knowledge";
 import { validateVerificationInput } from "./verification";
 import { createHash, randomUUID } from "node:crypto";
@@ -87,7 +88,7 @@ export async function analyze(
 ): Promise<{ canonical: CanonicalRequest; decision: Decision }> {
   const baseline = extractIntake(input, markers);
   const workEvidence = input.mode === "freeform" &&
-    !Object.values(input.fields).some(Boolean) &&
+    !Object.entries(input.fields).some(([field, value]) => !isEmployeeIdentityField(field) && Boolean(value)) &&
     !baseline.riskSignals.length &&
     !baseline.subrequests.some((part) => part.riskSignals.length) &&
     !baseline.redactions.length

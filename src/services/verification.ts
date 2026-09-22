@@ -2,7 +2,7 @@ import { safeInput } from "@/domain/text";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { SupportInput } from "@/domain/contracts";
-import { supportVerifyCases, runSupportCase } from "@/lib/support-verify";
+import { supportVerifyCases, runSupportCase, judgePackIds } from "@/lib/support-verify";
 import {
   insertVerifyRun,
   getVerifyRun,
@@ -16,10 +16,8 @@ export async function createVerifyRun(value: unknown) {
     .object({ pack: z.string().max(100) })
     .strict()
     .parse(value);
-  const cases =
-    pack === "all"
-      ? supportVerifyCases
-      : supportVerifyCases.filter((item) => item.pack === pack);
+  requireJudgePack(pack);
+  const cases = supportVerifyCases.filter((item) => item.pack === pack);
   if (!cases.length)
     throw new SupportError("UNKNOWN_PACK", "Bộ kiểm thử không tồn tại.", 422);
   const now = new Date().toISOString();
@@ -34,9 +32,14 @@ export async function createVerifyRun(value: unknown) {
     cases: cases.map((item) => ({ caseId: item.id, requestId: randomUUID() })),
   });
 }
+function requireJudgePack(pack: string) {
+  if (!judgePackIds.includes(pack))
+    throw new SupportError("UNKNOWN_PACK", "Chỉ chạy bộ 15 tình huống hoặc bộ Đề A 5 trường hợp. Kết quả cũ chỉ dùng để đối chiếu lịch sử.", 422);
+}
 export async function validateVerificationInput(input: SupportInput) {
   if (!input.verifyRunId) return;
   const run = await getVerifyRun(input.verifyRunId);
+  requireJudgePack(run.pack);
   const entry = run.cases.find((item) => item.caseId === input.verifyCaseId);
   const fixture = supportVerifyCases.find(
     (item) => item.id === input.verifyCaseId,
@@ -72,6 +75,7 @@ export async function executeVerifyCase(
     .strict()
     .parse(value);
   const run = await getVerifyRun(id);
+  requireJudgePack(run.pack);
   const existing = run.results.find((item) => item.caseId === caseId);
   if (existing) return run;
   if (run.status !== "RUNNING")
@@ -120,6 +124,7 @@ export async function changeVerifyRun(id: string, value: unknown) {
     .strict()
     .parse(value);
   return updateVerifyRun(id, (run) => {
+    if (action === "resume") requireJudgePack(run.pack);
     if (run.status === "COMPLETE") return;
     run.status = action === "stop" ? "STOPPED" : "RUNNING";
   });

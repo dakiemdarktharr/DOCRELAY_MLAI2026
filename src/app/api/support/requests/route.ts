@@ -3,6 +3,7 @@ import {
   supportApi,
   supportBody,
   enforceDemoRateLimit,
+  requireEmployeeIdentity,
   requireDemoReviewer,
   verifyModelOptions,
 } from "@/lib/support-http";
@@ -15,10 +16,8 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   return supportApi(async () => {
     enforceDemoRateLimit(request, "intake");
-    return submitSupport(
-      await supportBody(request),
-      verifyModelOptions(request),
-    );
+    const body = await requireEmployeeIdentity(await supportBody(request));
+    return submitSupport(body, verifyModelOptions(request));
   }, 201);
 }
 export async function GET(request: Request) {

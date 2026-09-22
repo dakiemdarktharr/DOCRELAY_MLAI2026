@@ -18,7 +18,7 @@ const api: typeof fetch = async (url, init) => {
   return detail(request, { params: Promise.resolve({ id: String(url).split("/").at(-1)! }) });
 };
 it.each(["json-503", "html-502", "rate-limit", "network", "processing", "readback"])("keeps %s retryable without consuming a case result or changing request ID", async (failure) => {
-  const run = await createVerifyRun({ pack: "submission-4" });
+  const run = await createVerifyRun({ pack: "de-a-v3" });
   const entry = run.cases[0];
   const broken: typeof fetch = async (url, init) => {
     if (failure === "network") throw new Error("synthetic network outage");
@@ -33,7 +33,7 @@ it.each(["json-503", "html-502", "rate-limit", "network", "processing", "readbac
   expect(completed.results[0]).toMatchObject({ requestId: entry.requestId, pass: true });
 });
 it("retains deterministic validation failures and does not silently retry them", async () => {
-  const run = await createVerifyRun({ pack: "submission-4" });
+  const run = await createVerifyRun({ pack: "de-a-v3" });
   const invalid: typeof fetch = async () => Response.json({ success: false, error: { code: "VALIDATION_ERROR", message: "synthetic invalid fixture" } }, { status: 422 });
   const result = await executeVerifyCase(run.id, { caseId: run.cases[0].caseId }, invalid);
   expect(result.results[0]).toMatchObject({ pass: false, httpStatus: 422 });

@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { errorResponse, successResponse } from "./api-response";
 import { SupportError } from "./support-repository";
+import { supportInputSchema } from "@/domain/input";
+import { hasEmployeeIdentity, identityRequiredMessage } from "@/domain/employee-identity";
+import { safeInput } from "@/domain/text";
+import { validateVerificationInput } from "@/services/verification";
 
 type RateWindow = { startedAt: number; count: number };
 type SupportHttpRuntime = { supportRateLimits?: Map<string, RateWindow> };
@@ -86,6 +90,22 @@ export function requireDemoReviewer() {
       403,
     );
   return "public-demo-reviewer";
+}
+export async function requireEmployeeIdentity(value: unknown) {
+  const input = supportInputSchema.parse(value);
+  // Only an exact fixture in a server-created Verify run can use the synthetic path.
+  // Validate here too: preview does not go through submitSupport's Verify guard.
+  if (input.verifyRunId) {
+    await validateVerificationInput(safeInput(input).input);
+    return input;
+  }
+  if (!hasEmployeeIdentity(input.fields))
+    throw new SupportError(
+      "IDENTITY_REQUIRED",
+      identityRequiredMessage,
+      422,
+    );
+  return input;
 }
 export function enforceDemoRateLimit(
   request: Request,

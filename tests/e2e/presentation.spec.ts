@@ -1,4 +1,5 @@
 import { expect, test } from "./fixtures";
+import { fillEmployeeIdentity } from "./intake-helpers";
 
 test("welcome uses native cursor, clear entry buttons and reduced motion", async ({
   page,
@@ -34,10 +35,11 @@ test("old help route and workspace alias share preview, edit and v3 submit", asy
       page.getByRole("heading", { name: "Tôi cần hỗ trợ" }),
     ).toBeVisible();
     await expect(page.locator(".site-header")).toBeVisible();
-    await expect(page.locator("form select")).toHaveCount(1);
+    await expect(page.locator("form select")).toHaveCount(2);
     await expect(page.locator("form textarea")).toHaveCount(1);
   }
   const description = page.getByLabel("Mô tả yêu cầu", { exact: true });
+  await fillEmployeeIdentity(page);
   await description.fill("Tôi tắt máy tính lúc về được không?");
   await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(description).toBeDisabled();
@@ -72,6 +74,7 @@ test("explain stays open, handoff is explicit and rejected request shows current
   request,
 }) => {
   await page.goto("/send-help");
+  await fillEmployeeIdentity(page);
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("VPN không kết nối");
