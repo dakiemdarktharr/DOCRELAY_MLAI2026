@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("saved Verify loading locks pack and new run until the requested result arrives", async ({ page, request }) => {
   const response = await request.post("/api/support/verify-runs", { data: { pack: "de-a-v3" } });

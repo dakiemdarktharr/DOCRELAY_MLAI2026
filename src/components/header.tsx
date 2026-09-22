@@ -2,11 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Files } from "lucide-react";
+import { SiteAccess } from "./site-access";
 export function Header() {
   const path = usePathname();
   const staff = /^\/(review|audit|verify|legacy)/.test(path);
   return (
     <header className="site-header">
+      <SiteAccess />
       <Link href="/" className="brand">
         <span className="brand-mark">
           <Files size={23} />

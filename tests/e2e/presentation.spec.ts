@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 test("welcome uses native cursor, clear entry buttons and reduced motion", async ({
   page,
@@ -9,6 +9,8 @@ test("welcome uses native cursor, clear entry buttons and reduced motion", async
   await expect(page.locator("footer")).toHaveCount(0);
   await expect(page.locator(".welcome-art img")).toBeVisible();
   await expect(page.locator(".navi-cursor")).toHaveCount(0);
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("button", { name: "URL / QR", exact: true })).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.locator(".brand")).toBeFocused();
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -37,12 +39,12 @@ test("old help route and workspace alias share preview, edit and v3 submit", asy
   }
   const description = page.getByLabel("Mô tả yêu cầu", { exact: true });
   await description.fill("Tôi tắt máy tính lúc về được không?");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(description).toBeDisabled();
   await page.getByRole("button", { name: "Quay lại sửa" }).click();
   await expect(description).toHaveValue("Tôi tắt máy tính lúc về được không?");
   await description.fill("VPN không kết nối");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(
     page.getByText("Cách hỗ trợ: Hướng dẫn từng bước", { exact: true }),
   ).toBeVisible();
@@ -73,7 +75,7 @@ test("explain stays open, handoff is explicit and rejected request shows current
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("VPN không kết nối");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   await expect(page.getByText("CHƯA GỬI YÊU CẦU")).toBeVisible();
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
   await expect(page).toHaveURL(/\/requests\/[a-f0-9-]+$/);

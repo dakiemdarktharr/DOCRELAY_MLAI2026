@@ -129,7 +129,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
   };
   const visibleRequests = requests;
   return (
-    <main className="page page-enter space-y-6">
+    <main className="page page-enter space-y-6" data-guide-stage={requestId ? "reviewer-detail" : "reviewer-list"}>
       <div>
         <p className="eyebrow">KHÔNG GIAN NHÂN VIÊN</p>
         <h1>Tiếp nhận hỗ trợ</h1>
@@ -149,6 +149,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 Tải lại danh sách
               </Button>
             </div>
+            <div data-guide="reviewer-filters">
             <label>
               Tìm theo nội dung hoặc mã yêu cầu
               <input
@@ -178,6 +179,8 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 <option value="all">Tất cả</option>
               </select>
             </label>
+            </div>
+            <div data-guide={!visibleRequests.length ? "reviewer-list" : undefined}>
             {!visibleRequests.length && (
               <div className="text-center py-6">
                 <Image
@@ -196,11 +199,12 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               </div>
             )}
             <ul className="review-list">
-              {visibleRequests.map((request) => (
+              {visibleRequests.map((request, index) => (
                 <li key={request.id}>
                   <Link
                     href={`/review?requestId=${request.id}`}
                     className="support-row"
+                    data-guide={index === 0 ? "reviewer-list" : undefined}
                   >
                     <Badge
                       tone={
@@ -218,6 +222,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 </li>
               ))}
             </ul>
+            </div>
             <p>
               Đang hiển thị {requests.length}/{total} yêu cầu.
             </p>
@@ -256,7 +261,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
             </details>
             <div className="support-columns review-comparison">
               <Card>
-                <h2 className="font-bold">
+                <h2 className="font-bold" data-guide="reviewer-evidence">
                   Nội dung đã che thông tin nhạy cảm
                 </h2>
                 <p className="my-3 whitespace-pre-wrap break-words">
@@ -322,11 +327,13 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 <label className="block">
                   Lý do (bắt buộc cho mọi quyết định của reviewer)
                   <Textarea
+                    data-guide="reviewer-reason"
                     maxLength={1000}
                     value={reason}
                     onChange={(event) => setReason(event.target.value)}
                   />
                 </label>
+                <div data-guide="reviewer-actions">
                 <label className="block">
                   Trạng thái sau điều chỉnh
                   <select
@@ -377,9 +384,10 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                     </Button>
                   ))}
                 </div>
+                </div>
               </fieldset>
             </Card>
-            <Card id="request-audit">
+            <Card id="request-audit" data-guide="reviewer-history">
               <h2 className="mb-4 font-bold">Lịch sử xử lý</h2>
               <AuditTimeline events={selected.events} />
             </Card>

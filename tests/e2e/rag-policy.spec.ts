@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 test("internal policy gaps are explained without invented entitlements or automatic handoff", async ({
   page,
 }) => {
@@ -6,7 +6,7 @@ test("internal policy gaps are explained without invented entitlements or automa
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("Chính sách công ty cho tôi bao nhiêu ngày nghỉ phép?");
-  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await page.getByRole("button", { name: "Gửi", exact: true }).click();
   const answer = page.getByRole("article", { name: "Câu trả lời của trợ lý" });
   await expect(answer).toContainText("chưa có chính sách nội bộ đã xác minh");
   await expect(answer).not.toContainText("AI đang tạm không sẵn sàng");

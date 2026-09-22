@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Header } from "@/components/header";
+import { JudgeGuide } from "@/components/judge-guide";
 import "./globals.css";
 
 const nunito = localFont({
@@ -21,8 +22,10 @@ export default function RootLayout({
   return (
     <html lang="vi" className={nunito.variable}>
       <body>
-        <Header />
-        {children}
+        <JudgeGuide>
+          <Header />
+          {children}
+        </JudgeGuide>
       </body>
     </html>
   );

@@ -134,7 +134,7 @@ export default function WorkspacePage() {
     );
   }
   return (
-    <main className="page page-narrow page-enter">
+    <main className="page page-narrow page-enter" data-guide-stage={preview ? "sender-preview" : "sender-form"}>
       <p className="eyebrow">HỖ TRỢ KỸ THUẬT</p>
       <h1>Tôi cần hỗ trợ</h1>
       <p className="page-description">
@@ -149,7 +149,7 @@ export default function WorkspacePage() {
         <li>3. Nhận hỗ trợ</li>
       </ol>
       <Card>
-        <div className="support-actions" role="group" aria-label="Kiểu yêu cầu">
+        <div className="support-actions" role="group" aria-label="Kiểu yêu cầu" data-guide="sender-mode">
           {(["freeform", "structured"] as const).map((mode) => (
             <Button
               key={mode}
@@ -179,6 +179,7 @@ export default function WorkspacePage() {
               Nhóm hỗ trợ
               <select
                 aria-label="Nhóm hỗ trợ"
+                data-guide="sender-group"
                 value={input.serviceGroup}
                 onChange={(event) =>
                   edit({
@@ -217,6 +218,7 @@ export default function WorkspacePage() {
                   Nhu cầu cụ thể
                   <select
                     aria-label="Nhu cầu cụ thể"
+                    data-guide="sender-intent"
                     value={input.fields.intentLabel ?? ""}
                     onChange={(event) =>
                       edit({ fields: { intentLabel: event.target.value } })
@@ -231,7 +233,7 @@ export default function WorkspacePage() {
                   </select>
                 </label>
                 {input.fields.intentLabel && (
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-4 sm:grid-cols-2" data-guide="sender-fields">
                     {initialFields.map(fieldControl)}
                   </div>
                 )}
@@ -268,6 +270,7 @@ export default function WorkspacePage() {
               {input.mode === "structured" ? "(không bắt buộc)" : ""}
               <Textarea
                 aria-label="Mô tả yêu cầu"
+                data-guide="sender-description"
                 rows={5}
                 required={input.mode === "freeform"}
                 maxLength={6000}
@@ -289,7 +292,7 @@ export default function WorkspacePage() {
                   ? "TRỢ LÝ TRẢ LỜI TRỰC TIẾP"
                   : "CHƯA GỬI YÊU CẦU"}
               </p>
-              <h2>
+              <h2 data-guide="sender-preview">
                 {isConversation ? "Câu hỏi của bạn" : "Mình đã hiểu như sau"}
               </h2>
               <p>
@@ -332,7 +335,7 @@ export default function WorkspacePage() {
               </Button>
             </section>
           )}
-          <Button type="submit" disabled={busy}>
+          <Button type="submit" disabled={busy} data-guide={preview ? "sender-confirm" : "sender-send"}>
             {busy ? (
               <>
                 <Spinner />
@@ -345,7 +348,7 @@ export default function WorkspacePage() {
                 "Xác nhận và gửi yêu cầu"
               )
             ) : (
-              "Xem hệ thống đã hiểu gì"
+              "Gửi"
             )}
           </Button>
         </form>

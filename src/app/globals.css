@@ -2,6 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
+.site-access-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex-shrink: 0; min-height: 44px; padding: 8px 10px; border: 1px solid var(--orange); border-radius: 10px; background: #fff5ef; color: #a7360d; font-size: 14px; font-weight: 800; }
+.site-access-modal { width: min(460px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 24px; border: 3px solid var(--orange); border-radius: 24px; background: white; color: var(--ink); overflow-y: auto; overscroll-behavior: contain; }
+.site-access-modal::backdrop { background: #20212480; backdrop-filter: blur(3px); }
+.site-access-modal h2 { font-size: 23px; line-height: 1.3; }
+.site-access-modal p { font-size: 14px; }
+.site-qr { display: flex; justify-content: center; margin: 16px auto; }
+.site-qr canvas { width: min(256px, 100%) !important; height: auto !important; aspect-ratio: 1; }
+.site-access-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.site-access-actions .button { flex: 1 1 auto; }
+.site-access-status { min-height: 1.5em; color: #276141; }
+@media (max-width: 400px) {
+  .site-access-modal { padding: 18px; }
+  .site-header .brand { font-size: 21px; gap: 8px; }
+}
+
+/* Session-scoped judge onboarding. Only the introduction blocks page interaction. */
+.guide-modal {
+  width: min(680px, calc(100vw - 32px));
+  height: min(680px, calc(100dvh - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 3px solid var(--orange);
+  border-radius: 28px;
+  background: white;
+  color: var(--ink);
+  box-shadow: 0 24px 90px #20212440;
+  overflow: hidden;
+}
+.guide-modal[open] { display: flex; flex-direction: column; }
+.guide-modal::backdrop { background: #20212480; backdrop-filter: blur(3px); }
+.guide-modal-heading { padding: 24px 28px 12px; border-bottom: 1px solid #ffe0cf; }
+.guide-modal-heading h2 { font-size: clamp(23px, 3vw, 30px); }
+.guide-modal-heading p:last-child { color: var(--muted); margin-bottom: 0; }
+.guide-modal-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 20px 28px; scrollbar-color: var(--orange) #fff3eb; }
+.guide-modal-scroll:focus-visible { outline: 2px solid var(--orange); outline-offset: -3px; }
+.guide-modal-scroll section + section { margin-top: 26px; }
+.guide-modal-footer { flex-shrink: 0; padding: 14px 28px; border-top: 1px solid #ffe0cf; background: white; }
+.guide-modal-footer button { width: 100%; }
+.guide-figure { margin: 16px 0; }
+.guide-figure svg { width: 100%; height: auto; display: block; }
+.guide-figure figcaption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.guide-note { border-left: 3px solid var(--orange); background: #fff8f3; padding: 14px; border-radius: 0 12px 12px 0; }
+.guide-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.guide-target-ring { position: fixed; border: 3px solid #dc2626; border-radius: 12px; box-shadow: 0 0 0 4px #fff8; }
+.guide-arrow { position: fixed; inset: 0; overflow: visible; filter: drop-shadow(0 1px 1px white); }
+.guide-tip { position: fixed; pointer-events: auto; width: min(320px, calc(100vw - 24px)); max-height: 40dvh; overflow-y: auto; overscroll-behavior: contain; padding: 16px; border: 2px solid var(--orange); border-radius: 18px; background: white; box-shadow: 0 8px 35px #20212430; font-size: 14px; line-height: 1.5; }
+.guide-tip h3 { font-size: 17px; }
+.guide-tip .eyebrow { font-size: 10px; margin: 0 0 5px; }
+.guide-tip-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.guide-tip .button { padding: 8px 12px; min-height: 40px; font-size: 13px; }
+.guide-skip { border: 0; background: transparent; color: #616161; text-decoration: underline; padding: 8px 0; font-size: 12px; }
+@media (max-width: 520px) {
+  .guide-modal-heading { padding: 16px 18px 10px; }
+  .guide-modal-scroll { padding: 16px 18px; }
+  .guide-modal-footer { padding: 12px 18px; }
+  .guide-tip { padding: 12px; }
+}
+
 /* U1–U11/B1: warm white workspaces, VNG-inspired orange, native cursor. */
 :root {
   --ink: #202124;
