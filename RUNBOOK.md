@@ -1,39 +1,61 @@
-> Latest verified production: source `5b03aeb`, policy v5.3, READY on [vng-support.vercel.app](https://vng-support.vercel.app). [Deployment receipt](docs/releases/5b03aeb.md) records 355 unit tests, 67 E2E passes and live desktop/mobile checks. The older snapshot below is historical; the two-package requirement no longer applies.
-> Package provenance: hai package AI-assisted, package base `532b123c7f78a3d6c0dd03058ef113d255c272b7`, current main head `bea350303d5812c7a72873e2cc592de9f9c2acf2`. Human review chưa được xác nhận; receipt triển khai cũ chỉ là lịch sử. Bản sửa tài liệu này không tạo project, đổi cấu hình hay deploy Vercel.
+# VNG Support — Hướng dẫn vận hành
 
-# VNG Support runbook
+Hướng dẫn thao tác sản phẩm nằm trong [README](README.md). File này dành cho cài đặt, kiểm tra và bảo trì repository.
 
-> Hướng dẫn từ clone sạch và kiểm tra bản có phòng ban bắt buộc: [submission/RUNBOOK.md](submission/RUNBOOK.md), source tham chiếu `7909f0c`. Các câu “current main” và SHA `bea3503` trong snapshot bên dưới mô tả mốc lịch sử, không phải HEAD hiện tại. Dùng `git rev-parse HEAD` và health để đối chiếu source/deployment thực tế.
+## Chạy local
 
-Current main head: `bea350303d5812c7a72873e2cc592de9f9c2acf2`. The package base `532b123c7f78a3d6c0dd03058ef113d255c272b7` is historical.
+Dùng Node.js 22+ và npm. Trong PowerShell, tại thư mục repository:
 
-Current source/deployment evidence: [release matrix](docs/RELEASE-MATRIX.md). Local main is not automatically the deployed revision.
+```powershell
+npm ci
+Copy-Item .env.example .env.local
+npm run db:generate
+npm run dev
+```
 
-## Local QA
+Chỉ sao chép `.env.example` khi chưa có `.env.local`; giữ cấu hình cá nhân đã có. Mở `http://localhost:3000`. Cấu hình mẫu sử dụng model mock và `memory-demo`.
 
-Use a clean clone of the source being verified. Current main is `bea350303d5812c7a72873e2cc592de9f9c2acf2`; the package base `532b123c7f78a3d6c0dd03058ef113d255c272b7` is already integrated, so do not apply those patches again. Earlier QA counts in this file are historical.
+## Kiểm tra trước khi phát hành
 
-Playwright owns a fresh server at 127.0.0.1:3227 with reuseExistingServer=false. Check the port first; do not stop an unrelated process or reuse 3000. Build and E2E share .next and must not run concurrently. Do not stage timestamp/UUID/screenshot/video churn automatically. Never copy secrets to run local QA.
+```powershell
+npm run lint
+npm run typecheck
+npm test
+npm run build
+$env:SUPPORT_E2E_PRODUCTION='true'
+npm run test:e2e -- --project=chromium
+npm run test:e2e -- --project=mobile
+npm audit
+```
 
-## Verify recovery
+Playwright tự khởi động server riêng tại `127.0.0.1:3227` với model mock và bộ nhớ tạm. Chạy build xong mới chạy E2E vì cùng sử dụng `.next`. Chạy desktop và mobile riêng để mỗi lượt có server và hạn mức request riêng. Không dừng một tiến trình khác đang dùng cổng này.
 
-Open /verify, choose a pack, run, and retain the saved-run link. Pack/new-run/history controls lock while a saved run loads. Rate limits, transient server/network failures, pending request processing and unavailable readback leave the case unrecorded and retryable. Select Continue after recovery; the case reuses its request ID. A real policy mismatch, successful-but-failed persistence assertion or nonretryable validation error remains FAIL. No automatic retry consumes a new model request.
+Báo cáo, ảnh chụp và video do test sinh ra cần được kiểm tra riêng trước khi đưa vào Git. Kết quả local không thay thế kiểm tra dịch vụ đang triển khai.
 
-## Policy and measurement
+## Đối chiếu bản triển khai
 
-Current main `bea350303d5812c7a72873e2cc592de9f9c2acf2` uses policy `support-guidance-v5.2`; the integrated package base is historical. Recreate v5.0/v5.1 previews only for historical regression checks.
+Website: [vng-support.vercel.app](https://vng-support.vercel.app). Dùng project Vercel hiện có `acne-a6cd/vng-support`.
 
-[Evaluation contract](docs/EVALUATION.md) is already included in inspected main. The additive endpoint computes declared-label reports without storing data or changing runtime policy. Held-out data cannot tune proposals. No authentic reviewer identity or internal entitlement is inferred from the public demo.
+```powershell
+git rev-parse HEAD
+Invoke-RestMethod https://vng-support.vercel.app/api/support/health
+```
 
-## Deployment boundary
+Đối chiếu `sourceRevision` với commit đã triển khai, cùng `status`, `policy`, `storage` và `durable`. Runtime lưu dữ liệu qua MongoDB; cấu hình nằm trong môi trường của project. `.vercelignore` loại environment files, dependencies, artifacts và worktree khỏi gói upload. Không đưa secret vào Git hoặc output kiểm tra.
 
-Vercel + MongoDB is the recorded deployment architecture. `render.yaml` is a deprecated historical PostgreSQL blueprint and must not be selected. This documentation-only correction does not run `vercel link`, `vercel init`, secret sync or deployment; those require separate explicit authorization. Keep secrets, model counter, old knowledge revisions and the existing database intact.
+Sau khi triển khai, kiểm tra trang chọn vai trò, popup lần đầu, URL/QR, trang gửi, reviewer, lịch sử và Verify trên desktop/mobile. Việc chạy kiểm thử có ghi dữ liệu hoặc gọi model trên site cần được phân biệt với kiểm tra chỉ đọc.
 
-[Historical runbook](docs/history/RUNBOOK-before-20727b5-fixes.md) is retained for provenance only.
+## Tiếp tục một lượt Verify
 
+Mở **Kiểm thử**, chọn lượt đã lưu rồi tiếp tục sau khi lỗi mạng hoặc giới hạn tần suất đã hết. Trường hợp có thể thử lại giữ nguyên mã yêu cầu. Một kết quả không khớp policy vẫn được ghi là không đạt; không thay kỳ vọng để che lỗi.
 
-## Release recheck corrections
+## Bảo trì dữ liệu và policy
 
-Verify now checks `/api/support/requests?view=page&requestId=<UUID>&limit=1&origin=all` instead of assuming the request appears in the newest-200 summary list. The new filter uses exact identity, is UUID-validated, and does not change the legacy array contracts. Do not repair a false queue failure by deleting newer requests or widening an unbounded list. Genuine missing records, audit problems or persistence mismatches still fail verification.
+- [Bộ dữ liệu kiểm thử](docs/JUDGE-DATASETS.md) mô tả các pack hiện có.
+- [Quản trị knowledge](docs/KNOWLEDGE-REVIEW.md) hướng dẫn tạo revision mới và kiểm tra nguồn.
+- [Hợp đồng đánh giá](docs/EVALUATION.md) mô tả đầu vào và cách tính kết quả.
+- [Workflow theo bằng chứng](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) mô tả yêu cầu bổ sung dữ liệu và điều kiện chuyển reviewer.
 
-Knowledge retrieval validates database document shapes before reviewed-content comparison. A malformed record is skipped while valid neighbors stay available. All-invalid returned rows give no Mongo matches; the code does not rewrite database documents. Actual storage outages still use the existing explicitly labeled local fallback. Use synthetic boundary tests before any authorized live verification.
+Các policy gốc trong `mlai26_new/data/policy/` là dữ liệu lịch sử được bảo vệ bằng checksum tại `artifacts/migration-baseline-manifest.json`. Giữ nguyên chúng để hồi quy; policy runtime nằm trong `src/domain/policy-source.ts` và `src/domain/policy.ts`. `POLICY-REVIEW.md` mô tả policy-v2 trước tích hợp, không phải trạng thái runtime hiện tại.
+
+Các báo cáo release, migration và prompt bàn giao cũ có thể tra cứu trong lịch sử Git. Tài liệu vận hành hiện hành không yêu cầu áp lại patch hay chia thành hai package.
