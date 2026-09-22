@@ -1,6 +1,6 @@
 # Vercel — hai package và kiểm tra phát hành
 
-Chủ dự án đã yêu cầu rõ agent commit cả hai package và deploy để chuyển cho tester. Thay đổi là AI-assisted; việc commit theo yêu cầu này không chứng minh Tiến Khoa hoặc Duy Anh đã human review hay tự viết code. Source package dựa trên main 532b123c7f78a3d6c0dd03058ef113d255c272b7. Kết quả/receipt triển khai cũ ở phần dưới chỉ là lịch sử; đối chiếu SHA đang chạy qua /api/support/health trước khi dùng làm bằng chứng.
+Đây là tài liệu readiness cho project Vercel hiện có. Bản sửa này chỉ đọc/sửa tài liệu: không tạo project, không đổi Production Branch, không đồng bộ secret và không deploy. Package base là `532b123c7f78a3d6c0dd03058ef113d255c272b7`; current main head là `bea350303d5812c7a72873e2cc592de9f9c2acf2`. Receipt triển khai cũ chỉ là lịch sử; đối chiếu SHA đang chạy qua `/api/support/health` trước khi dùng làm bằng chứng.
 
 Project hiện có: acne-a6cd/vng-support, ID prj_hmxBwMixxSLC7fZzeGXI6o6VV5Rh. GitHub: dakiemdarktharr/DOCRELAY_MLAI2026. Production Branch = main đã được API xác minh. Không tạo project mới.
 

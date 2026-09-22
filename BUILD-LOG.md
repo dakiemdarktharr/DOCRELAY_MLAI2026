@@ -1,5 +1,7 @@
 # New fixes from main 20727b5 — AI-assisted, uncommitted
 
+> Đây là build log lịch sử. Các heading, số liệu và trạng thái “uncommitted” bên dưới mô tả các phiên làm việc tại thời điểm đó; không dùng file này làm trạng thái hiện tại. Đối chiếu hiện trạng với [README](README.md), [STATUS](STATUS.md) và [release matrix](docs/RELEASE-MATRIX.md).
+
 - Inspected live GitHub main after both original RAG patches were merged. Preserved dirty original contracts and project memory; worked in an isolated clone.
 - Reproduced transient Verify failures being stored permanently and a short `Bypass MFA` request receiving AUTO_APPROVE. Kept regression expectations and fixed the corresponding runtime paths.
 - Added declared-label evaluation and bounded offline threshold proposals; no runtime activation or fabricated held-out/user evidence. Added saved-run loading guard and release/submission evidence boundaries.

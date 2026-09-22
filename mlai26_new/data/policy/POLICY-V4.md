@@ -1,6 +1,8 @@
-# Executable policy v4
+# Historical executable policy v4
 
-Version runtime: `support-guidance-v4`
+> Tài liệu lịch sử của runtime policy v4. Runtime hiện tại dùng policy `support-guidance-v5.2`; không dùng nhãn v4 này để mô tả trạng thái hiện hành.
+
+Historical runtime version: `support-guidance-v4`
 Scope: synthetic Sprint 1 demo; không phải policy chính thức của VNG.
 
 Các file policy-v2 trong thư mục này là nguồn challenge gốc và được giữ

@@ -1,29 +1,28 @@
 # OrganizationAI VN — Đề A
 
-Workspace riêng cho sản phẩm IT Helpdesk Escalation Referee.
+Workspace này giữ policy, dataset và provenance cho sản phẩm IT Helpdesk Escalation Referee.
 
-Trước khi phát triển, đọc `PROJECT-MEMORY.md` để nắm các quyết định đã thống nhất. Mọi coding agent phải tuân theo `AGENTS.md`.
+## Runtime hiện tại
+
+Ứng dụng đang chạy từ repository root, không phải một app riêng bên trong `mlai26_new/`:
+
+- `src/`: Next.js UI/API, deterministic policy, model adapter, reviewer, audit và Verify.
+- `tests/`: unit, integration và end-to-end tests.
+- `mlai26_new/data/`: policy source, Verify packs, Ground Truth và adversarial fixtures.
+
+Trước khi chỉnh sửa code, đọc `PROJECT-MEMORY.md` và `AGENTS.md`.
 
 ## Nguyên tắc dữ liệu
 
-- Dữ liệu ticket, danh tính, approval và audit demo trong `data/` là synthetic hoặc đã được ẩn danh.
-- Ground Truth và policy phải được lưu riêng, có mã rule rõ ràng.
-- Không lưu credential, token hoặc dữ liệu production thật trong repository.
+- Ticket, danh tính, approval và audit demo là synthetic hoặc đã ẩn danh.
+- Ground Truth và policy được lưu riêng, có mã rule rõ ràng.
+- Không lưu credential, token hoặc dữ liệu production thật.
+- Policy trong thư mục này là synthetic/proposed challenge policy, không phải policy chính thức của VNG.
 
-## Cấu trúc chính
+## Verify hiện tại
 
-- `src/app/`: các route và giao diện web.
-- `src/components/`: UI dùng chung.
-- `src/lib/policy/`: policy và rule evaluation.
-- `src/lib/decision/`: decision engine và escalation logic.
-- `src/lib/audit/`: audit log và human override.
-- `src/lib/verify/`: Verify harness.
-- `src/types/`: domain types và contract dùng chung.
-- `data/`: policy, Ground Truth, Verify, adversarial cases và dữ liệu demo.
-- `docs/`: brief, kiến trúc, bằng chứng người dùng và quyết định thiết kế.
-- `tests/`: unit, integration và end-to-end tests.
-- `scripts/`: các script seed, verify và hỗ trợ vận hành.
-- `prisma/`: schema và migration khi cần persistence.
-- `public/`: tài nguyên tĩnh của web app.
+- `data/verify/support-v3.json`: pack `de-a-v3`, 5 case, 3 AUTO và 2 ESCALATE.
+- `data/verify/judge-15.json`: 15 case dành cho judge.
+- `data/verify/verify_cases.json`: fixture gốc lịch sử, giữ để regression/provenance và không phải pack judge-facing hiện tại.
 
-Challenge-specific implementation sẽ được thêm sau khi chốt policy và dataset.
+Nguồn mô tả chính: [README root](../README.md), [judge datasets](../docs/JUDGE-DATASETS.md) và [policy migration](data/policy/support-v3-migration.md).
