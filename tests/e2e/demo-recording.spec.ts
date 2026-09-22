@@ -77,10 +77,10 @@ test("record a raw demo and verify reviewer override, stop and audit", async ({
     ).toBe(true);
     await page.goto("/verify");
     await page
-      .getByRole("button", { name: "Chạy toàn bộ test (4)", exact: true })
+      .getByRole("button", { name: "Chạy toàn bộ test (5)", exact: true })
       .click();
     await expect(page.getByRole("status")).toContainText(
-      "4/4 · Pass: 4 · Fail: 0",
+      "5/5 · Pass: 5 · Fail: 0",
     );
     await page.reload();
     await expect(page.getByRole("table")).toBeVisible();

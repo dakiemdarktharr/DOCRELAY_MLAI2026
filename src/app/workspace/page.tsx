@@ -66,6 +66,10 @@ export default function WorkspacePage() {
     setError("");
   }
   async function analyze() {
+    if (!input.rawText.trim() && !Object.values(input.fields).some((value) => value.trim())) {
+      setError("Nhập mô tả yêu cầu hoặc chọn một nhu cầu cụ thể trong danh mục.");
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -135,7 +139,6 @@ export default function WorkspacePage() {
   }
   return (
     <main className="page page-narrow page-enter">
-      <p className="eyebrow">HỖ TRỢ KỸ THUẬT</p>
       <h1>Tôi cần hỗ trợ</h1>
       <p className="page-description">
         Bạn có thể hỏi chuyện thường ngày hoặc mô tả điều đang gặp. Không cần
@@ -157,7 +160,9 @@ export default function WorkspacePage() {
               variant={input.mode === mode ? "primary" : "secondary"}
               aria-pressed={input.mode === mode}
               disabled={busy || !!preview}
-              onClick={() => edit({ mode, fields: {}, requestKind: undefined })}
+              onClick={() => {
+                if (mode !== input.mode) edit({ mode, fields: {}, requestKind: undefined });
+              }}
             >
               {mode === "freeform" ? "Mô tả vấn đề" : "Chọn theo danh mục"}
             </Button>

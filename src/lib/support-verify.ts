@@ -1,4 +1,5 @@
 import submission from "../../mlai26_new/data/verify/submission-4.json";
+import judge from "../../mlai26_new/data/verify/judge-15.json";
 import versioned from "../../mlai26_new/data/verify/support-v3.json";
 import official from "../../mlai26_new/data/verify/verify_cases.json";
 import synthetic from "../../mlai26_new/data/ground-truth/synthetic_tickets.json";
@@ -34,7 +35,14 @@ const originals = (
     expected_action: row.expected_action,
     expected_bucket: row.expected_bucket,
   }));
+export const judgePackIds: readonly string[] = ["de-a-v3", "judge-15"];
 export const supportVerifyCases: VerifyCase[] = [
+  ...judge.map((row) => ({
+    ...row,
+    fields: row.fields
+      ? Object.fromEntries(Object.entries(row.fields).filter((entry): entry is [string, string] => typeof entry[1] === "string"))
+      : undefined,
+  })),
   ...submission.map((row) => ({
     ...row,
     fields: row.fields

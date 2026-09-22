@@ -18,9 +18,9 @@ export default function TrackPage() {
             const id = value
               .trim()
               .match(
-                /(?:^|\/requests\/)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:$|[?#])/i,
+                /(?:^|\/requests\/)([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/?(?:$|[?#])/i,
               )?.[1];
-            if (id) router.push(`/requests/${id}`);
+            if (id) router.push(`/requests/${id.toLowerCase()}`);
             else
               setError(
                 "Cần liên kết theo dõi hoặc mã đầy đủ; mã ngắn trên màn hình chỉ dùng để nhận biết.",
@@ -31,7 +31,10 @@ export default function TrackPage() {
             Liên kết hoặc mã yêu cầu
             <Input
               value={value}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={(event) => {
+                setValue(event.target.value);
+                setError("");
+              }}
               required
             />
           </label>
