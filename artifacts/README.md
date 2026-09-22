@@ -1,7 +1,9 @@
-# Evidence và nguồn gốc
+# Báo cáo kiểm thử và dữ liệu đối chiếu
 
-Main đã nhận source từ migration 89d62c4 theo yêu cầu mới nhất. Screenshots home/help-preview/assistance/reviewer và e2e-results.json mô tả giao diện orange/NAVI + policy v3 đã kiểm thử: 24 E2E desktop/mobile PASS trên checkout riêng ghi trong report. Unit/integration 87, lint/typecheck/build PASS như ghi trong STATUS.
+Thư mục này lưu manifest, báo cáo và ảnh chụp được tạo ở các lần kiểm tra khác nhau. Xem commit, metadata và nội dung từng báo cáo để xác định bản source được kiểm tra; file có trong repository không mặc nhiên là kết quả của HEAD hiện tại.
 
-original-fixture-evaluation.json và migration-baseline-manifest.json giữ evidence giai đoạn migration trước. Không đổi nhãn chúng thành kết quả của code sinh viên đang viết dở. Các thay đổi domain chưa commit tại workspace chính không thuộc bản được kiểm thử/merge.
+`migration-baseline-manifest.json` giữ checksum của policy và fixture gốc. Bộ test `tests/support-verify.test.ts` đối chiếu các file trong `mlai26_new/data/` với manifest này. Không sửa expected output hay checksum để che lỗi.
 
-Manifest/commit không chứng minh thời điểm sáng tác, quyền tác giả hoặc đủ điều kiện cuộc thi. Báo cáo có thể được test tạo lại; kiểm tra diff và provenance trước khi commit.
+Các lần chạy test có thể cập nhật `e2e-results.json`, báo cáo evaluation, ảnh chụp và video. Kiểm tra diff trước khi commit; không tự đưa timestamp, UUID và output mới vào thay cho bằng chứng cũ.
+
+Cách chạy kiểm tra nằm trong [RUNBOOK](../RUNBOOK.md). Báo cáo Markdown lịch sử đã được dọn khỏi cây thư mục hiện tại và vẫn có thể tra cứu trong lịch sử Git. Thay đổi source có AI assistance; kết quả tự động không xác nhận human review hoặc quyền tác giả.

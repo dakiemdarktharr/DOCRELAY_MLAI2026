@@ -13,3 +13,7 @@ NAVI is identified as the VNGGames mascot, not a generic VNG corporate mascot. P
 Generation prompt:
 
 Create one polished 3D mascot illustration for a Vietnamese employee IT support website, inspired by NAVI by VNGGames: a friendly compact rounded upward-pointing triangular orange character (navigation-arrow silhouette), small square rounded yellow face panel centered on its body, two warm dark expressive eyes and a gentle smile, stubby yellow shoes, rounded short orange arms, one waving hello. Whole body fully visible, upright, slight three-quarter view, balanced proportions. Smooth soft satin orange material (#F05A22), warm yellow face (#FFCC04), tasteful soft studio illumination and subtle grounding shadow. Centered composition with generous whitespace, pure warm off-white background #FAFAF8. No text, no logo, no wordmark, no watermark, no accessory, no extra characters. High-quality approachable professional tech mascot, not a pointer cursor, no angular sharp needle, not flame shaped. Original AI interpretation for a student demo, not an official brand asset. Square output.
+
+## Nguồn giao diện tái sử dụng
+
+Giao diện orange/NAVI, SVG/cursor và các style liên quan được tái sử dụng từ workspace `typescript_maxxing` khi tích hợp Support v3 ở commit `89d62c4`. Font Nunito/Baloo2 cùng license được giữ trong `src/app/fonts/`. Việc tích hợp có AI assistance; commit mới không thay đổi nguồn gốc hay chứng minh human review. Chi tiết quá trình phục hồi giao diện có trong lịch sử Git của `UI-RESTORATION.md`.
