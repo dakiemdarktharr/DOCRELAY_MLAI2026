@@ -127,6 +127,8 @@ export function JudgeGuide({ children }: { children: ReactNode }) {
       if (!event.target.closest(`[data-guide="${step.target}"]`)) return;
       if (event.type === "click" && !event.target.closest("button, a, summary")) return;
       if (event.target.closest(":disabled")) return;
+      if (event.type === "change" && event.target instanceof HTMLSelectElement &&
+          event.target.required && !event.target.value) return;
       if (event.type === "input") {
         if (!(event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement)) return;
         if (event.target.value.trim().length < (step.target === "reviewer-reason" ? 8 : 2)) return;

@@ -1,5 +1,73 @@
-import { expect, freshTest as test } from "./fixtures";
+import { expect, freshTest as test, type Page } from "./fixtures";
 import { employeeIdentity, fillEmployeeIdentity } from "./intake-helpers";
+
+async function departmentGuideGeometry(page: Page) {
+  return page.evaluate(() => {
+    const department = document.querySelector('select[aria-label="Phòng ban"]');
+    const employeeId = document.querySelector('input[aria-label="ID nhân viên (đang phát triển)"]');
+    const ring = document.querySelector(".guide-target-ring");
+    const arrow = document.querySelector<SVGPathElement>(".guide-arrow > path");
+    const matrix = arrow?.getScreenCTM();
+    if (!department || !employeeId || !ring || !arrow || !matrix) return null;
+    const field = department.getBoundingClientRect();
+    const id = employeeId.getBoundingClientRect();
+    const highlight = ring.getBoundingClientRect();
+    const end = arrow.getPointAtLength(arrow.getTotalLength());
+    const point = new DOMPoint(end.x, end.y).matrixTransform(matrix);
+    return {
+      ringTracksDepartment:
+        Math.abs(highlight.left - (field.left - 4)) < 2 &&
+        Math.abs(highlight.top - (field.top - 4)) < 2 &&
+        Math.abs(highlight.width - (field.width + 8)) < 2 &&
+        Math.abs(highlight.height - (field.height + 8)) < 2,
+      ringOverlapsId:
+        highlight.left < id.right && highlight.right > id.left &&
+        highlight.top < id.bottom && highlight.bottom > id.top,
+      arrowPointsToDepartment:
+        point.x >= field.left - 2 && point.x <= field.right + 2 &&
+        point.y >= field.top - 2 && point.y <= field.bottom + 2,
+      arrowPointsToId:
+        point.x >= id.left && point.x <= id.right &&
+        point.y >= id.top && point.y <= id.bottom,
+    };
+  });
+}
+
+for (const mode of ["Mô tả vấn đề", "Chọn theo danh mục"]) {
+  test(`${mode}: department arrow excludes employee ID and follows resizing`, async ({ page }, info) => {
+    await page.goto("/send-help");
+    await page.getByRole("button", { name: "Đã hiểu", exact: true }).click();
+    await page.getByRole("button", { name: mode, exact: true }).click();
+    const tip = page.getByRole("region", { name: "Hướng dẫn thao tác" });
+    const department = page.getByLabel("Phòng ban", { exact: true });
+    const employeeId = page.getByLabel("ID nhân viên (đang phát triển)", { exact: true });
+    await expect(tip).toContainText("Chọn phòng ban");
+    const originalViewport = page.viewportSize()!;
+    for (const viewport of [originalViewport, { width: 320, height: 568 }, { width: 844, height: 390 }]) {
+      await page.setViewportSize(viewport);
+      await department.scrollIntoViewIfNeeded();
+      await expect.poll(() => departmentGuideGeometry(page)).toEqual({
+        ringTracksDepartment: true,
+        ringOverlapsId: false,
+        arrowPointsToDepartment: true,
+        arrowPointsToId: false,
+      });
+    }
+    await page.setViewportSize(originalViewport);
+    await department.scrollIntoViewIfNeeded();
+    await expect.poll(() => departmentGuideGeometry(page)).toMatchObject({ ringTracksDepartment: true });
+    await page.screenshot({ path: `artifacts/guide-department-${info.project.name}-${mode === "Mô tả vấn đề" ? "freeform" : "structured"}.png` });
+    await employeeId.fill("DEMO-42");
+    await employeeId.press("Tab");
+    await expect(tip).toContainText("Chọn phòng ban");
+    await department.selectOption("");
+    await expect(tip).toContainText("Chọn phòng ban");
+    await employeeId.fill("");
+    await department.selectOption("engineering");
+    await expect(tip).toContainText("2. Chọn nhóm hỗ trợ");
+    await expect(employeeId).toHaveValue("");
+  });
+}
 
 test("structured sender tour points to the fields before the description", async ({ page }) => {
   await page.goto("/send-help");
