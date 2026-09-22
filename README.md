@@ -109,4 +109,4 @@ npm run build
 npm run test:e2e
 ```
 
-Xem thêm [hướng dẫn giám khảo](docs/JUDGE-ONBOARDING.md), [hướng dẫn vận hành](RUNBOOK.md) và [hồ sơ sản phẩm](submission/README.md).
+Xem thêm [hướng dẫn giám khảo](docs/JUDGE-ONBOARDING.md) và [hướng dẫn vận hành](RUNBOOK.md).
