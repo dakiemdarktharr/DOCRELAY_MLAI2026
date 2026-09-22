@@ -3,6 +3,8 @@
 
 # VNG Support runbook
 
+> Hướng dẫn từ clone sạch và kiểm tra bản có phòng ban bắt buộc: [submission/RUNBOOK.md](submission/RUNBOOK.md), source tham chiếu `7909f0c`. Các câu “current main” và SHA `bea3503` trong snapshot bên dưới mô tả mốc lịch sử, không phải HEAD hiện tại. Dùng `git rev-parse HEAD` và health để đối chiếu source/deployment thực tế.
+
 Current main head: `bea350303d5812c7a72873e2cc592de9f9c2acf2`. The package base `532b123c7f78a3d6c0dd03058ef113d255c272b7` is historical.
 
 Current source/deployment evidence: [release matrix](docs/RELEASE-MATRIX.md). Local main is not automatically the deployed revision.

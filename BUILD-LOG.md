@@ -1,3 +1,9 @@
+# Submission workflow materials - 2026-09-22
+
+Owner requested all submission files except video and publication to GitHub, with the PPT focused on workflow. Based the package on 7909f0c after fetching upstream, including the required department and optional employee ID. Recreated five editable slides, a one-page build log, judge guide, clean-clone runbook, fixture-matched test table/CSV and measurement/feedback templates. Codex assisted the writing and Artifact Tool/ReportLab generated the artifacts. No participant observations, quotes, impact numbers or fresh runtime PASS were invented. Source 7909f0c reports 331 pass and one pre-existing policy-document hash failure. Video remains outside scope.
+
+Artifact validation covers five-slide structure, editable shapes, source citations, visual layout, a single-page PDF, relative links and fixture expectations. This is document QA, separate from runtime or deployment verification. Preserve earlier logs and the pre-sprint scaffold provenance below.
+
 # New fixes from main 20727b5 — AI-assisted, uncommitted
 
 > Đây là build log lịch sử. Các heading, số liệu và trạng thái “uncommitted” bên dưới mô tả các phiên làm việc tại thời điểm đó; không dùng file này làm trạng thái hiện tại. Đối chiếu hiện trạng với [README](README.md), [STATUS](STATUS.md) và [release matrix](docs/RELEASE-MATRIX.md).

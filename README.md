@@ -4,6 +4,8 @@
 
 Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. Production now runs source `5b03aeb` with these changes: [verified deployment receipt](docs/releases/5b03aeb.md). Earlier release statements remain historical.
 
+Hồ sơ nộp ngoài video: [5 slide workflow, build log 1 trang, test case và runbook](submission/README.md). Nội dung tham chiếu source `7909f0c`, bao gồm phòng ban bắt buộc. Xem [quy trình giám khảo](submission/JUDGE-GUIDE.md) và [trạng thái bằng chứng](submission/EVIDENCE-MATRIX.md).
+
 > **Đề A — The Escalation Referee.** Một trợ lý hỗ trợ kỹ thuật biết trả lời việc an toàn, hỏi phần còn thiếu và chuyển người thật khi yêu cầu có rủi ro hoặc vượt quyền.
 
 | Link | Mục đích |
