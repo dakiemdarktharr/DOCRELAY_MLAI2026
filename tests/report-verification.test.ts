@@ -36,9 +36,9 @@ const productionApi: typeof fetch = async (url, init) => {
     params: Promise.resolve({ id: String(url).split("/").at(-1)! }),
   });
 };
-it("E03/E04/E17 persists four server-derived results through the production API and reloads them", async () => {
-  let run = await createVerifyRun({ pack: "submission-4" });
-  expect(run.cases).toHaveLength(4);
+it("E03/E04/E17 persists the five judge results through the production API and reloads them", async () => {
+  let run = await createVerifyRun({ pack: "de-a-v3" });
+  expect(run.cases).toHaveLength(5);
   for (const entry of run.cases)
     run = await executeVerifyCase(
       run.id,
@@ -58,7 +58,7 @@ it("E03/E04/E17 persists four server-derived results through the production API 
     { caseId: run.cases[0].caseId },
     vi.fn(),
   );
-  expect(replay.results).toHaveLength(4);
+  expect(replay.results).toHaveLength(5);
   const support = await supportPage(
     parseSupportQuery("http://local?origin=support"),
   );
@@ -66,12 +66,12 @@ it("E03/E04/E17 persists four server-derived results through the production API 
     parseSupportQuery("http://local?origin=verify"),
   );
   expect(support.total).toBe(0);
-  expect(verify.total).toBe(4);
+  expect(verify.total).toBe(5);
   const request = await getSupportRequest(run.cases[0].requestId);
   expect(request?.input.verifyRunId).toBe(run.id);
 });
 it("Verify can stop/resume without rerunning completed cases", async () => {
-  let run = await createVerifyRun({ pack: "submission-4" });
+  let run = await createVerifyRun({ pack: "de-a-v3" });
   run = await executeVerifyCase(
     run.id,
     { caseId: run.cases[0].caseId },
@@ -90,7 +90,7 @@ it("Verify can stop/resume without rerunning completed cases", async () => {
   expect(run.results).toHaveLength(2);
 });
 it("Verify provenance cannot hide arbitrary requests or accept forged expected outcomes", async () => {
-  const run = await createVerifyRun({ pack: "submission-4" });
+  const run = await createVerifyRun({ pack: "de-a-v3" });
   await expect(
     submitSupport({
       rawText: "Grant production admin",

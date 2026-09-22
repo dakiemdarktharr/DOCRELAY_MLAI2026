@@ -1,3 +1,5 @@
+> Phát hành hai package: Chủ dự án đã yêu cầu rõ agent commit cả hai package và deploy để chuyển cho tester. Thay đổi là AI-assisted; việc commit theo yêu cầu này không chứng minh Tiến Khoa hoặc Duy Anh đã human review hay tự viết code. Source package dựa trên main 532b123c7f78a3d6c0dd03058ef113d255c272b7. Kết quả/receipt triển khai cũ ở phần dưới chỉ là lịch sử; đối chiếu SHA đang chạy qua /api/support/health trước khi dùng làm bằng chứng.
+
 # VNG Support status — integrated release fixes
 
 [Release matrix](docs/RELEASE-MATRIX.md) is the current reference for source, policy, deployment and evidence boundaries.
