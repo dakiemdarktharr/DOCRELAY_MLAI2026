@@ -64,3 +64,19 @@ test("conversation answers before confirmation, wraps and continues without a re
     "Đang chờ nhân viên",
   );
 });
+
+test("safe diagnosis exposes potential fixes and accepts a contextual follow-up", async ({
+  page,
+}) => {
+  await page.goto("/workspace");
+  await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill("mất kết nối mạng");
+  await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
+  await expect(page.getByLabel("Chẩn đoán khả dĩ")).toBeVisible();
+  await expect(page.getByText("Cách khắc phục có thể thử")).toBeVisible();
+  await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
+  await expect(page).toHaveURL(/\/requests\//);
+  await expect(page.getByRole("heading", { name: "Hỏi tiếp về phản hồi này" })).toBeVisible();
+  await page.getByLabel("Hỏi tiếp", { exact: true }).fill("Tôi đã kiểm tra Wi-Fi nhưng vẫn không kết nối");
+  await page.getByRole("button", { name: "Gửi câu hỏi", exact: true }).click();
+  await expect(page.getByLabel("Hỏi tiếp", { exact: true })).toHaveValue("");
+});

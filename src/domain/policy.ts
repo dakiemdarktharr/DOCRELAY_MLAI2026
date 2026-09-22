@@ -376,6 +376,28 @@ function evaluateSinglePolicy(
     };
   }
 
+  if (request.workEvidence) {
+    const work = request.workEvidence;
+    return {
+      ...base,
+      action: "NEEDS_INFORMATION",
+      handlingMode: "GUIDE",
+      bucket: "MISSING_INFO",
+      uncertaintyClass: "MISSING_FACTS",
+      ruleIds: ["INFO-EVIDENCE-001"],
+      missingFields: work.requirements.map((item) => item.artifact),
+      clarificationFields: [],
+      questions: work.requirements.map((item) => `${item.artifact}. Phạm vi: ${item.range}.`),
+      targetedQuestions: work.requirements.map((item) => item.reason),
+      reviewerQuestions: [],
+      assignedTeam: "Trợ lý",
+      userReason: "Cần nguồn dữ liệu có thể kiểm chứng trước khi thực hiện công việc.",
+      adminReason: "INFO-EVIDENCE-001: thiếu artefact hoặc công cụ đọc nguồn; chưa có bản nháp hoàn chỉnh để review.",
+      nextStep: work.nextAction,
+      approvalStatus: "not_required",
+    };
+  }
+
   if (request.conversation && request.requestedAction === "answer")
     return {
       ...base,

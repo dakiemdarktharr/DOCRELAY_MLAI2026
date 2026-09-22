@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { z } from "zod";
+import { evidenceWorkflowPrompt } from "@/domain/workflow-prompt";
 import {
   allFields,
   catalog,
@@ -70,6 +71,7 @@ export async function callModel(
   fallback: unknown,
   options: ModelOptions = {},
 ): Promise<unknown> {
+  call = { ...call, instructions: `${evidenceWorkflowPrompt}\n\n${call.instructions}` };
   if (options.fault === "unavailable")
     throw new ModelFailure("MODEL_UNAVAILABLE", "SIMULATED");
   if (options.fault === "invalid") return "invalid synthetic JSON";
@@ -363,6 +365,8 @@ export async function createAssistance(
   const schema = z
     .object({
       summary: z.literal(template.summary),
+      diagnosis: z.string().optional(),
+      potentialFixes: z.array(z.string()).optional(),
       stepByStepInstructions: z.array(z.string()).min(2).max(6),
       options: z.array(z.string()).length(4),
       expectedResult: z.literal(template.expectedResult),
@@ -479,6 +483,9 @@ export async function createAssistance(
       stepByStepInstructions: data.stepIndexes.map(
         (index) => template.stepByStepInstructions[index],
       ),
+      potentialFixes: template.potentialFixes
+        ? data.stepIndexes.map((index) => template.stepByStepInstructions[index])
+        : undefined,
       stepExplanations: data.stepExplanations,
       expectedResult: data.expectedResult,
       nextQuestion: data.nextQuestion,
@@ -524,6 +531,11 @@ export async function createAssistance(
     throw new ModelFailure("MODEL_OUTPUT_INVALID", "SCHEMA_INVALID");
   return {
     ...parsed.data,
+    // These fields are server-owned even when a legacy model supplies them.
+    diagnosis: template.diagnosis,
+    potentialFixes: template.potentialFixes
+      ? parsed.data.stepByStepInstructions
+      : undefined,
     source: process.env.AI_PROVIDER === "openai" ? "openai" : "mock",
     timestamp: new Date().toISOString(),
   };

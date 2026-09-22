@@ -3,6 +3,8 @@ import {
   conversationalCanonical,
 } from "@/domain/conversation";
 import { createConversationAnswer } from "@/lib/conversation-model";
+import { workEvidencePlan } from "@/domain/work-evidence";
+import { retrieveKnowledge } from "@/lib/support-knowledge";
 import { validateVerificationInput } from "./verification";
 import { createHash, randomUUID } from "node:crypto";
 import type {
@@ -68,6 +70,9 @@ export function auditEvent(
     approvalStatus: request.decision?.approvalStatus ?? "pending",
     approvalReference: request.decision?.approvalReference,
     subrequestOutcomes: request.decision?.subrequestOutcomes ?? [],
+    ...(request.canonical?.workEvidence
+      ? { sourceChecks: request.canonical.workEvidence.sourceChecks }
+      : {}),
     explanation,
   };
 }
@@ -81,6 +86,35 @@ export async function analyze(
   options: ModelOptions = {},
 ): Promise<{ canonical: CanonicalRequest; decision: Decision }> {
   const baseline = extractIntake(input, markers);
+  const workEvidence = input.mode === "freeform" &&
+    !Object.values(input.fields).some(Boolean) &&
+    !baseline.riskSignals.length &&
+    !baseline.subrequests.some((part) => part.riskSignals.length) &&
+    !baseline.redactions.length
+      ? workEvidencePlan(input.rawText)
+      : undefined;
+  if (workEvidence) {
+    // This server has a reviewed knowledge corpus, not filesystem/Drive/BI tools.
+    // Do the available lookup before requesting an exact source; never pretend
+    // a public help article contains the user's private business artefact.
+    try {
+      const found = await retrieveKnowledge(input.rawText, "GENERAL_GUIDE");
+      workEvidence.sourceChecks.push({
+        source: `Kho kiến thức (${found.storage})`,
+        result: found.articles.length
+          ? `Tìm thấy bài hướng dẫn: ${found.articles.map((row) => row.title).join("; ")}. Các bài này không phải artefact của yêu cầu.`
+          : "Không tìm thấy artefact phù hợp trong kho đã cấu hình.",
+      });
+    } catch {
+      workEvidence.sourceChecks.push({ source: "Kho kiến thức", result: "Tra cứu thất bại; chưa thể xác nhận nội dung nguồn." });
+    }
+    workEvidence.sourceChecks.push({
+      source: "Attachment, workspace/repository, Drive, dashboard, hệ thống tác vụ bên ngoài",
+      result: "Ứng dụng chưa có connector đọc các nguồn này. Không thể mở đường dẫn/URL chỉ từ nội dung tin nhắn.",
+    });
+    const canonical = { ...baseline, workEvidence };
+    return { canonical, decision: evaluatePolicy(canonical, verifyApproval) };
+  }
   const conversation = conversationRoute(input, baseline);
   const canonical = conversation
     ? conversationalCanonical(baseline, conversation)

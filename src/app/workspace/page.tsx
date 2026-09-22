@@ -315,7 +315,7 @@ export default function WorkspacePage() {
               </dl>
               <p>
                 {isConversation
-                  ? "Bạn đã nhận câu trả lời. Lưu cuộc trò chuyện nếu muốn hỏi tiếp hoặc theo dõi."
+                  ? "Bạn đã nhận câu trả lời. Lưu cuộc trò chuyện để mở khung Hỏi tiếp ngay bên dưới phản hồi và tiếp tục theo ngữ cảnh."
                   : "Bản xem trước chưa tạo hồ sơ. Kiểm tra thông tin rồi xác nhận gửi bên dưới."}
               </p>
               {!isConversation && <SupportResult {...preview} />}

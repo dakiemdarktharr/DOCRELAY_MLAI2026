@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { WorkEvidence } from "./work-evidence";
 import type { ConversationContext, ConversationLabel } from "./conversation";
 
 export const requestKinds = [
@@ -102,6 +103,7 @@ export type SupportInput = {
   verifyCaseId?: string;
 };
 export type CanonicalRequest = Extraction & {
+  workEvidence?: WorkEvidence;
   conversation?: ConversationContext;
   subrequests: Extraction[];
   redactions: string[];
@@ -191,6 +193,8 @@ export type ConversationAnswer = {
 export type Assistance = {
   answer?: ConversationAnswer;
   summary: string;
+  diagnosis?: string;
+  potentialFixes?: string[];
   stepExplanations?: string[];
   contextEvidence?: string;
   stepByStepInstructions: string[];
@@ -203,6 +207,7 @@ export type Assistance = {
   timestamp: string;
 };
 export type AuditEvent = {
+  sourceChecks?: WorkEvidence["sourceChecks"];
   id: string;
   requestId: string;
   timestamp: string;
@@ -264,7 +269,7 @@ export type ResultPage<T> = {
   total: number;
 };
 export function pendingReview(status: RequestStatus) {
-  return ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"].includes(
+  return ["ESCALATED", "APPROVED_BY_HUMAN"].includes(
     status,
   );
 }

@@ -193,6 +193,13 @@ export async function feedbackSupport(id: string, value: unknown) {
       "Yêu cầu đã thay đổi. Tải lại.",
       409,
     );
+  if (snapshot.canonical?.workEvidence &&
+      ["ADMIN", "CONFUSED"].includes(input.choice))
+    throw new SupportError(
+      "REVIEW_NOT_READY",
+      "Cần bản nháp hoàn chỉnh, bằng chứng, diff hoặc output kiểm tra, rủi ro và quyết định cụ thể trước khi review. Hãy bổ sung nguồn trước.",
+      409,
+    );
   if (
     ["RECEIVED", "PROCESSING", "COMPLETED", "STOPPED", "REJECTED"].includes(
       snapshot.status,

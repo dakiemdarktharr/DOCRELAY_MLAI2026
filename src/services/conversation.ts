@@ -18,8 +18,7 @@ export async function continueConversation(id: string, value: unknown) {
     throw new SupportError("NOT_FOUND", "Không tìm thấy cuộc trò chuyện.", 404);
   if (
     current.version !== input.version ||
-    current.status !== "AUTO_APPROVED" ||
-    !current.canonical?.conversation
+    current.status !== "AUTO_APPROVED"
   )
     throw new SupportError(
       "INVALID_TRANSITION",
@@ -29,7 +28,12 @@ export async function continueConversation(id: string, value: unknown) {
   const safe = prepareInput({
     ...current.input,
     previewId: undefined,
-    rawText: `${current.input.rawText.slice(-3900)}\nCâu hỏi tiếp theo: ${input.question}`,
+    // General chat answers need their original topic to interpret terse replies.
+    // Diagnostics are re-evaluated from the new symptom so no earlier prose can
+    // turn a conjunction into a second operational request.
+    rawText: current.canonical?.conversation
+      ? `${current.input.rawText.slice(-3900)}\nCâu hỏi tiếp theo: ${input.question}`
+      : input.question,
     fields: {},
   });
   const result = await completeAnalysis(safe.input, safe.markers);

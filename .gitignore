@@ -12,3 +12,4 @@ playwright-report/
 *.tsbuildinfo
 .firecrawl/
 .vercel/
+.task-worktrees/
