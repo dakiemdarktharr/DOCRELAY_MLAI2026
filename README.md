@@ -1,5 +1,7 @@
 # VNG Support — MLAI 2026 · Track VNG
 
+Hồ sơ nộp ngoài video: [5 slide workflow, build log 1 trang, test case và runbook](submission/README.md). Nội dung tham chiếu source `7909f0c`, bao gồm phòng ban bắt buộc. Xem [quy trình giám khảo](submission/JUDGE-GUIDE.md) và [trạng thái bằng chứng](submission/EVIDENCE-MATRIX.md).
+
 > **Đề A — The Escalation Referee.** Một trợ lý hỗ trợ kỹ thuật biết trả lời việc an toàn, hỏi phần còn thiếu và chuyển người thật khi yêu cầu có rủi ro hoặc vượt quyền.
 
 | Link | Mục đích |

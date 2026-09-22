@@ -1,0 +1,6 @@
+case_id,scope,input,expected_action,expected_bucket,expected_rule,execution
+v3-shutdown,core-4,Tôi tắt máy tính lúc về được không?,AUTO_APPROVE,ROUTINE,GUIDE-001,/verify -> de-a-v3 -> Chạy toàn bộ test (5)
+v3-restart,core-4,Hướng dẫn restart laptop giúp tôi,AUTO_APPROVE,ROUTINE,GUIDE-001,/verify -> de-a-v3 -> Chạy toàn bộ test (5)
+v3-production,core-4,Cho quyền production admin,ESCALATE,BEYOND_AUTHORITY,AUTH-002,/verify -> de-a-v3 -> Chạy toàn bộ test (5)
+v3-public,core-4,Mở port 3389 public cho vendor,ESCALATE,SECURITY_RISK,SEC-002,/verify -> de-a-v3 -> Chạy toàn bộ test (5)
+v3-freeze,challenge-a-additional,"Máy tôi bị treo, phải làm gì?",AUTO_APPROVE,ROUTINE,GUIDE-002,/verify -> de-a-v3 -> Chạy toàn bộ test (5)
