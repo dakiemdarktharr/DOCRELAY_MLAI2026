@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { fillEmployeeIdentity } from "./intake-helpers";
 test("internal policy gaps are explained without invented entitlements or automatic handoff", async ({
   page,
 }) => {
   await page.goto("/workspace");
+  await fillEmployeeIdentity(page);
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("Chính sách công ty cho tôi bao nhiêu ngày nghỉ phép?");

@@ -9,6 +9,7 @@ import type {
   SupportInput,
 } from "./contracts";
 import { redact } from "./redaction";
+import { isEmployeeIdentityField } from "./employee-identity";
 
 export function normalize(text: string) {
   return text
@@ -711,7 +712,10 @@ export function extractIntake(
       ["DEVICE_RESET_GUIDANCE", "DEVICE_RESTART_GUIDANCE"].includes(part.intentLabel) &&
       part.riskSignals.length === 0)
   ) subrequests = [];
-  if (subrequests.length > 1 && Object.keys(fields).length)
+  if (
+    subrequests.length > 1 &&
+    Object.keys(fields).some((field) => !isEmployeeIdentityField(field))
+  )
     risks.add("CONFLICT");
   subrequests.forEach((part) =>
     part.riskSignals.forEach((risk) => risks.add(risk)),

@@ -7,6 +7,13 @@ import {
   commonFields,
   labelForField,
 } from "@/domain/catalog";
+import {
+  employeeIdentityOnly,
+  hasEmployeeIdentity,
+  identityRequiredMessage,
+  isEmployeeIdentityField,
+} from "@/domain/employee-identity";
+import { EmployeeIdentityFields } from "@/components/employee-identity-fields";
 import { intentName, optionName } from "@/domain/presentation";
 import { extractIntake } from "@/domain/text";
 import { missingFacts } from "@/domain/policy";
@@ -66,7 +73,17 @@ export default function WorkspacePage() {
     setError("");
   }
   async function analyze() {
-    if (!input.rawText.trim() && !Object.values(input.fields).some((value) => value.trim())) {
+    if (busy) return;
+    if (!hasEmployeeIdentity(input.fields)) {
+      setError(identityRequiredMessage);
+      return;
+    }
+    if (
+      !input.rawText.trim() &&
+      !Object.entries(input.fields).some(
+        ([field, value]) => !isEmployeeIdentityField(field) && value.trim(),
+      )
+    ) {
       setError("Nhập mô tả yêu cầu hoặc chọn một nhu cầu cụ thể trong danh mục.");
       return;
     }
@@ -116,7 +133,9 @@ export default function WorkspacePage() {
       rawText: "",
       fields: { intentLabel: input.fields.intentLabel ?? "" },
     }),
-  ).filter((field) => allFields.has(field) && field !== "resetType");
+  ).filter(
+    (field) => allFields.has(field) && field !== "resetType" && !isEmployeeIdentityField(field),
+  );
   const initialFields = required.slice(0, 3);
   const extraFields = [
     ...new Set([
@@ -124,7 +143,9 @@ export default function WorkspacePage() {
       ...commonFields,
       ...catalog[input.serviceGroup].fields,
     ]),
-  ].filter((field) => !initialFields.includes(field));
+  ].filter(
+    (field) => !initialFields.includes(field) && !isEmployeeIdentityField(field),
+  );
   function fieldControl(field: string) {
     return (
       <SupportField
@@ -161,7 +182,12 @@ export default function WorkspacePage() {
               aria-pressed={input.mode === mode}
               disabled={busy || !!preview}
               onClick={() => {
-                if (mode !== input.mode) edit({ mode, fields: {}, requestKind: undefined });
+                if (mode !== input.mode)
+                  edit({
+                    mode,
+                    fields: employeeIdentityOnly(input.fields),
+                    requestKind: undefined,
+                  });
               }}
             >
               {mode === "freeform" ? "Mô tả vấn đề" : "Chọn theo danh mục"}
@@ -169,6 +195,7 @@ export default function WorkspacePage() {
           ))}
         </div>
         <form
+          noValidate
           className="space-y-5"
           onSubmit={(event) => {
             event.preventDefault();
@@ -180,6 +207,10 @@ export default function WorkspacePage() {
             className="intake-fields space-y-5"
             hidden={!!preview}
           >
+            <EmployeeIdentityFields
+              fields={input.fields}
+              onChange={(fields) => edit({ fields })}
+            />
             <label>
               Nhóm hỗ trợ
               <select
@@ -188,7 +219,7 @@ export default function WorkspacePage() {
                 onChange={(event) =>
                   edit({
                     serviceGroup: event.target.value as ServiceGroup,
-                    fields: {},
+                    fields: employeeIdentityOnly(input.fields),
                   })
                 }
               >
@@ -224,7 +255,12 @@ export default function WorkspacePage() {
                     aria-label="Nhu cầu cụ thể"
                     value={input.fields.intentLabel ?? ""}
                     onChange={(event) =>
-                      edit({ fields: { intentLabel: event.target.value } })
+                      edit({
+                        fields: {
+                          ...employeeIdentityOnly(input.fields),
+                          intentLabel: event.target.value,
+                        },
+                      })
                     }
                   >
                     <option value="">Chọn nhu cầu</option>

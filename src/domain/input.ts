@@ -7,6 +7,7 @@ import {
   validIntent,
 } from "./catalog";
 import { requestKinds, serviceGroups } from "./contracts";
+import { isEmployeeIdentityField } from "./employee-identity";
 
 export const supportInputSchema = z
   .object({
@@ -29,7 +30,12 @@ export const supportInputSchema = z
         path: ["verifyRunId"],
         message: "Cần đủ mã lần chạy và mã case.",
       });
-    if (!input.rawText && !Object.values(input.fields).some(Boolean))
+    if (
+      !input.rawText &&
+      !Object.entries(input.fields).some(
+        ([field, value]) => !isEmployeeIdentityField(field) && Boolean(value),
+      )
+    )
       ctx.addIssue({
         code: "custom",
         path: ["rawText"],

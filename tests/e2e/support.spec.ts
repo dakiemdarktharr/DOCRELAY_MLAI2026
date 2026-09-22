@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { employeeIdentity, fillEmployeeIdentity } from "./intake-helpers";
 
 test.beforeEach(async ({ request }) => {
   const response = await request.get("/api/support/health");
@@ -9,6 +10,7 @@ test.beforeEach(async ({ request }) => {
 });
 async function submit(page: Page, text: string) {
   await page.goto("/workspace");
+  await fillEmployeeIdentity(page);
   await page.getByLabel("Mô tả yêu cầu", { exact: true }).fill(text);
   await page.getByRole("button", { name: "Xem hệ thống đã hiểu gì" }).click();
   await page.getByRole("button", { name: "Xác nhận và gửi yêu cầu" }).click();
@@ -105,6 +107,7 @@ test("structured guidance matches freeform; intake conflicts escalate", async ({
   await page
     .getByRole("button", { name: "Chọn theo danh mục", exact: true })
     .click();
+  await fillEmployeeIdentity(page);
   await page
     .getByLabel("Nhu cầu cụ thể", { exact: true })
     .selectOption("DEVICE_RESTART_GUIDANCE");
@@ -128,6 +131,7 @@ test("reviewer rejection requires a reason and records audit", async ({
   const text = `Grant production admin - demo ${crypto.randomUUID().slice(0, 8)}`;
   const response = await request.post("/api/support/requests", {
     data: {
+      ...employeeIdentity,
       rawText: text,
       confirmed: true,
       idempotencyKey: crypto.randomUUID(),
@@ -216,6 +220,7 @@ test("one click Verify and a new judge input use live decision API", async ({
   await page
     .getByLabel("Yêu cầu tự do")
     .fill("Please help me restart my personal laptop after saving my work");
+  await fillEmployeeIdentity(page);
   await page.getByRole("button", { name: "Đánh giá input mới" }).click();
   await expect(
     page.getByRole("link", { name: "Xem hướng dẫn / chuyển admin" }),
@@ -227,6 +232,7 @@ test("security request cannot be approved and secret is absent from API/audit", 
   const secret = "SYNTHETIC" + "_E2E_991";
   const response = await request.post("/api/support/requests", {
     data: {
+      ...employeeIdentity,
       rawText: `Open RDP public 3389; password=${secret}`,
       confirmed: true,
       idempotencyKey: crypto.randomUUID(),

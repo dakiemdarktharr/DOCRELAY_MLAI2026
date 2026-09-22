@@ -1,8 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { employeeIdentity, fillEmployeeIdentity } from "./intake-helpers";
 test("conversation answers before confirmation, wraps and continues without a reviewer", async ({
   page,
 }, info) => {
   await page.goto("/workspace");
+  await fillEmployeeIdentity(page);
   await page
     .getByLabel("Mô tả yêu cầu", { exact: true })
     .fill("làm sao khôi phục tài khoản google");
@@ -47,6 +49,10 @@ test("conversation answers before confirmation, wraps and continues without a re
   await page.getByRole("button", { name: "Gửi câu hỏi", exact: true }).click();
   await expect(page.getByLabel("Hỏi tiếp", { exact: true })).toHaveValue("");
   await expect(page.getByText("Trạng thái:")).toContainText("Đã có hướng dẫn");
+  const saved = await (
+    await page.request.get(`/api/support${new URL(page.url()).pathname}`)
+  ).json();
+  expect(saved.data.input.fields).toMatchObject(employeeIdentity.fields);
   await page.emulateMedia({ reducedMotion: "reduce" });
   expect(
     await page
