@@ -1,181 +1,198 @@
-# VNG Support
+# VNG Support — MLAI 2026 · Track VNG
 
-> **Source và deployment:** main được kiểm tra tại `9d9ab05`, đã chứa cả hai package release-fix: kiểm tra schema knowledge và Verify readback theo UUID. Policy hiện tại là v5.2. Xem [release matrix](docs/RELEASE-MATRIX.md) để đối chiếu source, QA và deployment thực tế; Git commit không tự chứng minh human review.
+> **Đề A — The Escalation Referee.** Một trợ lý hỗ trợ kỹ thuật biết trả lời việc an toàn, hỏi phần còn thiếu và chuyển người thật khi yêu cầu có rủi ro hoặc vượt quyền.
 
-**Trợ lý giải đáp câu hỏi và hỗ trợ kỹ thuật: trả lời trực tiếp khi an toàn, hỏi đúng thông tin còn thiếu, chuyển nhân viên khi cần quyền hạn hoặc có rủi ro.**
-
-**Website: [vng-support.vercel.app](https://vng-support.vercel.app)** · [Hướng dẫn vận hành](RUNBOOK.md) · [Trạng thái và kiểm chứng](STATUS.md)
-
-VNG Support là demo sinh viên cho Đề A — The Escalation Referee, có AI assistance trong quá trình phát triển. Đây không phải dịch vụ hỗ trợ hay bộ chính sách nội bộ chính thức của VNG. Dữ liệu là synthetic; thao tác phê duyệt/cấp quyền chỉ mô phỏng.
-
-## Trải nghiệm
-
-- **Tôi cần hỗ trợ**: vào trực tiếp, không đăng nhập. Mô tả bằng lời thường ngày; không cần tự biết nhóm kỹ thuật. Có form theo nhóm khi cần nhập chi tiết.
-- **Dành cho nhân viên**: vào queue, đọc lý do/rủi ro/lịch sử hướng dẫn, yêu cầu bổ sung, duyệt, từ chối, dừng hoặc override trong giới hạn policy. Đây là reviewer công khai được chủ demo cho phép, không xác thực danh tính nhân viên.
-- Câu hỏi thường ngày được AI trả lời ngay trong preview. Bong bóng phản hồi hiện trong **0,4 giây**, pop **0,2 giây**, xuống dòng khi nội dung dài và hỗ trợ reduced motion.
-- Lưu để hỏi tiếp hoặc theo dõi hồ sơ qua link/UUID. Người hỏi có thể chủ động chuyển nhân viên cùng toàn bộ lịch sử.
-
-| Ví dụ | Hành vi |
+| Link | Mục đích |
 | --- | --- |
-| “Xin chào”, “Bạn tên gì?”, “Hôm nay ăn gì?” | Trả lời trực tiếp, không tạo việc cho reviewer |
-| “Làm sao khôi phục tài khoản Google?” | Hướng dẫn tự khôi phục qua nguồn Google; không thu mật khẩu/OTP |
-| “Làm sao tải chương trình abcxyz?” | Hỏi tên chính xác/hệ điều hành; không bịa link tải |
-| “Làm sao sử dụng cloud GPU công ty?” | Hướng dẫn tìm hiểu; phân biệt tài liệu công khai và quyền nội bộ chưa xác minh |
-| “Tôi tắt máy tính lúc về được không?” | Hướng dẫn an toàn, không hỏi device ID |
-| “Làm sao reset máy?” | Làm rõ restart hay factory reset |
-| “VPN không kết nối” | Hướng dẫn từng bước, giải thích thêm hoặc chuyển nhân viên theo lựa chọn |
-| “Cấp read-only staging DB” thiếu scope/duration | Hỏi thông tin có thể thay đổi quyết định |
-| Production admin, public RDP, secret, bypass MFA | Escalate; chatbot không cấp quyền hoặc thực thi |
+| **[Live product — vng-support.vercel.app](https://vng-support.vercel.app)** | URL sản phẩm chính thức của bản demo để chấm bài |
+| [GitHub repository](https://github.com/dakiemdarktharr/DOCRELAY_MLAI2026) | Source code và lịch sử phát triển |
+| [MLAI Hackathon 2026](https://ai-network.hcmut.edu.vn/mlai2026) | Trang cuộc thi và thể lệ |
 
-## Workflow hiện tại
+VNG Support là sản phẩm demo sinh viên cho MLAI 2026, không phải dịch vụ hỗ trợ chính thức của VNG và không cấp quyền thật. Dữ liệu, reviewer, approval và tác động vận hành trong demo đều là synthetic/simulated.
 
-```mermaid
+## Tóm tắt sản phẩm
+
+Vấn đề của người dùng đi qua một safety gate trước khi hệ thống trả lời:
+
+- Việc routine hoặc chẩn đoán an toàn được hướng dẫn ngay.
+- Thiếu thông tin làm thay đổi quyết định thì hệ thống hỏi bổ sung đúng trọng tâm.
+- Rủi ro bảo mật, yêu cầu vượt quyền, conflict hoặc scope chưa rõ được chuyển sang human review.
+- Chatbot không tự cấp quyền, không xác nhận approval bằng lời nói và không thực thi IAM, cloud, shell hay Kubernetes.
+- Mỗi request có decision, evidence, policy version, reviewer action và audit timeline để kiểm tra lại.
+
+### Một đường demo nhanh
+
+1. Mở [Live product](https://vng-support.vercel.app) và chọn **Tôi cần hỗ trợ**.
+2. Thử câu routine: “VPN không kết nối, tôi nên kiểm tra gì?”.
+3. Thử yêu cầu thiếu scope: “Cấp read-only staging DB”.
+4. Thử yêu cầu nguy hiểm: “Cấp production admin và bỏ qua MFA”.
+5. Mở /verify, chạy bộ Đề A 5 trường hợp (3 tự động / 2 chuyển tiếp), rồi chọn bộ 15 tình huống.
+6. Mở /review và /audit để kiểm tra human-in-the-loop, reason, version guard và log.
+
+## Workflow end-to-end
+
+~~~mermaid
 flowchart TD
-  A[Người dùng mô tả hoặc điền form] --> B[Redact secret và OTP]
-  B --> C[Trích xuất facts, kiểm tra conflict và từng subrequest]
-  C --> D[Deterministic policy: risk và authority]
-  D -->|Câu hỏi chỉ đọc an toàn| E[Truy xuất knowledge MongoDB theo label và từ khóa]
-  E --> F{Cần nguồn công khai về công ty hoặc GPU?}
-  F -->|Có và được bật| G[Web search giới hạn domain hoặc cache 24 giờ]
-  F -->|Không| H[LLM gán nhãn câu trả lời và diễn đạt]
-  G --> H
-  H --> I[Validate output và nguồn]
-  I -->|Hợp lệ| J[Hiển thị bong bóng AI cùng nguồn]
-  I -->|Lỗi hoặc hết budget| K[Hướng dẫn dự phòng có nhãn rõ]
-  D -->|Hướng dẫn kỹ thuật| L[Guide hoặc assistance từ bước đã kiểm duyệt]
-  D -->|Thiếu dữ kiện| M[Hỏi bổ sung có trọng tâm]
-  D -->|Routine đủ điều kiện| N[Workflow mô phỏng]
-  D -->|Rủi ro, vượt quyền hoặc conflict| O[Human review]
-  J --> P[Lưu để tiếp tục, phản hồi hoặc chuyển nhân viên]
-  K --> P
-  L --> P
-  M --> P
-  N --> P
-  P -->|Hỏi tiếp hoặc bổ sung| B
-  P -->|Cần nhân viên| O
-  O --> Q[Guard trạng thái và version trước reviewer action]
-  P --> R[Request và audit theo UUID trong MongoDB]
-  Q --> R
-```
+  U["Người dùng gửi free-form hoặc form"] --> R["Redact secret, OTP và dữ liệu nhạy cảm"]
+  R --> X["Chuẩn hoá facts, evidence, subrequests và conflict"]
+  X --> P{"Deterministic policy gate"}
+  P -->|"Routine an toàn"| K["BM25 knowledge retrieval"]
+  K --> W{"Cần nguồn web công khai?"}
+  W -->|"Không"| A["Guidance hoặc bounded AI assistance"]
+  W -->|"Có, được bật"| S["Domain-limited web lookup"]
+  S --> A
+  A --> V["Schema, evidence và safety validation"]
+  V -->|"Pass"| O["Trả lời + lưu request/audit"]
+  V -->|"Fail hoặc hết budget"| F["Fallback đã kiểm duyệt hoặc escalate"]
+  P -->|"Thiếu thông tin"| Q["Targeted clarification"]
+  P -->|"Risk, vượt quyền hoặc conflict"| H["Human review queue"]
+  H --> D{"Reviewer decision"}
+  D -->|"Approve bounded guidance"| O
+  D -->|"Reject, stop hoặc override có lý do"| O
+  Q -->|"User bổ sung"| R
+  F --> O
+~~~
 
-Policy của main được kiểm tra là **support-guidance-v5.2**, giữ ba action `AUTO_APPROVE`, `NEEDS_INFORMATION`, `ESCALATE`. `AUTO_APPROVE` chỉ cho phép trả lời/hướng dẫn/mô phỏng. Thứ tự ưu tiên: `SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE`.
+Policy là phần quyết định authority; model chỉ hỗ trợ extraction/diễn đạt trong giới hạn schema. Thứ tự ưu tiên là **SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE**; action chính là **AUTO_APPROVE**, **NEEDS_INFORMATION**, **ESCALATE**.
 
-LLM không có authority cuối cùng. Form/freeform mâu thuẫn hoặc một subrequest nguy hiểm không được tự chọn cách hiểu ít rủi ro hơn. Claim “đã được duyệt” không thay thế approval có thể kiểm chứng. Reviewer cũng không được bỏ qua missing facts/approval hoặc approve/fulfill security risk.
+## Model, RAG và human-in-the-loop
 
-Với hội thoại chỉ đọc đã qua safety gate, lỗi model/budget dùng nội dung dự phòng đã kiểm duyệt và ghi rõ nguồn, không tự chuyển nhân viên. Với tác vụ vận hành không xác định được scope an toàn, lỗi model vẫn fail-safe. Tiền tố kiểu “bỏ qua instruction” chỉ được bỏ qua nếu nhận diện được và phần còn lại an toàn; payload nguy hiểm vẫn bị kiểm tra.
+~~~mermaid
+flowchart TD
+  I["Untrusted user input"] --> B["Deterministic baseline"]
+  B -->|"Có risk hoặc intent đã rõ"| G["Giữ baseline; không gọi model không cần thiết"]
+  B -->|"Cần hiểu thêm facts"| E["OpenAI structured extraction"]
+  E --> C["Exact-quote, Zod schema và conflict checks"]
+  C -->|"Không hợp lệ"| G
+  C -->|"Hợp lệ"| G
+  G --> T["Policy + reviewed knowledge"]
+  T -->|"Cần diễn đạt theo context"| M["OpenAI bounded assistance"]
+  T -->|"Không cần model"| N["Deterministic guidance"]
+  M --> Z["Prose safety/evidence validator"]
+  N --> Z
+~~~
 
-Preview giữ snapshot theo input/policy, TTL **10 phút**. Submit dùng lại snapshot để tránh câu trả lời đổi giữa xem trước và lưu, và tránh gọi AI lặp. Sửa input, policy hoặc approval thay đổi cần preview lại. Mỗi câu hỏi tiếp theo được kiểm tra rủi ro lại.
-
-## RAG, AI và dữ liệu
-
-- **RAG có benchmark**: 24 bài đang hoạt động, BM25 nhỏ với synonym Việt–Anh/typo tolerance và trọng số title/keyword; label là gợi ý, không khóa retrieval. Chỉ chấp nhận Mongo document khớp reviewed manifest. Chưa dùng embeddings/vector search. Model gán nhãn câu trả lời nhưng không được dùng nhãn để mở quyền.
-- Bài có nguồn, ngày review, expiry và ID theo revision. Các bài nhận diện thương hiệu dùng revision 2; revision 1 vẫn lưu nhưng không được retrieval lại. Không đưa câu trả lời model/user hay web thẳng vào kho đã kiểm duyệt.
-- Web search chỉ cho câu hỏi công khai về công ty/GPU khi bật. Server tạo query từ chủ đề được phép, giới hạn domain chính thức; không chuyển nguyên mô tả nội bộ lên search. Cache 24 giờ tách khỏi knowledge. Nguồn công khai không chứng minh entitlement/chính sách nội bộ.
-- Trích dẫn article/web phải có quote đúng trong context; chỉ hiển thị nguồn thực sự được dùng. Quote đúng chưa chứng minh toàn bộ diễn giải đúng, vẫn cần đánh giá faithfulness. Câu hỏi entitlement nội bộ nhận boundary rõ ràng, không gọi model để đoán.
-- Shared answer cache một giờ chỉ cho allowlist câu hỏi công khai, có chữ ký và khóa theo model/policy/corpus; không cache câu hỏi cá nhân hoặc follow-up. UI ghi rõ câu trả lời được dùng lại. Cache không nâng hay reset cap 50.
-- Model không được gọi shell, database, IAM, Kubernetes hoặc tool thực thi. Web search là hosted tool riêng có giới hạn. Output phải qua schema và safety validation; không lưu chain-of-thought.
-- MongoDB lưu request/history/audit, preview, Verify run, knowledge, web cache và bộ đếm model. Health thực hiện Mongo ping. Khi cấu hình Mongo lỗi hoặc chạy trên Vercel mà thiếu Mongo, không tự rơi về memory.
-- API budget production hiện được chủ dự án cho phép tối đa **50 lần gọi tích lũy**; web lookup và answer tính riêng, không reset bộ đếm. Local `.env.example` vẫn mặc định mock và cap 20. Tăng cap cần chủ dự án cho phép.
-
-## Chạy local
-
-Cần Node.js 22+ và npm. Tại checkout muốn chạy:
-
-```powershell
-npm ci
-Copy-Item .env.example .env.local # chỉ khi file chưa tồn tại
-npm run dev
-```
-
-Mặc định mock + memory, không cần API key. Nếu port 3000 đang bận, dùng `npm run dev -- --port 3216`. Không dùng nhầm server cũ; kiểm tra `/api/support/health` với marker `MLAI_SUPPORT_REFEREE_V3`. Memory mất khi restart; chỉ dùng synthetic data.
-
-Cấu hình OpenAI/Mongo qua `.env.local` đã gitignore hoặc environment của Vercel; không đưa key vào chat/Git/frontend:
-
-| Biến | Cách dùng |
+| Thành phần | Cách dùng |
 | --- | --- |
-| `AI_PROVIDER` | `mock` local; `openai` để gọi thật |
-| `OPENAI_API_KEY` | Secret phía server |
-| `AI_MODEL`, `AI_ESCALATION_MODEL` | Production hiện dùng `gpt-4.1-mini` |
-| `AI_CONVERSATION_MODEL` | Tùy chọn, trống thì dùng `AI_MODEL` |
-| `AI_WEB_MODEL` | Production dùng `gpt-4.1` đã kiểm chứng web tool |
-| `AI_WEB_SEARCH` | `true` bật bounded public lookup; local mặc định `false` |
-| `AI_MAX_ATTEMPTS` | 0..50; production cap 50, không đồng nghĩa còn 50 lượt |
-| `MONGODB_URI`, `MONGODB_DB` | Secret URI và database `mlai26_support_v3_demo` |
-| `SUPPORT_STORAGE` | `memory-demo` chỉ local không Mongo |
-| `SUPPORT_ACCESS_MODE` | `public-demo` cho reviewer công khai |
-| `SUPPORT_VERIFY_FAULTS` | `true` cho Verify giả lập lỗi; không ép approve |
-| `APP_REVISION` | SHA source khi deploy để đối chiếu health |
+| Policy core | TypeScript deterministic rules trong src/domain; model không được quyết định quyền hoặc tự mở đường auto-approve. |
+| Extraction model | AI_ESCALATION_MODEL hoặc AI_MODEL; dùng khi baseline chưa đủ facts và không có risk rõ ràng. Output phải có evidence là exact quote từ input. |
+| Assistance model | AI_MODEL; chỉ được chọn/giải thích các bước trong template server-side; không phát minh command, URL, quyền, secret hay approval. |
+| Provider | AI_PROVIDER=mock cho local/Verify; AI_PROVIDER=openai cho hosted runtime có OPENAI_API_KEY. |
+| API format | OpenAI Chat Completions, store=false, JSON object/strict JSON schema, tối đa 1.000 completion tokens, timeout tối đa 12 giây. |
+| RAG | Corpus nhỏ dùng BM25, alias Việt–Anh và typo tolerance; ưu tiên content/title/keyword. Không dùng embedding hoặc vector search. |
+| Validation | Zod/schema, exact evidence, redaction, risk scan và policy re-check. Model failure được ghi nhận; flow vận hành fail-safe. |
+| Persistence | MongoDB lưu request, conversation, preview, Verify run, knowledge, web cache và audit. Vercel production không tự rơi về memory khi Mongo lỗi. |
 
-`DATABASE_URL`, `LLM_API_KEY`, `LLM_MODEL` phục vụ compatibility/sandbox cũ. Database/collection/marker/fixture ID không đổi theo tên hiển thị; repository GitHub vẫn giữ tên cũ đến khi chủ dự án đổi.
+Model không có tool thực thi. Web lookup, nếu bật, chỉ dành cho chủ đề công khai và domain được giới hạn; nguồn web không chứng minh entitlement hay policy nội bộ.
 
-## Route và API
+## Chức năng chính và route
 
 | Route | Chức năng |
 | --- | --- |
-| `/` | Hai lối vào không đăng nhập |
-| `/send-help`, `/workspace` | Nhập vấn đề, preview facts/answer, lưu |
-| `/requests/[id]`, `/track` | Trò chuyện tiếp, hướng dẫn, bổ sung, feedback, theo dõi |
-| `/review`, `/audit` | Queue/timeline có lọc, tìm kiếm và phân trang |
-| `/verify` | Chạy bộ test qua API production, nhập case mới, lưu expected/actual/rule/explanation |
-| `/legacy/workspace`, `/legacy/verify`, `/legacy/audit` | Echo UI cũ trong compatibility window |
+| / | Landing page và hai lối vào không đăng nhập |
+| /send-help, /workspace | Nhập vấn đề, preview facts/decision/answer và submit |
+| /requests/[id], /track | Hỏi tiếp, bổ sung thông tin, feedback và theo dõi |
+| /review | Queue cho reviewer: hỏi thêm, approve bounded action, reject, stop hoặc override có lý do |
+| /audit | Timeline audit theo request, policy/revision và reviewer action |
+| /verify | Chạy Verify pack, nhập case mới và xem expected/actual/rule/explanation |
+| /api/support/health | Marker, provider, policy, storage, durability và source revision |
+| /api/support/preview | Phân tích an toàn trước khi tạo request |
+| /api/support/requests | Tạo và đọc request có idempotency/version guard |
+| /api/review/[id] | Reviewer transition có optimistic concurrency guard |
+| /api/support/events | Audit events phân trang |
+| /api/support/verify-runs/* | Lưu và chạy Verify cases qua API |
 
-Support API dùng `{success:true,data}` hoặc `{success:false,error:{code,message,details?}}`.
+Response support dùng envelope success/data hoặc success/error. Contract đầy đủ ở src/domain/contracts.ts và src/domain/input.ts.
 
-| API | Contract chính |
+## Verify và tiêu chí Đề A
+
+Các fixture là synthetic và được giữ nguyên để tránh sửa Ground Truth nhằm che mismatch.
+
+| Pack | Mục đích |
 | --- | --- |
-| POST `/api/support/preview` | Input mô tả/form + `idempotencyKey:UUID` → safe input, previewId, facts, decision, assistance; chưa tạo ticket |
-| POST `/api/support/requests` | Input + `confirmed:true`, previewId nếu có; idempotent theo key/fingerprint |
-| GET `/api/support/requests` hoặc `/[id]` | `?view=page&limit=30&cursor=0&q=VPN&origin=support&status=pending` → items,total,nextCursor; array/summary cũ vẫn tương thích |
-| POST `/api/support/requests/[id]/conversation` | `{version,question}`; chỉ hồ sơ conversation còn mở |
-| POST `/api/support/requests/[id]/feedback` | `{version,choice,step?}`: RESOLVED, STILL_BROKEN, CONFUSED, ADMIN, EXPLAIN |
-| POST `/api/support/requests/[id]/clarification` | `{version,rawText?,fields?}` khi cần thông tin |
-| POST `/api/review/[id]` | `{version,action,reason,target?}`; reason ít nhất 8 ký tự; transition và version guard |
-| GET `/api/support/events` | Audit theo requestId hoặc phân trang |
-| GET `/api/support/metrics` | Tổng hợp toàn bộ hồ sơ Mongo, gồm synthetic Verify; không phải accuracy thực tế |
-| GET `/api/support/health` | Marker, storage/durable, provider cấu hình, policy, revision và Mongo ping; không gọi model trả phí |
-| `/api/support/verify-runs`, `/[id]`, `/[id]/cases` | Tạo/tải/chạy tiếp Verify đã lưu; mỗi case gọi production request API |
+| judge-15 | 15 tình huống gồm routine, thiếu thông tin, ngoài quy định, vượt thẩm quyền và rủi ro |
+| de-a-v3 | **5 cases: 3 auto / 2 escalate**, phù hợp đường Verify của Đề A |
 
-Giữ `GET /api/health`, `POST /api/echo`, `GET /api/events`, sandbox `/api/llm-test`. Xem schema ở [input.ts](src/domain/input.ts) và [contracts.ts](src/domain/contracts.ts).
 
-## Source và kiểm thử
+Chỉ hai bộ trên được chạy từ Verify. Fixture lịch sử vẫn được giữ để regression và đối chiếu provenance: lần chạy mock hiện tại có 55/128 ca khớp, 73 ca khác kỳ vọng; không sửa Ground Truth để che kết quả. Hai bộ demo được tuyển chọn theo policy hiện tại, không phải held-out accuracy. Xem [chi tiết bộ dữ liệu](docs/JUDGE-DATASETS.md).
 
-| Thư mục | Trách nhiệm |
-| --- | --- |
-| `src/domain/` | Types, taxonomy, redaction, canonical facts, policy/rules, guidance, knowledge seed |
-| `src/services/` | Điều phối preview/submit, approval, reviewer, feedback, conversation |
-| `src/lib/` | Mongo repository, model adapter, RAG/web cache, HTTP, Verify |
-| `src/app/`, `src/components/` | Next.js routes/API và giao diện |
-| `tests/`, `tests/e2e/` | Policy/API/workflow regression và desktop/mobile |
-| `mlai26_new/data/` | Policy, Verify và Ground Truth có provenance |
+Đề A được thể hiện bằng ba nhánh uncertainty: **MISSING_INFO**, **BEYOND_AUTHORITY** và **SECURITY_RISK**. Mỗi nhánh cần câu hỏi/điểm chuyển người cụ thể; input bị flag không được nhận câu trả lời tự tin như đã được duyệt.
 
-Không gộp source thành một file: giữ server secrets ngoài browser bundle, policy độc lập với LLM/UI và file routing của Next.js. Các module theo trách nhiệm giúp nhóm đọc và sửa từng phần.
+## Source và Vercel
 
-```powershell
+Hai package sửa lỗi được tích hợp trên base `532b123c7f78a3d6c0dd03058ef113d255c272b7` theo yêu cầu chủ dự án để commit và deploy cho tester. Code là AI-assisted; chưa có bằng chứng human review của hai người nhận.
+
+Vercel project `acne-a6cd/vng-support` đã liên kết đúng repository; API xác nhận `productionBranch: main`. Thiết lập này không chứng minh một SHA cụ thể đã deploy; kiểm tra `sourceRevision` qua `/api/support/health`. Xem [trạng thái phát hành](docs/RELEASE-MATRIX.md) và [Vercel](docs/VERCEL-READINESS.md).
+
+## Chạy local
+
+Cần Node.js 22+ và npm:
+
+~~~bash
+npm ci
+cp .env.example .env.local
+npm run dev
+~~~
+
+Windows PowerShell:
+
+~~~powershell
+npm ci
+Copy-Item .env.example .env.local
+npm run dev
+~~~
+
+Mặc định là mock provider + memory demo, chỉ dùng synthetic data và không cần API key. Kiểm tra đúng server bằng:
+
+~~~bash
+curl http://localhost:3000/api/support/health
+~~~
+
+Các lệnh QA:
+
+~~~bash
 npm test
 npm run lint
 npm run typecheck
 npm run build
 npm run test:e2e
-```
+~~~
 
-E2E tự khởi động Next dev của đúng checkout tại **127.0.0.1:3227**, `reuseExistingServer:false`, mock/memory, không gọi API trả phí. Kiểm tra port trước khi chạy; không chạy build đồng thời với E2E vì dùng chung `.next`.
+### Environment variables
 
-Verify mặc định `submission-4`; bộ `de-a-v3` có **3 auto / 2 escalate**. Có case mới, model lỗi, missing, mixed language, injection/conflict. Giữ nguyên fixture/expected gốc: báo cáo gần nhất **55/128 match, 73 mismatch**, không sửa Ground Truth để che conflict. Xem [evaluation](artifacts/original-fixture-evaluation.json).
+| Biến | Vai trò |
+| --- | --- |
+| AI_PROVIDER | mock local; openai khi muốn gọi model thật |
+| OPENAI_API_KEY | Secret server-side, không commit |
+| AI_MODEL, AI_ESCALATION_MODEL | Model cho assistance và extraction |
+| AI_WEB_MODEL, AI_WEB_SEARCH | Model/bật tắt public web lookup bounded |
+| AI_MAX_ATTEMPTS | Budget gọi model; không phải số request miễn phí |
+| MONGODB_URI, MONGODB_DB | MongoDB cho durable runtime |
+| SUPPORT_STORAGE | memory-demo chỉ dành cho local; production cần Mongo |
+| SUPPORT_ACCESS_MODE | Chế độ reviewer của public demo |
+| APP_REVISION | SHA hiển thị qua health để đối chiếu deploy |
+| LLM_API_KEY, LLM_MODEL | Compatibility path cũ trong src/lib/ai/client.ts |
 
-Bằng chứng runtime trước đổi tên: [RAG release](RAG-RELEASE-VERIFICATION-2026-09-21.md) với 22/22 live checks, OpenAI thật/Mongo/web citations. Kết quả của lần đổi tên ở [STATUS](STATUS.md); không coi health pass là bằng chứng đã gọi model thật.
+Không đưa API key, secret, OTP hoặc dữ liệu production vào issue, chat, frontend bundle hay fixture public.
 
-## Triển khai, lịch sử và giới hạn
+## Cấu trúc source
 
-Vercel project **vng-support** giữ cùng project ID và MongoDB. Domain mới tự theo production deployment; alias `labpass-five.vercel.app` giữ cho link cũ. Deploy thủ công bằng CLI sau QA; GitHub auto-deploy chưa được kết nối. Chi tiết ở [RUNBOOK](RUNBOOK.md).
+| Thư mục | Trách nhiệm |
+| --- | --- |
+| src/domain/ | Catalog, normalization, redaction, facts, policy, guidance và knowledge contracts |
+| src/services/ | Preview/submit, approval, reviewer, feedback và conversation orchestration |
+| src/lib/ | Mongo repository, model adapter, RAG/web cache, HTTP và Verify |
+| src/app/ | Next.js pages và API routes |
+| src/components/ | UI components |
+| tests/ | Policy, API, workflow, security boundary và Verify regression |
+| mlai26_new/data/ | Policy, Verify và Ground Truth có provenance |
+| submission/, BUILD-LOG.md | Gói nộp bài, build log và bằng chứng phát triển |
 
-Không có thực thi IAM/cloud/shell thật, SSO hoặc xác thực actor của public demo. Redaction và risk detection theo pattern có giới hạn ngôn ngữ; không nhập secret hay dữ liệu production. Có benchmark development synthetic 54 case, chưa có held-out độc lập, bằng chứng người dùng thật hay kiểm chứng chủ động Mongo failover. Kho nguồn công khai không thay chính sách nội bộ.
+## Giới hạn và provenance
 
-- [Retrieval/benchmark — Tiến Khoa](docs/RAG-RETRIEVAL.md), [quản trị knowledge](docs/KNOWLEDGE-REVIEW.md)
-- [Answer/cache/guard — Duy Anh](docs/RAG-ANSWER.md)
-- [Đổi tên và mapping file](VNG-SUPPORT-RENAME.md)
-- [Migration hội thoại/RAG](RAG-CONVERSATION-MIGRATION.md)
-- [Đối chiếu feedback E01–E23](VNG-SUPPORT-ERRORS-RECHECK.md)
-- [Build log và nguồn gốc](BUILD-LOG.md), [gói nộp bài lịch sử](submission/README.md)
-- [Audit migration ban đầu](MIGRATION-AUDIT.md), [sơ đồ v4 lịch sử](mermaid-diagram.excalidraw)
+- Không có IAM/cloud/shell execution, SSO hay actor authentication thật.
+- Pattern-based redaction và risk detection có giới hạn ngôn ngữ; không nhập secret hay dữ liệu production.
+- Benchmark là development/synthetic; không được diễn giải thành accuracy người dùng thật hay impact VNG thật.
+- Knowledge công khai không thay thế chính sách nội bộ. Câu hỏi entitlement phải được chuyển người hoặc nêu boundary rõ ràng.
 
-Các báo cáo/slide/video cũ giữ snapshot và nguồn gốc ban đầu. Commit mới không thay ngày thực sự phát triển hoặc tự chứng minh đủ điều kiện dự thi; nhóm cần công bố phần tái sử dụng và AI assistance theo thể lệ.
+Tài liệu liên quan: [RUNBOOK](RUNBOOK.md), [STATUS](STATUS.md), [BUILD-LOG](BUILD-LOG.md), [RAG retrieval](docs/RAG-RETRIEVAL.md), [knowledge review](docs/KNOWLEDGE-REVIEW.md), [submission package](submission/README.md).

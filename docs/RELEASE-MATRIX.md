@@ -1,3 +1,5 @@
+> Phát hành hai package: Chủ dự án đã yêu cầu rõ agent commit cả hai package và deploy để chuyển cho tester. Thay đổi là AI-assisted; việc commit theo yêu cầu này không chứng minh Tiến Khoa hoặc Duy Anh đã human review hay tự viết code. Source package dựa trên main 532b123c7f78a3d6c0dd03058ef113d255c272b7. Kết quả/receipt triển khai cũ ở phần dưới chỉ là lịch sử; đối chiếu SHA đang chạy qua /api/support/health trước khi dùng làm bằng chứng.
+
 # Release matrix — integrated source and deployment evidence
 
 Runtime source rechecked at `9d9ab053806250c72eea0b7b8b17f43f875252c1`, then deployed with documentation corrections as `01a20a7128b58a0e09e8e6f6ed1fe10a1f4a85a3`. Repository integration, QA, human review and live operation are separate claims. [Fresh deployment receipt](releases/01a20a7.md) records the actual deployment and read-only checks; the receipt commit itself changes documentation only.
