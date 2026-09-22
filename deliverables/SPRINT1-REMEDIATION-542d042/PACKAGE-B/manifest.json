@@ -1,0 +1,135 @@
+{
+  "package": "PACKAGE-B — JUDGE-FLOW-RELEASE-EVIDENCE-AND-DEMO-HYGIENE",
+  "owner": "Human Owner B",
+  "preparedBy": "AI assistant (Claude Code)",
+  "preparedAt": "2026-09-22",
+  "status": "PREPARED — the AI never committed, pushed, merged, tagged or deployed anything",
+  "base": {
+    "commit": "542d042097ff7ac2e73f1619f5543d513937d814",
+    "branch": "main",
+    "policy": "support-guidance-v5.2",
+    "originalWorktreeStatus": "main worktree clean at base commit. The owner checkout's only untracked file was SPRINT1-QUALIFICATION-GAP-REPORT.md (evidence, not part of this package). Test runs modify artifacts/*.json side-effect files; restore them before committing (excluded from every patch)."
+  },
+  "scope": {
+    "goal": "Make the judge journey unambiguous, separate verification artifacts from normal demo operations, publish the policy, and create truthful release/evidence procedures.",
+    "allowedFiles": [
+      "src/app/verify/page.tsx",
+      "src/app/policy/page.tsx",
+      "src/components/header.tsx",
+      "src/app/audit/page.tsx",
+      "src/components/review-console.tsx",
+      "src/app/page.tsx",
+      "src/lib/policy-public.ts",
+      "tests/e2e/verify-sprint1.spec.ts",
+      "tests/e2e/judge-flow.spec.ts",
+      "submission/TEST-CASES.md",
+      "docs/SPRINT1-READINESS.md",
+      "RUNBOOK.md",
+      "STATUS.md",
+      "QA-CHECKLIST.md",
+      "docs/RELEASE-MATRIX.md",
+      "submission/EVIDENCE-MATRIX.md",
+      "submission/ASSET-REFRESH-RUNBOOK.md",
+      "scripts/check-sprint1-release.mjs",
+      "package.json",
+      ".github/workflows/quality.yml"
+    ],
+    "forbiddenFiles": [
+      "all Owner A files",
+      "policy engine decision logic",
+      "database schema/migrations",
+      "Vercel environment settings",
+      "any deletion/reset of MongoDB data",
+      "binary slide/video/PDF artifacts",
+      "changing historical fixture expected values just to claim compliance"
+    ],
+    "notes": [
+      "official-original is filtered from the judge-facing cases and removed from the pack select; its data files are untouched.",
+      "No production data was read, changed or deleted by the AI. The release checker performs GET requests only.",
+      "Node 22 in CI follows the repository README ('Cần Node.js 22+'); no other version was guessed.",
+      "QA-CHECKLIST.md was not modified in this draft (no behavioral change to its items); if the owner wants the new human checks listed there, that is a human-owned edit."
+    ]
+  },
+  "investigation": {
+    "method": "Static inspection of base 542d042 files plus read-only production observations that the owner had already recorded (health sourceRevision 01a20a7, metrics 174/92/28). The AI performed no production writes.",
+    "findings": [
+      "CONFIRMED: /verify defaults to submission-4; no option is named for the Challenge A 'Escalation' 90-second flow; official-original (2 AUTO / 3 ESCALATE) contradicts the brief's 3-auto/2-escalate composition and is exposed in the select.",
+      "CONFIRMED: no /policy route exists; header and homepage do not link a policy document.",
+      "CONFIRMED: requester-facing audit timeline shows raw bucket/rule IDs inside a collapsed details (kept — transparency; the decision card is the primary surface and Package A removes raw diagnostics there).",
+      "CONFIRMED: review console shows no Verify-origin badge and no link to the requester's public page.",
+      "CONFIRMED: RUNBOOK.md lacks a clean-clone walkthrough.",
+      "CONFIRMED: production reports MODEL_OUTPUT_INVALID/generic questions belong to the FAIL-001/002 escalation branch, reproduced deterministically with fault injection and fixed in Package A — not re-fixed here."
+    ]
+  },
+  "requiredChecks": [
+    "npm test",
+    "npm run lint",
+    "npm run typecheck (after npm run db:generate on a clean clone)",
+    "npm run build",
+    "npm run test:e2e — at minimum tests/e2e/verify-sprint1.spec.ts and tests/e2e/judge-flow.spec.ts (chromium + mobile projects)"
+  ],
+  "acceptanceCriteria": [
+    "/verify opens directly on the correct 5-case Challenge A pack.",
+    "Judge can clearly distinguish the 4-case submission pack from the 5-case Challenge A pack.",
+    "/policy is reachable from homepage, header, and Verify.",
+    "Existing persisted records are not deleted or silently modified.",
+    "Audit/review clearly distinguishes support from Verify/demo records.",
+    "Release checker is read-only and catches source/deployment drift (verified against production: detects 01a20a7 != expected SHA).",
+    "CI has no secrets and does not claim production verification."
+  ],
+  "rollback": {
+    "method": "This package only touches its own allowed files and is file-disjoint from Package A. To roll back: `git revert <commit>...` for each of the six commits (reverse order), or `git checkout 542d042 -- <allowed files>` after dropping the six commits. The release checker and CI never mutate state.",
+    "verifyAfterRollback": "npm test && npm run lint && npm run typecheck && npm run build"
+  },
+  "commits": [
+    {
+      "index": 1,
+      "message": "feat(policy): publish public Vietnamese policy and navigation links",
+      "files": ["src/app/policy/page.tsx", "src/lib/policy-public.ts", "src/components/header.tsx", "src/app/page.tsx", "tests/e2e/judge-flow.spec.ts"],
+      "explains": "Public /policy page: routine cases, three uncertainty categories, authority boundaries, safety rule for suspicious input, specific handoff question examples, synthetic-demo disclaimer; linked from homepage and header."
+    },
+    {
+      "index": 2,
+      "message": "fix(verify): make Challenge A escalation pack the judge-facing default",
+      "files": ["src/app/verify/page.tsx", "tests/e2e/verify-sprint1.spec.ts"],
+      "explains": "Default pack de-a-v3 labeled 'Escalation — Đề A (5 case: 3 tự động / 2 chuyển tiếp)'; submission pack relabeled 'Bộ nộp bài chung — 4 case, có chuyển tiếp'; official-original hidden from judge-facing selection and runs; policy link added."
+    },
+    {
+      "index": 3,
+      "message": "fix(demo): clarify Verify origin and improve reviewer/audit traceability",
+      "files": ["src/components/review-console.tsx", "src/app/audit/page.tsx"],
+      "explains": "Reviewer detail shows 'Case Verify' badge (from request.input.verifyRunId) and a link to the requester page; audit page groups events per request with short ID, status/bucket/timestamp header, link to request detail, Verify badge when the verify filter is active, and a redaction note."
+    },
+    {
+      "index": 4,
+      "message": "docs(submission): add four-case table and reproducible clean-clone runbook",
+      "files": ["submission/TEST-CASES.md", "RUNBOOK.md"],
+      "explains": "Exactly the required 4-case table (input, expected behavior, execution method, one escalate case) plus the Challenge A 5-case note; RUNBOOK rewritten as a numbered clean-clone walkthrough with troubleshooting and mock/production boundary."
+    },
+    {
+      "index": 5,
+      "message": "chore(release): add read-only release SHA checker and readiness ledger",
+      "files": ["scripts/check-sprint1-release.mjs", "docs/SPRINT1-READINESS.md", "package.json", "STATUS.md", "docs/RELEASE-MATRIX.md", "submission/EVIDENCE-MATRIX.md", "submission/ASSET-REFRESH-RUNBOOK.md"],
+      "explains": "Read-only checker (GET /api/support/health, compares sourceRevision with the expected SHA, exits non-zero on drift); readiness ledger with local/production/pending checks and a human deploy checklist; asset refresh runbook; package.json release:check script; truthful matrix/status rows."
+    },
+    {
+      "index": 6,
+      "message": "ci(quality): add repeatable test lint typecheck and build workflow",
+      "files": [".github/workflows/quality.yml"],
+      "explains": "GitHub Actions: checkout, Node 22 (README-documented), npm ci, prisma generate, test, lint, typecheck, build. No secrets, no deploy, no production claims."
+    }
+  ],
+  "aiPreparedEvidence": {
+    "baseQA": "301 tests pass on base 542d042",
+    "postSeries": "both series applied to a fresh clone: patch apply clean; full QA run recorded at final verification",
+    "releaseCheckerSmoke": "run against https://vng-support.vercel.app with a dummy SHA: correctly FAILs and reports actual sourceRevision 01a20a7128b58a0e09e8e6f6ed1fe10a1f4a85a3 (read-only)",
+    "notRun": ["Playwright E2E (browser binaries absent on the AI machine) — human check"]
+  },
+  "neverClaimed": [
+    "human review or human commits",
+    "live deployment or production model calls",
+    "real-user outcomes or user studies",
+    "organizer approval",
+    "branding is a disqualification (README's existing non-affiliation disclaimer stands; rebrand requires explicit human approval)"
+  ]
+}
