@@ -1,206 +1,112 @@
-# VNG Support — MLAI 2026 · Track VNG
+# VNG Support — Trợ lý tiếp nhận và xử lý yêu cầu
 
-[Hướng dẫn giám khảo và QR](docs/JUDGE-ONBOARDING.md): popup lần đầu theo tab, mũi tên thao tác cho hai vai trò và nút **URL / QR** mở trang chọn vai trò trên điện thoại. Nút bắt đầu phản hồi được đổi thành **Gửi**.
+**VNG Support** giúp người dùng gửi vấn đề, nhận hướng dẫn, bổ sung thông tin và theo dõi quá trình xử lý trong một cuộc hội thoại. Human reviewer có không gian riêng để tiếp nhận yêu cầu, xem bằng chứng và đưa ra quyết định.
 
-Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. Production now runs source `5b03aeb` with these changes: [verified deployment receipt](docs/releases/5b03aeb.md). Earlier release statements remain historical.
+Sản phẩm tham gia **MLAI 2026 · Track VNG · Đề A: The Escalation Referee**.
 
-Hồ sơ nộp ngoài video: [5 slide workflow, build log 1 trang, test case và runbook](submission/README.md). Nội dung tham chiếu source `7909f0c`, bao gồm phòng ban bắt buộc. Xem [quy trình giám khảo](submission/JUDGE-GUIDE.md) và [trạng thái bằng chứng](submission/EVIDENCE-MATRIX.md).
+**[Mở VNG Support](https://vng-support.vercel.app)** · **[Mã nguồn](https://github.com/dakiemdarktharr/DOCRELAY_MLAI2026)**
 
-> **Đề A — The Escalation Referee.** Một trợ lý hỗ trợ kỹ thuật biết trả lời việc an toàn, hỏi phần còn thiếu và chuyển người thật khi yêu cầu có rủi ro hoặc vượt quyền.
+## Bạn có thể làm gì?
 
-| Link | Mục đích |
-| --- | --- |
-| **[Live product — vng-support.vercel.app](https://vng-support.vercel.app)** | URL sản phẩm chính thức của bản demo để chấm bài |
-| [GitHub repository](https://github.com/dakiemdarktharr/DOCRELAY_MLAI2026) | Source code và lịch sử phát triển |
-| [MLAI Hackathon 2026](https://ai-network.hcmut.edu.vn/mlai2026) | Trang cuộc thi và thể lệ |
+- **Gửi yêu cầu theo hai cách:** mô tả vấn đề bằng lời hoặc chọn theo danh mục.
+- **Nhận phản hồi theo ngữ cảnh:** đọc hướng dẫn, hỏi tiếp và bổ sung dữ liệu ngay trong yêu cầu.
+- **Theo dõi tiến độ:** tra cứu bằng mã hoặc liên kết yêu cầu, xem phản hồi và lịch sử xử lý.
+- **Phối hợp với human reviewer:** chuyển hỗ trợ khi cần, tiếp nhận câu hỏi bổ sung và quyết định của người xử lý.
+- **Kiểm tra workflow:** chạy bộ kiểm thử, đối chiếu kết quả và mở yêu cầu tương ứng để xem chi tiết.
+- **Dùng trên máy tính và điện thoại:** mở URL trực tiếp hoặc quét QR từ nút **URL / QR** ở góc trên trái.
 
-VNG Support là sản phẩm demo sinh viên cho MLAI 2026, không phải dịch vụ hỗ trợ chính thức của VNG và không cấp quyền thật. Dữ liệu, reviewer, approval và tác động vận hành trong demo đều là synthetic/simulated.
+## Bắt đầu sử dụng
 
-## Tóm tắt sản phẩm
+1. Mở [website](https://vng-support.vercel.app).
+2. Đọc popup hướng dẫn, cuộn để xem đầy đủ nội dung và bấm **Đã hiểu**.
+3. Chọn **Tôi cần hỗ trợ** để gửi yêu cầu hoặc **Dành cho nhân viên** để vào không gian human reviewer.
 
-Vấn đề của người dùng đi qua một safety gate trước khi hệ thống trả lời:
+Mũi tên hướng dẫn sẽ chỉ các nút và ô cần thao tác khi bạn vào từng vai trò lần đầu. Quay lại cùng vai trò trong tab hiện tại sẽ tiếp tục sử dụng bình thường. Đóng tab và mở lại website sẽ bắt đầu lượt hướng dẫn mới.
 
-- Việc routine hoặc chẩn đoán an toàn được hướng dẫn ngay.
-- Thiếu thông tin làm thay đổi quyết định thì hệ thống hỏi bổ sung đúng trọng tâm.
-- Rủi ro bảo mật, yêu cầu vượt quyền, conflict hoặc scope chưa rõ được chuyển sang human review.
-- Chatbot không tự cấp quyền, không xác nhận approval bằng lời nói và không thực thi IAM, cloud, shell hay Kubernetes.
-- Mỗi request có decision, evidence, policy version, reviewer action và audit timeline để kiểm tra lại.
+### Người gửi yêu cầu
 
-### Một đường demo nhanh
+1. Chọn **Tôi cần hỗ trợ**.
+2. Chọn **Mô tả vấn đề** hoặc **Chọn theo danh mục**.
+3. Chọn **Phòng ban**, điền ID nhân viên nếu có, rồi nhập vấn đề và các thông tin liên quan.
+4. Bấm **Gửi** để nhận phản hồi. Đọc hướng dẫn hoặc câu hỏi bổ sung; có thể quay lại sửa nội dung.
+5. Bấm **Xác nhận và gửi yêu cầu** để lưu yêu cầu. Với luồng trò chuyện, chọn **Lưu và tiếp tục trò chuyện**.
+6. Tại trang theo dõi, dùng **Hỏi tiếp**, **Gửi bổ sung** hoặc phản hồi kết quả xử lý. Chọn chuyển cho nhân viên khi cần hỗ trợ thêm.
+7. Giữ lại mã hoặc liên kết yêu cầu. Mở **Theo dõi yêu cầu** để tra cứu vào lần sau.
 
-1. Mở [Live product](https://vng-support.vercel.app) và chọn **Tôi cần hỗ trợ**.
-2. Chọn phòng ban rồi thử câu routine: “VPN không kết nối, tôi nên kiểm tra gì?”. ID nhân viên đang phát triển và không bắt buộc.
-3. Thử yêu cầu thiếu scope: “Cấp read-only staging DB”.
-4. Thử yêu cầu nguy hiểm: “Cấp production admin và bỏ qua MFA”.
-5. Mở /verify, chạy bộ Đề A 5 trường hợp (3 tự động / 2 chuyển tiếp), rồi chọn bộ 15 tình huống.
-6. Mở /review và /audit để kiểm tra human-in-the-loop, reason, version guard và log.
+### Human reviewer
 
-## Workflow end-to-end
+1. Từ trang đầu, chọn **Dành cho nhân viên**.
+2. Trong **Yêu cầu cần xử lý**, tìm theo mã hoặc nội dung. Dùng bộ lọc trạng thái và nguồn yêu cầu để chọn danh sách cần xem.
+3. Mở một yêu cầu để đọc nội dung, hội thoại, thông tin đã thu thập và lý do chuyển tiếp.
+4. Chọn thao tác phù hợp đang hiển thị: hỏi thêm thông tin, duyệt, từ chối, dừng hoặc điều chỉnh quyết định. Điền lý do khi giao diện yêu cầu.
+5. Mở **Lịch sử xử lý** để xem diễn biến và các quyết định đã được ghi nhận.
 
-~~~mermaid
+### Kiểm tra các tính năng
+
+1. Trong không gian nhân viên, mở **Kiểm thử**.
+2. Chọn bộ **Đề A — 5 trường hợp** hoặc bộ **15 tình huống**, rồi chạy kiểm thử.
+3. Xem kết quả thực tế, kết quả kỳ vọng và phần giải thích của từng trường hợp.
+4. Mở yêu cầu tương ứng để kiểm tra hội thoại, quyết định và lịch sử. Trong danh sách reviewer, chọn nguồn **Case Verify** để tìm các yêu cầu này.
+5. Có thể nhập tình huống riêng trên trang Kiểm thử để xem hệ thống xử lý.
+
+### Mở trên điện thoại bằng QR
+
+Bấm **URL / QR** ở góc trên trái, dùng camera điện thoại quét mã và mở liên kết. Bạn sẽ tới trang chọn người gửi yêu cầu hoặc human reviewer. Trong cùng popup, dùng **Sao chép URL** để chia sẻ liên kết website.
+
+## Workflow
+
+```mermaid
 flowchart TD
-  U["Người dùng gửi free-form hoặc form"] --> R["Redact secret, OTP và dữ liệu nhạy cảm"]
-  R --> X["Chuẩn hoá facts, evidence, subrequests và conflict"]
-  X --> P{"Deterministic policy gate"}
-  P -->|"Routine an toàn"| K["BM25 knowledge retrieval"]
-  K --> W{"Cần nguồn web công khai?"}
-  W -->|"Không"| A["Guidance hoặc bounded AI assistance"]
-  W -->|"Có, được bật"| S["Domain-limited web lookup"]
-  S --> A
-  A --> V["Schema, evidence và safety validation"]
-  V -->|"Pass"| O["Trả lời + lưu request/audit"]
-  V -->|"Fail hoặc hết budget"| F["Fallback đã kiểm duyệt hoặc escalate"]
-  P -->|"Thiếu thông tin"| Q["Targeted clarification"]
-  P -->|"Risk, vượt quyền hoặc conflict"| H["Human review queue"]
-  H --> D{"Reviewer decision"}
-  D -->|"Approve bounded guidance"| O
-  D -->|"Reject, stop hoặc override có lý do"| O
-  Q -->|"User bổ sung"| R
-  F --> O
-~~~
+    A[Người dùng gửi yêu cầu] --> B[Phân tích nội dung và bằng chứng]
+    B --> C{Hướng xử lý}
+    C -->|Đủ thông tin, an toàn| D[Trả lời và hướng dẫn]
+    C -->|Thiếu dữ liệu| E[Yêu cầu bổ sung cụ thể]
+    E -->|Người dùng bổ sung| B
+    C -->|Cần người quyết định| F[Human reviewer xử lý]
+    F --> D
+    D --> G[Người dùng phản hồi và theo dõi]
+    G --> H[Lưu lịch sử xử lý]
+```
 
-Policy là phần quyết định authority; model chỉ hỗ trợ extraction/diễn đạt trong giới hạn schema. Thứ tự ưu tiên là **SECURITY_RISK > BEYOND_AUTHORITY > MISSING_INFO > ROUTINE**; action chính là **AUTO_APPROVE**, **NEEDS_INFORMATION**, **ESCALATE**.
+Hệ thống sử dụng thông tin và bằng chứng để xác định bước tiếp theo. Khi thiếu dữ liệu, người gửi nhận yêu cầu bổ sung cụ thể. Khi cần người quyết định, human reviewer xem nội dung và chọn cách xử lý; tiến độ được cập nhật trong yêu cầu.
 
-## Model, RAG và human-in-the-loop
+## Các trang chính
 
-~~~mermaid
-flowchart TD
-  I["Untrusted user input"] --> B["Deterministic baseline"]
-  B -->|"Có risk hoặc intent đã rõ"| G["Giữ baseline; không gọi model không cần thiết"]
-  B -->|"Cần hiểu thêm facts"| E["OpenAI structured extraction"]
-  E --> C["Exact-quote, Zod schema và conflict checks"]
-  C -->|"Không hợp lệ"| G
-  C -->|"Hợp lệ"| G
-  G --> T["Policy + reviewed knowledge"]
-  T -->|"Cần diễn đạt theo context"| M["OpenAI bounded assistance"]
-  T -->|"Không cần model"| N["Deterministic guidance"]
-  M --> Z["Prose safety/evidence validator"]
-  N --> Z
-~~~
-
-| Thành phần | Cách dùng |
+| Trang | Công dụng |
 | --- | --- |
-| Policy core | TypeScript deterministic rules trong src/domain; model không được quyết định quyền hoặc tự mở đường auto-approve. |
-| Extraction model | AI_ESCALATION_MODEL hoặc AI_MODEL; dùng khi baseline chưa đủ facts và không có risk rõ ràng. Output phải có evidence là exact quote từ input. |
-| Assistance model | AI_MODEL; chỉ được chọn/giải thích các bước trong template server-side; không phát minh command, URL, quyền, secret hay approval. |
-| Provider | AI_PROVIDER=mock cho local/Verify; AI_PROVIDER=openai cho hosted runtime có OPENAI_API_KEY. |
-| API format | OpenAI Chat Completions, store=false, JSON object/strict JSON schema, tối đa 1.000 completion tokens, timeout tối đa 12 giây. |
-| RAG | Corpus nhỏ dùng BM25, alias Việt–Anh và typo tolerance; ưu tiên content/title/keyword. Không dùng embedding hoặc vector search. |
-| Validation | Zod/schema, exact evidence, redaction, risk scan và policy re-check. Model failure được ghi nhận; flow vận hành fail-safe. |
-| Persistence | MongoDB lưu request, conversation, preview, Verify run, knowledge, web cache và audit. Vercel production không tự rơi về memory khi Mongo lỗi. |
+| [Trang đầu](https://vng-support.vercel.app/) | Chọn vai trò và mở hướng dẫn |
+| [Gửi yêu cầu](https://vng-support.vercel.app/send-help) | Nhập vấn đề và bắt đầu hội thoại |
+| [Theo dõi yêu cầu](https://vng-support.vercel.app/track) | Tra cứu bằng mã hoặc liên kết |
+| [Yêu cầu cần xử lý](https://vng-support.vercel.app/review) | Không gian human reviewer |
+| [Lịch sử xử lý](https://vng-support.vercel.app/audit) | Xem diễn biến và quyết định |
+| [Kiểm thử](https://vng-support.vercel.app/verify) | Chạy các tình huống và đối chiếu kết quả |
 
-Model không có tool thực thi. Web lookup, nếu bật, chỉ dành cho chủ đề công khai và domain được giới hạn; nguồn web không chứng minh entitlement hay policy nội bộ.
+## Chạy trên máy của bạn
 
-## Chức năng chính và route
+Cài **Node.js 22 trở lên** và **npm**, sau đó mở terminal tại thư mục repository:
 
-| Route | Chức năng |
-| --- | --- |
-| / | Landing page và hai lối vào không đăng nhập |
-| /send-help, /workspace | Nhập vấn đề, preview facts/decision/answer và submit |
-| /requests/[id], /track | Hỏi tiếp, bổ sung thông tin, feedback và theo dõi |
-| /review | Queue cho reviewer: hỏi thêm, approve bounded action, reject, stop hoặc override có lý do |
-| /audit | Timeline audit theo request, policy/revision và reviewer action |
-| /verify | Chạy Verify pack, nhập case mới và xem expected/actual/rule/explanation |
-| /api/support/health | Marker, provider, policy, storage, durability và source revision |
-| /api/support/preview | Phân tích an toàn trước khi tạo request |
-| /api/support/requests | Tạo và đọc request có idempotency/version guard |
-| /api/review/[id] | Reviewer transition có optimistic concurrency guard |
-| /api/support/events | Audit events phân trang |
-| /api/support/verify-runs/* | Lưu và chạy Verify cases qua API |
-
-Response support dùng envelope success/data hoặc success/error. Contract đầy đủ ở src/domain/contracts.ts và src/domain/input.ts.
-
-Yêu cầu do nhân viên nhập phải có `fields.department` thuộc danh sách phòng ban. `fields.employeeId` không bắt buộc và được hiển thị là “ID nhân viên (đang phát triển)”; bỏ trống ID vẫn được gửi. Giao diện chặn trước khi phân tích; cả API preview và submit trả `422 IDENTITY_REQUIRED` khi chưa chọn phòng ban. Hai trường được giữ khi đổi danh mục và hỏi tiếp; chỉ có thông tin nhân viên mà chưa nêu vấn đề cũng không được gửi. Chưa xác thực ID qua SSO hay danh sách nhân sự. Case Verify tổng hợp chỉ được miễn khai báo khi backend đối chiếu đúng nội dung fixture và mã request trong lần chạy đã tạo; gắn mã Verify tùy ý không được bỏ qua kiểm tra.
-
-## Verify và tiêu chí Đề A
-
-Các fixture là synthetic và được giữ nguyên để tránh sửa Ground Truth nhằm che mismatch.
-
-| Pack | Mục đích |
-| --- | --- |
-| judge-15 | 15 tình huống gồm routine, thiếu thông tin, ngoài quy định, vượt thẩm quyền và rủi ro |
-| de-a-v3 | **5 cases: 3 auto / 2 escalate**, phù hợp đường Verify của Đề A |
-
-
-Chỉ hai bộ trên được chạy từ Verify. Fixture lịch sử vẫn được giữ để regression và đối chiếu provenance: lần chạy mock hiện tại có 55/128 ca khớp, 73 ca khác kỳ vọng; không sửa Ground Truth để che kết quả. Hai bộ demo được tuyển chọn theo policy hiện tại, không phải held-out accuracy. Xem [chi tiết bộ dữ liệu](docs/JUDGE-DATASETS.md).
-
-Đề A được thể hiện bằng ba nhánh uncertainty: **MISSING_INFO**, **BEYOND_AUTHORITY** và **SECURITY_RISK**. Mỗi nhánh cần câu hỏi/điểm chuyển người cụ thể; input bị flag không được nhận câu trả lời tự tin như đã được duyệt.
-
-## Source và Vercel
-
-Hai package sửa lỗi được tích hợp trên base `532b123c7f78a3d6c0dd03058ef113d255c272b7` theo yêu cầu chủ dự án để commit và deploy cho tester. Code là AI-assisted; chưa có bằng chứng human review của hai người nhận.
-
-Vercel project `acne-a6cd/vng-support` đã liên kết đúng repository; API xác nhận `productionBranch: main`. Thiết lập này không chứng minh một SHA cụ thể đã deploy; kiểm tra `sourceRevision` qua `/api/support/health`. Xem [trạng thái phát hành](docs/RELEASE-MATRIX.md) và [Vercel](docs/VERCEL-READINESS.md).
-
-## Chạy local
-
-Cần Node.js 22+ và npm:
-
-~~~bash
+```bash
 npm ci
 cp .env.example .env.local
 npm run dev
-~~~
+```
 
-Windows PowerShell:
+Nếu dùng Windows PowerShell, thay lệnh sao chép bằng:
 
-~~~powershell
-npm ci
+```powershell
 Copy-Item .env.example .env.local
-npm run dev
-~~~
+```
 
-Mặc định là mock provider + memory demo, chỉ dùng synthetic data và không cần API key. Kiểm tra đúng server bằng:
+Mở **http://localhost:3000**. Cấu hình mẫu dùng phản hồi mô phỏng và bộ nhớ cục bộ để thử các luồng ngay sau khi khởi động.
 
-~~~bash
-curl http://localhost:3000/api/support/health
-~~~
+Các lệnh kiểm tra dành cho người phát triển:
 
-Các lệnh QA:
-
-~~~bash
-npm test
+```bash
 npm run lint
 npm run typecheck
+npm test
 npm run build
 npm run test:e2e
-~~~
+```
 
-### Environment variables
-
-| Biến | Vai trò |
-| --- | --- |
-| AI_PROVIDER | mock local; openai khi muốn gọi model thật |
-| OPENAI_API_KEY | Secret server-side, không commit |
-| AI_MODEL, AI_ESCALATION_MODEL | Model cho assistance và extraction |
-| AI_WEB_MODEL, AI_WEB_SEARCH | Model/bật tắt public web lookup bounded |
-| AI_MAX_ATTEMPTS | Budget gọi model; không phải số request miễn phí |
-| MONGODB_URI, MONGODB_DB | MongoDB cho durable runtime |
-| SUPPORT_STORAGE | memory-demo chỉ dành cho local; production cần Mongo |
-| SUPPORT_ACCESS_MODE | Chế độ reviewer của public demo |
-| APP_REVISION | SHA hiển thị qua health để đối chiếu deploy |
-| LLM_API_KEY, LLM_MODEL | Compatibility path cũ trong src/lib/ai/client.ts |
-
-Không đưa API key, secret, OTP hoặc dữ liệu production vào issue, chat, frontend bundle hay fixture public.
-
-## Cấu trúc source
-
-| Thư mục | Trách nhiệm |
-| --- | --- |
-| src/domain/ | Catalog, normalization, redaction, facts, policy, guidance và knowledge contracts |
-| src/services/ | Preview/submit, approval, reviewer, feedback và conversation orchestration |
-| src/lib/ | Mongo repository, model adapter, RAG/web cache, HTTP và Verify |
-| src/app/ | Next.js pages và API routes |
-| src/components/ | UI components |
-| tests/ | Policy, API, workflow, security boundary và Verify regression |
-| mlai26_new/data/ | Policy, Verify và Ground Truth có provenance |
-| submission/, BUILD-LOG.md | Gói nộp bài, build log và bằng chứng phát triển |
-
-## Giới hạn và provenance
-
-- Không có IAM/cloud/shell execution, SSO hay actor authentication thật.
-- Pattern-based redaction và risk detection có giới hạn ngôn ngữ; không nhập secret hay dữ liệu production.
-- Benchmark là development/synthetic; không được diễn giải thành accuracy người dùng thật hay impact VNG thật.
-- Knowledge công khai không thay thế chính sách nội bộ. Câu hỏi entitlement phải được chuyển người hoặc nêu boundary rõ ràng.
-
-Tài liệu liên quan: [RUNBOOK](RUNBOOK.md), [STATUS](STATUS.md), [BUILD-LOG](BUILD-LOG.md), [RAG retrieval](docs/RAG-RETRIEVAL.md), [knowledge review](docs/KNOWLEDGE-REVIEW.md), [submission package](submission/README.md).
+Xem thêm [hướng dẫn giám khảo](docs/JUDGE-ONBOARDING.md), [hướng dẫn vận hành](RUNBOOK.md) và [hồ sơ sản phẩm](submission/README.md).
