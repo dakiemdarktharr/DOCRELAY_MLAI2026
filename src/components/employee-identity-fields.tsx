@@ -14,6 +14,7 @@ export function EmployeeIdentityFields({
         Phòng ban <span aria-hidden="true">*</span>
         <select
           aria-label="Phòng ban"
+          data-guide="sender-department"
           aria-required="true"
           required
           value={fields.department ?? ""}

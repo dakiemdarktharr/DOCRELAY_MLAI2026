@@ -207,10 +207,10 @@ export default function WorkspacePage() {
             className="intake-fields space-y-5"
             hidden={!!preview}
           >
-            <div data-guide="sender-identity"><EmployeeIdentityFields
+            <EmployeeIdentityFields
               fields={input.fields}
               onChange={(fields) => edit({ fields })}
-            /></div>
+            />
             <label>
               Nhóm hỗ trợ
               <select

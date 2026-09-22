@@ -5,7 +5,7 @@ Thay đổi có AI assistance, tiếp nối commit `1ed0954` trên nhánh `codex
 ## Trải nghiệm
 
 - Lần đầu mở tab: popup trắng bo tròn, viền cam, minh họa SVG với mũi tên đỏ; nội dung cuộn bên trong và nút **Đã hiểu** luôn ở cuối khung. Popup giữ focus bàn phím và khóa cuộn trang phía sau.
-- Chọn **Tôi cần hỗ trợ**: mũi tên chỉ chế độ, danh mục, các ô nhập, **Gửi**, phản hồi, xác nhận, A/B/C/D, hỏi tiếp và lịch sử. Các bước không có trên giao diện hiện tại được bỏ qua. Nút **Gửi** vẫn chạy preview; bước xác nhận mới lưu hồ sơ.
+- Chọn **Tôi cần hỗ trợ**: mũi tên chỉ chế độ, ô chọn **Phòng ban**, danh mục, các ô nhập, **Gửi**, phản hồi, xác nhận, A/B/C/D, hỏi tiếp và lịch sử. Bước Phòng ban chỉ đánh dấu ô chọn này, không bao quanh hoặc trỏ vào ID nhân viên. Nhập ID không làm chuyển bước; ID vẫn không bắt buộc. Để trống Phòng ban không tự chuyển bước. Các bước không có trên giao diện hiện tại được bỏ qua. Nút **Gửi** vẫn chạy preview; bước xác nhận mới lưu hồ sơ.
 - Chọn **Dành cho nhân viên**: hướng dẫn lọc danh sách, mở hồ sơ, đọc bằng chứng, nhập lý do, quyết định và kiểm tra nhật ký. Hướng dẫn không tự click, gửi request hoặc phê duyệt.
 - Có thể bấm **Tiếp theo** hoặc **Bỏ qua hướng dẫn**. Mỗi vai trò được ghi nhận ngay khi bắt đầu, nên thoát giữa chừng rồi quay lại cũng không lặp.
 - Cờ `vng-guide-v1:intro`, `sender`, `reviewer` nằm trong `sessionStorage`. Refresh và quay về trang chọn vai trò không lặp; đóng tab rồi mở link trong tab mới sẽ có hướng dẫn lại. Tab được trình duyệt khôi phục/nhân bản có thể giữ session theo hành vi của trình duyệt. Khi storage bị chặn, bộ nhớ trang là phương án dự phòng, không duy trì qua refresh.
@@ -42,3 +42,11 @@ Các kiểm tra mới bao gồm:
 - Luồng gửi, hội thoại, bổ sung, chuyển nhân viên, quyết định, audit và Verify chạy trên Chromium desktop và cấu hình điện thoại Pixel 7. Đây là browser emulation, không phải bằng chứng đã kiểm tra mọi điện thoại thật hoặc Safari/iOS.
 
 Ảnh chụp/video và báo cáo có timestamp được tạo cục bộ trong `artifacts/`, `test-results/` và `submission/`; không thay thế bằng chứng release lịch sử trong commit này.
+
+## Hiệu chỉnh mũi tên Phòng ban — 22/09/2026
+
+Base: `cdb40e326a87918de2547bd4d2af93292313ce23`. Sửa có AI assistance: đưa điểm neo từ khung chứa cả Phòng ban/ID sang riêng ô chọn Phòng ban; chỉ tự chuyển bước khi ô bắt buộc có giá trị. Mã nguồn thay đổi tại component thông tin nhân viên, trang workspace và cấu hình/bộ điều khiển hướng dẫn.
+
+Test mới đã tái hiện lỗi trên bản base: khung đỏ bao ô ID và đầu mũi tên không nằm ở Phòng ban. Sau sửa, kiểm tra hình học đầu mũi tên/khung đỏ, resize, thao tác ID và lựa chọn Phòng ban trống đều đạt ở cả hai chế độ gửi; kích thước gồm desktop, Pixel 7, 320 × 568 và 844 × 390. Đã xem ảnh chụp desktop/mobile.
+
+Kiểm tra trên bản sao riêng, mock/memory: 355 unit/integration tests đạt; lint, typecheck và production build đạt; E2E desktop 36 đạt, mobile 35 đạt và 1 ca ghi video bỏ qua theo cấu hình sẵn. `npm audit` báo 0 lỗ hổng. Kết quả này kiểm chứng bản local, không phải xác nhận một deployment Vercel.
