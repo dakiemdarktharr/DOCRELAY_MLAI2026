@@ -1,0 +1,54 @@
+{
+  "sourcePackage": "TECH-SUPPORT-DIAGNOSIS-FOLLOWUP-542d042",
+  "baseCommit": "542d042097ff7ac2e73f1619f5543d513937d814",
+  "patches": [
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/01-assistance-diagnostic-contract.patch",
+      "sha256": "d0789586123831a43bfea6094a4ecc5aeaad20eeeff2b6ec8c383b5939bda4ee"
+    },
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/02-deterministic-diagnosis-and-fixes.patch",
+      "sha256": "442a9e59a341268b9067695aace286419428c54ef74d70b509f8820e7859ea35"
+    },
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/03-vietnamese-symptom-and-followup-parsing.patch",
+      "sha256": "c10ab12cabd523a4dbf0fffd8fd589bf23cf385ea4f63070b0195c02b4f2bd43"
+    },
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/04-cloud-gpu-contact-guidance.patch",
+      "sha256": "fcecb6a9af38bf738fd7c4e25ffb33a07cbe04644fdf23767290a33551fa784f"
+    },
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/05-safe-diagnostic-followup-service.patch",
+      "sha256": "5fcf57b7925b2853d2ed91f5e9269ec6c0729169b5fb55f6b410dc8afc0cdf0b"
+    },
+    {
+      "path": "BACKEND-DIAGNOSIS/PATCH-SERIES/06-diagnosis-and-followup-regression-tests.patch",
+      "sha256": "d25bb472c3a44e2861962458125bdf26d78a98d7ff1f1d2237c84356407dfac2"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/01-diagnosis-and-fixes-presentation.patch",
+      "sha256": "d072f83647ee7126bd4ec8142f369d7fc1d1e2e1609f9835dcf3c3ea0f9e992f"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/02-followup-chat-frame.patch",
+      "sha256": "e3f99bafe2a476ba1767ea180e27e5308db24b10268f397ad0dc328422f0af6f"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/03-preview-followup-expectation.patch",
+      "sha256": "9ffca64c017f9bf5f8c4a0341267751527b8cefdc91dc3f43eff3b301c1b816c"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/04-diagnosis-and-followup-styling.patch",
+      "sha256": "12dae5d02db33c674dbf809583938707eec16fbb226745f74d0a262e9cd6af6b"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/05-browser-coverage-safe-diagnosis.patch",
+      "sha256": "98f393fade678ed1b3983b650abed979dd94d366f427e0f36315219b244b1b90"
+    },
+    {
+      "path": "FRONTEND-FOLLOWUP/PATCH-SERIES/06-followup-input-example.patch",
+      "sha256": "40b11cf25523454b02fbf3e1688be6651ad4afd44ece25189be4976303dd998c"
+    }
+  ]
+}

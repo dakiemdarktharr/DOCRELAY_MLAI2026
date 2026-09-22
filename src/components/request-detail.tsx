@@ -159,8 +159,8 @@ export function RequestDetail({ id }: { id: string }) {
               <p>{item.text}</p>
             </Card>
           ))}
-          {canGuide && latest?.answer && (
-            <Card>
+          {canGuide && (
+            <Card className="followup-card">
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -168,10 +168,17 @@ export function RequestDetail({ id }: { id: string }) {
                 }}
               >
                 <fieldset disabled={pending} className="space-y-4">
+                  <div>
+                    <h2>Hỏi tiếp về phản hồi này</h2>
+                    <p className="text-sm text-slate-600">
+                      Câu hỏi tiếp theo sẽ được kiểm tra lại trước khi trả lời.
+                    </p>
+                  </div>
                   <label>
                     Hỏi tiếp
                     <Textarea
                       aria-label="Hỏi tiếp"
+                      placeholder="Ví dụ: Tôi đã thử nhưng mạng vẫn không kết nối"
                       value={followup}
                       onChange={(event) => setFollowup(event.target.value)}
                       required
@@ -242,6 +249,7 @@ export function RequestDetail({ id }: { id: string }) {
                 </>
               )}
               {request.status !== "ESCALATED" &&
+                !request.canonical?.workEvidence &&
                 request.status !== "APPROVED_BY_HUMAN" && (
                   <Button
                     variant="secondary"

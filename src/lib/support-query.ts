@@ -28,7 +28,7 @@ export function parseSupportQuery(url: string) {
 }
 export type SupportQuery = z.infer<typeof querySchema>;
 type Row = { _id: string; data: SupportRequest };
-const pending = ["ESCALATED", "NEEDS_INFORMATION", "APPROVED_BY_HUMAN"];
+const pending = ["ESCALATED", "APPROVED_BY_HUMAN"];
 function filterFor(query: SupportQuery): Filter<Row> {
   const filter: Filter<Row> = {};
   if (query.requestId) filter._id = query.requestId;

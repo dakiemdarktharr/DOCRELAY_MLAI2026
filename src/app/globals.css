@@ -586,6 +586,18 @@ fieldset {
 .assistant-sources span {
   display: block;
 }
+.support-diagnosis {
+  margin-top: 1rem;
+  border-left: 3px solid var(--orange);
+  padding-left: 0.9rem;
+}
+.support-diagnosis h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.followup-card {
+  border: 2px solid color-mix(in srgb, var(--orange) 35%, var(--line));
+}
 @keyframes assistant-reveal {
   from {
     opacity: 0;

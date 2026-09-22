@@ -1,5 +1,7 @@
 # VNG Support
 
+Local follow-up: [diagnosis and evidence-first workflow](docs/EVIDENCE-WORKFLOW-FOLLOWUP.md) uses policy v5.3. Recognized work requests ask for exact missing artefacts and stay out of pending review; the app reports unavailable connectors explicitly. The release/deployment information below remains historical and does not claim this follow-up is deployed.
+
 > **Source và deployment:** main được kiểm tra tại `9d9ab05`, đã chứa cả hai package release-fix: kiểm tra schema knowledge và Verify readback theo UUID. Policy hiện tại là v5.2. Xem [release matrix](docs/RELEASE-MATRIX.md) để đối chiếu source, QA và deployment thực tế; Git commit không tự chứng minh human review.
 
 **Trợ lý giải đáp câu hỏi và hỗ trợ kỹ thuật: trả lời trực tiếp khi an toàn, hỏi đúng thông tin còn thiếu, chuyển nhân viên khi cần quyền hạn hoặc có rủi ro.**

@@ -51,6 +51,14 @@ it("E07 shutdown gives a direct answer and VPN timeout has a relevant follow-up"
   expect(vpn.summary).toContain("hết thời gian chờ");
   expect(vpn.nextQuestion).toContain("mã lỗi");
 });
+it("shows bounded diagnosis and potential fixes for common network and power symptoms", () => {
+  const network = guidanceTemplate(extractIntake(input("mất kết nối mạng")));
+  expect(network.diagnosis).toContain("Có thể");
+  expect(network.potentialFixes).toEqual(network.stepByStepInstructions);
+  const power = guidanceTemplate(extractIntake(input("máy tính tôi sập nguồn")));
+  expect(power.diagnosis).toContain("Chưa đủ dữ kiện");
+  expect(power.potentialFixes).toHaveLength(3);
+});
 it("E08 contextual model output uses redacted request evidence and retains vetted actions", async () => {
   const request = extractIntake(input("VPN timeout trên Windows"));
   const run = vi.fn<(call: ModelCall) => Promise<unknown>>(async () => ({
@@ -73,10 +81,22 @@ it("E08 contextual model output uses redacted request evidence and retains vette
     required: expect.arrayContaining(["evidenceQuote", "stepExplanations"]),
   });
   expect(result.summary).toContain("Windows");
+  expect(result.diagnosis).toBe(guidanceTemplate(request).diagnosis);
   expect(result.stepExplanations).toHaveLength(2);
+  expect(result.potentialFixes).toEqual(result.stepByStepInstructions);
   expect(result.stepByStepInstructions[0]).toBe(
     guidanceTemplate(request).stepByStepInstructions[0],
   );
+});
+it("legacy model prose cannot inject diagnosis or fixes for a topic without server diagnosis", async () => {
+  const request = extractIntake(input("Tôi tắt máy tính được không?"));
+  const template = guidanceTemplate(request);
+  expect(template.diagnosis).toBeUndefined();
+  const result = await createAssistance(request, true, {
+    run: async () => ({ ...template, diagnosis: "Invented hardware failure", potentialFixes: ["Turn off MFA"] }),
+  });
+  expect(result.diagnosis).toBeUndefined();
+  expect(result.potentialFixes).toBeUndefined();
 });
 it.each([
   "Run sudo rm -rf /",

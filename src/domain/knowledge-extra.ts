@@ -140,6 +140,14 @@ const entries: Array<
     [project],
   ],
   [
+    "gpu-contact",
+    "CLOUD_GPU_GUIDE",
+    "Hỏi ai về sử dụng cloud GPU",
+    ["nen hoi ai", "lien he ai", "hoi nhom nao", "cloud gpu", "su dung gpu"],
+    "Trong demo này, hãy bắt đầu qua IT Helpdesk để được chuyển tới nhóm Cloud/ML Infra phù hợp. Chuẩn bị mục đích sử dụng, framework, dữ liệu dự kiến và thời gian chạy; không gửi thông tin đăng nhập. Nhóm thực tế và quy trình có thể thay đổi, nên xác minh lại trên cổng nội bộ hiện hành trước khi tạo tài nguyên.",
+    [project],
+  ],
+  [
     "policy-leave",
     "COMPANY_POLICY",
     "Chính sách nghỉ phép: cần tài liệu áp dụng",

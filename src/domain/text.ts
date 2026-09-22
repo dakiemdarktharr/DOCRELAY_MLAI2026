@@ -195,8 +195,10 @@ function classifyFallback(text: string): [ServiceGroup, string, RequestKind] {
     )
   )
     return ["NETWORK_VPN", "VPN_NOT_CONNECTING", "SAFE_DIAGNOSTIC"];
-  if (/wifi|wi fi|mang khong|network unreachable/.test(text))
+  if (/wifi|wi fi|mang khong|mat ket noi mang|network unreachable/.test(text))
     return ["NETWORK_VPN", "WIFI_NOT_WORKING", "SAFE_DIAGNOSTIC"];
+  if (/sap nguon|mat nguon|tu tat may|sudden power loss/.test(text))
+    return ["DEVICE_BOOT", "DEVICE_FREEZE", "SAFE_DIAGNOSTIC"];
   if (asserted(text, /factory reset|khoi phuc cai dat goc/))
     return ["DEVICE_BOOT", "DEVICE_FACTORY_RESET", "CONFIGURATION_CHANGE"];
   if (asserted(text, /\bwipe\b|xoa toan bo (?:may|thiet bi)/))
@@ -674,6 +676,8 @@ export function extractIntake(
   )
     risks.add("DATA_EXPORT");
   const parts = input.rawText
+    // "but still" describes the same symptom; risks are already evaluated on the full original text.
+    .replace(/\b(?:nhưng|nhung|but)\s+(?:vẫn|van)\b/gi, "vẫn")
     .split(
       /(?:\n|;|\.\s+|\b(?:nhưng|nhung|but|tiện thể|tien the|ngoài ra|ngoai ra|and also|and then|then|đồng thời|dong thoi|cùng lúc|cung luc)\b|\band\s+(?=(?:grant|give|open|disable|turn|export|deploy|delete|restart|create|cap|mo|tat|xuat|trien khai)\b))/i,
     )

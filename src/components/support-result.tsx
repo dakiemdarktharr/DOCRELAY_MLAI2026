@@ -36,6 +36,27 @@ export function SupportResult({
       <p>
         {audience === "reviewer" ? decision.adminReason : decision.userReason}
       </p>
+      {canonical.workEvidence && (
+        <section aria-label="Yêu cầu bổ sung dữ liệu" className="space-y-3">
+          <h3 className="font-semibold">Nguồn đã kiểm tra</h3>
+          <ul className="list-disc pl-5">
+            {canonical.workEvidence.sourceChecks.map((check) => (
+              <li key={check.source}><strong>{check.source}:</strong> {check.result}</li>
+            ))}
+          </ul>
+          <h3 className="font-semibold">Dữ liệu hoặc quyền cần bổ sung</h3>
+          {canonical.workEvidence.requirements.map((item) => (
+            <dl key={item.artifact} className="rounded-xl bg-paper p-3">
+              <dt className="font-semibold">Artefact</dt><dd>{item.artifact}</dd>
+              <dt className="font-semibold">Range / phiên bản</dt><dd>{item.range}</dd>
+              <dt className="font-semibold">Quyền đọc</dt><dd>{item.access}</dd>
+              <dt className="font-semibold">Mục đích</dt><dd>{item.reason}</dd>
+            </dl>
+          ))}
+          <p>{canonical.workEvidence.confidence}</p>
+          <p>Chưa chuyển review. Sau khi có nguồn và công cụ phù hợp: {canonical.workEvidence.nextAction}</p>
+        </section>
+      )}
       {questions.length > 0 && (
         <ul className="list-disc space-y-2 pl-5">
           {questions.map((question) => (

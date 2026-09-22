@@ -105,6 +105,14 @@ const expected: Partial<Record<GuidanceTopic, string>> = {
   peripherals:
     "Thiết bị hoạt động trở lại hoặc bạn có thông báo lỗi cụ thể để gửi hỗ trợ.",
 };
+const diagnosis: Partial<Record<GuidanceTopic, string>> = {
+  device:
+    "Máy có thể đang hết nguồn, bị treo tác vụ hoặc gặp cảnh báo phần cứng. Chưa đủ dữ kiện để kết luận nguyên nhân.",
+  vpn:
+    "Có thể là đường truyền, profile VPN hoặc xác thực. Cần kiểm tra theo thứ tự an toàn để khoanh vùng.",
+  wifi:
+    "Có thể là Wi-Fi đang tắt, chọn sai mạng hoặc lỗi chỉ xảy ra trên kết nối hiện tại. Cần so sánh an toàn trước khi kết luận.",
+};
 export function guidanceTemplate(
   request: CanonicalRequest,
   round = 0,
@@ -134,6 +142,19 @@ export function guidanceTemplate(
           : intentName(request.intentLabel);
   return {
     summary,
+    ...(diagnosis[topic] ? { diagnosis: diagnosis[topic] } : {}),
+    ...(diagnosis[topic]
+      ? {
+          potentialFixes:
+            round > 0
+              ? [
+                  "Dừng lặp lại bước vừa thử nếu kết quả không thay đổi; giữ nguyên cài đặt bảo mật và công việc đang mở.",
+                  "Ghi lại bước đã thử, thông báo lỗi và thời điểm xảy ra; loại bỏ mật khẩu và mã xác minh.",
+                  "Nếu không thể tiếp tục an toàn, chuyển cho nhân viên hỗ trợ cùng lịch sử này.",
+                ]
+              : [...(specificSteps[request.intentLabel] ?? steps[topic])],
+        }
+      : {}),
     stepByStepInstructions:
       round > 0
         ? [

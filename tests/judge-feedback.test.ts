@@ -210,14 +210,16 @@ it("explain step stays in guidance and preserves history; explicit handoff creat
   expect(handed.status).toBe("ESCALATED");
   expect(handed.stepExplanations).toHaveLength(1);
 });
-it("summary list is light; queue and metrics agree; unknown events are 404", async () => {
-  await submitSupport(input("Need database read access"));
-  await submitSupport(input("Open public RDP port 3389"));
+it("summary includes clarification, but pending review only counts escalation; unknown events are 404", async () => {
+  const missing = await submitSupport(input("Need database read access"));
+  const risk = await submitSupport(input("Open public RDP port 3389"));
+  expect(missing.status).toBe("NEEDS_INFORMATION");
+  expect(risk.status).toBe("ESCALATED");
   const rows = await listSupportSummaries();
   expect(rows).toHaveLength(2);
   expect(rows[0]).not.toHaveProperty("events");
   expect(rows[0]).not.toHaveProperty("input");
-  expect((await (await metrics()).json()).data.pendingReview).toBe(2);
+  expect((await (await metrics()).json()).data.pendingReview).toBe(1);
   expect(
     (
       await events(

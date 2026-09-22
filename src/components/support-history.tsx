@@ -21,8 +21,19 @@ export function AssistanceHistory({
                 : "Hướng dẫn an toàn"}{" "}
             · {new Date(item.timestamp).toLocaleString("vi-VN")}
           </p>
+          {item.diagnosis && (
+            <section className="support-diagnosis" aria-label="Chẩn đoán khả dĩ">
+              <h3>Chẩn đoán khả dĩ</h3>
+              <p>{item.diagnosis}</p>
+            </section>
+          )}
+          <h3 className="mt-4 text-base font-bold">
+            {item.potentialFixes
+              ? "Cách khắc phục có thể thử"
+              : "Các bước hỗ trợ"}
+          </h3>
           <ol className="ml-5 list-decimal space-y-3">
-            {item.stepByStepInstructions.map((step, stepIndex) => (
+            {(item.potentialFixes ?? item.stepByStepInstructions).map((step, stepIndex) => (
               <li key={step}>
                 {step}
                 {item.stepExplanations?.[stepIndex] && (

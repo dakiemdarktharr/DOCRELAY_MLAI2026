@@ -59,5 +59,7 @@ LLM không được trực tiếp thực thi hành động có rủi ro. Determi
 
 ## Quy tắc cộng tác
 
+Người dùng đã bỏ yêu cầu bắt buộc chia hai package. Có thể triển khai và commit local trên máy này khi được yêu cầu; không cần số package hoặc số commit cố định. Ghi rõ base, diff, kiểm tra và AI assistance. Không suy ra human review từ Git identity. Bảo toàn thay đổi chưa commit; quyền commit không tự cấp quyền push, merge hoặc deploy. Prompt package cũ chỉ là lịch sử.
+
 Trước mỗi thay đổi lớn, phải xác định rõ yêu cầu nghiệp vụ, contract dữ liệu và tiêu chí kiểm thử. Sau mỗi thay đổi, phải giải thích được luồng xử lý bằng ngôn ngữ đơn giản và chỉ ra file/test liên quan. Nếu một giải pháp đúng nhưng quá khó để thành viên đội thi tự giải thích hoặc chỉnh sửa, phải đơn giản hóa trước khi chấp nhận.
 

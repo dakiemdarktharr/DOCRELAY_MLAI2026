@@ -80,7 +80,11 @@ export function conversationRoute(
     /khoi phuc|lay lai|recover|quen|forgot|dang nhap|login/.test(text)
   )
     label = "GOOGLE_RECOVERY";
-  else if (how && /\bgpu\b|cloud/.test(text)) label = "CLOUD_GPU_GUIDE";
+  else if (
+    (how || /nen hoi ai|lien he ai|hoi nhom nao|who (?:should|do) i (?:ask|contact)/.test(text)) &&
+    /\bgpu\b|cloud/.test(text)
+  )
+    label = "CLOUD_GPU_GUIDE";
   else if (
     /chinh sach|noi quy|quy dinh|company policy|employee policy/.test(text)
   )
