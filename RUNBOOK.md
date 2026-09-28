@@ -59,3 +59,35 @@ Mở **Kiểm thử**, chọn lượt đã lưu rồi tiếp tục sau khi lỗi
 Các policy gốc trong `mlai26_new/data/policy/` là dữ liệu lịch sử được bảo vệ bằng checksum tại `artifacts/migration-baseline-manifest.json`. Giữ nguyên chúng để hồi quy; policy runtime nằm trong `src/domain/policy-source.ts` và `src/domain/policy.ts`. `POLICY-REVIEW.md` mô tả policy-v2 trước tích hợp, không phải trạng thái runtime hiện tại.
 
 Các báo cáo release, migration và prompt bàn giao cũ có thể tra cứu trong lịch sử Git. Tài liệu vận hành hiện hành không yêu cầu áp lại patch hay chia thành hai package.
+
+## Kiểm tra Mongo trong môi trường thử nghiệm riêng
+
+Chỉ dùng Mongo local hoặc credential thử nghiệm giới hạn trên database mới, tên `sprint1_test_<suffix>`. Không copy URI/credential production. Giữ `AI_PROVIDER=mock`, `AI_MAX_ATTEMPTS=0`, model keys và `DATABASE_URL` rỗng. Đặt `MONGODB_URI`, `MONGODB_DB` riêng cùng `SUPPORT_ACCESS_MODE=public-demo`, chạy server tại3227. Health ping thành công chưa chứng minh persistence sau restart.
+
+Trong terminal khác, tạo duy nhất dữ liệu synthetic rồi giữ lại các biến:
+
+```powershell
+$baseUrl = 'http://127.0.0.1:3227'
+$body = @{rawText='Restart synthetic laptop'; fields=@{department='engineering'}; confirmed=$true; idempotencyKey=[guid]::NewGuid().ToString()} | ConvertTo-Json
+$before = (Invoke-RestMethod "$baseUrl/api/support/requests" -Method Post -ContentType 'application/json' -Body $body).data
+$requestId = $before.id
+if (-not $requestId) { throw 'Create failed' }
+$beforeJson = $before | ConvertTo-Json -Depth 40 -Compress
+```
+
+Dừng đúng server vừa khởi chạy, rồi khởi động lại với cùng URI/database. Đọc lại:
+
+```powershell
+$after = (Invoke-RestMethod "$baseUrl/api/support/requests/$requestId").data
+if (($after | ConvertTo-Json -Depth 40 -Compress) -cne $beforeJson) { throw 'Restart read-back differs' }
+```
+
+Mở hai tab reviewer cùng request/version, bấm Stop: một thành công, một409; version chỉ tăng1 và chỉ có một event STOP. Ngắt Mongo thử nghiệm rồi thử đọc/ghi: phải503, không fallback memory hoặc lộ URI. Chạy lại với một credential synthetic có nhãn và kiểm tra response/document/audit chỉ giữ bản redact. Ghi kết quả kèm commit, Node/Mongo version và DB name; không log URI, secret hoặc raw personal input, không xóa collection/reset budget. Test adapter mock không thay thế quy trình live này.
+
+## Giới hạn riêng tư và phép đo local
+
+Redaction chỉ nhận diện một số credential/pattern; không ẩn danh toàn diện CCCD, điện thoại, tên, điểm hoặc OTP/secret bị làm rối. Dữ liệu chưa nhận diện có thể đến model, storage, audit và UI. Chỉ dùng synthetic hoặc đã ẩn danh trước; dữ liệu gõ vào form vẫn tồn tại trong trình duyệt trước xử lý.
+
+`node scripts/measure-support-latency.mjs` dùng server loopback3227 mock/memory, bỏ5 warmup rồi đo20 preview tuần tự, trả p50/p95/max HTTP+JSON. Ghi kèm OS, Node, commit và dev/start mode. Preview có thể lưu trong memory cache; không tạo support request. Không chạy cùng E2E, không coi đây là tốc độ Mongo/model/production hoặc bằng chứng cần song song hóa pipeline.
+
+`.github/workflows/qa.yml` chạy unit/lint/types/build và E2E desktop/mobile riêng bằng production build, không có deploy step. Kết quả local và hosted CI phải ghi riêng; việc có config không chứng minh GitHub Actions đã chạy thành công.

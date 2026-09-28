@@ -43,7 +43,7 @@ export function asserted(text: string, pattern: RegExp) {
         .split(/[,;.\n]|\b(?:but|nhung|however|va|and)\b/)
         .at(-1) ?? "";
     if (
-      !/(?:\bkhong\b|\bnot\b|\bno\b|\bwithout\b|\bnever\b|don't|do not)(?:\s+(?:can|need|request|require|yeu|cau|co|muon|quyen|access|vao|to|for|any|a|an|the|production|real|true|admin|hay|or|mo|open|expose|service|bucket|server|services|buckets|servers|address|ip|public|port|rdp|ssh|inbound|remote|cap|grant|give|gui|send|share|token|private|key|internet|from|tu|ra|\d+)){0,10}\s*$/.test(
+      !/(?:\bkhong\b|\bnot\b|\bno\b|\bwithout\b|\bnever\b|don't|do not)(?:\s+(?:can|need|request|require|yeu|cau|co|muon|quyen|access|vao|to|for|any|a|an|the|production|real|true|admin|hay|or|mo|open|expose|service|bucket|server|services|buckets|servers|address|ip|public|port|rdp|ssh|inbound|remote|cap|grant|give|gui|send|share|token|private|key|internet|from|tu|ra|dung|dung den|dong|route|project|space|\d+)){0,10}\s*$/.test(
         prefix,
       )
     )
@@ -108,7 +108,7 @@ export function detectedRisks(raw: string): RiskSignal[] {
   if (
     asserted(
       text,
-      /(?:bypass|skip|ignore|bo qua|khoi can|khong can qua)\s+(?:the |security |software |network )?(?:mfa\b|2fa\b|edr\b|audit(?: logging)?\b|authentication\b|xac thuc\b|policy|review|approval|gate|control|quy trinh|chinh sach|form|cab)/,
+      /(?:bypass|skip|ignore|bo qua|khoi can|khong can qua)\s+(?:the |security |software |network )?(?:mfa\b|2fa\b|edr\b|audit(?: logging)?\b|authentication\b|xac thuc\b|policy|review|approval|gate|control|quy trinh|chinh sach|form|cab|change ticket)/,
     ) ||
     /(?:cu|lam|cap|mo).{0,20}truoc.{0,30}(?:approval|phe duyet).{0,15}sau/.test(
       text,
@@ -236,7 +236,7 @@ function classifyFallback(text: string): [ServiceGroup, string, RequestKind] {
     return ["ACCOUNT_ACCESS", "ACCOUNT_LOGIN", "SAFE_DIAGNOSTIC"];
   if (/phishing|malware|security incident|data breach/.test(text))
     return ["SECURITY", "SECURITY_INCIDENT", "INCIDENT"];
-  if (/\b(?:port|firewall|rdp|dns|public ip|vpn|proxy)\b/.test(text))
+  if (asserted(text, /\b(?:port|firewall|rdp|dns|public ip|vpn|proxy)\b/))
     return ["NETWORK_VPN", "PORT_OPEN_REQUEST", "CONFIGURATION_CHANGE"];
   if (/github|gitlab|\bgit\b|repository|\brepo\b/.test(text))
     return ["GIT_PERMISSION", "GIT_READ_ACCESS", "ACCESS_REQUEST"];

@@ -227,6 +227,7 @@ test("one click Verify and a new judge input use live decision API", async ({
   ).toBeVisible();
 });
 test("security request cannot be approved and secret is absent from API/audit", async ({
+  page,
   request,
 }) => {
   const secret = "SYNTHETIC" + "_E2E_991";
@@ -252,4 +253,16 @@ test("security request cannot be approved and secret is absent from API/audit", 
   expect(rejected.status()).toBe(409);
   const events = await request.get(`/api/support/events?requestId=${data.id}`);
   expect(await events.text()).not.toContain(secret);
+  await page.goto(`/requests/${data.id}`);
+  await expect(page.getByText("Trạng thái:")).toBeVisible();
+  await expect(page.locator("body")).not.toContainText(secret);
+});
+
+test("change-ticket bypass shows the security reason in request detail", async ({ page, request }) => {
+  await submit(page, "Cấp root staging, khỏi cần change ticket");
+  const id = new URL(page.url()).pathname.split("/").at(-1);
+  const { data } = await (await request.get(`/api/support/requests/${id}`)).json();
+  expect(data.decision.bucket).toBe("SECURITY_RISK");
+  expect(data.decision.ruleIds).toContain("SEC-003");
+  await expect(page.getByText(data.decision.userReason, { exact: true }).first()).toBeVisible();
 });

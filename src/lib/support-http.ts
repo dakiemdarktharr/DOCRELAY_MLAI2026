@@ -22,7 +22,8 @@ export async function supportApi(work: () => Promise<unknown>, status = 200) {
         "Dữ liệu không hợp lệ.",
         422,
         error.issues.map((issue) => ({
-          field: issue.path.join("."),
+          // Record keys can contain private input; expose only the schema root.
+          field: String(issue.path[0] ?? "input"),
           code: issue.code,
         })),
       );

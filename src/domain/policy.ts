@@ -29,6 +29,15 @@ export type Approval = {
 };
 type ApprovalResolver = (request: CanonicalRequest) => Approval;
 
+function isGuidanceOnly(request: CanonicalRequest) {
+  return (
+    ["GUIDANCE", "SAFE_DIAGNOSTIC"].includes(request.requestKind) &&
+    ["guidance", "diagnose", "restart", "query_help", "view_logs"].includes(
+      request.requestedAction,
+    )
+  );
+}
+
 const placeholder =
   /^(unknown|chua biet|khong biet|bat ky|default|gap|urgent|any|all|not provided|n\/a)$/i;
 
@@ -56,14 +65,7 @@ export function missingFacts(request: CanonicalRequest): string[] {
   const guide = guidanceRules.find((rule) =>
     rule.labels.some((label) => label === request.intentLabel),
   );
-  if (
-    guide &&
-    ["GUIDANCE", "SAFE_DIAGNOSTIC"].includes(requestKind) &&
-    !["repair", "replace", "execute", "change", "deploy"].includes(
-      request.requestedAction,
-    )
-  )
-    return [];
+  if (guide && isGuidanceOnly(request)) return [];
 
   let required: string[];
   switch (serviceGroup) {
@@ -507,7 +509,7 @@ function evaluateSinglePolicy(
     };
   }
 
-  if (guide && ["GUIDANCE", "SAFE_DIAGNOSTIC"].includes(request.requestKind)) {
+  if (guide && isGuidanceOnly(request)) {
     const medium = ["vpn", "wifi", "software", "account"].includes(guide.topic);
     return {
       ...base,

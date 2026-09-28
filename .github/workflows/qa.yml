@@ -1,0 +1,36 @@
+name: Local-equivalent QA
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AI_PROVIDER: mock
+      AI_MAX_ATTEMPTS: "0"
+      MONGODB_URI: ""
+      DATABASE_URL: ""
+      OPENAI_API_KEY: ""
+      LLM_API_KEY: ""
+      SUPPORT_STORAGE: memory-demo
+      SUPPORT_ACCESS_MODE: public-demo
+      NEXT_TELEMETRY_DISABLED: "1"
+      SUPPORT_E2E_PRODUCTION: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm test
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --project=chromium
+      - run: npm run test:e2e -- --project=mobile
