@@ -113,6 +113,7 @@ it("rejects assistance commands outside the safe catalog", async () => {
   ).rejects.toMatchObject({ code: "MODEL_OUTPUT_INVALID" });
 });
 it("bounds time and lifetime call count without retries", async () => {
+  vi.stubEnv("AI_MAX_ATTEMPTS", "20");
   const run = vi.fn(() => new Promise<never>(() => {}));
   await expect(
     callModel(
@@ -145,6 +146,16 @@ it("bounds time and lifetime call count without retries", async () => {
   expect(await reserveModelAttempt()).toBe(false);
 });
 
+it("zero budget rejects concurrent reservations without consuming allowance", async () => {
+  vi.stubEnv("AI_MAX_ATTEMPTS", "0");
+  const reserved = await Promise.all(
+    Array.from({ length: 25 }, () => reserveModelAttempt()),
+  );
+  expect(reserved).toEqual(Array(25).fill(false));
+  vi.stubEnv("AI_MAX_ATTEMPTS", "1");
+  expect(await reserveModelAttempt()).toBe(true);
+  expect(await reserveModelAttempt()).toBe(false);
+});
 it("known reset ambiguity asks the deterministic question even when OpenAI is enabled", async () => {
   vi.stubEnv("AI_PROVIDER", "openai");
   const run = vi.fn(async () => {
