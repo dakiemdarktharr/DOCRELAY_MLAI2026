@@ -27,7 +27,7 @@ it("does not report lost persistence when an older request leaves the newest-200
   expect((await listSupportSummaries()).some((row) => row.id === old.id)).toBe(false);
   expect(await verifyPersistence(old, api)).toMatchObject({ pass: true, checks: ["detail:pass", "audit:pass", "queue:pass", "metrics:pass"] });
 });
-it("exact request filtering validates UUIDs, excludes text mentions, and preserves legacy summary shape", async () => {
+it("exact request filtering validates UUIDs, excludes text mentions, and preserves summary response shape", async () => {
   const target = await submitSupport({ rawText: "Restart my laptop", confirmed: true, idempotencyKey: crypto.randomUUID() });
   await submitSupport({ rawText: `Restart my laptop, reference ${target.id}`, confirmed: true, idempotencyKey: crypto.randomUUID() });
   const response = await list(new Request(`http://local/api/support/requests?view=page&requestId=${target.id}&limit=1`));
@@ -36,8 +36,8 @@ it("exact request filtering validates UUIDs, excludes text mentions, and preserv
   expect(body.data.items.map((row: { id: string }) => row.id)).toEqual([target.id]);
   expect(body.data.nextCursor).toBeNull();
   expect((await list(new Request("http://local/api/support/requests?view=page&requestId=not-a-uuid"))).status).toBe(422);
-  const legacy = await (await list(new Request("http://local/api/support/requests?view=summary"))).json();
-  expect(Array.isArray(legacy.data)).toBe(true);
+  const summary = await (await list(new Request("http://local/api/support/requests?view=summary"))).json();
+  expect(Array.isArray(summary.data)).toBe(true);
 });
 it("a genuinely missing queue record remains a failed persistence assertion", async () => {
   const target = await submitSupport({ rawText: "Restart my laptop", confirmed: true, idempotencyKey: crypto.randomUUID() });
@@ -46,7 +46,7 @@ it("a genuinely missing queue record remains a failed persistence assertion", as
     : api(url, init);
   expect(await verifyPersistence(target, absent)).toMatchObject({ pass: false, checks: expect.arrayContaining(["queue:fail"]) });
 });
-it("the Mongo page query uses exact indexed identity rather than the bounded legacy list", async () => {
+it("the Mongo page query uses exact indexed identity rather than the bounded summary list", async () => {
   const id = crypto.randomUUID();
   const cursor = { sort: vi.fn(), skip: vi.fn(), limit: vi.fn(), toArray: vi.fn(async () => []) };
   cursor.sort.mockReturnValue(cursor); cursor.skip.mockReturnValue(cursor); cursor.limit.mockReturnValue(cursor);

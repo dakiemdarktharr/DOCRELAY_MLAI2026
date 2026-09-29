@@ -531,7 +531,7 @@ export async function createAssistance(
     throw new ModelFailure("MODEL_OUTPUT_INVALID", "SCHEMA_INVALID");
   return {
     ...parsed.data,
-    // These fields are server-owned even when a legacy model supplies them.
+    // These fields are server-owned even when untrusted model output supplies them.
     diagnosis: template.diagnosis,
     potentialFixes: template.potentialFixes
       ? parsed.data.stepByStepInstructions

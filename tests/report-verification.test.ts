@@ -108,7 +108,7 @@ it("Verify provenance cannot hide arbitrary requests or accept forged expected o
     ),
   ).rejects.toThrow();
 });
-it("E18 pagination/search/audit and metrics include records older than the legacy 200 limit", async () => {
+it("E18 pagination/search/audit and metrics include records older than the summary list limit", async () => {
   for (let i = 0; i < 205; i++)
     await submitSupport({
       rawText: `Restart my laptop. Reference ${i === 0 ? "old-record-target" : i}`,

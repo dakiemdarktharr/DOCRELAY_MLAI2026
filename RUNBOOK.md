@@ -9,7 +9,6 @@ Dùng Node.js 22+ và npm. Trong PowerShell, tại thư mục repository:
 ```powershell
 npm ci
 Copy-Item .env.example .env.local
-npm run db:generate
 npm run dev
 ```
 
@@ -62,7 +61,7 @@ Các báo cáo release, migration và prompt bàn giao cũ có thể tra cứu t
 
 ## Kiểm tra Mongo trong môi trường thử nghiệm riêng
 
-Chỉ dùng Mongo local hoặc credential thử nghiệm giới hạn trên database mới, tên `sprint1_test_<suffix>`. Không copy URI/credential production. Giữ `AI_PROVIDER=mock`, `AI_MAX_ATTEMPTS=0`, model keys và `DATABASE_URL` rỗng. Đặt `MONGODB_URI`, `MONGODB_DB` riêng cùng `SUPPORT_ACCESS_MODE=public-demo`, chạy server tại3227. Health ping thành công chưa chứng minh persistence sau restart.
+Chỉ dùng Mongo local hoặc credential thử nghiệm giới hạn trên database mới, tên `sprint1_test_<suffix>`. Không copy URI/credential production. Giữ `AI_PROVIDER=mock`, `AI_MAX_ATTEMPTS=0` và model keys rỗng. Đặt `MONGODB_URI`, `MONGODB_DB` riêng cùng `SUPPORT_ACCESS_MODE=public-demo`, chạy server tại3227. Health ping thành công chưa chứng minh persistence sau restart.
 
 Trong terminal khác, tạo duy nhất dữ liệu synthetic rồi giữ lại các biến:
 

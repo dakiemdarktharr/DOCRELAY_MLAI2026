@@ -5,7 +5,7 @@ import { Files } from "lucide-react";
 import { SiteAccess } from "./site-access";
 export function Header() {
   const path = usePathname();
-  const staff = /^\/(review|audit|verify|legacy)/.test(path);
+  const staff = /^\/(review|audit|verify)/.test(path);
   return (
     <header className="site-header">
       <SiteAccess />

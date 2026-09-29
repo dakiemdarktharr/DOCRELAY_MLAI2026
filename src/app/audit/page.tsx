@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AuditEvent, ResultPage } from "@/domain/contracts";
 import { browserApi } from "@/lib/browser-api";
@@ -134,16 +133,6 @@ export default function AuditPage() {
           </Button>
         )}
       </Card>
-      <details>
-        <summary>Nhật ký API cũ</summary>
-        <p>
-          Echo chỉ ghi sự kiện tương thích riêng. Mọi quyết định hỗ trợ nằm
-          trong nhật ký ở trên.
-        </p>
-        <Link className="text-accent underline" href="/legacy/audit">
-          Mở nhật ký echo cũ
-        </Link>
-      </details>
     </main>
   );
 }

@@ -38,6 +38,6 @@ Trường hợp judge-conflict có field environment=staging mâu thuẫn với 
 
 Hai bộ là demo/development được tuyển chọn, không phải held-out benchmark hay thử nghiệm người dùng thật. Regression fixture gốc vẫn chạy trong npm test; báo cáo hiện tại có 55/128 khớp và 73 mismatch. Unit test PASS nghĩa là kiểm tra ghi nhận đúng kết quả, không có nghĩa toàn bộ Ground Truth đã khớp. Không xoá hoặc chỉnh expected để tăng điểm.
 
-API chỉ cho tạo/chạy/tiếp tục hai pack trên, kể cả đường submit trực tiếp có verifyRunId. Kết quả cũ còn tồn tại có thể đọc để đối chiếu nhưng không chạy lại. Các API legacy vẫn được giữ để compatibility; bỏ đường dẫn echo Verify khỏi màn hình giám khảo.
+API chỉ cho tạo/chạy/tiếp tục hai pack trên, kể cả đường submit trực tiếp có verifyRunId. Kết quả cũ còn tồn tại có thể đọc để đối chiếu nhưng không chạy lại. Runtime chỉ giữ Verify của Support; echo Verify prototype đã được loại bỏ.
 
 Hai bộ fixture nằm trong source, không phải hai collection MongoDB. Request/audit và Verify run là dữ liệu runtime; knowledge và model budget là dữ liệu phục vụ hệ thống, không được xóa chỉ để giảm số bộ test.

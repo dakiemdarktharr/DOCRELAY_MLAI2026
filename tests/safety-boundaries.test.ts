@@ -6,7 +6,6 @@ import { verifyApproval } from "@/services/approvals";
 import { extractWithModel } from "@/lib/support-model";
 import { resetSupportTestStore } from "@/lib/support-repository";
 import { POST } from "@/app/api/support/requests/route";
-import { POST as echo } from "@/app/api/echo/route";
 import type { SupportInput } from "@/domain/contracts";
 beforeEach(() => {
   vi.stubEnv("AI_PROVIDER", "mock");
@@ -210,7 +209,7 @@ it("requires evidence for model environment and recomputes privileged label risk
   expect(unsafe.riskSignals).toContain("PRIVILEGED");
   expect(evaluatePolicy(unsafe).action).toBe("ESCALATE");
 });
-it("redacts JSON credentials, Vietnamese labels, URIs and keys including on compatibility echo", async () => {
+it("redacts JSON credentials, Vietnamese labels, URIs and keys through the active support API", async () => {
   const value = "SYNTHETIC" + "_HIDDEN_987";
   for (const text of [
     `{"password":"${value}"}`,
@@ -219,10 +218,11 @@ it("redacts JSON credentials, Vietnamese labels, URIs and keys including on comp
     `-----BEGIN PRIVATE KEY-----\n${value}\n-----END PRIVATE KEY-----`,
   ]) {
     expect(redact(text).text).not.toContain(value);
-    const response = await echo(
-      new Request("http://localhost/api/echo", {
+    const response = await POST(
+      new Request("http://localhost/api/support/requests", {
         method: "POST",
-        body: JSON.stringify({ text }),
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(intake(text, { department: "engineering" })),
       }),
     );
     expect(await response.text()).not.toContain(value);

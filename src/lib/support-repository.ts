@@ -220,7 +220,7 @@ export async function getSupportPreview(
 }
 export async function listSupportSummaries(): Promise<SupportSummary[]> {
   const db = supportDatabase();
-  // Additive API: the legacy full-list contract remains available during migration.
+  // Summary responses keep the compact list contract used by the reviewer UI.
   const rows = db
     ? (
         await supportRequests(db)

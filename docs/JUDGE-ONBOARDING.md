@@ -38,7 +38,7 @@ Các kiểm tra mới bao gồm:
 
 - Popup cuộn nội bộ, giữ focus, luồng hướng dẫn thực tế cho hai vai trò; quay lại, refresh và đóng/mở tab.
 - Giải mã pixel QR bằng `jsqr`, so sánh URL gốc, kiểm tra copy và mở đích quét trong tab mới.
-- Không tràn ngang ở 320 × 568, 390 × 844 và 844 × 390 trên trang đầu, gửi, workspace, theo dõi, danh sách/chi tiết reviewer, chi tiết yêu cầu, audit, Verify và các trang legacy. Popup QR nằm trong viewport và cuộn được.
+- Không tràn ngang ở 320 × 568, 390 × 844 và 844 × 390 trên trang đầu, gửi, workspace, theo dõi, danh sách/chi tiết reviewer, chi tiết yêu cầu, audit và Verify. Popup QR nằm trong viewport và cuộn được.
 - Luồng gửi, hội thoại, bổ sung, chuyển nhân viên, quyết định, audit và Verify chạy trên Chromium desktop và cấu hình điện thoại Pixel 7. Đây là browser emulation, không phải bằng chứng đã kiểm tra mọi điện thoại thật hoặc Safari/iOS.
 
 Ảnh chụp/video và báo cáo có timestamp được tạo cục bộ trong `artifacts/`, `test-results/` và `submission/`; không thay thế bằng chứng release lịch sử trong commit này.

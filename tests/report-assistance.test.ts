@@ -88,7 +88,7 @@ it("E08 contextual model output uses redacted request evidence and retains vette
     guidanceTemplate(request).stepByStepInstructions[0],
   );
 });
-it("legacy model prose cannot inject diagnosis or fixes for a topic without server diagnosis", async () => {
+it("untrusted model prose cannot inject diagnosis or fixes for a topic without server diagnosis", async () => {
   const request = extractIntake(input("Tôi tắt máy tính được không?"));
   const template = guidanceTemplate(request);
   expect(template.diagnosis).toBeUndefined();
