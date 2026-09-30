@@ -178,7 +178,7 @@ export function RequestDetail({ id }: { id: string }) {
               >
                 <fieldset disabled={pending} className="space-y-4">
                   <div>
-                    <h2>Phản hồi hoặc hỏi tiếp</h2>
+                    <h2>Hỏi tiếp về phản hồi này</h2>
                     <p className="text-sm text-slate-600">
                       Hệ thống nhận diện câu đã giải quyết, câu hỏi cần hỗ trợ
                       tiếp hoặc yêu cầu gặp nhân viên. Câu hỏi tiếp theo vẫn
