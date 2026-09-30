@@ -1,0 +1,320 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Post-answer feedback routing for synthetic IT helpdesk scenarios; not a production accuracy claim.",
+  "labels": {
+    "positive": "User indicates the offered help worked or expresses thanks.",
+    "neutral": "User asks to continue, clarify, or provide more help without clear frustration or resolution.",
+    "negative": "User expresses frustration/abuse or explicitly asks for a human support handoff."
+  },
+  "splitPolicy": "Keep every paraphrase in the same splitGroup as its seed before any training or evaluation.",
+  "examples": [
+    {
+      "id": "seed-pos-01",
+      "text": "cảm ơn nhé tôi đã làm được rồi",
+      "label": "positive",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-pos-01"
+    },
+    {
+      "id": "seed-pos-02",
+      "text": "đã không còn bị lỗi",
+      "label": "positive",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-pos-02"
+    },
+    {
+      "id": "seed-pos-03",
+      "text": "tôi đã vào được rồi",
+      "label": "positive",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-pos-03"
+    },
+    {
+      "id": "seed-pos-04",
+      "text": "cảm ơn bạn",
+      "label": "positive",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-pos-04"
+    },
+    {
+      "id": "seed-neg-01",
+      "text": "bạn không hiểu tôi nói gì à?",
+      "label": "negative",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neg-01"
+    },
+    {
+      "id": "seed-neg-02",
+      "text": "bạn ngu phết",
+      "label": "negative",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neg-02"
+    },
+    {
+      "id": "seed-neg-03",
+      "text": "hãy chuyển tôi cho nhân viên hỗ trợ",
+      "label": "negative",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neg-03"
+    },
+    {
+      "id": "seed-neg-04",
+      "text": "tôi khá là bất lực rồi đấy",
+      "label": "negative",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neg-04"
+    },
+    {
+      "id": "seed-neu-01",
+      "text": "bước tiếp theo là gì",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-01"
+    },
+    {
+      "id": "seed-neu-02",
+      "text": "làm cái này như nào",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-02"
+    },
+    {
+      "id": "seed-neu-03",
+      "text": "hãy hỗ trợ kĩ hơn",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-03"
+    },
+    {
+      "id": "seed-neu-04",
+      "text": "tôi vẫn còn vướng",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-04"
+    },
+    {
+      "id": "seed-neu-05",
+      "text": "tiếp tục",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-05"
+    },
+    {
+      "id": "seed-neu-06",
+      "text": "xong bước này",
+      "label": "neutral",
+      "source": "user_provided_seed",
+      "splitGroup": "seed-neu-06"
+    },
+    {
+      "id": "synthetic-positive-01",
+      "text": "máy chạy bình thường lại rồi, cảm ơn",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-01"
+    },
+    {
+      "id": "synthetic-positive-02",
+      "text": "tôi đã đăng nhập thành công",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-02"
+    },
+    {
+      "id": "synthetic-positive-03",
+      "text": "làm theo hướng dẫn là mở được rồi",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-03"
+    },
+    {
+      "id": "synthetic-positive-04",
+      "text": "giờ tôi dùng được rồi nhé",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-04"
+    },
+    {
+      "id": "synthetic-positive-05",
+      "text": "lỗi đã hết sau khi làm bước đó",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-05"
+    },
+    {
+      "id": "synthetic-positive-06",
+      "text": "đã kết nối VPN được rồi",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-06"
+    },
+    {
+      "id": "synthetic-positive-07",
+      "text": "ok, cách này hiệu quả rồi",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-07"
+    },
+    {
+      "id": "synthetic-positive-08",
+      "text": "đã xử lý xong, cảm ơn bạn",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-08"
+    },
+    {
+      "id": "synthetic-positive-09",
+      "text": "I can log in now, thank you",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-09"
+    },
+    {
+      "id": "synthetic-positive-10",
+      "text": "it works now",
+      "label": "positive",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-positive-10"
+    },
+    {
+      "id": "synthetic-negative-01",
+      "text": "hướng dẫn này không giúp được gì cả",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-01"
+    },
+    {
+      "id": "synthetic-negative-02",
+      "text": "tôi đã nói lỗi khác mà bạn vẫn không hiểu",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-02"
+    },
+    {
+      "id": "synthetic-negative-03",
+      "text": "làm ơn nối tôi với IT",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-03"
+    },
+    {
+      "id": "synthetic-negative-04",
+      "text": "tôi muốn nói chuyện với nhân viên thật",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-04"
+    },
+    {
+      "id": "synthetic-negative-05",
+      "text": "cách trả lời này thật vô dụng",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-05"
+    },
+    {
+      "id": "synthetic-negative-06",
+      "text": "bạn đang không nghe điều tôi nói",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-06"
+    },
+    {
+      "id": "synthetic-negative-07",
+      "text": "tôi bực mình vì vấn đề vẫn chưa được hiểu",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-07"
+    },
+    {
+      "id": "synthetic-negative-08",
+      "text": "chuyển cuộc trao đổi này cho bộ phận hỗ trợ",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-08"
+    },
+    {
+      "id": "synthetic-negative-09",
+      "text": "I need a human support agent",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-09"
+    },
+    {
+      "id": "synthetic-negative-10",
+      "text": "you are not understanding the issue and I am frustrated",
+      "label": "negative",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-negative-10"
+    },
+    {
+      "id": "synthetic-neutral-01",
+      "text": "bạn có thể giải thích bước thứ hai không",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-01"
+    },
+    {
+      "id": "synthetic-neutral-02",
+      "text": "tôi nên kiểm tra phần nào tiếp theo",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-02"
+    },
+    {
+      "id": "synthetic-neutral-03",
+      "text": "gửi giúp tôi hướng dẫn tiếp theo",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-03"
+    },
+    {
+      "id": "synthetic-neutral-04",
+      "text": "có cách nào khác để kiểm tra không",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-04"
+    },
+    {
+      "id": "synthetic-neutral-05",
+      "text": "tôi đang làm theo các bước",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-05"
+    },
+    {
+      "id": "synthetic-neutral-06",
+      "text": "nói rõ hơn cách mở phần cài đặt",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-06"
+    },
+    {
+      "id": "synthetic-neutral-07",
+      "text": "tôi đã xong bước đầu, tiếp theo làm gì",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-07"
+    },
+    {
+      "id": "synthetic-neutral-08",
+      "text": "cho tôi biết cần nhập thông tin nào",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-08"
+    },
+    {
+      "id": "synthetic-neutral-09",
+      "text": "what should I do next",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-09"
+    },
+    {
+      "id": "synthetic-neutral-10",
+      "text": "please explain that step in more detail",
+      "label": "neutral",
+      "source": "assistant_generated_synthetic",
+      "splitGroup": "synthetic-neutral-10"
+    }
+  ]
+}

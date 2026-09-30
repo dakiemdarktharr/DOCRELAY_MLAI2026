@@ -30,7 +30,7 @@ Mũi tên hướng dẫn sẽ chỉ các nút và ô cần thao tác khi bạn v
 3. Chọn **Phòng ban**, điền ID nhân viên nếu có, rồi nhập vấn đề và các thông tin liên quan.
 4. Bấm **Gửi** để nhận phản hồi. Đọc hướng dẫn hoặc câu hỏi bổ sung; có thể quay lại sửa nội dung.
 5. Bấm **Xác nhận và gửi yêu cầu** để lưu yêu cầu. Với luồng trò chuyện, chọn **Lưu và tiếp tục trò chuyện**.
-6. Tại trang theo dõi, dùng **Hỏi tiếp**, **Gửi bổ sung** hoặc phản hồi kết quả xử lý. Chọn chuyển cho nhân viên khi cần hỗ trợ thêm.
+6. Sau câu trả lời đầu tiên, nhập phản hồi tự do. Sentiment positive hoàn tất yêu cầu và tạo gợi ý tri thức chờ người phụ trách biên tập; neutral tiếp tục hội thoại; negative hoặc yêu cầu người hỗ trợ chuyển reviewer cùng lịch sử. Có thể dùng nút **Tôi đã làm được** hoặc **Chuyển cho nhân viên** thay cho câu tự do.
 7. Giữ lại mã hoặc liên kết yêu cầu. Mở **Theo dõi yêu cầu** để tra cứu vào lần sau.
 
 ### Human reviewer
@@ -64,11 +64,18 @@ flowchart TD
     E -->|Người dùng bổ sung| B
     C -->|Cần người quyết định| F[Human reviewer xử lý]
     F --> D
-    D --> G[Người dùng phản hồi và theo dõi]
-    G --> H[Lưu lịch sử xử lý]
+    D --> G{Sentiment phản hồi}
+    G -->|Positive| I[Hoàn tất và tạo gợi ý tri thức chờ rà soát]
+    G -->|Neutral| J[LLM tiếp tục hỗ trợ]
+    J --> G
+    G -->|Negative / yêu cầu người hỗ trợ| F
+    I --> H[Lưu lịch sử xử lý]
+    F --> H
 ```
 
-Hệ thống sử dụng thông tin và bằng chứng để xác định bước tiếp theo. Khi thiếu dữ liệu, người gửi nhận yêu cầu bổ sung cụ thể. Khi cần người quyết định, human reviewer xem nội dung và chọn cách xử lý; tiến độ được cập nhật trong yêu cầu.
+Classifier sentiment rule-based chỉ xử lý phản hồi sau câu trả lời, không thay deterministic policy hoặc risk check. Gợi ý tri thức từ ticket positive không được tự động xuất bản hoặc đưa vào retrieval: người phụ trách phải kiểm tra nguồn và biên tập thành revision theo [quy trình knowledge](docs/KNOWLEDGE-REVIEW.md). Khi thiếu dữ liệu, người gửi nhận yêu cầu bổ sung cụ thể; khi cần người quyết định, reviewer xem lịch sử và chọn cách xử lý.
+
+Seed và câu tổng hợp nằm trong `mlai26_new/data/sentiment/post-answer-feedback.json`: 14 câu do người dùng cung cấp và 30 câu tổng hợp, chia gần cân bằng theo nhãn. Runtime dùng rule-based classifier; corpus hiện chưa được dùng để huấn luyện model hoặc đo accuracy.
 
 ## Các trang chính
 

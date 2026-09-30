@@ -1,4 +1,8 @@
 import { createConversationAnswer } from "@/lib/conversation-model";
+import {
+  classifyPostAnswerFeedback,
+  type FeedbackSentiment,
+} from "@/domain/feedback";
 import { explainStep } from "@/domain/guidance";
 import { z } from "zod";
 import { canReview } from "@/domain/transitions";
@@ -180,10 +184,38 @@ const feedbackSchema = z
       "EXPLAIN",
     ]),
     step: z.number().int().nonnegative().optional(),
+    replyText: z.string().trim().max(1000).optional(),
   })
   .strict();
 export async function feedbackSupport(id: string, value: unknown) {
   const input = feedbackSchema.parse(value);
+  const safeReply = input.replyText ? redact(input.replyText) : null;
+  const sentiment: FeedbackSentiment = safeReply
+    ? classifyPostAnswerFeedback(safeReply.text)
+    : input.choice === "RESOLVED"
+      ? "positive"
+      : ["ADMIN", "CONFUSED"].includes(input.choice)
+        ? "negative"
+        : "neutral";
+  if (
+    safeReply &&
+    sentiment === "neutral"
+  )
+    throw new SupportError(
+      "FEEDBACK_REQUIRES_CONVERSATION",
+      "Câu hỏi trung tính cần đi qua luồng hội thoại để được phân tích và hỗ trợ tiếp.",
+      422,
+    );
+  if (
+    safeReply &&
+    ((sentiment === "positive" && input.choice !== "RESOLVED") ||
+      (sentiment === "negative" && input.choice !== "ADMIN"))
+  )
+    throw new SupportError(
+      "FEEDBACK_ROUTE_MISMATCH",
+      "Phản hồi cần được xử lý theo nhánh sentiment tương ứng.",
+      422,
+    );
   const snapshot = await getSupportRequest(id);
   if (!snapshot)
     throw new SupportError("NOT_FOUND", "Không tìm thấy yêu cầu.", 404);
@@ -234,6 +266,7 @@ export async function feedbackSupport(id: string, value: unknown) {
       request.feedback.push({
         choice: "EXPLAIN",
         timestamp: new Date().toISOString(),
+        sentiment: "neutral",
       });
       request.events.push(
         auditEvent(request, request.status, "EXPLAIN", "employee-demo", text),
@@ -264,8 +297,31 @@ export async function feedbackSupport(id: string, value: unknown) {
     request.feedback.push({
       choice: input.choice,
       timestamp: new Date().toISOString(),
+      sentiment,
+      ...(safeReply?.text ? { replyText: safeReply.text } : {}),
     });
     if (nextAssistance) request.assistance.push(nextAssistance);
+    if (
+      sentiment === "positive" &&
+      request.canonical &&
+      !request.canonical.conversation &&
+      request.assistance.length > 0
+    ) {
+      const answer = request.assistance.at(-1)!;
+      const safeAnswer = redact(answer.answer?.text || answer.summary).text;
+      request.knowledgeCandidate = {
+        status: "PENDING_REVIEW",
+        sourceRequestId: request.id,
+        serviceGroup: request.canonical.serviceGroup,
+        intentLabel: request.canonical.intentLabel,
+        symptom: redact(request.originalQuestion || request.input.rawText).text,
+        answerSummary: safeAnswer,
+        steps: answer.stepByStepInstructions.map((step) => redact(step).text),
+        employeeFeedback:
+          safeReply?.text || "Người dùng xác nhận đã giải quyết.",
+        createdAt: new Date().toISOString(),
+      };
+    }
     if (failedCanonical) {
       request.canonical = failedCanonical;
       request.decision = evaluatePolicy(failedCanonical, verifyApproval);
@@ -298,7 +354,7 @@ export async function feedbackSupport(id: string, value: unknown) {
         before,
         request.status === "ESCALATED" ? "HANDOFF" : "FEEDBACK",
         "employee-demo",
-        `Phản hồi: ${input.choice}. Giữ lịch sử hướng dẫn; không có side effect bên ngoài.`,
+        `Phản hồi sentiment ${sentiment}; lựa chọn ${input.choice}. Giữ lịch sử hướng dẫn; không có side effect bên ngoài.`,
       ),
     );
   });

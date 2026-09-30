@@ -165,6 +165,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 onChange={(event) => setFilter(event.target.value)}
               >
                 <option value="pending">Đang chờ xử lý</option>
+                <option value="knowledge">Gợi ý tri thức cần rà soát</option>
                 <option value="all">Tất cả trạng thái</option>
               </select>
             </label>
@@ -213,6 +214,9 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                     >
                       {statusLabels[request.status]}
                     </Badge>
+                    {request.hasKnowledgeCandidate && (
+                      <Badge tone="warning">Gợi ý tri thức</Badge>
+                    )}
                     <span className="block font-semibold">{request.title}</span>
                     <span className="block text-xs">
                       {displayId(request.id)} ·{" "}
@@ -303,6 +307,31 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
               </Card>
             )}
             <AssistanceHistory items={selected.assistance} />
+            {selected.knowledgeCandidate && (
+              <Card>
+                <h2 className="font-bold">Gợi ý tri thức · chờ rà soát</h2>
+                <p className="mt-2">
+                  <strong>Vấn đề:</strong> {selected.knowledgeCandidate.symptom}
+                </p>
+                <p className="mt-2">
+                  <strong>Phản hồi:</strong>{" "}
+                  {selected.knowledgeCandidate.employeeFeedback}
+                </p>
+                <p className="mt-2">{selected.knowledgeCandidate.answerSummary}</p>
+                {!!selected.knowledgeCandidate.steps.length && (
+                  <ol className="my-3 list-decimal space-y-1 pl-5">
+                    {selected.knowledgeCandidate.steps.map((step, index) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ol>
+                )}
+                <p className="text-sm text-slate-600">
+                  Đây là đề xuất tổng hợp từ ticket đã giải quyết, chưa được thêm
+                  vào kho tri thức. Người phụ trách cần kiểm tra nguồn và biên tập
+                  thành revision được duyệt theo hướng dẫn quản trị knowledge.
+                </p>
+              </Card>
+            )}
             {selected.stepExplanations?.map((item, index) => (
               <Card key={index}>
                 <h2>Giải thích bước {item.step + 1}</h2>

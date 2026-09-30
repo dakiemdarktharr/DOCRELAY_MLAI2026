@@ -12,7 +12,7 @@ const querySchema = z.object({
   cursor: z.coerce.number().int().min(0).max(1000000).default(0),
   limit: z.coerce.number().int().min(1).max(100).default(30),
   q: z.string().trim().max(200).default(""),
-  status: z.enum(["all", "pending"]).default("all"),
+  status: z.enum(["all", "pending", "knowledge"]).default("all"),
   origin: z.enum(["all", "support", "verify"]).default("all"),
   requestId: z.string().uuid().optional(),
 });
@@ -33,6 +33,8 @@ function filterFor(query: SupportQuery): Filter<Row> {
   const filter: Filter<Row> = {};
   if (query.requestId) filter._id = query.requestId;
   if (query.status === "pending") filter["data.status"] = { $in: pending };
+  if (query.status === "knowledge")
+    filter["data.knowledgeCandidate.status"] = "PENDING_REVIEW";
   if (query.origin !== "all")
     filter["data.input.verifyRunId"] = { $exists: query.origin === "verify" };
   if (query.q) {
@@ -49,7 +51,10 @@ async function memoryRows(query: SupportQuery) {
   return rows.filter(
     (row) =>
       (!query.requestId || row.id === query.requestId) &&
-      (query.status === "all" || pending.includes(row.status)) &&
+      (query.status === "all" ||
+        (query.status === "pending"
+          ? pending.includes(row.status)
+          : row.knowledgeCandidate?.status === "PENDING_REVIEW")) &&
       (query.origin === "all" ||
         Boolean(row.input.verifyRunId) === (query.origin === "verify")) &&
       `${row.id} ${row.originalQuestion || row.input.rawText}`
@@ -76,6 +81,7 @@ export async function supportPage(
             "data.input.rawText": 1,
             "data.canonical.serviceGroup": 1,
             "data.decision.action": 1,
+            "data.knowledgeCandidate.status": 1,
           },
         })
         .sort({ "data.createdAt": -1, _id: -1 })
@@ -106,6 +112,8 @@ export async function supportPage(
       ).slice(0, 140),
       serviceGroup: row.canonical?.serviceGroup ?? "OTHER",
       action: row.decision?.action ?? null,
+      hasKnowledgeCandidate:
+        row.knowledgeCandidate?.status === "PENDING_REVIEW",
     })),
     total,
     nextCursor:

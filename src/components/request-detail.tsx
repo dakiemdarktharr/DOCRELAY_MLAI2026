@@ -153,6 +153,15 @@ export function RequestDetail({ id }: { id: string }) {
               />
             )}
           {active && latest && <AssistanceHistory items={[latest]} />}
+          {request.knowledgeCandidate && (
+            <Card>
+              <h2>Gợi ý tri thức đã gửi rà soát</h2>
+              <p className="text-sm text-slate-600">
+                Người phụ trách sẽ kiểm tra và biên tập trước khi hướng dẫn có
+                thể được đưa vào kho tri thức.
+              </p>
+            </Card>
+          )}
           {request.stepExplanations?.map((item, index) => (
             <Card key={index}>
               <h2>Giải thích bước {item.step + 1}</h2>
@@ -169,17 +178,19 @@ export function RequestDetail({ id }: { id: string }) {
               >
                 <fieldset disabled={pending} className="space-y-4">
                   <div>
-                    <h2>Hỏi tiếp về phản hồi này</h2>
+                    <h2>Phản hồi hoặc hỏi tiếp</h2>
                     <p className="text-sm text-slate-600">
-                      Câu hỏi tiếp theo sẽ được kiểm tra lại trước khi trả lời.
+                      Hệ thống nhận diện câu đã giải quyết, câu hỏi cần hỗ trợ
+                      tiếp hoặc yêu cầu gặp nhân viên. Câu hỏi tiếp theo vẫn
+                      được kiểm tra lại trước khi trả lời.
                     </p>
                   </div>
                   <label>
-                    Hỏi tiếp
+                      Phản hồi về hướng dẫn
                     <Textarea
                       aria-label="Hỏi tiếp"
                       data-guide="sender-followup"
-                      placeholder="Ví dụ: Tôi đã thử nhưng mạng vẫn không kết nối"
+                      placeholder="Ví dụ: Tôi đã vào được rồi; hoặc bước tiếp theo là gì?"
                       value={followup}
                       onChange={(event) => setFollowup(event.target.value)}
                       required

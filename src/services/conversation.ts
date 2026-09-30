@@ -6,6 +6,9 @@ import {
 } from "@/lib/support-repository";
 import { auditEvent, completeAnalysis, prepareInput } from "./support";
 import { employeeIdentityOnly } from "@/domain/employee-identity";
+import { classifyPostAnswerFeedback } from "@/domain/feedback";
+import { redact } from "@/domain/redaction";
+import { feedbackSupport } from "./review";
 const schema = z
   .object({
     version: z.number().int().nonnegative(),
@@ -26,6 +29,20 @@ export async function continueConversation(id: string, value: unknown) {
       "Cuộc trò chuyện đã thay đổi hoặc kết thúc. Vui lòng tải lại.",
       409,
     );
+  const safeReply = redact(input.question).text;
+  const sentiment = classifyPostAnswerFeedback(safeReply);
+  if (sentiment === "positive")
+    return feedbackSupport(id, {
+      version: input.version,
+      choice: "RESOLVED",
+      replyText: safeReply,
+    });
+  if (sentiment === "negative")
+    return feedbackSupport(id, {
+      version: input.version,
+      choice: "ADMIN",
+      replyText: safeReply,
+    });
   const safe = prepareInput({
     ...current.input,
     previewId: undefined,
@@ -39,6 +56,12 @@ export async function continueConversation(id: string, value: unknown) {
   });
   const result = await completeAnalysis(safe.input, safe.markers);
   return updateSupportRequest(id, input.version, (request) => {
+    request.feedback.push({
+      choice: "STILL_BROKEN",
+      timestamp: new Date().toISOString(),
+      sentiment: "neutral",
+      replyText: safeReply,
+    });
     request.input = safe.input;
     request.canonical = result.canonical;
     request.decision = result.decision;
@@ -55,7 +78,7 @@ export async function continueConversation(id: string, value: unknown) {
         "AUTO_APPROVED",
         "CONVERSATION",
         "employee-demo",
-        result.decision.adminReason,
+        `Phản hồi sentiment neutral; tiếp tục hội thoại. ${result.decision.adminReason}`,
       ),
     );
     if (result.assistance?.answer)

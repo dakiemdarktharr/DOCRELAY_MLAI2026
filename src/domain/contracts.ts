@@ -169,6 +169,18 @@ export type RequestStatus =
   | "REJECTED"
   | "STOPPED"
   | "COMPLETED";
+export type FeedbackSentiment = "positive" | "neutral" | "negative";
+export type KnowledgeCandidate = {
+  status: "PENDING_REVIEW";
+  sourceRequestId: string;
+  serviceGroup: ServiceGroup;
+  intentLabel: string;
+  symptom: string;
+  answerSummary: string;
+  steps: string[];
+  employeeFeedback: string;
+  createdAt: string;
+};
 export type AnswerSource = {
   title: string;
   url: string;
@@ -247,7 +259,10 @@ export type SupportRequest = {
   feedback: Array<{
     choice: "RESOLVED" | "STILL_BROKEN" | "CONFUSED" | "ADMIN" | "EXPLAIN";
     timestamp: string;
+    sentiment?: FeedbackSentiment;
+    replyText?: string;
   }>;
+  knowledgeCandidate?: KnowledgeCandidate;
   events: AuditEvent[];
 };
 
@@ -262,7 +277,12 @@ export type SupportPreview = {
 export type SupportSummary = Pick<
   SupportRequest,
   "id" | "version" | "status" | "createdAt" | "updatedAt"
-> & { title: string; serviceGroup: ServiceGroup; action: Action | null };
+> & {
+  title: string;
+  serviceGroup: ServiceGroup;
+  action: Action | null;
+  hasKnowledgeCandidate?: boolean;
+};
 export type ResultPage<T> = {
   items: T[];
   nextCursor: string | null;
