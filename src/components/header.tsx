@@ -7,7 +7,7 @@ export function Header() {
   const path = usePathname();
   const staff = /^\/(review|audit|verify)/.test(path);
   return (
-    <header className="site-header">
+    <header className={`site-header${path === "/review" ? " it-header" : ""}`}>
       <SiteAccess />
       <Link href="/" className="brand">
         <span className="brand-mark">

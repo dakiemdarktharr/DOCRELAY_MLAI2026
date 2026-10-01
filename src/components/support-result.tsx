@@ -6,10 +6,12 @@ export function SupportResult({
   decision,
   canonical,
   audience = "employee",
+  compact = false,
 }: {
   decision: Decision;
   canonical: CanonicalRequest;
   audience?: "employee" | "reviewer";
+  compact?: boolean;
 }) {
   const title =
     decision.action === "AUTO_APPROVE"
@@ -25,7 +27,7 @@ export function SupportResult({
     <Card className="space-y-4" aria-label="Kết quả quyết định">
       <div className="flex flex-wrap items-center gap-3">
         <h2>{title}</h2>
-        {audience === "reviewer" && (
+        {audience === "reviewer" && !compact && (
           <Badge
             tone={decision.action === "AUTO_APPROVE" ? "success" : "warning"}
           >
@@ -80,7 +82,7 @@ export function SupportResult({
           }[decision.handlingMode]
         }
       </p>
-      {audience === "reviewer" && (
+      {audience === "reviewer" && !compact && (
         <details className="rounded-xl bg-paper p-4 text-sm">
           <summary>Quy tắc và thông tin đã hiểu</summary>
           <dl className="mt-3 space-y-2">
