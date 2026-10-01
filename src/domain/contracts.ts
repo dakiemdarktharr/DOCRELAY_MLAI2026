@@ -282,6 +282,8 @@ export type SupportSummary = Pick<
   serviceGroup: ServiceGroup;
   action: Action | null;
   hasKnowledgeCandidate?: boolean;
+  uncertaintyClass?: Decision["uncertaintyClass"];
+  assignedTeam?: string;
 };
 export type ResultPage<T> = {
   items: T[];

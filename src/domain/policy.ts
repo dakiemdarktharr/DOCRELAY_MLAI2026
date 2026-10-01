@@ -475,12 +475,12 @@ function evaluateSinglePolicy(
         ? clarificationPlan(request, unresolved).questions
         : ["Bạn muốn làm được việc gì và vấn đề xảy ra ở ứng dụng nào?"],
       reviewerQuestions: [
-        "Xác định nhóm phụ trách và phạm vi chính sách trước khi tiếp nhận.",
+        "Chủ chính sách xác nhận quy định áp dụng hoặc ngoại lệ nào cho dịch vụ và mục tiêu này? Nhóm nào được giao tiếp nhận?",
       ],
       userReason: "Chưa ánh xạ được request vào service/owner trong policy.",
       adminReason:
         "AUTH-005: classifier/reviewer phải xác định owner; không tự chọn IT Helpdesk.",
-      assignedTeam: "Classifier/reviewer",
+      assignedTeam: unresolved.length ? "Classifier/reviewer" : "Policy owner / Classifier/reviewer",
       nextStep:
         "Classifier/reviewer xác nhận service, owner và scope trước khi xử lý.",
     };
@@ -563,6 +563,7 @@ function evaluateSinglePolicy(
       uncertaintyClass: "AUTHORITY_REQUIRED",
       riskLevel: "MEDIUM",
       ruleIds: ["AUTH-QUOTA"],
+      reviewerQuestions: ["Owner có thể duyệt số lượng, cấu hình, thời hạn và ngân sách nào? Có phương án giảm tài nguyên về giới hạn mô phỏng không?"],
       userReason:
         "Tài nguyên vượt giới hạn mô phỏng hoặc chưa xác định được quy mô an toàn.",
       adminReason:
@@ -664,9 +665,10 @@ function evaluateSinglePolicy(
     bucket: "BEYOND_AUTHORITY",
     uncertaintyClass: "OUT_OF_POLICY",
     ruleIds: ["AUTH-005"],
+    assignedTeam: "Policy owner / " + base.assignedTeam,
     questions: [],
     reviewerQuestions: [
-      "Ai có thẩm quyền xử lý dịch vụ này và phương án an toàn nào đã được xác nhận?",
+      "Chủ chính sách có quy định nào áp dụng cho phạm vi này, hay cần xét ngoại lệ? Phương án an toàn được cho phép là gì?",
     ],
     userReason: "Phạm vi này chưa có rule tự xử lý an toàn.",
     adminReason:

@@ -6,8 +6,9 @@ import {
 } from "@/lib/support-repository";
 import { auditEvent, completeAnalysis, prepareInput } from "./support";
 import { employeeIdentityOnly } from "@/domain/employee-identity";
-import { classifyPostAnswerFeedback } from "@/domain/feedback";
+import { classifyPostAnswerFeedback, isContinuationOnly, requiresFeedbackAnalysis } from "@/domain/feedback";
 import { redact } from "@/domain/redaction";
+import { extractIntake } from "@/domain/text";
 import { feedbackSupport } from "./review";
 const schema = z
   .object({
@@ -30,7 +31,10 @@ export async function continueConversation(id: string, value: unknown) {
       409,
     );
   const safeReply = redact(input.question).text;
-  const sentiment = classifyPostAnswerFeedback(safeReply);
+  const reply = prepareInput({ rawText: input.question, idempotencyKey: id });
+  const baseline = extractIntake(reply.input, reply.markers);
+  const risky = requiresFeedbackAnalysis(baseline);
+  const sentiment = risky ? "neutral" : classifyPostAnswerFeedback(safeReply);
   if (sentiment === "positive")
     return feedbackSupport(id, {
       version: input.version,
@@ -43,6 +47,8 @@ export async function continueConversation(id: string, value: unknown) {
       choice: "ADMIN",
       replyText: safeReply,
     });
+  if (!risky && isContinuationOnly(safeReply))
+    return feedbackSupport(id, { version: input.version, choice: "STILL_BROKEN", replyText: safeReply });
   const safe = prepareInput({
     ...current.input,
     previewId: undefined,
@@ -75,7 +81,7 @@ export async function continueConversation(id: string, value: unknown) {
     request.events.push(
       auditEvent(
         request,
-        "AUTO_APPROVED",
+        current.status,
         "CONVERSATION",
         "employee-demo",
         `Phản hồi sentiment neutral; tiếp tục hội thoại. ${result.decision.adminReason}`,

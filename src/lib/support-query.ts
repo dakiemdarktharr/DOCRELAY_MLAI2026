@@ -14,13 +14,14 @@ const querySchema = z.object({
   q: z.string().trim().max(200).default(""),
   status: z.enum(["all", "pending", "knowledge"]).default("all"),
   origin: z.enum(["all", "support", "verify"]).default("all"),
+  queue: z.enum(["all", "OUT_OF_POLICY", "AUTHORITY_REQUIRED"]).default("all"),
   requestId: z.string().uuid().optional(),
 });
 export function parseSupportQuery(url: string) {
   const params = new URL(url).searchParams;
   return querySchema.parse(
     Object.fromEntries(
-      ["cursor", "limit", "q", "status", "origin", "requestId"]
+      ["cursor", "limit", "q", "status", "origin", "requestId", "queue"]
         .filter((key) => params.has(key))
         .map((key) => [key, params.get(key)]),
     ),
@@ -32,6 +33,7 @@ const pending = ["ESCALATED", "APPROVED_BY_HUMAN"];
 function filterFor(query: SupportQuery): Filter<Row> {
   const filter: Filter<Row> = {};
   if (query.requestId) filter._id = query.requestId;
+  if (query.queue !== "all") filter["data.decision.uncertaintyClass"] = query.queue;
   if (query.status === "pending") filter["data.status"] = { $in: pending };
   if (query.status === "knowledge")
     filter["data.knowledgeCandidate.status"] = "PENDING_REVIEW";
@@ -51,6 +53,7 @@ async function memoryRows(query: SupportQuery) {
   return rows.filter(
     (row) =>
       (!query.requestId || row.id === query.requestId) &&
+      (query.queue === "all" || row.decision?.uncertaintyClass === query.queue) &&
       (query.status === "all" ||
         (query.status === "pending"
           ? pending.includes(row.status)
@@ -81,6 +84,8 @@ export async function supportPage(
             "data.input.rawText": 1,
             "data.canonical.serviceGroup": 1,
             "data.decision.action": 1,
+            "data.decision.uncertaintyClass": 1,
+            "data.decision.assignedTeam": 1,
             "data.knowledgeCandidate.status": 1,
           },
         })
@@ -112,6 +117,8 @@ export async function supportPage(
       ).slice(0, 140),
       serviceGroup: row.canonical?.serviceGroup ?? "OTHER",
       action: row.decision?.action ?? null,
+      uncertaintyClass: row.decision?.uncertaintyClass,
+      assignedTeam: row.decision?.assignedTeam,
       hasKnowledgeCandidate:
         row.knowledgeCandidate?.status === "PENDING_REVIEW",
     })),

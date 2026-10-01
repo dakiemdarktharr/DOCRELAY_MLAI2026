@@ -76,10 +76,11 @@ export function conversationRoute(
     /lam sao|lam the nao|cach |huong dan|su dung|how (?:to|do|can)|explain|what is/.test(
       text,
     );
+  const accessProblem = /khong.{0,45}(?:vao|dang nhap|mo).{0,25}duoc|khong vao duoc|(?:cannot|can't|can not|unable to).{0,25}(?:sign in|log in|login|access)|khoi phuc|lay lai|recover|quen|forgot|dang nhap|login/.test(text);
   let label: ConversationLabel | undefined;
   if (
-    /\b(?:google|gmail)\b/.test(text) &&
-    /khoi phuc|lay lai|recover|quen|forgot|dang nhap|login/.test(text)
+    (/\b(?:google|gmail)\b/.test(text) ||
+      (/\byoutube\b/.test(text) && /tai khoan|\bacc\b|\baccount\b|dang nhap|sign in|log in|login|recover|khoi phuc/.test(text))) && accessProblem
   )
     label = "GOOGLE_RECOVERY";
   else if (
@@ -117,8 +118,8 @@ export function conversationRoute(
   )
     label = "GREETING";
   else if (
-    baseline.intentLabel === "UNKNOWN_SUPPORT_REQUEST" &&
-    (how || /[?？]$/.test(text))
+    ["UNKNOWN_SUPPORT_REQUEST", "GENERAL_HOW_TO"].includes(baseline.intentLabel) &&
+    (how || /[?？]$/.test(text) || /khong.{0,60}duoc|bi loi|gap loi|(?:cannot|can't|unable to).{0,45}|not working/.test(text))
   )
     label = "GENERAL_GUIDE";
   if (!label) return null;
@@ -131,7 +132,8 @@ export function conversationRoute(
       "GREETING",
       "GENERAL_GUIDE",
     ].includes(label) &&
-    baseline.intentLabel !== "UNKNOWN_SUPPORT_REQUEST"
+    baseline.intentLabel !== "UNKNOWN_SUPPORT_REQUEST" &&
+    !(label === "GENERAL_GUIDE" && baseline.intentLabel === "GENERAL_HOW_TO")
   )
     return null;
   return { label, question, ignoredOverride };

@@ -56,8 +56,8 @@ export function detectedRisks(raw: string): RiskSignal[] {
   const text = normalize(raw);
   const risks = new Set<RiskSignal>();
   if (
-    /chuyen.{0,20}admin|pass.{0,15}admin|human (?:agent|reviewer)|khong hieu.{0,30}(?:ho tro|giup)/.test(
-      text,
+    asserted(text,
+      /chuyen.{0,20}admin|pass.{0,15}admin|human (?:agent|reviewer)|khong hieu.{0,30}(?:ho tro|giup)/,
     )
   )
     risks.add("USER_HANDOFF");
@@ -230,7 +230,9 @@ function classifyFallback(text: string): [ServiceGroup, string, RequestKind] {
   )
     return ["ACCOUNT_ACCESS", "PASSWORD_RESET", "GUIDANCE"];
   if (
-    /mfa|sso|account locked|login|dang nhap/.test(text) &&
+    (/mfa|sso|account locked|login|dang nhap/.test(text) ||
+      (/tai khoan|\bacc\b|\baccount\b/.test(text) &&
+        /khong.{0,45}(?:vao|truy cap)|(?:cannot|can't|unable to).{0,25}(?:access|sign in|log in)/.test(text))) &&
     !/disable|tat |cap quyen/.test(text)
   )
     return ["ACCOUNT_ACCESS", "ACCOUNT_LOGIN", "SAFE_DIAGNOSTIC"];

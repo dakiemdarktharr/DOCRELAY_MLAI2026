@@ -28,6 +28,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
   const [filter, setFilter] = useState("pending");
   const [search, setSearch] = useState("");
   const [origin, setOrigin] = useState("support");
+  const [queue, setQueue] = useState("all");
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const refresh = useCallback(
@@ -39,6 +40,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
           q: search,
           status: filter,
           origin,
+          queue,
           limit: "30",
           ...(cursor ? { cursor } : {}),
         });
@@ -59,7 +61,7 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
           );
       }
     },
-    [search, filter, origin],
+    [search, filter, origin, queue],
   );
   useEffect(() => {
     if (requestId) return;
@@ -180,6 +182,14 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                 <option value="all">Tất cả</option>
               </select>
             </label>
+            <label>
+              Hàng đợi chuyển tiếp
+              <select value={queue} onChange={(event) => setQueue(event.target.value)}>
+                <option value="all">Tất cả lý do</option>
+                <option value="OUT_OF_POLICY">Ngoài quy định — chủ chính sách / Security</option>
+                <option value="AUTHORITY_REQUIRED">Cần thẩm quyền — người phê duyệt / team xử lý</option>
+              </select>
+            </label>
             </div>
             <div data-guide={!visibleRequests.length ? "reviewer-list" : undefined}>
             {!visibleRequests.length && (
@@ -217,6 +227,9 @@ export function ReviewConsole({ requestId }: { requestId?: string }) {
                     {request.hasKnowledgeCandidate && (
                       <Badge tone="warning">Gợi ý tri thức</Badge>
                     )}
+                    {request.uncertaintyClass === "OUT_OF_POLICY" && <Badge tone="warning">Ngoài quy định</Badge>}
+                    {request.uncertaintyClass === "AUTHORITY_REQUIRED" && <Badge tone="warning">Cần thẩm quyền</Badge>}
+                    {request.assignedTeam && <span className="block text-sm">Nơi tiếp nhận: {request.assignedTeam}</span>}
                     <span className="block font-semibold">{request.title}</span>
                     <span className="block text-xs">
                       {displayId(request.id)} ·{" "}

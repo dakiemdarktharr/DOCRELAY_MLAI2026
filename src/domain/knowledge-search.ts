@@ -5,7 +5,7 @@ import { normalize } from "./text";
 const aliases: Array<[RegExp, string]> = [
   [/\b(?:an gi|an mon|mon an|bua an|dinner|lunch|what.*eat)\b/g, "meal"],
   [/\b(?:khoi phuc|lay lai|recovery|recover)\b/g, "recover"],
-  [/\b(?:tai khoan|account)\b/g, "account"],
+  [/\b(?:tai khoan|account|acc)\b/g, "account"],
   [/\b(?:gmail|google)\b/g, "google"],
   [
     /\b(?:ten dang nhap|username|dia chi email|dia chi gmail|tim email)\b/g,
@@ -75,7 +75,11 @@ export function searchKnowledge(
     ),
   }));
   const dictionary = [...new Set(documents.flatMap((item) => item.tokens))];
-  const query = [...new Set(searchTokens(question))].map((word) =>
+  // Account recovery uses Google sign-in; video playback must not retrieve that advice by alias alone.
+  const retrievalQuestion = label === "GOOGLE_RECOVERY"
+    ? question.replace(/\byoutube\b/gi, "Google")
+    : question;
+  const query = [...new Set(searchTokens(retrievalQuestion))].map((word) =>
     dictionary.includes(word)
       ? word
       : (dictionary.find((candidate) => oneEdit(word, candidate)) ?? word),

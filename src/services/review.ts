@@ -1,12 +1,15 @@
 import { createConversationAnswer } from "@/lib/conversation-model";
 import {
   classifyPostAnswerFeedback,
+  isContinuationOnly,
+  requiresFeedbackAnalysis,
   type FeedbackSentiment,
 } from "@/domain/feedback";
 import { explainStep } from "@/domain/guidance";
 import { z } from "zod";
 import { canReview } from "@/domain/transitions";
 import { redact } from "@/domain/redaction";
+import { extractIntake } from "@/domain/text";
 import { evaluatePolicy, requiresApproval } from "@/domain/policy";
 import {
   getSupportRequest,
@@ -184,11 +187,17 @@ const feedbackSchema = z
       "EXPLAIN",
     ]),
     step: z.number().int().nonnegative().optional(),
-    replyText: z.string().trim().max(1000).optional(),
+    replyText: z.string().trim().max(2000).optional(),
   })
   .strict();
 export async function feedbackSupport(id: string, value: unknown) {
   const input = feedbackSchema.parse(value);
+  if (input.replyText) {
+    const safe = prepareInput({ rawText: input.replyText, idempotencyKey: id });
+    const baseline = extractIntake(safe.input, safe.markers);
+    if (requiresFeedbackAnalysis(baseline))
+      throw new SupportError("FEEDBACK_REQUIRES_CONVERSATION", "Nội dung mới cần được kiểm tra policy trong luồng hội thoại.", 422);
+  }
   const safeReply = input.replyText ? redact(input.replyText) : null;
   const sentiment: FeedbackSentiment = safeReply
     ? classifyPostAnswerFeedback(safeReply.text)
@@ -199,7 +208,8 @@ export async function feedbackSupport(id: string, value: unknown) {
         : "neutral";
   if (
     safeReply &&
-    sentiment === "neutral"
+    sentiment === "neutral" &&
+    !(input.choice === "STILL_BROKEN" && isContinuationOnly(safeReply.text))
   )
     throw new SupportError(
       "FEEDBACK_REQUIRES_CONVERSATION",
@@ -340,6 +350,7 @@ export async function feedbackSupport(id: string, value: unknown) {
           handlingMode: "HUMAN_REVIEW",
           bucket: "BEYOND_AUTHORITY",
           uncertaintyClass: "AUTHORITY_REQUIRED",
+          assignedTeam: request.canonical?.conversation ? "Support reviewer" : request.decision.assignedTeam,
           ruleIds: [...new Set([...request.decision.ruleIds, "HANDOFF-001"])],
           userReason:
             "Đã chuyển người phụ trách cùng toàn bộ lịch sử hướng dẫn.",

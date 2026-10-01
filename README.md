@@ -75,7 +75,11 @@ flowchart TD
 
 Classifier sentiment rule-based chỉ xử lý phản hồi sau câu trả lời, không thay deterministic policy hoặc risk check. Gợi ý tri thức từ ticket positive không được tự động xuất bản hoặc đưa vào retrieval: người phụ trách phải kiểm tra nguồn và biên tập thành revision theo [quy trình knowledge](docs/KNOWLEDGE-REVIEW.md). Khi thiếu dữ liệu, người gửi nhận yêu cầu bổ sung cụ thể; khi cần người quyết định, reviewer xem lịch sử và chọn cách xử lý.
 
-Seed và câu tổng hợp nằm trong `mlai26_new/data/sentiment/post-answer-feedback.json`: 14 câu do người dùng cung cấp và 30 câu tổng hợp, chia gần cân bằng theo nhãn. Runtime dùng rule-based classifier; corpus hiện chưa được dùng để huấn luyện model hoặc đo accuracy.
+Seed và câu tổng hợp nằm trong `mlai26_new/data/sentiment/post-answer-feedback.json`: 14 câu do người dùng cung cấp và 30 câu tổng hợp. Runtime dùng rule-based classifier; corpus được kiểm tra như regression phát triển, chưa dùng để huấn luyện model hoặc đo accuracy trên dữ liệu giữ riêng. Phủ định, tình trạng còn lỗi và câu hỏi tiếp được ưu tiên hơn dấu hiệu đã giải quyết; nội dung có rủi ro phải qua policy trước khi được ghi nhận hoàn tất.
+
+Có thể mô tả vấn đề bằng câu bình thường: “tôi không vào acc youtube được” và câu có thêm “làm sao để vào?” cùng đi vào hướng dẫn tài khoản an toàn. Không cần dấu hỏi. Nếu chưa có nguồn phù hợp, trợ lý hỏi làm rõ thay vì khẳng định đã xử lý tài khoản.
+
+Reviewer có bộ lọc **Hàng đợi chuyển tiếp**: **Ngoài quy định** để chủ chính sách/Security xem xét và **Cần thẩm quyền** cho người phê duyệt/team xử lý. Mỗi yêu cầu hiển thị nơi tiếp nhận. Thiếu dữ kiện tiếp tục hỏi người gửi; bộ lọc không cấp quyền phê duyệt hoặc gửi thông báo tới người thật.
 
 ## Các trang chính
 

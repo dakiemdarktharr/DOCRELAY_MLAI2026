@@ -143,7 +143,7 @@ describe("phase 2 deterministic policy", () => {
     const decision = evaluatePolicy(extractIntake(other));
     expect(decision).toMatchObject({
       action: "ESCALATE",
-      assignedTeam: "Classifier/reviewer",
+      assignedTeam: "Policy owner / Classifier/reviewer",
       ruleIds: ["AUTH-005"],
     });
     expect(decision.questions.length).toBeGreaterThan(0);
