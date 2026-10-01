@@ -121,3 +121,9 @@ npm run test:e2e
 ```
 
 Xem thêm [hướng dẫn giám khảo](docs/JUDGE-ONBOARDING.md) và [hướng dẫn vận hành](RUNBOOK.md).
+
+## Giới hạn bằng chứng và dữ liệu demo
+
+Chỉ nhập dữ liệu synthetic hoặc đã ẩn danh trước. Redaction che một số credential, OTP và CCCD/số điện thoại theo nhãn và định dạng hỗ trợ; không đảm bảo che tên, email, địa chỉ hoặc mọi dạng PII. Bộ lọc reviewer không phải phân quyền theo team và chưa gửi thông báo tới người thật.
+
+Evaluator trả `caller-declared-unverified`; nhãn held-out hoặc consented-anonymized do caller khai báo không xác minh tính độc lập/consent. Bằng chứng chưa có giữ trạng thái `NOT_COLLECTED`. Health `durable=true` mô tả Mongo adapter, còn `persistenceVerification=NOT_PERFORMED` cho biết endpoint không kiểm tra đọc lại sau restart. CI mock/memory không chứng minh model thật, Mongo production hay hiệu quả người dùng. Xem [đối chiếu kỹ thuật và các quyết định còn thiếu](docs/FEEDBACK-EVIDENCE-REVIEW.md).

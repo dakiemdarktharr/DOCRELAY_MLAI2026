@@ -1,5 +1,11 @@
 # Hướng dẫn giám khảo và truy cập bằng QR
 
+## Phạm vi demo hiện tại
+
+Sản phẩm là IT support. Dùng các case synthetic; không nhập dữ liệu cá nhân/credential thật. Hàng đợi Ngoài quy định/Cần thẩm quyền chỉ lọc danh sách, không xác thực team hoặc thông báo đến người thật. Evaluator nhận nhãn do caller khai báo; chưa có bằng chứng held-out độc lập, consent đã xác minh hoặc user study. Redaction chỉ che một số mẫu có nhận diện; Mongo health ping không chứng minh persistence sau restart. Xem [bằng chứng và giới hạn hiện tại](FEEDBACK-EVIDENCE-REVIEW.md), gồm harness local và quyết định quyền reviewer còn cần chủ repo cung cấp.
+
+Các số kiểm thử và base commit ở những phần lịch sử bên dưới chỉ mô tả lần thay đổi tương ứng, không phải kết quả của HEAD hiện tại.
+
 Thay đổi có AI assistance, tiếp nối commit `1ed0954` trên nhánh `codex/evidence-workflow-followup`. Không suy ra human review hoặc deployment từ commit. Checkout gốc có thay đổi chưa commit nên phần triển khai nằm trong worktree riêng; không đưa những thay đổi ngoài phạm vi vào commit này.
 
 ## Trải nghiệm

@@ -4,6 +4,7 @@ import { MongoClient, MongoServerError } from "mongodb";
 import { getSupportRequest, insertSupportRequest, listSupportRequests, resetSupportTestStore, updateSupportRequest } from "@/lib/support-repository";
 import { submitSupport } from "@/services/support";
 import { supportApi } from "@/lib/support-http";
+import { GET as health } from "@/app/api/support/health/route";
 
 type Row = { _id: string; data: SupportRequest };
 const mongo = vi.hoisted(() => ({
@@ -15,7 +16,7 @@ vi.mock("mongodb", async (original) => {
   return {
     ...actual,
     MongoClient: class {
-      db() { return { collection: () => mongo }; }
+      db() { return { collection: () => mongo, command: async () => ({ ok: 1 }) }; }
     },
   };
 });
@@ -52,6 +53,11 @@ describe.each(["memory", "mongo-mock"])("repository contract: %s", (mode) => {
     expect(read).toEqual(row);
     read.events.length = 0;
     expect((await getSupportRequest(row.id))?.events).toEqual(row.events);
+  });
+  it("does not report a ping or memory adapter as verified persistence", async () => {
+    const response = await health();
+    expect(response.status).toBe(200);
+    expect((await response.json()).data).toMatchObject({ durable: mode === "mongo-mock", persistenceVerification: "NOT_PERFORMED" });
   });
   it("commits exactly one concurrent status+audit change with the same version", async () => {
     const row = await create();
@@ -115,4 +121,21 @@ it("requires explicit memory-demo opt-in without a production Mongo URI", async 
   await expect(getSupportRequest("absent")).rejects.toMatchObject({ code: "STORAGE_UNAVAILABLE", status: 503 });
   vi.stubEnv("SUPPORT_STORAGE", "memory-demo");
   expect(await getSupportRequest("absent")).toBeNull();
+  vi.stubEnv("VERCEL", "1");
+  await expect(getSupportRequest("absent")).rejects.toMatchObject({ code: "STORAGE_UNAVAILABLE", status: 503 });
+});
+it.each(["insert", "replace"])("returns sanitized 503 on Mongo %s failure and never writes a memory fallback", async (operation) => {
+  vi.stubEnv("MONGODB_URI", "mongodb://synthetic.invalid");
+  const row = await create();
+  const error = new Error("SYNTHETIC_PRIVATE_WRITE_DETAILS");
+  if (operation === "insert") mongo.insertOne.mockRejectedValueOnce(error);
+  else mongo.replaceOne.mockRejectedValueOnce(error);
+  const response = await supportApi(() => operation === "insert"
+    ? insertSupportRequest({ ...row, id: crypto.randomUUID() })
+    : updateSupportRequest(row.id, row.version, (draft) => { draft.status = "STOPPED"; }));
+  expect(response.status).toBe(503);
+  expect(await response.text()).not.toContain(error.message);
+  expect(await getSupportRequest(row.id)).toEqual(row);
+  vi.stubEnv("MONGODB_URI", "");
+  expect(await listSupportRequests()).toEqual([]);
 });

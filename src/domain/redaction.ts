@@ -1,7 +1,8 @@
 // Redact before extraction, persistence, audit and response. Never retain the original secret.
 export function redact(text: string): { text: string; markers: string[] } {
   const markers = new Set<string>();
-  let safe = text;
+  // Match the same Unicode forms that extraction understands, before any boundary.
+  let safe = text.normalize("NFKC").replace(/[\u200B-\u200D\u2060\uFEFF]/g, "");
   const replace = (pattern: RegExp, marker: string, replacement: string) => {
     safe = safe.replace(pattern, () => {
       markers.add(marker);
@@ -19,7 +20,7 @@ export function redact(text: string): { text: string; markers: string[] } {
     "[REDACTED_TOKEN]",
   );
   safe = safe.replace(
-    /\b((?:aws_secret_access_key|aws_session_token|client_secret|access_token|refresh_token|private_key)\s*=\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi,
+    /\b((?:aws_secret_access_key|aws_session_token|client_secret|access_token|refresh_token|private_key)\s*["']?\s*[:=]\s*)(?:"[^"]*"|'[^']*'|[^\s,;}]+)/gi,
     (_, prefix: string) => {
       markers.add("SECRET_VALUE");
       return prefix + "[REDACTED]";
@@ -60,6 +61,22 @@ export function redact(text: string): { text: string; markers: string[] } {
     (_, protocol: string) => {
       markers.add("CONNECTION_CREDENTIAL");
       return protocol + "[REDACTED]@";
+    },
+  );
+  // Only explicit labels and bounded formats: unlabeled numbers may be ticket
+  // IDs/resources. These masks neither validate identity nor anonymize all PII.
+  safe = safe.replace(
+    /((?:\bCCCD|căn cước(?: công dân)?|can cuoc(?: cong dan)?)\s*(?:[:=]|là|la|is)?\s*)[0-9]{12}(?![0-9])/gi,
+    (_, prefix: string) => {
+      markers.add("LABELED_IDENTITY_NUMBER");
+      return prefix + "[REDACTED_IDENTITY_NUMBER]";
+    },
+  );
+  safe = safe.replace(
+    /((?:số điện thoại|so dien thoai|\bsđt|\bsdt|\bphone(?: number)?|\bmobile(?: number)?)\s*(?:[:=]|là|la|is)?\s*)(?:0|\+84[ .-]?)[35789](?:[ .-]?[0-9]){8}(?![ .-]*[0-9])/gi,
+    (_, prefix: string) => {
+      markers.add("LABELED_PHONE_NUMBER");
+      return prefix + "[REDACTED_PHONE_NUMBER]";
     },
   );
   return { text: safe, markers: [...markers] };

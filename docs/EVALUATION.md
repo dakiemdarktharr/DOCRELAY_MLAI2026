@@ -2,6 +2,8 @@
 
 AI-assisted candidate. No real-user or independently held-out dataset is supplied. The evaluator is runnable; missing evidence remains NOT COLLECTED. It does not activate adaptive routing in production.
 
+Every report includes `evidenceAssessment`: `declaredSplit` and `declaredSource` mirror the input, while `independentHeldOut`, `consentVerification`, `authenticatedLabelReview` and `realUserStudy` remain `NOT_COLLECTED`. This endpoint has no facility to collect or verify those proofs. `COMPLETE_DECLARED` means all submitted rows have predictions, not independent validation or a completed user study. Synthetic and development are separate axes (source and split), not interchangeable quality labels.
+
 ## Contract
 
 POST `/api/support/evaluation` accepts JSON `{evaluation, proposal?}`. It uses the existing public-demo reviewer gate, body-size and mutation-rate limits. The gate is not authentication of a reviewer. No database write, model call, raw question or feedback text is accepted. Outputs are `caller-declared-unverified`, never verified human evidence.

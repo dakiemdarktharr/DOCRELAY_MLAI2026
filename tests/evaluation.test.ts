@@ -7,6 +7,14 @@ export function batch(): EvaluationBatch {
 it("reports no data without manufacturing accuracy", () => {
   expect(evaluateBatch(batch())).toMatchObject({ status: "NO_DATA", accuracy: null, coverage: null, escalation: { falseNegativeRate: null, unnecessaryEscalationRate: null } });
 });
+it.each(["synthetic", "consented-anonymized"] as const)("never promotes %s declarations into collected independent evidence", (evidence) => {
+  for (const split of ["development", "held-out"] as const) {
+    const result = evaluateBatch({ ...batch(), evidence, split, rows: [{ caseId: "declared", expectedAction: "AUTO_APPROVE", actualAction: "AUTO_APPROVE", observedAt: "2026-09-20T00:00:00Z", review: { reviewerId: "declared-reviewer", labelledBeforeRun: true } }] });
+    expect(result).toMatchObject({ status: "COMPLETE_DECLARED", accuracy: 1, provenance: "caller-declared-unverified", evidenceAssessment: {
+      declaredSplit: split, declaredSource: evidence, independentHeldOut: "NOT_COLLECTED", consentVerification: "NOT_COLLECTED", authenticatedLabelReview: "NOT_COLLECTED", realUserStudy: "NOT_COLLECTED",
+    } });
+  }
+});
 it("keeps all three actions and separates missed escalation from unnecessary escalation", () => {
   const data = batch();
   data.rows = [

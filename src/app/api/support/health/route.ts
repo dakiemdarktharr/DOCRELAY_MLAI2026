@@ -11,6 +11,8 @@ export function GET() {
       app: "MLAI_SUPPORT_REFEREE_V3",
       storage: supportStorageMode(),
       durable: !!db,
+      // Adapter selection and ping do not demonstrate restart durability.
+      persistenceVerification: "NOT_PERFORMED",
       provider: process.env.AI_PROVIDER || "mock",
       policy: POLICY_VERSION,
       sourceRevision:

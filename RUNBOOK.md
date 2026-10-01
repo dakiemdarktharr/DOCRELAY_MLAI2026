@@ -20,6 +20,7 @@ Chỉ sao chép `.env.example` khi chưa có `.env.local`; giữ cấu hình cá
 npm run lint
 npm run typecheck
 npm test
+node --test scripts/mongo-smoke-guard.test.mjs
 npm run build
 $env:SUPPORT_E2E_PRODUCTION='true'
 npm run test:e2e -- --project=chromium
@@ -63,6 +64,10 @@ Policy `support-guidance-v5.5` thay đổi nhận diện câu mô tả, feedback
 
 ## Kiểm tra Mongo trong môi trường thử nghiệm riêng
 
+Ưu tiên harness có guard và tự restart tiến trình tại [hướng dẫn kiểm tra persistence](docs/FEEDBACK-EVIDENCE-REVIEW.md#reproducible-mongo-evidence): `node scripts/mongo-restart-smoke.mjs`. Harness chỉ chấp nhận Mongo loopback trên instance disposable được khai báo rõ, database mới do script chọn, không có `.env` local, model mock và budget 0. Chưa có kết quả live từ harness trong lượt sửa này. `durable=true` vẫn là metadata của adapter; trường health `persistenceVerification=NOT_PERFORMED` nói rõ endpoint không kiểm tra restart.
+
+Quy trình thủ công dưới đây dành cho operator đã xác nhận database thử nghiệm riêng; không chạy trên production:
+
 Chỉ dùng Mongo local hoặc credential thử nghiệm giới hạn trên database mới, tên `sprint1_test_<suffix>`. Không copy URI/credential production. Giữ `AI_PROVIDER=mock`, `AI_MAX_ATTEMPTS=0` và model keys rỗng. Đặt `MONGODB_URI`, `MONGODB_DB` riêng cùng `SUPPORT_ACCESS_MODE=public-demo`, chạy server tại3227. Health ping thành công chưa chứng minh persistence sau restart.
 
 Trong terminal khác, tạo duy nhất dữ liệu synthetic rồi giữ lại các biến:
@@ -87,7 +92,7 @@ Mở hai tab reviewer cùng request/version, bấm Stop: một thành công, m�
 
 ## Giới hạn riêng tư và phép đo local
 
-Redaction chỉ nhận diện một số credential/pattern; không ẩn danh toàn diện CCCD, điện thoại, tên, điểm hoặc OTP/secret bị làm rối. Dữ liệu chưa nhận diện có thể đến model, storage, audit và UI. Chỉ dùng synthetic hoặc đã ẩn danh trước; dữ liệu gõ vào form vẫn tồn tại trong trình duyệt trước xử lý.
+Redaction nhận diện một số credential/OTP, kể cả JSON snake-case và một số biến thể Unicode; che CCCD 12 số liền nhau và mobile Việt Nam khi có nhãn rõ theo định dạng trong [phạm vi privacy](docs/FEEDBACK-EVIDENCE-REVIEW.md#privacy-boundary-inventory). Không ẩn danh toàn diện CCCD, điện thoại, email, tên, điểm hoặc OTP/secret bị làm rối. Dữ liệu chưa nhận diện có thể đến model, storage, audit và UI. Chỉ dùng synthetic hoặc đã ẩn danh trước; dữ liệu gõ vào form vẫn tồn tại trong trình duyệt trước xử lý. Không tự sửa dữ liệu lịch sử bằng thay đổi này.
 
 `node scripts/measure-support-latency.mjs` dùng server loopback3227 mock/memory, bỏ5 warmup rồi đo20 preview tuần tự, trả p50/p95/max HTTP+JSON. Ghi kèm OS, Node, commit và dev/start mode. Preview có thể lưu trong memory cache; không tạo support request. Không chạy cùng E2E, không coi đây là tốc độ Mongo/model/production hoặc bằng chứng cần song song hóa pipeline.
 
